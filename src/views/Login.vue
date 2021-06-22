@@ -12,9 +12,6 @@
         <base-button @click="handleSubmit" >
           Sign In
         </base-button>
-        <a class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="#">
-          Forgot Password?
-        </a>
       </div>
   </div>
 </div>
@@ -22,29 +19,27 @@
 </template>
 
 <script lang="ts">
-// {
-//     "email": "peerkatlive@gmail.com",
-//     "password": "=C8N$Q!s&x9ne4KY"
-// }
-// https://vivid-media-test.herokuapp.com/admin/login
 import BaseInput from "@/components/BaseInput.vue";
 import BaseButton from "@/components/BaseButton.vue";
+import AuthService from "../services/AuthService"
 import { ref, defineComponent } from 'vue'
+import router from "../router";
 export default defineComponent({
-  name: 'Login',
   components: {
     BaseInput,
     BaseButton
   },
   setup: () => {
-  const email = ref("");
-  const password = ref("");
-        return {
+  const email = ref();
+  const password = ref();
+    return {
       email,
       password,
-      handleSubmit(e:Event) {
+      async handleSubmit(e:Event) {
         e.preventDefault()
-        console.log("submit", email.value, password.value);
+        const token =  await AuthService.login({email:email.value, password: password.value})
+       if(token) router.push({ path: 'media' })
+       console.log(token)
       },
     };
   }

@@ -4,6 +4,8 @@
   <input
     class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
     :value="modelValue"
+    :type="type"
+    :placeholder="placeholder"
     @change="handleChange"
     :id="id"
   />
@@ -15,6 +17,8 @@ export default {
     id: String,
     labelText: String,
     modelValue: String,
+    type:String,
+    placeholder:String
   },
   methods:{
     handleChange(e:Event) { 
