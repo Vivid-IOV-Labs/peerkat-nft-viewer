@@ -1,10 +1,19 @@
 {
-    "editor.codeActionsOnSave": {
-        "source.fixAll": true
-    },
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "vetur": {
-        "experimental": "templateInterpolationService"
-    }
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "eslint.format.enable": true,
+    "eslint.validate": [
+        "vue",
+        "html",
+        "javascript",
+        "typescript",
+        "javascriptreact",
+        "typescriptreact"
+    ],
+    "vetur.validation.style": false,
+    "vetur.validation.template": false,
+    "vetur.experimental": "templateInterpolationService",
+    "files.eol": "\n"
 }

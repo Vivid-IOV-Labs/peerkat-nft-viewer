@@ -1,21 +1,26 @@
 import { createWebHistory, createRouter } from "vue-router";
 
 const routes = [
-    {
-        path: "/",
-        name: "Login",
-        component: () => import("../views/Login.vue"),
-    },
-    {
-        path: "/media",
-        name: "MediaList",
-        component: () => import("../views/MediaList.vue"),
-    },
+  {
+    path: "/",
+    name: "Login",
+    component: () => import("../views/Login.vue"),
+  },
+  {
+    path: "/media",
+    name: "MediaList",
+    component: () => import("../views/MediaList.vue"),
+  },
+  {
+    path: "/media/add",
+    name: "MediaAdd",
+    component: () => import("../views/MediaAdd.vue"),
+  },
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes,
+  history: createWebHistory(),
+  routes,
 });
 
 // router.beforeEach((to, from, next) => {
