@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="border-t-2 p-4 flex justify-end">
-      <base-button>Edit</base-button>
+      <base-button @click="editMedia">Edit</base-button>
       <base-button @click="confirmDelete">Delete</base-button>
     </div>
     <base-dialog
@@ -110,6 +110,9 @@ export default {
   methods: {
     confirmDelete(): void {
       this.isDeleteDialogOpen = true;
+    },
+    editMedia(): void {
+      this.$router.push({ path: `/media/edit/${this.mediaID}` });
     },
     async deleteMedia(): Promise<void> {
       console.log(this.mediaID);

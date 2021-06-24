@@ -156,10 +156,5 @@ export default defineComponent({
       },
     };
   },
-  data: function () {
-    return {
-      lice: true,
-    };
-  },
 });
 </script>

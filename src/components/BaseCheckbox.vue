@@ -1,13 +1,13 @@
 <template>
-  <label :for="id" class="inline-flex items-center mt-3">
+  <div class="inline-flex items-center">
     <input
       :id="id"
       type="checkbox"
-      class="form-checkbox h-5 w-5 text-gray-600"
+      class="rounded border-grey-200 text-green-600 focus:ring-green-400"
       :checked="modelValue"
       @input="$emit('update:modelValue', $event.target.checked)"
-    /><span class="ml-2 text-gray-700">{{ labelText }}</span>
-  </label>
+    /><label :for="id" class="ml-2 text-grey-600">{{ labelText }}</label>
+  </div>
 </template>
 
 <script lang="ts">

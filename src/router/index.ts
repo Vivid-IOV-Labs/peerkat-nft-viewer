@@ -16,6 +16,11 @@ const routes = [
     name: "MediaAdd",
     component: () => import("../views/MediaAdd.vue"),
   },
+  {
+    path: "/media/edit/:mediaID",
+    name: "MediaEdit",
+    component: () => import("../views/MediaEdit.vue"),
+  },
 ];
 
 const router = createRouter({

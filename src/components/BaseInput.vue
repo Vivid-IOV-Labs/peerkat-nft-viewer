@@ -7,23 +7,7 @@
     >
     <input
       :id="id"
-      class="
-        shadow
-        text-grey-darker
-        ring-offset-2
-        appearance-none
-        block
-        w-full
-        bg-gray-200
-        text-gray-700
-        border
-        rounded
-        py-3
-        px-4
-        mb-3
-        leading-tight
-        focus:outline-none focus:bg-white
-      "
+      class="shadow w-full text-gray-700 rounded py-3 px-4 mb-3"
       :value="modelValue"
       :type="type"
       :placeholder="placeholder"
