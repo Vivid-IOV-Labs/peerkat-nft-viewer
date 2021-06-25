@@ -5,21 +5,33 @@ const routes = [
     path: "/",
     name: "Login",
     component: () => import("../views/Login.vue"),
+    meta: {
+      guest: true,
+    },
   },
   {
     path: "/media",
     name: "MediaList",
     component: () => import("../views/MediaList.vue"),
+    meta: {
+      withAuth: true,
+    },
   },
   {
     path: "/media/add",
     name: "MediaAdd",
     component: () => import("../views/MediaAdd.vue"),
+    meta: {
+      withAuth: true,
+    },
   },
   {
     path: "/media/edit/:mediaID",
     name: "MediaEdit",
     component: () => import("../views/MediaEdit.vue"),
+    meta: {
+      withAuth: true,
+    },
   },
 ];
 
@@ -28,18 +40,19 @@ const router = createRouter({
   routes,
 });
 
-// router.beforeEach((to, from, next) => {
-//   const publicPages = ['/login', '/register', '/home'];
-//   const authRequired = !publicPages.includes(to.path);
-//   const loggedIn = localStorage.getItem('user');
-
-//   // trying to access a restricted page + not logged in
-//   // redirect to login page
-//   if (authRequired && !loggedIn) {
-//     next('/login');
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.withAuth)) {
+    if (localStorage.getItem("token") == null) {
+      next({
+        path: "/",
+        params: { nextUrl: to.fullPath },
+      });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
 
 export default router;

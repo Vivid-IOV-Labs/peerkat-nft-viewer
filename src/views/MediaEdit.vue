@@ -60,9 +60,9 @@
         label-text="live"
       ></base-checkbox>
     </div>
-    <div class="flex justify-between w-full">
+    <div v-if="data.formData.list" class="flex justify-between w-full">
       <base-checkbox
-        id="highlighted:highlighted.value"
+        id="highlighted"
         v-model="data.formData.list.highlighted"
         text="Is highlighted"
         label-text="highlighted"

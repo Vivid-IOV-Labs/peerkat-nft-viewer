@@ -8,12 +8,16 @@
     <input
       :id="id"
       class="shadow w-full text-gray-700 rounded py-3 px-4 mb-3"
+      :class="{ 'border-red-500': errors.length }"
       :value="modelValue"
       :type="type"
       :placeholder="placeholder"
       v-bind="$attrs"
       @change="handleChange"
     />
+    <div v-for="error of errors" :key="error.$uid" class="input-errors">
+      <div class="text-red-500">{{ error.$message }}</div>
+    </div>
   </div>
 </template>
 
@@ -43,6 +47,10 @@ export default {
     placeholder: {
       type: String,
       required: true,
+    },
+    errors: {
+      type: Array,
+      default: (): Array<unknown> => [],
     },
   },
   emits: { "update:modelValue": null },

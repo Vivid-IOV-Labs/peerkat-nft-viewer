@@ -8,6 +8,9 @@
       @input="$emit('update:modelValue', $event.target.checked)"
     /><label :for="id" class="ml-2 text-grey-600">{{ labelText }}</label>
   </div>
+  <div v-for="error of errors" :key="error.$uid" class="input-errors">
+    <div class="text-red-500">{{ error.$message }}</div>
+  </div>
 </template>
 
 <script lang="ts">
