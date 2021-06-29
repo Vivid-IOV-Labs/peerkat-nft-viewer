@@ -12,7 +12,7 @@
             leave-from="opacity-100"
             leave-to="opacity-0"
           >
-            <DialogOverlay class="fixed inset-0" />
+            <DialogOverlay class="fixed inset-20 opacity-20" />
           </TransitionChild>
 
           <span class="inline-block h-screen align-middle" aria-hidden="true">
@@ -32,8 +32,8 @@
               class="
                 inline-block
                 w-full
-                max-w-md
-                p-6
+                max-w-lg
+                p-8
                 my-8
                 overflow-hidden
                 text-left
@@ -41,8 +41,8 @@
                 transition-all
                 transform
                 bg-white
-                shadow-xl
-                rounded-2xl
+                shadow-lg
+                rounded
               "
             >
               <DialogTitle
@@ -58,9 +58,9 @@
                 </p>
               </div>
 
-              <div class="flex flex-end mt-4">
+              <div class="flex justify-end mt-4">
                 <base-button @click="confirm"> Confirm </base-button>
-                <base-button class="mr-2" @click="cancel"> Cancel </base-button>
+                <base-button class="ml-2" @click="cancel"> Cancel </base-button>
               </div>
             </div>
           </TransitionChild>

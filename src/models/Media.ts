@@ -1,16 +1,16 @@
 export interface Media {
-  type?: string;
-  earn?: boolean;
-  publisher?: {
+  type: string;
+  earn: boolean;
+  publisher: {
     walletAddress?: string;
   };
-  mediaID?: string;
-  list?: {
+  mediaID: string;
+  list: {
     highlighted?: boolean;
     order?: number;
   };
-  details?: {
-    title?: string;
+  details: {
+    title: string;
     subtitle?: string;
     moreInfo?: string;
     twitter?: {
