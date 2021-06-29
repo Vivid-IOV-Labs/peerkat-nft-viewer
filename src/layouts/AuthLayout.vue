@@ -1,6 +1,6 @@
 <template>
   <HeaderNavigation />
-  <div class="container px-6 pt-4 pb-6">
+  <div class="container m-auto px-6 pt-4 pb-6">
     <slot></slot>
   </div>
 </template>

@@ -89,6 +89,7 @@ import BaseCheckbox from "../components/BaseCheckbox.vue";
 import { defineComponent, reactive } from "vue";
 import MediaService from "../services/MediaService";
 import { useRoute } from "vue-router";
+
 export default defineComponent({
   components: {
     BaseInput,
