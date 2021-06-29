@@ -78,7 +78,7 @@
         placeholder="hashtags"
       ></base-input>
     </div>
-    <base-button @click="submit">Submit</base-button>
+    <base-button class="w-full" @click="submit">Submit</base-button>
   </form>
 </template>
 

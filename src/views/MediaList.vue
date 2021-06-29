@@ -5,6 +5,7 @@
       placeholder="Seaech by title"
       aria-placeholder="Seaech by title"
       type="search"
+      class="w-full max-w-xl"
     ></base-input>
   </div>
   <div class="mt-4 grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

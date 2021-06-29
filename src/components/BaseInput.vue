@@ -7,7 +7,7 @@
     >
     <input
       :id="id"
-      class="shadow w-full text-gray-700 rounded py-3 px-4 mb-3"
+      class="shadow-inner w-full text-gray-700 rounded py-3 px-4 mb-3"
       :class="{ 'border-red-500': errors.length }"
       :value="modelValue"
       :type="type"

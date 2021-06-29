@@ -23,7 +23,7 @@
     </div>
     <div class="border-t-2 p-4 flex justify-end">
       <base-button @click="editMedia">Edit</base-button>
-      <base-button @click="confirmDelete">Delete</base-button>
+      <base-button class="ml-2" @click="confirmDelete">Delete</base-button>
     </div>
     <base-dialog
       v-model="isDeleteDialogOpen"
