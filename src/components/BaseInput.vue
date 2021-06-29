@@ -15,18 +15,22 @@
       v-bind="$attrs"
       @change="handleChange"
     />
-    <div v-for="error of errors" :key="error.$uid" class="input-errors">
-      <div class="text-red-500">{{ error.$message }}</div>
-    </div>
+    <base-alert v-if="errors.length" :messages="errors" class="input-errors">
+    </base-alert>
   </div>
 </template>
 
 <script lang="ts">
+import BaseAlert from "@/components/BaseAlert.vue";
+
 type HTMLElementEvent<T extends HTMLElement> = Event & {
   target: T;
   currentTarget: T;
 };
 export default {
+  components: {
+    BaseAlert,
+  },
   props: {
     id: {
       type: String,

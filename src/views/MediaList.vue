@@ -10,21 +10,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
-import MediaService from "../services/MediaService";
+import { defineComponent, computed } from "vue";
 import MediaCard from "../components/MediaCard.vue";
-import { Media } from "../models/Media";
+import { useStore } from "vuex";
 
 export default defineComponent({
   components: {
     MediaCard,
   },
   setup: () => {
-    const allMedia = ref<Media[]>([]);
-    onMounted(async () => {
-      const result = await MediaService.list();
-      allMedia.value = result;
-    });
+    const store = useStore();
+    const allMedia = computed(() => store.getters["media/filtered"]());
+    console.log(allMedia.value);
+    store.dispatch("media/fetchAll");
+
     return { allMedia };
   },
 });

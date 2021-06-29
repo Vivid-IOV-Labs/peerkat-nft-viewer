@@ -8,7 +8,7 @@
         label-text="title"
         type="text"
         placeholder="Title"
-        :errors="v$.title.$errors"
+        :errors="formatVuelidateErrors(v$.title.$errors)"
       ></base-input>
     </div>
     <div>
@@ -18,7 +18,7 @@
         label-text="subtitle"
         type="text"
         placeholder="Subtitile"
-        :errors="v$.subtitle.$errors"
+        :errors="formatVuelidateErrors(v$.subtitle.$errors)"
       ></base-input>
     </div>
     <div>
@@ -28,7 +28,7 @@
         label-text="mediaID"
         type="text"
         placeholder="Media ID"
-        :errors="v$.mediaID.$errors"
+        :errors="formatVuelidateErrors(v$.mediaID.$errors)"
       ></base-input>
     </div>
     <div>
@@ -38,7 +38,7 @@
         label-text="walletAddress"
         type="text"
         placeholder="Publisher walletAddress"
-        :errors="v$.walletAddress.$errors"
+        :errors="formatVuelidateErrors(v$.walletAddress.$errors)"
       ></base-input>
     </div>
     <div>
@@ -48,7 +48,7 @@
         label-text="moreInfo"
         type="text"
         placeholder="More Info"
-        :errors="v$.moreInfo.$errors"
+        :errors="formatVuelidateErrors(v$.moreInfo.$errors)"
       ></base-input>
     </div>
     <div class="flex justify-between w-full">
@@ -57,14 +57,14 @@
         v-model="v$.earn.$model"
         text="Is earn"
         label-text="earn"
-        :errors="v$.earn.$errors"
+        :errors="formatVuelidateErrors(v$.earn.$errors)"
       ></base-checkbox>
       <base-checkbox
         id="live"
         v-model="v$.live.$model"
         text="Is live"
         label-text="live"
-        :errors="v$.live.$errors"
+        :errors="formatVuelidateErrors(v$.live.$errors)"
       ></base-checkbox>
     </div>
     <div class="flex justify-between w-full">
@@ -73,7 +73,7 @@
         v-model="v$.highlighted.$model"
         text="Is highlighted"
         label-text="highlighted"
-        :errors="v$.highlighted.$errors"
+        :errors="formatVuelidateErrors(v$.highlighted.$errors)"
       ></base-checkbox>
       <base-input
         id="order"
@@ -81,7 +81,7 @@
         label-text="order"
         type="number"
         placeholder="Order"
-        :errors="v$.order.$errors"
+        :errors="formatVuelidateErrors(v$.order.$errors)"
       ></base-input>
     </div>
     <div class="flex justify-between w-full">
@@ -91,7 +91,7 @@
         label-text="hashtags"
         type="text"
         placeholder="hashtags"
-        :errors="v$.hashtags.$errors"
+        :errors="formatVuelidateErrors(v$.hashtags.$errors)"
       ></base-input>
     </div>
     <base-button @click="submit">Submit</base-button>
@@ -102,10 +102,22 @@
 import BaseInput from "@/components/BaseInput.vue";
 import BaseButton from "../components/BaseButton.vue";
 import BaseCheckbox from "../components/BaseCheckbox.vue";
-import { ref, defineComponent, computed } from "vue";
+import { ref, defineComponent, computed, Ref } from "vue";
 import MediaService from "../services/MediaService";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
+
+export interface ErrorObject {
+  $propertyPath: string;
+  $property: string;
+  $validator: string;
+  $message: string | Ref<string>;
+  $params: Record<string, unknown>;
+  $pending: boolean;
+  $response: unknown;
+  $uid: string;
+}
+
 export default defineComponent({
   components: {
     BaseInput,
@@ -185,7 +197,12 @@ export default defineComponent({
             },
           },
         };
-        await MediaService.add(newMedia);
+        store.dispatch("media/add", newMedia);
+      },
+      formatVuelidateErrors(errors: Array<ErrorObject>) {
+        return errors.map((error) => {
+          return { text: error.$message, key: error.$uid };
+        });
       },
     };
   },
