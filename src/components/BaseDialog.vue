@@ -1,6 +1,6 @@
 <template>
   <TransitionRoot appear :show="modelValue" as="template">
-    <Dialog as="div" @close="closeModal">
+    <Dialog as="div" @close="cancel">
       <div class="fixed inset-0 z-10 overflow-y-auto">
         <div class="min-h-screen px-4 text-center">
           <TransitionChild
@@ -49,7 +49,7 @@
                 as="h3"
                 class="text-lg font-medium leading-6 text-gray-900"
               >
-                Payment successful
+                {{ title }}
               </DialogTitle>
               <div class="mt-2">
                 <p class="text-sm text-gray-500">
@@ -58,30 +58,9 @@
                 </p>
               </div>
 
-              <div class="mt-4">
-                <button
-                  type="button"
-                  class="
-                    inline-flex
-                    justify-center
-                    px-4
-                    py-2
-                    text-sm
-                    font-medium
-                    text-blue-900
-                    bg-blue-100
-                    border border-transparent
-                    rounded-md
-                    hover:bg-blue-200
-                    focus:outline-none
-                    focus-visible:ring-2
-                    focus-visible:ring-offset-2
-                    focus-visible:ring-blue-500
-                  "
-                  @click="closeModal"
-                >
-                  Got it, thanks!
-                </button>
+              <div class="flex flex-end mt-4">
+                <base-button @click="confirm"> Confirm </base-button>
+                <base-button class="mr-2" @click="cancel"> Cancel </base-button>
               </div>
             </div>
           </TransitionChild>
@@ -92,6 +71,8 @@
 </template>
 
 <script lang="ts">
+import BaseButton from "@/components/BaseButton.vue";
+
 import {
   TransitionRoot,
   TransitionChild,
@@ -107,10 +88,15 @@ export default {
     Dialog,
     DialogOverlay,
     DialogTitle,
+    BaseButton,
   },
   props: {
     modelValue: {
       type: Boolean,
+      required: true,
+    },
+    title: {
+      type: String,
       required: true,
     },
     onClose: {
@@ -120,8 +106,11 @@ export default {
   },
   emits: ["update:modelValue"],
   methods: {
-    async closeModal(): Promise<void> {
+    async confirm(): Promise<void> {
       await this.onClose();
+      this.$emit("update:modelValue", false);
+    },
+    cancel(): void {
       this.$emit("update:modelValue", false);
     },
   },

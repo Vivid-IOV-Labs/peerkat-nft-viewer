@@ -64,9 +64,7 @@ export default {
     },
   },
   methods: {
-    close(event: HTMLElementEvent<HTMLInputElement>): void {
-      console.log(event);
-    },
+    close(event: HTMLElementEvent<HTMLInputElement>): void {},
   },
 };
 </script>

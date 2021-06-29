@@ -59,13 +59,6 @@
         label-text="earn"
         :errors="formatVuelidateErrors(v$.earn.$errors)"
       ></base-checkbox>
-      <base-checkbox
-        id="live"
-        v-model="v$.live.$model"
-        text="Is live"
-        label-text="live"
-        :errors="formatVuelidateErrors(v$.live.$errors)"
-      ></base-checkbox>
     </div>
     <div class="flex justify-between w-full">
       <base-checkbox
@@ -100,12 +93,13 @@
 
 <script lang="ts">
 import BaseInput from "@/components/BaseInput.vue";
-import BaseButton from "../components/BaseButton.vue";
-import BaseCheckbox from "../components/BaseCheckbox.vue";
+import BaseButton from "@/components/BaseButton.vue";
+import BaseCheckbox from "@/components/BaseCheckbox.vue";
 import { ref, defineComponent, computed, Ref } from "vue";
-import MediaService from "../services/MediaService";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import useVuelidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import { required, url } from "@vuelidate/validators";
 
 export interface ErrorObject {
   $propertyPath: string;
@@ -125,24 +119,24 @@ export default defineComponent({
     BaseCheckbox,
   },
   setup: () => {
+    const store = useStore();
+    const router = useRouter();
     const title = ref("");
     const subtitle = ref("");
     const walletAddress = ref("");
     const mediaID = ref("");
     const moreInfo = ref("");
     const hashtags = ref("");
-    const live = ref(true);
     const earn = ref(true);
     const highlighted = ref(true);
     const order = ref(0);
 
     const rules = computed(() => ({
       title: { required },
-      subtitle: { required },
+      subtitle: {},
       walletAddress: { required },
       mediaID: { required },
-      moreInfo: { required },
-      live: { required },
+      moreInfo: { url },
       earn: { required },
       highlighted: { required },
       order: { required },
@@ -153,7 +147,6 @@ export default defineComponent({
       subtitle,
       mediaID,
       walletAddress,
-      live,
       earn,
       highlighted,
       moreInfo,
@@ -165,7 +158,6 @@ export default defineComponent({
       subtitle,
       mediaID,
       walletAddress,
-      live,
       earn,
       highlighted,
       moreInfo,
@@ -178,7 +170,6 @@ export default defineComponent({
         if (!isFormCorrect) return;
         const newMedia = {
           type: "video",
-          live: live.value,
           earn: earn.value,
           publisher: {
             walletAddress: walletAddress.value,
@@ -197,7 +188,8 @@ export default defineComponent({
             },
           },
         };
-        store.dispatch("media/add", newMedia);
+        await store.dispatch("media/add", newMedia);
+        router.push({ path: "/media" });
       },
       formatVuelidateErrors(errors: Array<ErrorObject>) {
         return errors.map((error) => {

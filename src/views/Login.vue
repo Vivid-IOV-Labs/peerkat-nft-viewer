@@ -46,7 +46,7 @@ import BaseInput from "@/components/BaseInput.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import AuthService from "../services/AuthService";
 import { ref, defineComponent } from "vue";
-import router from "../router";
+import { useRouter } from "vue-router";
 export default defineComponent({
   components: {
     BaseInput,
@@ -55,6 +55,8 @@ export default defineComponent({
   setup: () => {
     const email = ref("");
     const password = ref("");
+    const router = useRouter();
+
     return {
       email,
       password,
@@ -65,7 +67,6 @@ export default defineComponent({
           password: password.value,
         });
         if (token) router.push({ path: "media" });
-        console.log(token);
       },
     };
   },

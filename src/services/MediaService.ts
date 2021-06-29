@@ -7,7 +7,6 @@ async function list(): Promise<Array<Media>> {
   const {
     data: { allMedia },
   } = await ApiService.get(`${API_ENDPOINT}/list`);
-  console.log(allMedia);
   return allMedia;
 }
 
@@ -19,11 +18,9 @@ async function add(newMedia: Media): Promise<Media> {
 }
 
 async function remove(mediaID: string): Promise<void> {
-  console.log(mediaID);
-  const { data } = await ApiService.delete(`${API_ENDPOINT}`, {
+  await ApiService.delete(`${API_ENDPOINT}`, {
     params: { mediaID },
   });
-  console.log(data);
 }
 
 async function find(mediaID: string): Promise<Media> {

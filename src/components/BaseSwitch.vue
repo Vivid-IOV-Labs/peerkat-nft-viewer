@@ -76,7 +76,6 @@ export default {
   emits: ["update:modelValue"],
   methods: {
     handleChange(event: HTMLElementEvent<HTMLInputElement>): void {
-      console.log(event);
       this.$emit("update:modelValue", event.currentTarget?.value);
     },
   },

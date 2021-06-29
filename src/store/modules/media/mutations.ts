@@ -11,6 +11,6 @@ export default {
     state.all = [newMedia, ...state.all];
   },
   remove(state: MediaState, mediaID: string): void {
-    state.all.filter((media) => media.mediaID !== mediaID);
+    state.all = state.all.filter((media) => media.mediaID !== mediaID);
   },
 };

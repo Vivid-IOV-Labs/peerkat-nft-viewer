@@ -28,7 +28,10 @@
     <base-dialog
       v-model="isDeleteDialogOpen"
       :on-close="deleteMedia"
-    ></base-dialog>
+      title="Delete Media"
+    >
+      <p>Do you want to delete this Media?</p>
+    </base-dialog>
   </div>
 </template>
 <script lang="ts">
@@ -37,9 +40,11 @@ import BaseButton from "../components/BaseButton.vue";
 import BaseDialog from "../components/BaseDialog.vue";
 import { PropType } from "vue";
 import { Media } from "../models/Media";
-import MediaService from "../services/MediaService";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import { ref, defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   components: {
     BaseButton,
     BaseDialog,
@@ -47,9 +52,21 @@ export default {
   props: {
     media: { type: Object as PropType<Media>, required: true },
   },
-  data: function (): Record<string, unknown> {
+  setup: (props) => {
+    const store = useStore();
+    const router = useRouter();
+    const isDeleteDialogOpen = ref(false);
     return {
-      isDeleteDialogOpen: false,
+      isDeleteDialogOpen,
+      deleteMedia(): void {
+        store.dispatch("media/remove", props.media.mediaID);
+      },
+      confirmDelete(): void {
+        isDeleteDialogOpen.value = true;
+      },
+      editMedia(): void {
+        router.push({ path: `/media/edit/${props.media.mediaID}` });
+      },
     };
   },
   computed: {
@@ -107,17 +124,5 @@ export default {
       }
     },
   },
-  methods: {
-    confirmDelete(): void {
-      this.isDeleteDialogOpen = true;
-    },
-    editMedia(): void {
-      this.$router.push({ path: `/media/edit/${this.mediaID}` });
-    },
-    async deleteMedia(): Promise<void> {
-      console.log(this.mediaID);
-      await MediaService.remove(this.mediaID);
-    },
-  },
-};
+});
 </script>

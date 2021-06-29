@@ -14,5 +14,8 @@ export default {
     const newAddedMedia = await MediaService.add(newVideo);
     commit("add", newAddedMedia);
   },
-  // delete({ commit }, video) {},
+  async remove({ commit }: Store<MediaState>, mediaID: string): Promise<void> {
+    await MediaService.remove(mediaID);
+    commit("remove", mediaID);
+  },
 };

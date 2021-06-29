@@ -21,9 +21,7 @@ export default defineComponent({
   setup: () => {
     const store = useStore();
     const allMedia = computed(() => store.getters["media/filtered"]());
-    console.log(allMedia.value);
     store.dispatch("media/fetchAll");
-
     return { allMedia };
   },
 });

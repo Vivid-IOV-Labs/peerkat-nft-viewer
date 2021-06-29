@@ -53,12 +53,6 @@
         text="Is earn"
         label-text="earn"
       ></base-checkbox>
-      <base-checkbox
-        id="live"
-        v-model="data.formData.live"
-        text="Is live"
-        label-text="live"
-      ></base-checkbox>
     </div>
     <div v-if="data.formData.list" class="flex justify-between w-full">
       <base-checkbox
@@ -103,7 +97,6 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
-    console.log(route.params);
     const data = reactive({ formData: {} });
     (async () => {
       if (route.params.mediaID) {
