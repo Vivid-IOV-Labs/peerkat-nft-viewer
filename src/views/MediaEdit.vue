@@ -1,6 +1,5 @@
 <template>
   <form v-if="data.formData.details" class="w-full max-w-lg space-y-5 mx-auto">
-    <h1>Edit</h1>
     <div>
       <base-input
         id="title"
@@ -79,6 +78,28 @@
       ></base-input>
     </div>
     <base-button class="w-full" @click="submit">Submit</base-button>
+    <base-dialog
+      :show="showSuccess"
+      title="Success"
+      @close="showSuccess = false"
+    >
+      <template #body>
+        <p>Media updated successfully</p>
+      </template>
+      <template #footer>
+        <base-button class="ml-2" @click="showSuccess = false">
+          OK
+        </base-button>
+      </template>
+    </base-dialog>
+    <base-dialog :show="showError" title="Error" @close="showError = false">
+      <template #body>
+        <p>{{ errorMessage }}</p>
+      </template>
+      <template #footer>
+        <base-button class="ml-2" @click="showError = false"> OK </base-button>
+      </template>
+    </base-dialog>
   </form>
 </template>
 
@@ -86,7 +107,8 @@
 import BaseInput from "@/components/BaseInput.vue";
 import BaseButton from "../components/BaseButton.vue";
 import BaseCheckbox from "../components/BaseCheckbox.vue";
-import { defineComponent, reactive } from "vue";
+import BaseDialog from "../components/BaseDialog.vue";
+import { defineComponent, reactive, ref } from "vue";
 import MediaService from "../services/MediaService";
 import { useRoute } from "vue-router";
 
@@ -95,10 +117,14 @@ export default defineComponent({
     BaseInput,
     BaseButton,
     BaseCheckbox,
+    BaseDialog,
   },
   setup() {
     const route = useRoute();
     const data = reactive({ formData: {} });
+    const showError = ref(false);
+    const errorMessage = ref<string>("");
+    const showSuccess = ref(false);
     (async () => {
       if (route.params.mediaID) {
         data.formData = await MediaService.find(String(route.params.mediaID));
@@ -106,9 +132,23 @@ export default defineComponent({
     })();
     return {
       data,
+      showSuccess,
+      showError,
+      errorMessage,
       async submit(event: Event) {
         event.preventDefault();
-        await MediaService.update(data.formData);
+        try {
+          await MediaService.update(data.formData);
+          showSuccess.value = true;
+        } catch (error) {
+          const {
+            response: {
+              data: { message },
+            },
+          } = error;
+          errorMessage.value = String(message);
+          showError.value = true;
+        }
       },
     };
   },

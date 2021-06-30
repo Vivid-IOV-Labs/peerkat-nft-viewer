@@ -1,6 +1,5 @@
 <template>
   <form class="w-full max-w-lg space-y-5 mx-auto">
-    <h1>Add New media</h1>
     <div>
       <base-input
         id="title"
@@ -87,6 +86,26 @@
         :errors="formatVuelidateErrors(v$.hashtags.$errors)"
       ></base-input>
     </div>
+    <base-dialog
+      :show="showSuccess"
+      title="Success"
+      @close="showSuccess = false"
+    >
+      <template #body>
+        <p>Media added successfully</p>
+      </template>
+      <template #footer>
+        <base-button class="ml-2" @click="pushToMediaList"> OK </base-button>
+      </template>
+    </base-dialog>
+    <base-dialog :show="showError" title="Error" @close="showError = false">
+      <template #body>
+        <p>{{ errorMessage }}</p>
+      </template>
+      <template #footer>
+        <base-button class="ml-2" @click="showError = false"> OK </base-button>
+      </template>
+    </base-dialog>
     <base-button class="w-full" @click="submit">Submit</base-button>
   </form>
 </template>
@@ -95,6 +114,7 @@
 import BaseInput from "@/components/BaseInput.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseCheckbox from "@/components/BaseCheckbox.vue";
+import BaseDialog from "../components/BaseDialog.vue";
 import { ref, defineComponent, computed, Ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
@@ -117,6 +137,7 @@ export default defineComponent({
     BaseInput,
     BaseButton,
     BaseCheckbox,
+    BaseDialog,
   },
   setup: () => {
     const store = useStore();
@@ -130,6 +151,9 @@ export default defineComponent({
     const earn = ref(true);
     const highlighted = ref(true);
     const order = ref(0);
+    const showError = ref(false);
+    const errorMessage = ref<string>("");
+    const showSuccess = ref(false);
 
     const rules = computed(() => ({
       title: { required },
@@ -164,6 +188,9 @@ export default defineComponent({
       order,
       hashtags,
       v$,
+      showError,
+      showSuccess,
+      errorMessage,
       async submit(event: Event) {
         event.preventDefault();
         const isFormCorrect = await v$.value.$validate();
@@ -188,7 +215,21 @@ export default defineComponent({
             },
           },
         };
-        await store.dispatch("media/add", newMedia);
+        try {
+          await store.dispatch("media/add", newMedia);
+          showSuccess.value = true;
+        } catch (error) {
+          const {
+            response: {
+              data: { message },
+            },
+          } = error;
+          errorMessage.value = String(message);
+          showError.value = true;
+        }
+      },
+      pushToMediaList() {
+        showSuccess.value = false;
         router.push({ path: "/media" });
       },
       formatVuelidateErrors(errors: Array<ErrorObject>) {

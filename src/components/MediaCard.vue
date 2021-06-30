@@ -44,13 +44,21 @@
       <base-button class="ml-2" @click="confirmDelete">Delete</base-button>
     </div>
     <base-dialog
-      v-model="isDeleteDialogOpen"
-      :on-close="deleteMedia"
+      :show="isDeleteDialogOpen"
       title="Delete Media"
+      @close="isDeleteDialogOpen = false"
     >
-      <p>
-        Do you want to delete <strong>{{ media.details.title }}</strong> ?
-      </p>
+      <template #body>
+        <p>
+          Do you want to delete <strong>{{ media.details.title }}</strong> ?
+        </p>
+      </template>
+      <template #footer>
+        <base-button @click="deleteMedia"> Confirm </base-button>
+        <base-button class="ml-2" @click="isDeleteDialogOpen = false">
+          Cancel
+        </base-button>
+      </template>
     </base-dialog>
   </div>
 </template>

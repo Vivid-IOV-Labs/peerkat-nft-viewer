@@ -11,9 +11,6 @@
             alt="svelte logo"
           />
         </li>
-        <li>
-          <h1 class="pl-8 lg:pl-0 text-gray-700">Peerkat Admin</h1>
-        </li>
       </ul>
 
       <ul class="flex items-center">

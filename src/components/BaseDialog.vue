@@ -1,6 +1,6 @@
 <template>
-  <TransitionRoot appear :show="modelValue" as="template">
-    <Dialog as="div" @close="cancel">
+  <TransitionRoot appear :show="show" as="template">
+    <Dialog as="div" @close="close">
       <div class="fixed inset-0 z-10 overflow-y-auto">
         <div class="min-h-screen px-4 text-center">
           <TransitionChild
@@ -52,12 +52,11 @@
                 {{ title }}
               </DialogTitle>
               <div class="mt-2">
-                <slot></slot>
+                <slot name="body"></slot>
               </div>
 
               <div class="flex justify-end mt-8">
-                <base-button @click="confirm"> Confirm </base-button>
-                <base-button class="ml-2" @click="cancel"> Cancel </base-button>
+                <slot name="footer"></slot>
               </div>
             </div>
           </TransitionChild>
@@ -68,8 +67,6 @@
 </template>
 
 <script lang="ts">
-import BaseButton from "@/components/BaseButton.vue";
-
 import {
   TransitionRoot,
   TransitionChild,
@@ -85,10 +82,9 @@ export default {
     Dialog,
     DialogOverlay,
     DialogTitle,
-    BaseButton,
   },
   props: {
-    modelValue: {
+    show: {
       type: Boolean,
       required: true,
     },
@@ -96,19 +92,11 @@ export default {
       type: String,
       required: true,
     },
-    onClose: {
-      type: Function,
-      required: true,
-    },
   },
-  emits: ["update:modelValue"],
+  emits: ["close"],
   methods: {
-    async confirm(): Promise<void> {
-      await this.onClose();
-      this.$emit("update:modelValue", false);
-    },
-    cancel(): void {
-      this.$emit("update:modelValue", false);
+    close(): void {
+      this.$emit("close");
     },
   },
 };
