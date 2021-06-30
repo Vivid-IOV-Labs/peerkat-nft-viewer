@@ -108,10 +108,12 @@ import BaseInput from "@/components/BaseInput.vue";
 import BaseButton from "../components/BaseButton.vue";
 import BaseCheckbox from "../components/BaseCheckbox.vue";
 import BaseDialog from "../components/BaseDialog.vue";
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref, computed } from "vue";
 import MediaService from "../services/MediaService";
 import { useRoute } from "vue-router";
-
+import useVuelidate from "@vuelidate/core";
+import { required, url } from "@vuelidate/validators";
+import { isAddress } from "../utils/validators";
 export default defineComponent({
   components: {
     BaseInput,
@@ -125,6 +127,21 @@ export default defineComponent({
     const showError = ref(false);
     const errorMessage = ref<string>("");
     const showSuccess = ref(false);
+    const rules = computed(() => ({
+      title: { required },
+      subtitle: {},
+      walletAddress: {
+        required,
+        isAddress,
+      },
+      mediaID: { required },
+      moreInfo: { url },
+      earn: { required },
+      highlighted: { required },
+      order: { required },
+      hashtags: { required },
+    }));
+    const v$ = useVuelidate(rules, data.formData);
     (async () => {
       if (route.params.mediaID) {
         data.formData = await MediaService.find(String(route.params.mediaID));

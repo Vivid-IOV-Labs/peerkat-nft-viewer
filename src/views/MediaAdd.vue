@@ -120,6 +120,7 @@ import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import useVuelidate from "@vuelidate/core";
 import { required, url } from "@vuelidate/validators";
+import { isAddress } from "../utils/validators";
 
 export interface ErrorObject {
   $propertyPath: string;
@@ -158,7 +159,10 @@ export default defineComponent({
     const rules = computed(() => ({
       title: { required },
       subtitle: {},
-      walletAddress: { required },
+      walletAddress: {
+        required,
+        isAddress,
+      },
       mediaID: { required },
       moreInfo: { url },
       earn: { required },

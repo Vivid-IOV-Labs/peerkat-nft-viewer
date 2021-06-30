@@ -12,6 +12,7 @@
     "@vuelidate/core": "^2.0.0-alpha.19",
     "@vuelidate/validators": "^2.0.0-alpha.17",
     "axios": "^0.21.1",
+    "ethers": "^5.4.0",
     "vue": "^3.0.5",
     "vue-router": "^4.0.9",
     "vuex": "^4.0.2"
