@@ -1,8 +1,26 @@
 <template>
   <div class="rounded overflow-hidden border w-full bg-white shadow-lg">
     <div class="w-full flex justify-between p-3">
-      <div class="flex">
+      <div class="flex w-full justify-between items-center">
         <span class="pt-1 ml-2 font-bold text-xl">{{ title }}</span>
+        <span
+          v-if="media.earn"
+          class="
+            inline-flex
+            items-center
+            justify-center
+            px-2
+            py-1
+            mr-2
+            text-xs
+            font-bold
+            leading-none
+            text-green-100
+            bg-green-600
+            rounded-full
+          "
+          >EARN</span
+        >
       </div>
     </div>
     <figure class="w-full h-22">
