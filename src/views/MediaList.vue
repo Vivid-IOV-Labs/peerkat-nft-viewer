@@ -2,8 +2,7 @@
   <div class="flex justify-center items-center">
     <base-input
       v-model="searchByTitle"
-      placeholder="Seaech by title"
-      aria-placeholder="Search by title"
+      placeholder="Search by title"
       type="search"
       class="w-full max-w-xl"
     ></base-input>

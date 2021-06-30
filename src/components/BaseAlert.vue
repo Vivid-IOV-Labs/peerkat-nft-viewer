@@ -12,12 +12,12 @@
     role="alert"
   >
     <strong class="font-bold">{{ title }}</strong>
-    <span
-      v-for="message in messages"
-      :key="message.key"
-      class="block sm:inline"
-      >{{ message.text }}</span
-    >
+    <ul>
+      <li v-for="message in messages" :key="message.key" class="block">
+        {{ message.text }}
+      </li>
+    </ul>
+
     <span v-if="cancellable" class="absolute top-0 bottom-0 right-0 px-4 py-3">
       <svg
         class="fill-current h-6 w-6 text-red-500"
