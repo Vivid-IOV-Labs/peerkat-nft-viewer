@@ -4,7 +4,7 @@
       <router-view></router-view>
     </auth-layout>
   </div>
-  <div v-else class="container px-6 pt-4 pb-6">
+  <div v-else class="container px-6 pt-4 pb-6 h-screen">
     <router-view></router-view>
   </div>
 </template>

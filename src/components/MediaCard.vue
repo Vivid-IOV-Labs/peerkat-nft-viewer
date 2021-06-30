@@ -30,7 +30,9 @@
       :on-close="deleteMedia"
       title="Delete Media"
     >
-      <p>Do you want to delete this Media?</p>
+      <p>
+        Do you want to delete <strong>{{ media.details.title }}</strong> ?
+      </p>
     </base-dialog>
   </div>
 </template>

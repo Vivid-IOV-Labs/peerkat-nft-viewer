@@ -52,13 +52,10 @@
                 {{ title }}
               </DialogTitle>
               <div class="mt-2">
-                <p class="text-sm text-gray-500">
-                  Your payment has been successfully submitted. We’ve sent your
-                  an email with all of the details of your order.
-                </p>
+                <slot></slot>
               </div>
 
-              <div class="flex justify-end mt-4">
+              <div class="flex justify-end mt-8">
                 <base-button @click="confirm"> Confirm </base-button>
                 <base-button class="ml-2" @click="cancel"> Cancel </base-button>
               </div>

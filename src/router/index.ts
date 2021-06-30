@@ -7,6 +7,7 @@ const routes = [
     component: () => import("../views/Login.vue"),
     meta: {
       guest: true,
+      title: "Login",
     },
   },
   {
@@ -15,6 +16,7 @@ const routes = [
     component: () => import("../views/MediaList.vue"),
     meta: {
       withAuth: true,
+      title: "Media Dashboard",
     },
   },
   {
@@ -23,6 +25,7 @@ const routes = [
     component: () => import("../views/MediaAdd.vue"),
     meta: {
       withAuth: true,
+      title: "Add New Media",
     },
   },
   {
@@ -31,6 +34,7 @@ const routes = [
     component: () => import("../views/MediaEdit.vue"),
     meta: {
       withAuth: true,
+      title: "Edit Media",
     },
   },
 ];

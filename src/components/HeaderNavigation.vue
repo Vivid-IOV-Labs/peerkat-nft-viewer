@@ -11,12 +11,15 @@
             alt="svelte logo"
           />
         </li>
+        <li>
+          <h1 class="pl-8 lg:pl-0 text-gray-700">Peerkat Admin</h1>
+        </li>
       </ul>
 
       <ul class="flex items-center">
         <!-- add button -->
         <li>
-          <h1 class="pl-8 lg:pl-0 text-gray-700">Peerkat Admin</h1>
+          <h1 class="pl-8 lg:pl-0 text-gray-700">{{ title }}</h1>
         </li>
       </ul>
 
@@ -43,3 +46,15 @@
     </nav>
   </div>
 </template>
+<script lang="ts">
+import { useRoute } from "vue-router";
+import { defineComponent, computed } from "vue";
+
+export default defineComponent({
+  setup: () => {
+    const route = useRoute();
+    const title = computed(() => route.meta.title);
+    return { title };
+  },
+});
+</script>
