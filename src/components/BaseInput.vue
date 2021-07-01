@@ -60,7 +60,11 @@ export default {
   emits: { "update:modelValue": null },
   methods: {
     handleChange(event: HTMLElementEvent<HTMLInputElement>): void {
-      this.$emit("update:modelValue", event.currentTarget?.value);
+      const value =
+        this.type == "number"
+          ? Number(event.currentTarget?.value)
+          : String(event.currentTarget?.value);
+      this.$emit("update:modelValue", value);
     },
   },
 };

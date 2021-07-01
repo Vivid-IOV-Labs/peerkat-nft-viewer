@@ -5,6 +5,8 @@ export interface Media {
     walletAddress?: string;
   };
   mediaID: string;
+  balanceTotal: number;
+  balanceAvailable: number;
   list: {
     highlighted?: boolean;
     order?: number;

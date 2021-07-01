@@ -36,7 +36,7 @@ async function update(mediaToUpdate: Media): Promise<Media> {
   const { mediaID } = mediaToUpdate;
   const {
     data: { media: updatedMedia },
-  } = await ApiService.put(`${API_ENDPOINT}`, {
+  } = await ApiService.patch(`${API_ENDPOINT}`, {
     params: { mediaID },
     ...mediaToUpdate,
   });

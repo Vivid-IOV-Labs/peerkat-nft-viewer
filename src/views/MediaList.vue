@@ -15,14 +15,12 @@
     ></media-card>
     <router-link
       class="
-        w-20
-        h-20
-        bg-green-400
-        hover:bg-green-700
-        focus:ring
-        ring-offset-2
+        w-16
+        h-16
+        bg-green-500
         text-white
-        font-bold
+        font-bolder
+        text-3xl
         rounded-full
         flex
         items-center
@@ -30,10 +28,12 @@
         fixed
         bottom-10
         right-10
+        shadow-xl
       "
       :to="{ path: '/media/add' }"
-      >Add New</router-link
     >
+      <PlusIcon class="h-8 w-8 text-white" />
+    </router-link>
   </div>
 </template>
 
@@ -42,11 +42,13 @@ import { defineComponent, computed, ref } from "vue";
 import MediaCard from "../components/MediaCard.vue";
 import BaseInput from "@/components/BaseInput.vue";
 import { useStore } from "vuex";
+import { PlusIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({
   components: {
     MediaCard,
     BaseInput,
+    PlusIcon,
   },
   setup: () => {
     const store = useStore();

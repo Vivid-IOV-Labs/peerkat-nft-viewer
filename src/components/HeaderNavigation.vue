@@ -16,7 +16,7 @@
       <ul class="flex items-center">
         <!-- add button -->
         <li>
-          <h1 class="pl-8 lg:pl-0 text-gray-700">{{ title }}</h1>
+          <h1 class="pl-8 lg:pl-0 font-semibold text-xl">{{ title }}</h1>
         </li>
       </ul>
 
