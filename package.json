@@ -4,6 +4,7 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview",
+    "start": "node server.js",
     "lint": "eslint --ext .ts,vue --ignore-path .gitignore ."
   },
   "dependencies": {
@@ -19,6 +20,9 @@
     "vuex": "^4.0.2"
   },
   "devDependencies": {
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "express-static-gzip": "^2.1.1",
     "@types/node": "^15.12.4",
     "@types/vuelidate": "^0.7.14",
     "@typescript-eslint/eslint-plugin": "^4.28.0",
