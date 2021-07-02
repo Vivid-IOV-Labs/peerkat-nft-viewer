@@ -74,8 +74,9 @@ import {
   DialogOverlay,
   DialogTitle,
 } from "@headlessui/vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   components: {
     TransitionRoot,
     TransitionChild,
@@ -99,5 +100,5 @@ export default {
       this.$emit("close");
     },
   },
-};
+});
 </script>

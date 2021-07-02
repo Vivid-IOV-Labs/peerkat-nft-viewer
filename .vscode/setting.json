@@ -15,6 +15,7 @@
     "vetur.validation.style": false,
     "vetur.validation.template": false,
     "vetur.experimental": "templateInterpolationService",
+    "vetur.experimental.templateInterpolationService": true,
     "files.eol": "\n",
     "emmet.includeLanguages": {
         "javascript": "javascriptreact",

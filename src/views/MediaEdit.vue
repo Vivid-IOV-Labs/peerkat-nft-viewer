@@ -168,13 +168,6 @@ export default defineComponent({
       errorMessage,
       async submit(event: Event) {
         event.preventDefault();
-        console.log(data.formData.details);
-
-        if (data.formData.details && data.formData.details.twitter.hashtags) {
-          data.formData.details.twitter.hashtags =
-            data.formData.details.twitter.hashtags.split(",");
-        }
-        console.log(data.formData);
         try {
           await MediaService.update(data.formData);
           showSuccess.value = true;

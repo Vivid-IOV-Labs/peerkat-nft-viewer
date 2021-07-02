@@ -5,22 +5,20 @@
       type="checkbox"
       class="rounded border-grey-200 text-green-600 focus:ring-green-400"
       :checked="modelValue"
-      @input="$emit('update:modelValue', $event.target.checked)"
+      @input="handleChange"
     /><label :for="id" class="ml-2 text-grey-600">{{ labelText }}</label>
-  </div>
-  <div v-for="error of errors" :key="error.$uid" class="input-errors">
-    <div class="text-red-500">{{ error.$message }}</div>
   </div>
 </template>
 
 <script lang="ts">
-type HTMLElementEvent<T extends HTMLElement> = Event & {
-  target: T;
-  currentTarget: T;
-  checked: T;
-};
+import { defineComponent } from "vue";
 
-export default {
+function getValue (event: Event): boolean | undefined  {
+  const checked = (<HTMLInputElement>event.target).checked;
+  return checked
+}
+
+export default defineComponent({
   props: {
     id: {
       type: String,
@@ -41,9 +39,10 @@ export default {
   },
   emits: ["update:modelValue"],
   methods: {
-    handleChange(event: HTMLElementEvent<HTMLInputElement>): void {
-      this.$emit("update:modelValue", event.currentTarget?.value);
+    handleChange(event: Event): void {
+      const checked = getValue(event);
+      this.$emit("update:modelValue", checked);
     },
   },
-};
+});
 </script>

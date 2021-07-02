@@ -13,7 +13,7 @@
       :type="type"
       :placeholder="placeholder"
       v-bind="$attrs"
-      @change="handleChange"
+      @input="handleChange"
     />
     <base-alert v-if="errors.length" :messages="errors" class="input-errors">
     </base-alert>
@@ -22,12 +22,17 @@
 
 <script lang="ts">
 import BaseAlert from "@/components/BaseAlert.vue";
+import { defineComponent } from "vue";
 
-type HTMLElementEvent<T extends HTMLElement> = Event & {
-  target: T;
-  currentTarget: T;
-};
-export default {
+const getValue = (event: Event): string | number | undefined => {
+    const value =
+    (<HTMLInputElement>event.target).type == "number"
+        ? Number((<HTMLInputElement>event.target).value)
+        : String((<HTMLInputElement>event.target).value);
+    return value
+}
+
+export default defineComponent({
   components: {
     BaseAlert,
   },
@@ -41,7 +46,7 @@ export default {
       required: true,
     },
     modelValue: {
-      type: [Number, String, Array],
+      type: [Number, String],
       required: true,
     },
     type: {
@@ -59,13 +64,10 @@ export default {
   },
   emits: { "update:modelValue": null },
   methods: {
-    handleChange(event: HTMLElementEvent<HTMLInputElement>): void {
-      const value =
-        this.type == "number"
-          ? Number(event.currentTarget?.value)
-          : String(event.currentTarget?.value);
+    handleChange(event: Event): void {
+      const value = getValue(event);
       this.$emit("update:modelValue", value);
     },
   },
-};
+});
 </script>
