@@ -25,12 +25,12 @@ import BaseAlert from "@/components/BaseAlert.vue";
 import { defineComponent } from "vue";
 
 const getValue = (event: Event): string | number | undefined => {
-    const value =
-    (<HTMLInputElement>event.target).type == "number"
-        ? Number((<HTMLInputElement>event.target).value)
-        : String((<HTMLInputElement>event.target).value);
-    return value
-}
+  const value =
+    (event.target as HTMLInputElement).type == "number"
+      ? Number((event.target as HTMLInputElement).value)
+      : String((event.target as HTMLInputElement).value);
+  return value;
+};
 
 export default defineComponent({
   components: {

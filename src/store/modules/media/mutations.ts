@@ -1,9 +1,11 @@
+import { MutationTree } from "vuex";
 import { Media } from "../../../models/Media";
 
 interface MediaState {
   all: Array<Media>;
 }
-export default {
+
+const mutations: MutationTree<MediaState> = {
   setAll(state: MediaState, all: Array<Media>): void {
     state.all = all;
   },
@@ -14,3 +16,4 @@ export default {
     state.all = state.all.filter((media) => media.mediaID !== mediaID);
   },
 };
+export default mutations;

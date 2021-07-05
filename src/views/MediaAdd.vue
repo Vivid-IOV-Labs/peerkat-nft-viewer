@@ -45,6 +45,7 @@
           :errors="formatVuelidateErrors(v$.walletAddress.$errors)"
         ></base-input>
       </div>
+      <pre>{{ v$.walletAddress.$errors }}</pre>
       <div>
         <base-input
           id="moreInfo"
@@ -108,7 +109,9 @@
           label-text="hashtags"
           type="text"
           placeholder="hashtags"
-          :errors="formatVuelidateErrors(v$.hashtags.$errors)"
+          :errors="
+            v$.hashtags.$errors && formatVuelidateErrors(v$.hashtags.$errors)
+          "
         ></base-input>
       </div>
       <base-dialog
@@ -161,6 +164,24 @@ export interface ErrorObject {
   $response: unknown;
   $uid: string;
 }
+type Proxy<T> = {
+  get(): T;
+  set(value: T): void;
+};
+
+interface ProxyArray<T> extends Array<T> {
+  handler(): Array<T>;
+  target(value: T): void;
+}
+
+type Proxify<T> = {
+  [P in keyof T]: Proxy<T[P]>;
+};
+
+type ProxifyArray<T> = {
+  [P in keyof T]: ProxyArray<T[P]>;
+};
+type ArrayErrors = ProxifyArray<ErrorObject>;
 
 export default defineComponent({
   components: {
@@ -276,7 +297,7 @@ export default defineComponent({
         showSuccess.value = false;
         router.push({ path: "/media" });
       },
-      formatVuelidateErrors(errors: Array<ErrorObject>) {
+      formatVuelidateErrors(errors: any[]) {
         return errors.map((error) => {
           return { text: error.$message, key: error.$uid };
         });

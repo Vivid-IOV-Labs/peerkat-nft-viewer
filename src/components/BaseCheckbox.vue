@@ -13,9 +13,9 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-function getValue (event: Event): boolean | undefined  {
-  const checked = (<HTMLInputElement>event.target).checked;
-  return checked
+function getValue(event: Event): boolean | undefined {
+  const checked = (event.target as HTMLInputElement).checked;
+  return checked;
 }
 
 export default defineComponent({

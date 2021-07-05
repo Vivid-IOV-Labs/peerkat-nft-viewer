@@ -54,7 +54,6 @@ export default defineComponent({
     const store = useStore();
     const searchByTitle = ref("");
     const allMedia = computed(() => {
-      console.log(searchByTitle.value);
       return store.getters["media/byTitle"](searchByTitle.value);
     });
     store.dispatch("media/fetchAll");

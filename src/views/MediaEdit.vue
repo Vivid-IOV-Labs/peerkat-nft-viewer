@@ -79,7 +79,10 @@
           label-text="earn"
         ></base-checkbox>
       </div>
-      <div v-if="data.formData.list" class="flex justify-between w-full">
+      <div
+        v-if="data.formData.list && data.formData.list.highlighted"
+        class="flex justify-between w-full"
+      >
         <base-checkbox
           id="highlighted"
           v-model="data.formData.list.highlighted"
@@ -94,7 +97,10 @@
           placeholder="Order"
         ></base-input>
       </div>
-      <div class="flex justify-between w-full">
+      <div
+        v-if="data.formData.details.twitter"
+        class="flex justify-between w-full"
+      >
         <base-input
           id="hashtags"
           v-model="data.formData.details.twitter.hashtags"
@@ -141,6 +147,7 @@ import { defineComponent, reactive, ref } from "vue";
 import MediaService from "../services/MediaService";
 import { useRoute } from "vue-router";
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
+import { Media } from "../models/Media";
 
 export default defineComponent({
   components: {
@@ -152,7 +159,20 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
-    const data = reactive({ formData: {} });
+    const data = reactive<{ formData: Media }>({
+      formData: {
+        type: "",
+        earn: false,
+        publisher: {},
+        mediaID: "",
+        balanceTotal: 0,
+        balanceAvailable: 0,
+        list: {},
+        details: {
+          title: "",
+        },
+      },
+    });
     const showError = ref(false);
     const errorMessage = ref<string>("");
     const showSuccess = ref(false);
