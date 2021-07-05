@@ -1,7 +1,8 @@
 {
-    "root": "dist",
+    "root": "dist/",
     "clean_urls": true,
     "routes": {
         "/**": "index.html"
-    }
+    },
+    "brotli_static": "on"
 }
