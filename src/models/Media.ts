@@ -7,6 +7,7 @@ export interface Media {
   mediaID: string;
   balanceTotal: number;
   balanceAvailable: number;
+  categories: string[];
   list: {
     highlighted?: boolean;
     order?: number;

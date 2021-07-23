@@ -97,10 +97,26 @@
           placeholder="Order"
         ></base-input>
       </div>
-      <div
-        v-if="data.formData.details.twitter"
-        class="flex justify-between w-full"
-      >
+      <p>
+        You should separate categories by "," with no space in between and
+        outside <br />
+        ES: "crypto,gaming,other"
+      </p>
+      <div>
+        <base-input
+          id="categories"
+          v-model="data.formData.categories"
+          label-text="categories"
+          type="text"
+          placeholder="categories"
+        ></base-input>
+      </div>
+      <p>
+        You should separate hashtags by "," with no space in between and outside
+        <br />
+        ES: "crypto,thundercore,twitter"
+      </p>
+      <div v-if="data.formData.details.twitter">
         <base-input
           id="hashtags"
           v-model="data.formData.details.twitter.hashtags"
@@ -148,7 +164,17 @@ import MediaService from "../services/MediaService";
 import { useRoute } from "vue-router";
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
 import { Media } from "../models/Media";
-
+function formatArraysString(arrayString: string | string[]) {
+  if (arrayString && arrayString.length) {
+    if (Array.isArray(arrayString)) {
+      return arrayString;
+    } else {
+      return arrayString.split(",");
+    }
+  } else {
+    return [];
+  }
+}
 export default defineComponent({
   components: {
     BaseInput,
@@ -168,8 +194,12 @@ export default defineComponent({
         balanceTotal: 0,
         balanceAvailable: 0,
         list: {},
+        categories: [],
         details: {
           title: "",
+          twitter: {
+            hashtags: [],
+          },
         },
       },
     });
@@ -179,6 +209,9 @@ export default defineComponent({
     (async () => {
       if (route.params.mediaID) {
         data.formData = await MediaService.find(String(route.params.mediaID));
+        data.formData.categories = data.formData.mediaCategories
+          .map(({ name }) => name)
+          .join(",");
       }
     })();
     return {
@@ -189,9 +222,37 @@ export default defineComponent({
       async submit(event: Event) {
         event.preventDefault();
         try {
-          await MediaService.update(data.formData);
+          const toUpdate = JSON.parse(JSON.stringify(data));
+
+          const updatedMedia = {
+            type: "video",
+            earn: toUpdate.formData.earn,
+            publisher: {
+              walletAddress: toUpdate.formData.publisher.walletAddress,
+            },
+            balanceAvailable: toUpdate.formData.balanceAvailable,
+            balanceTotal: toUpdate.formData.balanceTotal,
+            mediaID: route.params.mediaID,
+            list: {
+              highlighted: toUpdate.formData.list.highlighted,
+              order: toUpdate.formData.list.order,
+            },
+            categories: formatArraysString(toUpdate.formData.categories),
+            details: {
+              title: toUpdate.formData.details.title,
+              subtitle: toUpdate.formData.details.subtitle || "",
+              moreInfo: toUpdate.formData.details.moreInfo || "",
+              twitter: {
+                hashtags: formatArraysString(
+                  toUpdate.formData.details.twitter.hashtags
+                ),
+              },
+            },
+          };
+          await MediaService.update(updatedMedia);
           showSuccess.value = true;
         } catch (error) {
+          console.log(error);
           const {
             response: {
               data: { message },

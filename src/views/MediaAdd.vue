@@ -45,7 +45,6 @@
           :errors="formatVuelidateErrors(v$.walletAddress.$errors)"
         ></base-input>
       </div>
-      <pre>{{ v$.walletAddress.$errors }}</pre>
       <div>
         <base-input
           id="moreInfo"
@@ -102,7 +101,30 @@
           :errors="formatVuelidateErrors(v$.order.$errors)"
         ></base-input>
       </div>
-      <div class="flex justify-between w-full">
+      <p>
+        You should separate categories by "," with no space in between and
+        outside <br />
+        ES: "crypto,gaming,other"
+      </p>
+      <div>
+        <base-input
+          id="categories"
+          v-model="v$.categories.$model"
+          label-text="categories"
+          type="text"
+          placeholder="categories"
+          :errors="
+            v$.categories.$errors &&
+            formatVuelidateErrors(v$.categories.$errors)
+          "
+        ></base-input>
+      </div>
+      <p>
+        You should separate hashtags by "," with no space in between and outside
+        <br />
+        ES: "crypto,thundercore,twitter"
+      </p>
+      <div>
         <base-input
           id="hashtags"
           v-model="v$.hashtags.$model"
@@ -200,6 +222,7 @@ export default defineComponent({
     const mediaID = ref("");
     const moreInfo = ref("");
     const hashtags = ref("");
+    const categories = ref("");
     const earn = ref(true);
     const highlighted = ref(true);
     const order = ref<number>(0);
@@ -224,6 +247,7 @@ export default defineComponent({
       balanceTotal: { required },
       balanceAvailable: { required },
       hashtags: { required },
+      categories: { required },
     }));
     const v$ = useVuelidate(rules, {
       title,
@@ -237,6 +261,7 @@ export default defineComponent({
       hashtags,
       balanceTotal,
       balanceAvailable,
+      categories,
     });
     return {
       title,
@@ -271,6 +296,7 @@ export default defineComponent({
             highlighted: highlighted.value,
             order: order.value,
           },
+          categories: categories.value.trim().split(","),
           details: {
             title: title.value,
             subtitle: subtitle.value,
