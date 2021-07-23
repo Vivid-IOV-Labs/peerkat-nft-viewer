@@ -209,9 +209,10 @@ export default defineComponent({
     (async () => {
       if (route.params.mediaID) {
         data.formData = await MediaService.find(String(route.params.mediaID));
-        data.formData.categories = data.formData.mediaCategories
-          .map(({ name }) => name)
-          .join(",");
+        data.formData.categories =
+          data.formData.mediaCategories && data.formData.mediaCategories?.length
+            ? data.formData.mediaCategories.map(({ name }) => name).join(",")
+            : "";
       }
     })();
     return {
