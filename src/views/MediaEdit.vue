@@ -252,7 +252,6 @@ export default defineComponent({
           await MediaService.update(updatedMedia);
           showSuccess.value = true;
         } catch (error) {
-          console.log(error);
           const {
             response: {
               data: { message },
