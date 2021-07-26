@@ -10,7 +10,7 @@ export interface Media {
   categories?: string | Array<any>;
   mediaCategories?: Array<any>;
   list: {
-    highlighted?: boolean;
+    highlighted: boolean;
     order?: number;
   };
   details: {
