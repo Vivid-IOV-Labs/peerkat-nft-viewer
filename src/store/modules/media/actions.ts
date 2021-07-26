@@ -8,7 +8,13 @@ interface MediaState {
 
 const actions: ActionTree<Media, MediaState> = {
   async fetchAll({ commit }): Promise<void> {
-    const media = await MediaService.list();
+    const allParams = {
+      sortBy: "createdAt",
+      order: "desc",
+      page: 1,
+      pageSize: 120,
+    };
+    const media = await MediaService.list(allParams);
     commit("setAll", media);
   },
   async add({ commit }, newVideo: Media): Promise<void> {

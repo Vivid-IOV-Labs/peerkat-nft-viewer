@@ -2,11 +2,19 @@ import ApiService from "./ApiService";
 import { Media } from "../models/Media";
 
 const API_ENDPOINT = "media";
-
-async function list(): Promise<Array<Media>> {
+function serialized(params: Record<string, string | number>): string {
+  return Object.keys(params)
+    .map((key) => {
+      return encodeURIComponent(key) + "=" + encodeURIComponent(params[key]);
+    })
+    .join("&");
+}
+async function list(
+  params: Record<string, string | number>
+): Promise<Array<Media>> {
   const {
     data: { allMedia },
-  } = await ApiService.get(`${API_ENDPOINT}/list`);
+  } = await ApiService.get(`${API_ENDPOINT}/list?${serialized(params)}`);
   return allMedia;
 }
 
