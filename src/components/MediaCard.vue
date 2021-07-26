@@ -1,26 +1,46 @@
 <template>
   <div class="rounded overflow-hidden border w-full bg-white shadow-lg">
     <div class="w-full flex justify-between p-3">
-      <div class="flex w-full justify-between items-center">
-        <span class="pt-1 ml-2 font-bold text-xl">{{ title }}</span>
-        <span
-          v-if="media.earn"
-          class="
-            inline-flex
-            items-center
-            justify-center
-            px-2
-            py-1
-            mr-2
-            text-xs
-            font-bold
-            leading-none
-            text-green-100
-            bg-green-600
-            rounded-full
-          "
-          >EARN</span
-        >
+      <div class="flex w-full flex-col justify-between">
+        <span class="pt-1 font-bold text-xl">{{ title }}</span>
+        <div class="flex mt-2">
+          <span
+            v-if="media.earn"
+            class="
+              inline-flex
+              items-center
+              justify-center
+              px-2
+              py-1
+              mr-2
+              text-xs
+              font-bold
+              leading-none
+              text-green-100
+              bg-green-600
+              rounded-full
+            "
+            >EARN</span
+          >
+          <span
+            v-if="media.list.highlighted"
+            class="
+              inline-flex
+              items-center
+              justify-center
+              px-2
+              py-1
+              mr-2
+              text-xs
+              font-bold
+              leading-none
+              text-green-100
+              bg-green-600
+              rounded-full
+            "
+            >TOP #{{ media.list.order }}</span
+          >
+        </div>
       </div>
     </div>
     <figure class="w-full h-22">
@@ -36,7 +56,9 @@
         </div>
       </div>
       <div class="pt-1">
-        <a target="_blank" :href="moreInfo" class="mb-2"> More Info </a>
+        <a v-if="moreInfo" target="_blank" :href="moreInfo" class="mb-2">
+          More Info
+        </a>
       </div>
     </div>
     <div class="border-t-2 p-4 flex justify-end">
