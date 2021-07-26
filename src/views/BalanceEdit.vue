@@ -89,11 +89,7 @@ export default defineComponent({
           const toUpdate = JSON.parse(JSON.stringify(data));
 
           const updatedMedia = {
-            publisher: {
-              walletAddress: toUpdate.formData.publisher.walletAddress,
-            },
             balanceAvailable: toUpdate.formData.balanceAvailable,
-            balanceTotal: toUpdate.formData.balanceTotal,
             mediaID: route.params.mediaID,
           };
           await MediaService.update(updatedMedia);

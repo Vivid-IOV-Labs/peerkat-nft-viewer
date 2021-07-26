@@ -53,32 +53,6 @@
           placeholder="More Info"
         ></base-input>
       </div>
-      <div>
-        <base-input
-          id="balanceTotal"
-          v-model="data.formData.balanceTotal"
-          label-text="balanceTotal"
-          type="number"
-          placeholder="balanceTotal"
-        ></base-input>
-      </div>
-      <div>
-        <base-input
-          id="balanceAvailable"
-          v-model="data.formData.balanceAvailable"
-          label-text="balanceAvailable"
-          type="number"
-          placeholder="balanceAvailable"
-        ></base-input>
-      </div>
-      <div class="flex justify-between w-full">
-        <base-checkbox
-          id="earn"
-          v-model="data.formData.earn"
-          text="Is earn"
-          label-text="earn"
-        ></base-checkbox>
-      </div>
       <div v-if="data.formData.list" class="flex justify-between w-full">
         <base-checkbox
           id="highlighted"
@@ -182,14 +156,11 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const router = useRouter();
-    const data = reactive<{ formData: Media }>({
+    const data = reactive<{ formData: any }>({
       formData: {
         type: "",
-        earn: false,
         publisher: {},
         mediaID: "",
-        balanceTotal: 0,
-        balanceAvailable: 0,
         list: { highlighted: false },
         categories: [],
         details: {
@@ -224,12 +195,9 @@ export default defineComponent({
 
           const updatedMedia = {
             type: "video",
-            earn: toUpdate.formData.earn,
             publisher: {
               walletAddress: toUpdate.formData.publisher.walletAddress,
             },
-            balanceAvailable: toUpdate.formData.balanceAvailable,
-            balanceTotal: toUpdate.formData.balanceTotal,
             mediaID: route.params.mediaID,
             list: {
               highlighted: toUpdate.formData.list.highlighted,
