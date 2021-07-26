@@ -79,10 +79,7 @@
           label-text="earn"
         ></base-checkbox>
       </div>
-      <div
-        v-if="data.formData.list && data.formData.list.highlighted"
-        class="flex justify-between w-full"
-      >
+      <div v-if="data.formData.list" class="flex justify-between w-full">
         <base-checkbox
           id="highlighted"
           v-model="data.formData.list.highlighted"
