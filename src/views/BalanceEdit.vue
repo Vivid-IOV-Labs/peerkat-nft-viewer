@@ -46,8 +46,8 @@
 
 <script lang="ts">
 import BaseInput from "@/components/BaseInput.vue";
-import BaseButton from "../components/BaseButton.vue";
-import BaseDialog from "../components/BaseDialog.vue";
+import BaseButton from "@/components/BaseButton.vue";
+import BaseDialog from "@/components/BaseDialog.vue";
 import { defineComponent, reactive, ref } from "vue";
 import MediaService from "../services/MediaService";
 import { useRoute, useRouter } from "vue-router";

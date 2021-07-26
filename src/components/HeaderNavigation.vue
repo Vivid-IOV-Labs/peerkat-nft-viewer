@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-1 flex flex-col">
+  <div class="sticky top-0 z-50 flex-1 flex flex-col">
     <nav class="px-4 flex justify-between bg-white h-16 shadow">
       <!-- top bar left -->
       <ul class="flex items-center">
@@ -21,37 +21,39 @@
       </ul>
 
       <!-- to bar right  -->
-      <ul class="flex items-center">
-        <li class="pr-6">
-          <!-- <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="feather feather-bell"
-          >
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-          </svg> -->
-        </li>
-      </ul>
+      <div class="flex items-center">
+        <base-button
+          v-if="route.path == '/media'"
+          class="pr-6 ml-2"
+          @click="logOut"
+        >
+          LOGOUT
+        </base-button>
+      </div>
     </nav>
   </div>
 </template>
 <script lang="ts">
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { defineComponent, computed } from "vue";
+import BaseButton from "@/components/BaseButton.vue";
 
 export default defineComponent({
+  components: {
+    BaseButton,
+  },
   setup: () => {
     const route = useRoute();
+    const router = useRouter();
     const title = computed(() => route.meta.title);
-    return { title };
+    return {
+      title,
+      route,
+      logOut() {
+        localStorage.removeItem("token");
+        router.push({ path: "/" });
+      },
+    };
   },
 });
 </script>

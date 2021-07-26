@@ -229,7 +229,7 @@ export default defineComponent({
       },
       pushToMediaList() {
         showSuccess.value = false;
-        router.push({ path: "/media" });
+        router.push({ path: "/" });
       },
     };
   },
