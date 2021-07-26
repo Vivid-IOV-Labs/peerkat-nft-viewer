@@ -62,6 +62,9 @@
       </div>
     </div>
     <div class="border-t-2 p-4 flex justify-end">
+      <base-button v-if="media.earn" class="mr-2" @click="editMediaBalance"
+        >Edit Balance</base-button
+      >
       <base-button @click="editMedia">Edit</base-button>
       <base-button class="ml-2" @click="confirmDelete">Delete</base-button>
     </div>
@@ -116,6 +119,9 @@ export default defineComponent({
       },
       editMedia(): void {
         router.push({ path: `/media/edit/${props.media.mediaID}` });
+      },
+      editMediaBalance(): void {
+        router.push({ path: `/media/balance/edit/${props.media.mediaID}` });
       },
     };
   },

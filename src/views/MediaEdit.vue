@@ -132,9 +132,7 @@
           <p>Media updated successfully</p>
         </template>
         <template #footer>
-          <base-button class="ml-2" @click="showSuccess = false">
-            OK
-          </base-button>
+          <base-button class="ml-2" @click="pushToMediaList"> OK </base-button>
         </template>
       </base-dialog>
       <base-dialog :show="showError" title="Error" @close="showError = false">
@@ -158,9 +156,10 @@ import BaseCheckbox from "../components/BaseCheckbox.vue";
 import BaseDialog from "../components/BaseDialog.vue";
 import { defineComponent, reactive, ref } from "vue";
 import MediaService from "../services/MediaService";
-import { useRoute } from "vue-router";
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
 import { Media } from "../models/Media";
+import { useRoute, useRouter } from "vue-router";
+
 function formatArraysString(arrayString: string | string[]) {
   if (arrayString && arrayString.length) {
     if (Array.isArray(arrayString)) {
@@ -182,6 +181,7 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const data = reactive<{ formData: Media }>({
       formData: {
         type: "",
@@ -258,6 +258,10 @@ export default defineComponent({
           errorMessage.value = String(message);
           showError.value = true;
         }
+      },
+      pushToMediaList() {
+        showSuccess.value = false;
+        router.push({ path: "/media" });
       },
     };
   },

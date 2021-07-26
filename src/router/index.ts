@@ -37,6 +37,15 @@ const routes = [
       title: "Edit Media",
     },
   },
+  {
+    path: "/media/balance/edit/:mediaID",
+    name: "BalanceEdit",
+    component: () => import("../views/BalanceEdit.vue"),
+    meta: {
+      withAuth: true,
+      title: "Edit Balance",
+    },
+  },
 ];
 
 const router = createRouter({
