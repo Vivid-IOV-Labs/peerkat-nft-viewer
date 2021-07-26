@@ -8,8 +8,12 @@
           <img
             class="h-full w-full mx-auto"
             src="@/assets/img/logopeerkat.png"
-            alt="svelte logo"
+            alt="Peerkat logo"
           />
+        </li>
+        <li class="mr-2">
+          <span v-if="isProduction" class="text-xl font-bold">Production</span>
+          <span v-else class="text-xl font-bold">Test</span>
         </li>
       </ul>
 
@@ -34,6 +38,8 @@
   </div>
 </template>
 <script lang="ts">
+const apiUrl = import.meta.env.VITE_API_URL;
+const isProduction = apiUrl === "https://media.peerkat.live";
 import { useRoute, useRouter } from "vue-router";
 import { defineComponent, computed } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
@@ -47,6 +53,7 @@ export default defineComponent({
     const router = useRouter();
     const title = computed(() => route.meta.title);
     return {
+      isProduction,
       title,
       route,
       logOut() {
