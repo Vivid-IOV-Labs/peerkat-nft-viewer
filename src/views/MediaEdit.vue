@@ -156,10 +156,9 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const router = useRouter();
-    const data = reactive<{ formData: any }>({
+    const data = reactive<{ formData: Media }>({
       formData: {
-        type: "",
-        publisher: {},
+        publisher: { walletAddress: "" },
         mediaID: "",
         list: { highlighted: false },
         categories: [],

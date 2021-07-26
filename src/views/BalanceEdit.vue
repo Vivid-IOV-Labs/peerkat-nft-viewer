@@ -65,7 +65,6 @@ export default defineComponent({
     const router = useRouter();
     const data = reactive<{ formData: any }>({
       formData: {
-        publisher: {},
         mediaID: "",
         balanceAvailable: 0,
       },

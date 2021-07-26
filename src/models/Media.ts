@@ -1,12 +1,12 @@
 export interface Media {
-  type: string;
-  earn: boolean;
+  type?: string;
+  earn?: boolean;
   publisher: {
-    walletAddress?: string;
+    walletAddress: string;
   };
   mediaID: string;
-  balanceTotal: number;
-  balanceAvailable: number;
+  balanceTotal?: number;
+  balanceAvailable?: number;
   categories?: string | Array<any>;
   mediaCategories?: Array<any>;
   list: {
