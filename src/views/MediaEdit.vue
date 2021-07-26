@@ -190,7 +190,7 @@ export default defineComponent({
         mediaID: "",
         balanceTotal: 0,
         balanceAvailable: 0,
-        list: {},
+        list: { highlighted: false },
         categories: [],
         details: {
           title: "",
