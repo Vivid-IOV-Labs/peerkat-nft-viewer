@@ -32,7 +32,6 @@
           type="password"
           placeholder="******************"
         ></base-input>
-        <p class="text-red text-xs italic">Please choose a password.</p>
       </div>
       <div class="flex items-center justify-between">
         <base-button @click="handleSubmit"> Sign In </base-button>
