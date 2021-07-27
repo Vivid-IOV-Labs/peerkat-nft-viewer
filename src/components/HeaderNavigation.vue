@@ -12,6 +12,7 @@
           />
         </li>
         <li class="mr-2">
+          {{ apiUrl }}
           <span v-if="isProduction" class="text-lg uppercase font-bold"
             >Production</span
           >
@@ -60,6 +61,7 @@ export default defineComponent({
       isProduction,
       title,
       route,
+      apiUrl,
       logOut() {
         localStorage.removeItem("token");
         router.push({ path: "/" });
