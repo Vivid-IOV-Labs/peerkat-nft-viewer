@@ -43,7 +43,7 @@
 </template>
 <script lang="ts">
 const apiUrl = import.meta.env.VITE_API_URL;
-const isProduction = apiUrl === "https://media.peerkat.live";
+const isProduction = apiUrl == "https://media.peerkat.live";
 import { useRoute, useRouter } from "vue-router";
 import { defineComponent, computed } from "vue";
 import BaseButton from "@/components/BaseButton.vue";

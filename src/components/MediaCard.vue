@@ -133,7 +133,7 @@ export default defineComponent({
         router.push({ path: `/media/balance/edit/${props.media.mediaID}` });
       },
       fallbackImg(event: Event): void {
-        event.target.src = "thumbnail.jpg";
+        (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
     };
   },
