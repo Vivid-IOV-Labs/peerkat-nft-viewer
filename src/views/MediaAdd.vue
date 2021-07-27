@@ -5,6 +5,40 @@
     </router-link>
     <hr class="clear-both my-6 border-none" />
     <form class="w-full max-w-lg space-y-5 mx-auto">
+      <div class="flex justify-between w-full items-start">
+        <base-checkbox
+          id="earn"
+          v-model="v$.earn.$model"
+          text="Is earn"
+          label-text="earn"
+          :errors="formatVuelidateErrors(v$.earn.$errors)"
+          @change="onEarnChange"
+        ></base-checkbox>
+        <div v-if="v$.earn.$model">
+          <div>
+            <base-input
+              id="balanceTotal"
+              v-model="v$.balanceTotal.$model"
+              label-text="balanceTotal"
+              type="number"
+              min="0"
+              placeholder="100"
+              :errors="formatVuelidateErrors(v$.balanceTotal.$errors)"
+            ></base-input>
+          </div>
+          <div>
+            <base-input
+              id="balanceAvailable"
+              v-model="v$.balanceAvailable.$model"
+              label-text="balanceAvailable"
+              type="number"
+              min="0"
+              placeholder="100"
+              :errors="formatVuelidateErrors(v$.balanceAvailable.$errors)"
+            ></base-input>
+          </div>
+        </div>
+      </div>
       <div>
         <base-input
           id="title"
@@ -15,7 +49,7 @@
           :errors="formatVuelidateErrors(v$.title.$errors)"
         ></base-input>
       </div>
-      <div>
+      <div v-if="v$.earn.$model">
         <base-input
           id="subtitle"
           v-model="v$.subtitle.$model"
@@ -45,51 +79,20 @@
           :errors="formatVuelidateErrors(v$.walletAddress.$errors)"
         ></base-input>
       </div>
-      <div>
+      <div v-if="v$.earn.$model">
         <base-input
           id="moreInfo"
           v-model="v$.moreInfo.$model"
           label-text="moreInfo"
           type="text"
-          placeholder="More Info"
+          placeholder="More Info Link"
           :errors="formatVuelidateErrors(v$.moreInfo.$errors)"
         ></base-input>
       </div>
-      <div class="flex justify-between w-full items-start">
-        <base-checkbox
-          id="earn"
-          v-model="v$.earn.$model"
-          text="Is earn"
-          label-text="earn"
-          :errors="formatVuelidateErrors(v$.earn.$errors)"
-        ></base-checkbox>
-        <div v-if="v$.earn.$model">
-          <div>
-            <base-input
-              id="balanceTotal"
-              v-model="v$.balanceTotal.$model"
-              label-text="balanceTotal"
-              type="number"
-              min="0"
-              placeholder="100"
-              :errors="formatVuelidateErrors(v$.balanceTotal.$errors)"
-            ></base-input>
-          </div>
-          <div>
-            <base-input
-              id="balanceAvailable"
-              v-model="v$.balanceAvailable.$model"
-              label-text="balanceAvailable"
-              type="number"
-              min="0"
-              placeholder="100"
-              :errors="formatVuelidateErrors(v$.balanceAvailable.$errors)"
-            ></base-input>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex justify-between w-full items-start">
+      <div
+        v-if="!v$.earn.$model"
+        class="flex justify-between w-full items-start"
+      >
         <base-checkbox
           id="highlighted:highlighted.value"
           v-model="v$.highlighted.$model"
@@ -335,6 +338,10 @@ export default defineComponent({
         return errors.map((error) => {
           return { text: error.$message, key: error.$uid };
         });
+      },
+      onEarnChange(event: Event) {
+        const isChecked = (event.target as HTMLInputElement).checked;
+        highlighted.value = isChecked ? false : highlighted.value;
       },
     };
   },

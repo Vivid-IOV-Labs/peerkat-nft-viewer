@@ -17,7 +17,7 @@
           placeholder="Title"
         ></base-input>
       </div>
-      <div>
+      <div v-if="data.formData.earn">
         <base-input
           id="subtitle"
           v-model="data.formData.details.subtitle"
@@ -44,16 +44,19 @@
           placeholder="Publisher walletAddress"
         ></base-input>
       </div>
-      <div>
+      <div v-if="data.formData.earn">
         <base-input
           id="moreInfo"
           v-model="data.formData.details.moreInfo"
           label-text="moreInfo"
           type="text"
-          placeholder="More Info"
+          placeholder="More Info Link"
         ></base-input>
       </div>
-      <div v-if="data.formData.list" class="flex justify-between w-full">
+      <div
+        v-if="data.formData.list && !data.formData.earn"
+        class="flex justify-between w-full"
+      >
         <base-checkbox
           id="highlighted"
           v-model="data.formData.list.highlighted"
@@ -158,6 +161,7 @@ export default defineComponent({
     const router = useRouter();
     const data = reactive<{ formData: Media }>({
       formData: {
+        earn: false,
         publisher: { walletAddress: "" },
         mediaID: "",
         list: { highlighted: false },
