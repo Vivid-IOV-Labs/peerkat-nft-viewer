@@ -56,8 +56,13 @@
         </div>
       </div>
       <div class="pt-1">
-        <a v-if="moreInfo" target="_blank" :href="moreInfo" class="mb-2">
-          More Info
+        <a
+          v-if="moreInfo"
+          target="_blank"
+          :href="moreInfo"
+          class="mb-2 text-xs"
+        >
+          {{ moreInfo }}
         </a>
       </div>
     </div>

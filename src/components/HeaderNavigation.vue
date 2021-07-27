@@ -12,15 +12,19 @@
           />
         </li>
         <li class="mr-2">
-          <span v-if="isProduction" class="text-xl font-bold">Production</span>
-          <span v-else class="text-xl font-bold">Test</span>
+          <span v-if="isProduction" class="text-lg uppercase font-bold"
+            >Production</span
+          >
+          <span v-else class="text-lg uppercase font-bold">Test</span>
         </li>
       </ul>
 
       <ul class="flex items-center">
         <!-- add button -->
         <li>
-          <h1 class="pl-8 lg:pl-0 font-semibold text-xl">{{ title }}</h1>
+          <h1 class="pl-8 lg:pl-0 uppercase font-semibold text-lg">
+            {{ title }}
+          </h1>
         </li>
       </ul>
 
@@ -28,7 +32,7 @@
       <div class="flex items-center">
         <base-button
           v-if="route.path == '/media'"
-          class="pr-6 ml-2"
+          class="pr-6 uppercase text-lg ml-2"
           @click="logOut"
         >
           LOGOUT
