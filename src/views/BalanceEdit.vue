@@ -10,6 +10,37 @@
     >
       <div>
         <base-input
+          id="title"
+          v-model="data.formData.details.title"
+          label-text="title"
+          type="text"
+          placeholder="Title"
+          readonly
+        ></base-input>
+      </div>
+      <div>
+        <base-input
+          id="mediaID"
+          v-model="data.formData.mediaID"
+          label-text="mediaID"
+          type="text"
+          placeholder="Media ID"
+          readonly
+        ></base-input>
+      </div>
+      <div>
+        <base-input
+          id="balanceTotal"
+          v-model="data.formData.balanceTotal"
+          label-text="Balance Total"
+          type="number"
+          min="0"
+          placeholder="balanceTotal"
+          readonly
+        ></base-input>
+      </div>
+      <div>
+        <base-input
           id="balanceAvailable"
           v-model="data.formData.balanceAvailable"
           label-text="New Balance Available"
@@ -68,6 +99,10 @@ export default defineComponent({
       formData: {
         mediaID: "",
         balanceAvailable: 0,
+        balanceTotal: 0,
+        details: {
+          title: "",
+        },
       },
     });
     const showError = ref(false);
