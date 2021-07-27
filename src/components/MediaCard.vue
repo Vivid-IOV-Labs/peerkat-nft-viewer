@@ -44,7 +44,11 @@
       </div>
     </div>
     <figure class="w-full h-22">
-      <img class="w-full object-cover object-centerz" :src="posterUrl" />
+      <img
+        class="w-full object-cover object-centerz"
+        :src="posterUrl"
+        @error="fallbackImg"
+      />
     </figure>
     <div class="px-3 pb-2">
       <div class="pt-2">
@@ -127,6 +131,9 @@ export default defineComponent({
       },
       editMediaBalance(): void {
         router.push({ path: `/media/balance/edit/${props.media.mediaID}` });
+      },
+      fallbackImg(event: Event): void {
+        event.target.src = "thumbnail.jpg";
       },
     };
   },
