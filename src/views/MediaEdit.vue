@@ -193,7 +193,6 @@ export default defineComponent({
           const toUpdate = JSON.parse(JSON.stringify(data));
 
           const updatedMedia = {
-            type: "video",
             publisher: {
               walletAddress: toUpdate.formData.publisher.walletAddress,
             },
@@ -228,7 +227,7 @@ export default defineComponent({
       },
       pushToMediaList() {
         showSuccess.value = false;
-        router.push({ path: "/" });
+        router.push({ path: "/media" });
       },
     };
   },

@@ -1,5 +1,5 @@
 import MediaService from "../../../services/MediaService";
-import { ActionTree, Store } from "vuex";
+import { ActionTree } from "vuex";
 import { Media } from "../../../models/Media";
 
 interface MediaState {
@@ -9,7 +9,7 @@ interface MediaState {
 const actions: ActionTree<Media, MediaState> = {
   async fetchAll({ commit }): Promise<void> {
     const allParams = {
-      sortBy: "createdAt",
+      sortBy: "updatedAt",
       order: "desc",
       page: 1,
       pageSize: 120,

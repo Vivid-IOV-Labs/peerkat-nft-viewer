@@ -55,27 +55,7 @@
           :errors="formatVuelidateErrors(v$.moreInfo.$errors)"
         ></base-input>
       </div>
-      <div>
-        <base-input
-          id="balanceTotal"
-          v-model="v$.balanceTotal.$model"
-          label-text="balanceTotal"
-          type="number"
-          placeholder="100"
-          :errors="formatVuelidateErrors(v$.balanceTotal.$errors)"
-        ></base-input>
-      </div>
-      <div>
-        <base-input
-          id="balanceAvailable"
-          v-model="v$.balanceAvailable.$model"
-          label-text="balanceAvailable"
-          type="number"
-          placeholder="100"
-          :errors="formatVuelidateErrors(v$.balanceAvailable.$errors)"
-        ></base-input>
-      </div>
-      <div class="flex justify-between w-full">
+      <div class="flex justify-between w-full items-start">
         <base-checkbox
           id="earn"
           v-model="v$.earn.$model"
@@ -83,8 +63,33 @@
           label-text="earn"
           :errors="formatVuelidateErrors(v$.earn.$errors)"
         ></base-checkbox>
+        <div v-if="v$.earn.$model">
+          <div>
+            <base-input
+              id="balanceTotal"
+              v-model="v$.balanceTotal.$model"
+              label-text="balanceTotal"
+              type="number"
+              min="0"
+              placeholder="100"
+              :errors="formatVuelidateErrors(v$.balanceTotal.$errors)"
+            ></base-input>
+          </div>
+          <div>
+            <base-input
+              id="balanceAvailable"
+              v-model="v$.balanceAvailable.$model"
+              label-text="balanceAvailable"
+              type="number"
+              min="0"
+              placeholder="100"
+              :errors="formatVuelidateErrors(v$.balanceAvailable.$errors)"
+            ></base-input>
+          </div>
+        </div>
       </div>
-      <div class="flex justify-between w-full">
+
+      <div class="flex justify-between w-full items-start">
         <base-checkbox
           id="highlighted:highlighted.value"
           v-model="v$.highlighted.$model"
@@ -92,14 +97,17 @@
           label-text="highlighted"
           :errors="formatVuelidateErrors(v$.highlighted.$errors)"
         ></base-checkbox>
-        <base-input
-          id="order"
-          v-model="v$.order.$model"
-          label-text="order"
-          type="number"
-          placeholder="Order"
-          :errors="formatVuelidateErrors(v$.order.$errors)"
-        ></base-input>
+        <div v-if="v$.highlighted.$model">
+          <base-input
+            id="order"
+            v-model="v$.order.$model"
+            label-text="order"
+            type="number"
+            placeholder="Order"
+            min="0"
+            :errors="formatVuelidateErrors(v$.order.$errors)"
+          ></base-input>
+        </div>
       </div>
       <p>
         You should separate categories by "," with no space in between and
@@ -172,7 +180,7 @@ import { ref, defineComponent, computed, Ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import useVuelidate from "@vuelidate/core";
-import { required, url } from "@vuelidate/validators";
+import { required, url, minValue } from "@vuelidate/validators";
 import { isAddress } from "../utils/validators";
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
 
@@ -223,8 +231,8 @@ export default defineComponent({
     const moreInfo = ref("");
     const hashtags = ref("");
     const categories = ref("");
-    const earn = ref(true);
-    const highlighted = ref(true);
+    const earn = ref(false);
+    const highlighted = ref(false);
     const order = ref<number>(0);
     const balanceTotal = ref<number>(0);
     const balanceAvailable = ref<number>(0);
@@ -243,9 +251,9 @@ export default defineComponent({
       moreInfo: { url },
       earn: { required },
       highlighted: { required },
-      order: { required },
-      balanceTotal: { required },
-      balanceAvailable: { required },
+      order: { required, minValue: minValue(0) },
+      balanceTotal: { required, minValue: minValue(0) },
+      balanceAvailable: { required, minValue: minValue(0) },
       hashtags: { required },
       categories: { required },
     }));

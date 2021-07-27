@@ -14,6 +14,7 @@
           v-model="data.formData.balanceAvailable"
           label-text="New Balance Available"
           type="number"
+          min="0"
           placeholder="balanceAvailable"
         ></base-input>
       </div>

@@ -3,10 +3,21 @@
     <input
       :id="id"
       type="checkbox"
-      class="rounded border-grey-200 text-green-600 focus:ring-green-400"
+      class="
+        rounded
+        w-5
+        h-5
+        border-grey-200
+        text-green-600
+        focus:ring-green-400
+      "
       :checked="modelValue"
       @input="handleChange"
-    /><label :for="id" class="ml-2 text-grey-600">{{ labelText }}</label>
+    /><label
+      :for="id"
+      class="ml-2 block uppercase tracking-wide text-gray-700 text-xs font-bold"
+      >{{ labelText }}</label
+    >
   </div>
 </template>
 
