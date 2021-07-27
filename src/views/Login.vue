@@ -37,12 +37,21 @@
         <base-button @click="handleSubmit"> Sign In </base-button>
       </div>
     </div>
+    <base-dialog :show="showError" title="Error" @close="showError = false">
+      <template #body>
+        <p>{{ errorMessage }}</p>
+      </template>
+      <template #footer>
+        <base-button class="ml-2" @click="showError = false"> OK </base-button>
+      </template>
+    </base-dialog>
   </div>
 </template>
 
 <script lang="ts">
 import BaseInput from "@/components/BaseInput.vue";
 import BaseButton from "@/components/BaseButton.vue";
+import BaseDialog from "@/components/BaseDialog.vue";
 import AuthService from "../services/AuthService";
 import { ref, defineComponent } from "vue";
 import { useRouter } from "vue-router";
@@ -50,22 +59,36 @@ export default defineComponent({
   components: {
     BaseInput,
     BaseButton,
+    BaseDialog,
   },
   setup: () => {
     const email = ref("");
     const password = ref("");
     const router = useRouter();
-
+    const showError = ref(false);
+    const errorMessage = ref<string>("");
     return {
       email,
       password,
+      showError,
+      errorMessage,
       async handleSubmit(e: Event) {
         e.preventDefault();
-        const token = await AuthService.login({
-          email: email.value,
-          password: password.value,
-        });
-        if (token) router.push({ path: "media" });
+        try {
+          const token = await AuthService.login({
+            email: email.value,
+            password: password.value,
+          });
+          if (token) router.push({ path: "media" });
+        } catch (error) {
+          const {
+            response: {
+              data: { message },
+            },
+          } = error;
+          errorMessage.value = String(message);
+          showError.value = true;
+        }
       },
     };
   },

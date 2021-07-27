@@ -47,9 +47,23 @@
           type="number"
           min="0"
           placeholder="balanceAvailable"
+          readonly
         ></base-input>
       </div>
-      <base-button class="w-full" @click="submit">Submit</base-button>
+      <div>
+        <base-input
+          id="balanceAvailable"
+          v-model="v$.newBalanceAvailable.$model"
+          label-text="New Balance Available"
+          type="number"
+          min="0"
+          placeholder="balanceAvailable"
+          :errors="formatVuelidateErrors(v$.newBalanceAvailable.$errors)"
+        ></base-input>
+      </div>
+      <base-button :disabled="v$.$invalid" class="w-full" @click="submit"
+        >Submit</base-button
+      >
       <base-dialog
         :show="showSuccess"
         title="Success"
@@ -80,10 +94,12 @@
 import BaseInput from "@/components/BaseInput.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseDialog from "@/components/BaseDialog.vue";
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref, computed } from "vue";
 import MediaService from "../services/MediaService";
 import { useRoute, useRouter } from "vue-router";
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
+import useVuelidate from "@vuelidate/core";
+import { required, minValue } from "@vuelidate/validators";
 
 export default defineComponent({
   components: {
@@ -105,26 +121,33 @@ export default defineComponent({
         },
       },
     });
+
     const showError = ref(false);
     const errorMessage = ref<string>("");
     const showSuccess = ref(false);
+    const newBalanceAvailable = ref<number>(0);
     (async () => {
       if (route.params.mediaID) {
         data.formData = await MediaService.find(String(route.params.mediaID));
       }
     })();
+    const rules = computed(() => ({
+      newBalanceAvailable: { required, minValue: minValue(0) },
+    }));
+    const v$ = useVuelidate(rules, { newBalanceAvailable });
+
     return {
       data,
       showSuccess,
       showError,
       errorMessage,
+      newBalanceAvailable,
+      v$,
       async submit(event: Event) {
         event.preventDefault();
         try {
-          const toUpdate = JSON.parse(JSON.stringify(data));
-
           const updatedMedia = {
-            balanceAvailable: toUpdate.formData.balanceAvailable,
+            balanceAvailable: newBalanceAvailable.value,
             mediaID: route.params.mediaID,
           };
           await MediaService.update(updatedMedia);
@@ -142,6 +165,11 @@ export default defineComponent({
       pushToMediaList() {
         showSuccess.value = false;
         router.push({ path: "/media" });
+      },
+      formatVuelidateErrors(errors: any[]) {
+        return errors.map((error) => {
+          return { text: error.$message, key: error.$uid };
+        });
       },
     };
   },

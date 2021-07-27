@@ -169,7 +169,9 @@
           </base-button>
         </template>
       </base-dialog>
-      <base-button class="w-full" @click="submit">Submit</base-button>
+      <base-button :disabled="v$.$invalid" class="w-full" @click="submit"
+        >Submit</base-button
+      >
     </form>
   </div>
 </template>
