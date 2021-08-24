@@ -79,7 +79,17 @@ export default defineComponent({
             email: email.value,
             password: password.value,
           });
-          if (token) router.push({ path: "media" });
+          if (token)
+            router.push({
+              path: "media",
+              query: {
+                sortBy: "updatedAt",
+                order: "desc",
+                page: 1,
+                pageSize: 10,
+                earn: "true",
+              },
+            });
         } catch (error) {
           const {
             response: {

@@ -3,6 +3,7 @@ import { Media } from "../../../models/Media";
 
 export default {
   getAll: (state: MediaState): Array<Media> => state.all,
+  getTotal: (state: MediaState): number => state.totalItems,
   find:
     (state: MediaState) =>
     (mediaID: string): Media | undefined => {

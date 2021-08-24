@@ -9,13 +9,17 @@ function serialized(params: Record<string, string | number>): string {
     })
     .join("&");
 }
+interface listResponse {
+  media: Media[];
+  total: number;
+}
 async function list(
   params: Record<string, string | number>
-): Promise<Array<Media>> {
+): Promise<listResponse> {
   const {
-    data: { allMedia },
+    data: { allMedia: media, totalMedia: total },
   } = await ApiService.get(`${API_ENDPOINT}/list?${serialized(params)}`);
-  return allMedia;
+  return { media, total };
 }
 
 async function add(newMedia: Media): Promise<Media> {
