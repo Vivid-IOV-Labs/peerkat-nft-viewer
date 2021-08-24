@@ -42,7 +42,7 @@
 <script lang="ts">
 import { defineComponent, computed, ref, watch } from "vue";
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
 export default defineComponent({
   props: {
@@ -54,10 +54,12 @@ export default defineComponent({
   setup: (props) => {
     const store = useStore();
     const router = useRouter();
+    const route = useRoute();
     const currentPage = ref<number>(1);
     const total = computed(() => store.getters["media/getTotal"]);
+    const pageSize = route.query.pageSize ? Number(route.query.pageSize) : 5;
     const pages = computed(() => {
-      const numberOfPages = Math.floor(total.value / props.itemsPerPage);
+      const numberOfPages = Math.ceil(total.value / pageSize);
       return [...Array(numberOfPages).keys()].map((i) => i + 1);
     });
 
@@ -65,7 +67,7 @@ export default defineComponent({
       router.push({
         path: "/media",
         replace: true,
-        query: { page: currentPage },
+        query: { ...route.query, ...{ page: currentPage } },
       });
     });
     return {
