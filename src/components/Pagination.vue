@@ -1,10 +1,10 @@
 <template>
-  <div class="flex items-center space-x-1">
+  <div class="flex justify-center items-center space-x-1 w-full">
     <a
       href="#"
       class="flex items-center px-4 py-2 text-gray-500 bg-gray-300 rounded-md"
       :class="{
-        'hover:bg-blue-400 hover:text-white': currentPage > 1,
+        'hover:bg-green-400 hover:text-white font-bold ': currentPage > 1,
       }"
       @click.stop.prevent="prev()"
     >
@@ -14,24 +14,21 @@
       v-for="page in pages"
       :key="page"
       href="#"
-      class="
-        px-4
-        py-2
-        text-gray-700
-        bg-gray-200
-        rounded-md
-        hover:bg-blue-400 hover:text-white
-      "
-      :class="{ 'bg-blue-400 text-white': page == currentPage }"
+      class="px-4 py-2 rounded-md hover:bg-green-400 hover:text-white"
+      :class="{
+        'bg-green-400 text-white': page == currentPage,
+        'text-gray-700bg-gray-200': page != currentPage,
+      }"
       @click.stop.prevent="setCurrentPage(page)"
     >
       {{ page }}
     </a>
     <a
       href="#"
-      class="px-4 py-2 font-bold text-gray-500 bg-gray-300 rounded-md"
+      class="px-4 py-2 text-gray-500 bg-gray-300 rounded-md"
       :class="{
-        'hover:bg-blue-400 hover:text-white': currentPage < pages.length,
+        'hover:bg-green-400 hover:text-white font-bold ':
+          currentPage < pages.length,
       }"
       @click.stop.prevent="next()"
     >

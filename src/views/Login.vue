@@ -87,7 +87,6 @@ export default defineComponent({
                 order: "desc",
                 page: 1,
                 pageSize: 10,
-                earn: "true",
               },
             });
         } catch (error) {
