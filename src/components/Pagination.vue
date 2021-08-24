@@ -14,7 +14,13 @@
       v-for="page in pages"
       :key="page"
       href="#"
-      class="px-4 py-2 rounded-md hover:bg-green-400 hover:text-white"
+      class="
+        px-4
+        py-2
+        bg-gray-300
+        rounded-md
+        hover:bg-green-400 hover:text-white
+      "
       :class="{
         'bg-green-400 text-white': page == currentPage,
         'text-gray-700bg-gray-200': page != currentPage,

@@ -1,3 +1,7 @@
+interface Category {
+  name: string;
+  id: string;
+}
 export interface Media {
   type?: string;
   earn?: boolean;
@@ -7,8 +11,8 @@ export interface Media {
   mediaID: string;
   balanceTotal?: number;
   balanceAvailable?: number;
-  categories?: string | Array<any>;
-  mediaCategories?: Array<any>;
+  categories?: string | string[];
+  mediaCategories?: Array<Category>;
   list: {
     highlighted: boolean;
     order?: number;

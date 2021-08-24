@@ -196,11 +196,13 @@ export default defineComponent({
         try {
           const toUpdate = JSON.parse(JSON.stringify(data));
 
-          const updatedMedia = {
+          const updatedMedia: Media = {
             publisher: {
               walletAddress: toUpdate.formData.publisher.walletAddress,
             },
-            mediaID: route.params.mediaID,
+            mediaID: Array.isArray(route.params.mediaID)
+              ? route.params.mediaID.join("")
+              : route.params.mediaID,
             list: {
               highlighted: toUpdate.formData.list.highlighted,
               order: toUpdate.formData.list.order,

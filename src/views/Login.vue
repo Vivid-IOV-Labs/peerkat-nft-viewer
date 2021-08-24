@@ -86,7 +86,7 @@ export default defineComponent({
                 sortBy: "updatedAt",
                 order: "desc",
                 page: 1,
-                pageSize: 10,
+                pageSize: 6,
               },
             });
         } catch (error) {

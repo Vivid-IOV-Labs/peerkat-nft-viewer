@@ -44,7 +44,9 @@ async function find(mediaID: string): Promise<Media> {
   return media;
 }
 
-async function update(mediaToUpdate: Media | any): Promise<Media> {
+async function update(
+  mediaToUpdate: Media | Pick<Media, "balanceAvailable" | "mediaID">
+): Promise<Media> {
   const { mediaID } = mediaToUpdate;
   const {
     data: { media: updatedMedia },

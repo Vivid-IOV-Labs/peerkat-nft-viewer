@@ -100,6 +100,7 @@ import { useRoute, useRouter } from "vue-router";
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
 import useVuelidate from "@vuelidate/core";
 import { required, minValue } from "@vuelidate/validators";
+import { Media } from "../models/Media";
 
 export default defineComponent({
   components: {
@@ -111,7 +112,12 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const router = useRouter();
-    const data = reactive<{ formData: any }>({
+    const data = reactive<{
+      formData: Pick<
+        Media,
+        "balanceAvailable" | "mediaID" | "balanceTotal" | "details"
+      >;
+    }>({
       formData: {
         mediaID: "",
         balanceAvailable: 0,
@@ -146,9 +152,11 @@ export default defineComponent({
       async submit(event: Event) {
         event.preventDefault();
         try {
-          const updatedMedia = {
+          const updatedMedia: Pick<Media, "balanceAvailable" | "mediaID"> = {
             balanceAvailable: newBalanceAvailable.value,
-            mediaID: route.params.mediaID,
+            mediaID: Array.isArray(route.params.mediaID)
+              ? route.params.mediaID.join("")
+              : route.params.mediaID,
           };
           await MediaService.update(updatedMedia);
           showSuccess.value = true;
