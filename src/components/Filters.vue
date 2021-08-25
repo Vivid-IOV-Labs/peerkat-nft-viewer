@@ -86,7 +86,10 @@ export default defineComponent({
         router.push({
           path: "/media",
           replace: true,
-          query: { ...route.query, ...{ sortBy: newVal.value } },
+          query: {
+            ...route.query,
+            ...{ categories: JSON.stringify([newVal.value]) },
+          },
         });
       },
     });
