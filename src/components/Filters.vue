@@ -173,10 +173,11 @@ export default defineComponent({
         categories,
         earn,
       } = route.query;
+      // const catToArray = JSON.parse(categories as string);
       return {
-        ...(highlighted && { highlighted }),
+        ...(highlighted && { highlighted: highlighted ? "yes" : "no" }),
         ...(categories && { categories }),
-        ...(earn && { earn }),
+        ...(earn && { earn: earn ? "yes" : "no" }),
       };
     });
 
