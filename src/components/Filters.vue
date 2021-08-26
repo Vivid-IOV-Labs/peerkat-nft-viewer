@@ -78,6 +78,12 @@ export default defineComponent({
     const route = useRoute();
     function setQuery(addQuery: Record<string, string | number | undefined>) {
       const resetPage = { page: 1 };
+      if ("earn" in addQuery) {
+        delete route.query["list.highlighted"];
+      }
+      if ("list.highlighted" in addQuery) {
+        delete route.query["earn"];
+      }
       router.push({
         path: "/media",
         replace: true,
@@ -176,9 +182,11 @@ export default defineComponent({
       const formattedCategories =
         categories && JSON.parse(categories.toString()).join(", ");
       return {
-        ...(highlighted && { highlighted: highlighted ? "yes" : "no" }),
+        ...(highlighted && {
+          highlighted: highlighted == "true" ? "yes" : "no",
+        }),
         ...(categories && { categories: formattedCategories }),
-        ...(earn && { earn: earn ? "yes" : "no" }),
+        ...(earn && { earn: earn == "true" ? "yes" : "no" }),
       };
     });
 
