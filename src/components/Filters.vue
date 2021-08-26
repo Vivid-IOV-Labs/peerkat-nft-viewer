@@ -144,10 +144,15 @@ export default defineComponent({
       },
     });
     const filters = computed(() => {
-      const { ["list.highlighted"]: highlighted, categories } = route.query;
+      const {
+        ["list.highlighted"]: highlighted,
+        categories,
+        earn,
+      } = route.query;
       return {
         ...(highlighted && { highlighted }),
         ...(categories && { categories }),
+        ...(earn && { earn }),
       };
     });
 
@@ -162,8 +167,9 @@ export default defineComponent({
       withCategories,
       filters,
       removeFilter(name: string): void {
+        const toRemove = name == "highlighted" ? "list.highlighted" : name;
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { [name]: remove, ...rest } = route.query;
+        const { [toRemove]: remove, ...rest } = route.query;
         router.push({
           path: "/media",
           replace: true,
