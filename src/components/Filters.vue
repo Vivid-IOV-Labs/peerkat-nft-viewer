@@ -28,6 +28,12 @@
     </div>
     <div class="flex space-x-4">
       <base-select
+        v-model="pageSize"
+        name="sizes"
+        label="Items per Page"
+        :choices="sizes"
+      ></base-select>
+      <base-select
         v-model="withCategories"
         name="categories"
         label="Category"
@@ -84,12 +90,18 @@ export default defineComponent({
       { label: "Other", value: "other" },
     ];
     const sorts = [
-      { label: "updatedAt", value: "updatedAt" },
-      { label: "createdAt", value: "createdAt" },
+      { label: "Updated At", value: "updatedAt" },
+      { label: "Created At", value: "createdAt" },
     ];
     const orders: Choice[] = [
-      { label: "asc", value: "asc" },
-      { label: "desc", value: "desc" },
+      { label: "Ascending", value: "asc" },
+      { label: "Descending", value: "desc" },
+    ];
+    const sizes: Choice[] = [
+      { label: "6 per page", value: 6 },
+      { label: "12 per page", value: 12 },
+      { label: "24 per page", value: 24 },
+      { label: "48 per page", value: 48 },
     ];
     const orderBy = computed({
       get(): Choice {
@@ -113,6 +125,18 @@ export default defineComponent({
       },
       set(newVal: Choice): void {
         setQuery({ sortBy: newVal.value });
+      },
+    });
+    const pageSize = computed({
+      get(): Choice {
+        return (
+          sizes.find((sort: Choice) => {
+            return sort.value == route.query.pageSize;
+          }) || sizes[1]
+        );
+      },
+      set(newVal: Choice): void {
+        setQuery({ pageSize: newVal.value });
       },
     });
     const withCategories = computed({
@@ -160,8 +184,10 @@ export default defineComponent({
       sorts,
       orders,
       categories,
+      sizes,
       orderBy,
       sortBy,
+      pageSize,
       isHighlighted,
       isEarn,
       withCategories,

@@ -53,9 +53,9 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const total = computed(() => store.getters["media/getTotal"]);
-    const pageSize = route.query.pageSize ? Number(route.query.pageSize) : 5;
+    const pageSize = computed(() => Number(route.query.pageSize));
     const pages = computed(() => {
-      const numberOfPages = Math.ceil(total.value / pageSize);
+      const numberOfPages = Math.ceil(total.value / pageSize.value);
       return [...Array(numberOfPages).keys()].map((i) => i + 1);
     });
     const currentPage = computed({
