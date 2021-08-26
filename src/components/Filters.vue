@@ -70,6 +70,14 @@ export default defineComponent({
   setup: () => {
     const router = useRouter();
     const route = useRoute();
+    function setQuery(addQuery: Record<string, string | number | undefined>) {
+      const resetPage = { page: 1 };
+      router.push({
+        path: "/media",
+        replace: true,
+        query: { ...route.query, ...resetPage, ...addQuery },
+      });
+    }
     const categories = [
       { label: "Crypto", value: "crypto" },
       { label: "Gaming", value: "gaming" },
@@ -87,18 +95,12 @@ export default defineComponent({
       get(): Choice {
         return (
           orders.find((order: Choice) => {
-            console.log(order.value);
-
             return order.value == route.query.order;
           }) || orders[1]
         );
       },
       set(newVal: Choice): void {
-        router.push({
-          path: "/media",
-          replace: true,
-          query: { ...route.query, ...{ order: newVal.value } },
-        });
+        setQuery({ order: newVal.value });
       },
     });
     const sortBy = computed({
@@ -110,11 +112,7 @@ export default defineComponent({
         );
       },
       set(newVal: Choice): void {
-        router.push({
-          path: "/media",
-          replace: true,
-          query: { ...route.query, ...{ sortBy: newVal.value } },
-        });
+        setQuery({ sortBy: newVal.value });
       },
     });
     const withCategories = computed({
@@ -126,48 +124,33 @@ export default defineComponent({
         );
       },
       set(newVal: Choice): void {
-        router.push({
-          path: "/media",
-          replace: true,
-          query: {
-            ...route.query,
-            ...{ categories: JSON.stringify([newVal.value]) },
-          },
-        });
+        setQuery({ categories: JSON.stringify([newVal.value]) });
       },
     });
-
     const isEarn = computed({
       get(): boolean {
         return Boolean(route.query.earn);
       },
       set(newVal: boolean): void {
-        router.push({
-          path: "/media",
-          replace: true,
-          query: { ...route.query, ...{ earn: String(newVal) } },
-        });
+        setQuery({ earn: String(newVal) });
       },
     });
-
     const isHighlighted = computed({
       get(): boolean {
         return Boolean(route.query["list.highlighted"]);
       },
       set(newVal: boolean): void {
-        router.push({
-          path: "/media",
-          replace: true,
-          query: {
-            ...route.query,
-            ...{ ["list.highlighted"]: String(newVal) },
-          },
-        });
+        setQuery({ ["list.highlighted"]: String(newVal) });
       },
     });
     const filters = computed(() => {
-      return route.query;
+      const { ["list.highlighted"]: highlighted, categories } = route.query;
+      return {
+        ...(highlighted && { highlighted }),
+        ...(categories && { categories }),
+      };
     });
+
     return {
       sorts,
       orders,
