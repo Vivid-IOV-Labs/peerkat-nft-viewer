@@ -173,10 +173,11 @@ export default defineComponent({
         categories,
         earn,
       } = route.query;
-      // const catToArray = JSON.parse(categories as string);
+      const formattedCategories =
+        categories && JSON.parse(categories.toString()).join(", ");
       return {
         ...(highlighted && { highlighted: highlighted ? "yes" : "no" }),
-        ...(categories && { categories }),
+        ...(categories && { categories: formattedCategories }),
         ...(earn && { earn: earn ? "yes" : "no" }),
       };
     });
