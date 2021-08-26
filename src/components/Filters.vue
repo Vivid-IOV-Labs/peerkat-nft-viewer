@@ -26,10 +26,25 @@
         </li>
       </ul>
     </div>
-    <div class="flex">
-      <base-select v-model="withCategories" :choices="categories"></base-select>
-      <base-select v-model="sortBy" :choices="sorts"></base-select>
-      <base-select v-model="orderBy" :choices="orders"></base-select>
+    <div class="flex space-x-4">
+      <base-select
+        v-model="withCategories"
+        name="categories"
+        label="Category"
+        :choices="categories"
+      ></base-select>
+      <base-select
+        v-model="sortBy"
+        name="sorts"
+        label="Sort By"
+        :choices="sorts"
+      ></base-select>
+      <base-select
+        v-model="orderBy"
+        name="orders"
+        label="Ord By"
+        :choices="orders"
+      ></base-select>
       <base-checkbox
         v-model="isHighlighted"
         label-text="Highlighted"

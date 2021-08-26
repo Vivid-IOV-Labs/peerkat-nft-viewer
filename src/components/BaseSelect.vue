@@ -1,6 +1,17 @@
 <template>
-  <div v-if="modelValue" class="p-1" v-bind="$attrs">
-    <select class="rounded" :value="modelValue.value" @change="handleChange">
+  <div v-if="modelValue" class="p-1">
+    <label
+      class="uppercase tracking-wide text-gray-700 text-xs font-bold mr-2"
+      :for="name"
+      >{{ label }}</label
+    >
+    <select
+      :id="name"
+      class="rounded"
+      :value="modelValue.value"
+      v-bind="$attrs"
+      @change="handleChange"
+    >
       <option
         v-for="choice in choices"
         :key="choice.label"
@@ -23,6 +34,14 @@ export default defineComponent({
     choices: {
       type: Array as PropType<Choice[]>,
       default: () => [],
+    },
+    name: {
+      type: String,
+      default: () => "",
+    },
+    label: {
+      type: String,
+      default: () => "",
     },
     modelValue: {
       type: Object as PropType<Choice>,
