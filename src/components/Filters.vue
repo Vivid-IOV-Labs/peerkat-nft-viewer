@@ -1,19 +1,47 @@
 <template>
-  <div class="flex justify-center items-center space-x-1 w-full">
-    <base-select v-model="withCategories" :choices="categories"></base-select>
-    <base-select v-model="sortBy" :choices="sorts"></base-select>
-    <base-select v-model="orderBy" :choices="orders"></base-select>
-    <base-checkbox
-      v-model="isHighlighted"
-      label-text="Highlighted"
-    ></base-checkbox>
-    <base-checkbox v-model="isEarn" label-text="is Earn"></base-checkbox>
+  <div class="flex flex-col justify-center items-center space-x-1 w-full">
+    <div class="flex mb-3">
+      <ul class="flex">
+        <li
+          v-for="(value, name, index) in filters"
+          :key="index"
+          class="
+            flex
+            py-1
+            px-2
+            text-xs text-green-800
+            border-green-600 border-2
+            rounded
+            items-center
+            mx-1
+            cursor-pointer
+          "
+          @click="removeFilter(name)"
+        >
+          <span class="font-bold">{{ name }}</span
+          >: {{ value }}
+          <span class="ml-2 block uppercase tracking-wide font-bold"
+            >&times;</span
+          >
+        </li>
+      </ul>
+    </div>
+    <div class="flex">
+      <base-select v-model="withCategories" :choices="categories"></base-select>
+      <base-select v-model="sortBy" :choices="sorts"></base-select>
+      <base-select v-model="orderBy" :choices="orders"></base-select>
+      <base-checkbox
+        v-model="isHighlighted"
+        label-text="Highlighted"
+      ></base-checkbox>
+      <base-checkbox v-model="isEarn" label-text="is Earn"></base-checkbox>
+    </div>
   </div>
 </template>
 <script lang="ts">
 interface Choice {
   label: string;
-  value: string | number;
+  value?: string | number;
 }
 import { defineComponent, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
@@ -122,6 +150,9 @@ export default defineComponent({
         });
       },
     });
+    const filters = computed(() => {
+      return route.query;
+    });
     return {
       sorts,
       orders,
@@ -131,6 +162,18 @@ export default defineComponent({
       isHighlighted,
       isEarn,
       withCategories,
+      filters,
+      removeFilter(name: string): void {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { [name]: remove, ...rest } = route.query;
+        router.push({
+          path: "/media",
+          replace: true,
+          query: {
+            ...rest,
+          },
+        });
+      },
     };
   },
 });

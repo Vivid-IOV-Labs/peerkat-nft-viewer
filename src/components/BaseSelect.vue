@@ -1,6 +1,6 @@
 <template>
-  <div v-if="modelValue" class="w-72 p-1" v-bind="$attrs">
-    <select :value="modelValue.value" @change="handleChange">
+  <div v-if="modelValue" class="p-1" v-bind="$attrs">
+    <select class="rounded" :value="modelValue.value" @change="handleChange">
       <option
         v-for="choice in choices"
         :key="choice.label"
@@ -16,7 +16,7 @@
 import { defineComponent, PropType } from "vue";
 interface Choice {
   label: string;
-  value: string | number;
+  value?: string | number;
 }
 export default defineComponent({
   props: {
@@ -34,10 +34,12 @@ export default defineComponent({
     return {
       handleChange(event: Event): void {
         const value = (event.target as HTMLSelectElement).value;
-        const selected = props.choices.find((choice: Choice) => {
-          return choice.value == value;
-        });
-        emit("update:modelValue", selected);
+        if (value) {
+          const selected = props.choices.find((choice: Choice) => {
+            return choice.value == value;
+          });
+          emit("update:modelValue", selected);
+        }
       },
     };
   },
