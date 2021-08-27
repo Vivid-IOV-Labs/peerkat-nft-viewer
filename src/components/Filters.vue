@@ -68,6 +68,8 @@ import { defineComponent, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import BaseSelect from "@/components/BaseSelect.vue";
 import BaseCheckbox from "@/components/BaseCheckbox.vue";
+import useFilters from "../modules/filters";
+
 export default defineComponent({
   components: {
     BaseSelect,
@@ -76,20 +78,7 @@ export default defineComponent({
   setup: () => {
     const router = useRouter();
     const route = useRoute();
-    function setQuery(addQuery: Record<string, string | number | undefined>) {
-      const resetPage = { page: 1 };
-      if ("earn" in addQuery) {
-        delete route.query["list.highlighted"];
-      }
-      if ("list.highlighted" in addQuery) {
-        delete route.query["earn"];
-      }
-      router.push({
-        path: "/media",
-        replace: true,
-        query: { ...route.query, ...resetPage, ...addQuery },
-      });
-    }
+    const { setQuery } = useFilters();
     const categories = [
       { label: "Crypto", value: "crypto" },
       { label: "Gaming", value: "gaming" },

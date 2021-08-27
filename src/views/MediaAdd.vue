@@ -1,8 +1,8 @@
 <template>
   <div class="p-2">
-    <router-link href="#" :to="{ path: '/media' }" class="block float-right">
+    <a href="#" class="block float-right" @click="pushToMediaList">
       <ArrowLeftIcon class="h-8 w-8 text-gray-700" />
-    </router-link>
+    </a>
     <hr class="clear-both my-6 border-none" />
     <form class="w-full max-w-lg space-y-5 mx-auto">
       <div class="flex justify-between w-full items-start">
@@ -334,7 +334,7 @@ export default defineComponent({
       },
       pushToMediaList() {
         showSuccess.value = false;
-        router.push({ path: "/media" });
+        router.go(-1);
       },
       formatVuelidateErrors(errors: any[]) {
         return errors.map((error) => {

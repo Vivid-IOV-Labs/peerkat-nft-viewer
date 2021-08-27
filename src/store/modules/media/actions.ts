@@ -12,6 +12,9 @@ const actions: ActionTree<Media, MediaState> = {
     commit("setAll", media);
     commit("setTotalItems", total);
   },
+  setQuery({ commit }, query) {
+    commit("setQuery", query);
+  },
   async add({ commit }, newVideo: Media): Promise<void> {
     const newAddedMedia = await MediaService.add(newVideo);
     commit("add", newAddedMedia);

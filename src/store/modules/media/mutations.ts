@@ -9,6 +9,9 @@ const mutations: MutationTree<MediaState> = {
   setTotalItems(state: MediaState, total: number): void {
     state.totalItems = total;
   },
+  setQuery(state: MediaState, query: Record<string, string | number>): void {
+    state.query = query;
+  },
   add(state: MediaState, newMedia: Media): void {
     state.all = [newMedia, ...state.all];
   },

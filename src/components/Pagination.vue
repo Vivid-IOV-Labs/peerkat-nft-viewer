@@ -45,13 +45,14 @@
 <script lang="ts">
 import { defineComponent, computed } from "vue";
 import { useStore } from "vuex";
-import { useRouter, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
+import useFilters from "../modules/filters";
 
 export default defineComponent({
   setup: () => {
     const store = useStore();
-    const router = useRouter();
     const route = useRoute();
+    const { setQuery } = useFilters();
     const total = computed(() => store.getters["media/getTotal"]);
     const pageSize = computed(() => Number(route.query.pageSize));
     const pages = computed(() => {
@@ -63,11 +64,7 @@ export default defineComponent({
         return Number(route.query.page);
       },
       set(newVal: number): void {
-        router.push({
-          path: "/media",
-          replace: true,
-          query: { ...route.query, ...{ page: newVal } },
-        });
+        setQuery({ ...route.query, ...{ page: newVal } });
       },
     });
 
