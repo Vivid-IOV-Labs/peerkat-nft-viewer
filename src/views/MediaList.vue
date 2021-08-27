@@ -1,9 +1,11 @@
 <template>
   <div class="flex flex-col justify-center items-center">
     <base-input
+      id="search"
       v-model="searchByTitle"
       placeholder="Search by title"
       type="search"
+      label-text=""
       class="w-full max-w-xl"
     ></base-input>
     <div class="flex py-4"><filters></filters></div>

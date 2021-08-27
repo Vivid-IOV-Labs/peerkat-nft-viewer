@@ -28,34 +28,43 @@
     </div>
     <div class="flex space-x-4">
       <base-select
+        id="sizes"
         v-model="pageSize"
         name="sizes"
         label="Items per Page"
         :choices="sizes"
       ></base-select>
       <base-select
+        id="categories"
         v-model="withCategories"
         name="categories"
         label="Category"
         :choices="categories"
       ></base-select>
       <base-select
+        id="sorts"
         v-model="sortBy"
         name="sorts"
         label="Sort By"
         :choices="sorts"
       ></base-select>
       <base-select
+        id="orders"
         v-model="orderBy"
         name="orders"
         label="Ord By"
         :choices="orders"
       ></base-select>
       <base-checkbox
+        id="highlighted"
         v-model="isHighlighted"
         label-text="Highlighted"
       ></base-checkbox>
-      <base-checkbox v-model="isEarn" label-text="is Earn"></base-checkbox>
+      <base-checkbox
+        id="earn"
+        v-model="isEarn"
+        label-text="is Earn"
+      ></base-checkbox>
     </div>
   </div>
 </template>

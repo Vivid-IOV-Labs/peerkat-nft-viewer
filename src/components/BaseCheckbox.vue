@@ -43,10 +43,6 @@ export default defineComponent({
       type: Boolean,
       required: true,
     },
-    text: {
-      type: String,
-      required: true,
-    },
   },
   emits: ["update:modelValue"],
   methods: {
