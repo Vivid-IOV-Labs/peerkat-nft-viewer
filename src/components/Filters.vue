@@ -98,14 +98,12 @@ import BaseSelect from "@/components/BaseSelect.vue";
 import BaseCheckbox from "@/components/BaseCheckbox.vue";
 import useFilters from "../modules/filters";
 import { TransitionRoot } from "@headlessui/vue";
-import { AdjustmentsIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({
   components: {
     BaseSelect,
     BaseCheckbox,
     TransitionRoot,
-    AdjustmentsIcon,
   },
   setup: () => {
     const router = useRouter();
