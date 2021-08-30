@@ -254,6 +254,7 @@ export default defineComponent({
       withCategories,
       filters,
       removeFilter(name: string | number | symbol): void {
+        const resetPage = { page: 1 };
         const toRemove =
           name == "highlighted" ? "list.highlighted" : name.toString();
         if (
@@ -277,7 +278,7 @@ export default defineComponent({
           router.push({
             path: "/media",
             replace: true,
-            query: newQuery,
+            query: { ...newQuery, ...resetPage },
           });
         } else {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -287,6 +288,7 @@ export default defineComponent({
             replace: true,
             query: {
               ...rest,
+              ...resetPage,
             },
           });
         }
