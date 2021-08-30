@@ -1,11 +1,11 @@
 <template>
-  <div class="flex">
+  <div>
     <a
       class="text-xs text-green-600 uppercase font-bold ml-2"
       href="#"
       @click="isShowing = !isShowing"
     >
-      Filters
+      Filters <PlusIcon class="h-4 w-4 inline-block align-middle" />
     </a>
     <TransitionRoot
       :show="isShowing"
@@ -103,12 +103,14 @@ import BaseSelect from "@/components/BaseSelect.vue";
 import BaseCheckbox from "@/components/BaseCheckbox.vue";
 import useFilters from "../modules/filters";
 import { TransitionRoot } from "@headlessui/vue";
+import { PlusIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({
   components: {
     BaseSelect,
     BaseCheckbox,
     TransitionRoot,
+    PlusIcon,
   },
   setup: () => {
     const router = useRouter();
@@ -251,10 +253,11 @@ export default defineComponent({
       isEarn,
       withCategories,
       filters,
-      removeFilter(name: string): void {
-        const toRemove = name == "highlighted" ? "list.highlighted" : name;
+      removeFilter(name: string | number | symbol): void {
+        const toRemove =
+          name == "highlighted" ? "list.highlighted" : name.toString();
         if (
-          categories.map((c) => c.value).includes(name) &&
+          categories.map((c) => c.value).includes(name.toString()) &&
           route.query.categories
         ) {
           const newCategories = JSON.parse(
@@ -268,7 +271,7 @@ export default defineComponent({
           const newQuery = newCategories.length
             ? {
                 ...route.query,
-                categories: newCategories,
+                categories: JSON.stringify(newCategories),
               }
             : { ...rest };
           router.push({

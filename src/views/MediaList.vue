@@ -8,7 +8,7 @@
       label-text=""
       class="w-full max-w-xl"
     ></base-input>
-    <div class="flex w-full h-20"><filters></filters></div>
+    <div class="flex w-full"><filters></filters></div>
     <div class="flex w-full py-4"><pagination></pagination></div>
   </div>
 
