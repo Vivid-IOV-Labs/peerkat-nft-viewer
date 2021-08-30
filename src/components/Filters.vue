@@ -35,8 +35,13 @@
               "
               @click="removeFilter(name)"
             >
-              <span class="font-bold">{{ name }}</span
-              >: {{ value }}
+              <span class="font-bold">
+                <span v-if="!categories.map((c) => c.value).includes(value)">{{
+                  value
+                }}</span>
+                {{ name }}</span
+              >
+
               <span class="ml-2 block uppercase tracking-wide font-bold"
                 >&times;</span
               >
@@ -169,7 +174,7 @@ export default defineComponent({
       get(): Choice {
         return (
           categories.find((category: Choice) => {
-            return category.value == route.query.sortBy;
+            return category.value == route.query.categories;
           }) || categories[1]
         );
       },
@@ -199,14 +204,22 @@ export default defineComponent({
         categories,
         earn,
       } = route.query;
-      const formattedCategories =
-        categories && JSON.parse(categories.toString()).join(", ");
+      const categoriesTags =
+        categories && categories.length
+          ? JSON.parse(categories.toString()).reduce(
+              (acc: Record<string, string>, cat: string) => {
+                acc[cat] = cat;
+                return acc;
+              },
+              {}
+            )
+          : null;
       return {
         ...(highlighted && {
-          highlighted: highlighted == "true" ? "yes" : "no",
+          highlighted: highlighted == "true" ? "is" : "not",
         }),
-        ...(categories && { categories: formattedCategories }),
-        ...(earn && { earn: earn == "true" ? "yes" : "no" }),
+        ...(categoriesTags && { ...categoriesTags }),
+        ...(earn && { earn: earn == "true" ? "is" : "not" }),
       };
     });
 
@@ -225,15 +238,40 @@ export default defineComponent({
       filters,
       removeFilter(name: string): void {
         const toRemove = name == "highlighted" ? "list.highlighted" : name;
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { [toRemove]: remove, ...rest } = route.query;
-        router.push({
-          path: "/media",
-          replace: true,
-          query: {
-            ...rest,
-          },
-        });
+        if (
+          categories.map((c) => c.value).includes(name) &&
+          route.query.categories
+        ) {
+          const newCategories = JSON.parse(
+            route.query.categories.toString()
+          ).filter((c: string) => {
+            return c != name;
+          });
+
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { categories, ...rest } = route.query;
+          const newQuery = newCategories.length
+            ? {
+                ...route.query,
+                categories: newCategories,
+              }
+            : { ...rest };
+          router.push({
+            path: "/media",
+            replace: true,
+            query: newQuery,
+          });
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { [toRemove]: remove, ...rest } = route.query;
+          router.push({
+            path: "/media",
+            replace: true,
+            query: {
+              ...rest,
+            },
+          });
+        }
       },
     };
   },

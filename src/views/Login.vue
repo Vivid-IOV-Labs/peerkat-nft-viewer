@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-center items-center h-full">
-    <div
+    <form
       class="
         bg-white
         w-1/3
@@ -36,7 +36,7 @@
       <div class="flex items-center justify-between">
         <base-button @click="handleSubmit"> Sign In </base-button>
       </div>
-    </div>
+    </form>
     <base-dialog :show="showError" title="Error" @close="showError = false">
       <template #body>
         <p>{{ errorMessage }}</p>
