@@ -179,7 +179,22 @@ export default defineComponent({
         );
       },
       set(newVal: Choice): void {
-        setQuery({ categories: JSON.stringify([newVal.value]) });
+        const categoriesInFilter =
+          route.query.categories &&
+          JSON.parse(route.query.categories.toString());
+        if (categoriesInFilter) {
+          const newCategories =
+            categoriesInFilter && categoriesInFilter.includes(newVal.value)
+              ? categoriesInFilter
+              : [...categoriesInFilter, newVal.value];
+          setQuery({
+            categories: JSON.stringify(newCategories),
+          });
+        } else {
+          setQuery({
+            categories: JSON.stringify([newVal.value]),
+          });
+        }
       },
     });
     const isEarn = computed({
