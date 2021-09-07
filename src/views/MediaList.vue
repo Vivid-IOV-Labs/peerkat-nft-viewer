@@ -9,7 +9,6 @@
       class="w-full max-w-xl"
     ></base-input>
     <div class="flex w-full"><filters></filters></div>
-    <div class="flex w-full py-4"><pagination></pagination></div>
   </div>
 
   <div class="mt-4 grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -40,6 +39,7 @@
       <PlusIcon class="h-8 w-8 text-white" />
     </router-link>
   </div>
+  <div class="flex w-full py-4"><pagination></pagination></div>
 </template>
 
 <script lang="ts">
