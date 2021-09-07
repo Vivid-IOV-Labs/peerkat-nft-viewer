@@ -117,6 +117,7 @@
           v-model="v$.categories.$model"
           name="categories"
           label-text="categories"
+          label="value"
           :options="categoriesOptions"
           :errors="
             v$.categories.$errors &&
