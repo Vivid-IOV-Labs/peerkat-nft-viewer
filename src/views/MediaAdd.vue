@@ -112,40 +112,27 @@
           ></base-input>
         </div>
       </div>
-      <p>
-        You should separate categories by "," with no space in between and
-        outside <br />
-        ES: "crypto,gaming,other"
-      </p>
       <div>
-        <base-input
-          id="categories"
+        <base-multi-select
           v-model="v$.categories.$model"
+          name="categories"
           label-text="categories"
-          type="text"
-          placeholder="categories"
+          :options="categoriesOptions"
           :errors="
             v$.categories.$errors &&
             formatVuelidateErrors(v$.categories.$errors)
           "
-        ></base-input>
+        ></base-multi-select>
       </div>
-      <p>
-        You should separate hashtags by "," with no space in between and outside
-        <br />
-        ES: "crypto,thundercore,twitter"
-      </p>
       <div>
-        <base-input
-          id="hashtags"
+        <base-multi-select
           v-model="v$.hashtags.$model"
+          name="hashtags"
           label-text="hashtags"
-          type="text"
-          placeholder="hashtags"
           :errors="
             v$.hashtags.$errors && formatVuelidateErrors(v$.hashtags.$errors)
           "
-        ></base-input>
+        ></base-multi-select>
       </div>
       <base-dialog
         :show="showSuccess"
@@ -180,7 +167,8 @@
 import BaseInput from "@/components/BaseInput.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseCheckbox from "@/components/BaseCheckbox.vue";
-import BaseDialog from "../components/BaseDialog.vue";
+import BaseDialog from "@/components/BaseDialog.vue";
+import BaseMultiSelect from "@/components/BaseMultiSelect.vue";
 import { ref, defineComponent, computed, Ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
@@ -224,6 +212,7 @@ export default defineComponent({
     BaseButton,
     BaseCheckbox,
     BaseDialog,
+    BaseMultiSelect,
     ArrowLeftIcon,
   },
   setup: () => {
@@ -276,6 +265,11 @@ export default defineComponent({
       balanceAvailable,
       categories,
     });
+    const categoriesOptions = [
+      { label: "Crypto", value: "crypto" },
+      { label: "Gaming", value: "gaming" },
+      { label: "Other", value: "other " },
+    ];
     return {
       title,
       subtitle,
@@ -292,6 +286,7 @@ export default defineComponent({
       showError,
       showSuccess,
       errorMessage,
+      categoriesOptions,
       async submit(event: Event) {
         event.preventDefault();
         const isFormCorrect = await v$.value.$validate();
@@ -309,13 +304,13 @@ export default defineComponent({
             highlighted: highlighted.value,
             order: order.value,
           },
-          categories: categories.value.trim().split(","),
+          categories: categories.value,
           details: {
             title: title.value,
             subtitle: subtitle.value,
             moreInfo: moreInfo.value,
             twitter: {
-              hashtags: hashtags.value.trim().split(","),
+              hashtags: hashtags.value,
             },
           },
         };
