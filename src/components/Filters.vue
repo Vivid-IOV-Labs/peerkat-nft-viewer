@@ -1,12 +1,20 @@
 <template>
-  <div>
-    <a
-      class="text-xs text-green-600 uppercase font-bold ml-2"
+  <div class="text-center w-full">
+    <base-button
+      class="text-xs items-center uppercase font-bold ml-2"
       href="#"
       @click="isShowing = !isShowing"
     >
-      Filters <PlusIcon class="h-4 w-4 inline-block align-middle" />
-    </a>
+      Filters
+      <ArrowUpIcon
+        v-if="isShowing"
+        class="h-3 w-3 stroke-current inline-block"
+      /><ArrowDownIcon
+        v-if="!isShowing"
+        class="h-3 w-3 stroke-current inline-block"
+      />
+    </base-button>
+
     <TransitionRoot
       :show="isShowing"
       enter="transition-opacity duration-75"
@@ -16,38 +24,9 @@
       leave-from="opacity-100"
       leave-to="opacity-0"
     >
-      <div class="flex flex-col justify-center items-center space-x-1 w-full">
-        <div class="flex mb-3">
-          <ul class="flex">
-            <li
-              v-for="(value, name, index) in filters"
-              :key="index"
-              class="
-                flex
-                py-1
-                px-2
-                text-xs text-green-800
-                border-green-600 border-2
-                rounded
-                items-center
-                mx-1
-                cursor-pointer
-              "
-              @click="removeFilter(name)"
-            >
-              <span class="font-bold">
-                <span v-if="!categories.map((c) => c.value).includes(value)">{{
-                  value
-                }}</span>
-                {{ name }}</span
-              >
-
-              <span class="ml-2 block uppercase tracking-wide font-bold"
-                >&times;</span
-              >
-            </li>
-          </ul>
-        </div>
+      <div
+        class="flex flex-col justify-center items-center space-x-1 w-full mt-4"
+      >
         <div class="flex space-x-4">
           <base-select
             id="sizes"
@@ -90,6 +69,37 @@
         </div>
       </div>
     </TransitionRoot>
+    <div class="flex justify-center mt-4">
+      <ul class="flex">
+        <li
+          v-for="(value, name, index) in filters"
+          :key="index"
+          class="
+            flex
+            py-1
+            px-2
+            text-xs text-green-800
+            border-green-600 border-2
+            rounded
+            items-center
+            mx-1
+            cursor-pointer
+          "
+          @click="removeFilter(name)"
+        >
+          <span class="font-bold">
+            <span v-if="!categories.map((c) => c.value).includes(value)">{{
+              value
+            }}</span>
+            {{ name }}</span
+          >
+
+          <span class="ml-2 block uppercase tracking-wide font-bold"
+            >&times;</span
+          >
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -99,18 +109,21 @@ interface Choice {
 }
 import { defineComponent, computed, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import BaseButton from "@/components/BaseButton.vue";
 import BaseSelect from "@/components/BaseSelect.vue";
 import BaseCheckbox from "@/components/BaseCheckbox.vue";
 import useFilters from "../modules/filters";
 import { TransitionRoot } from "@headlessui/vue";
-import { PlusIcon } from "@heroicons/vue/solid";
+import { ArrowUpIcon, ArrowDownIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({
   components: {
+    BaseButton,
     BaseSelect,
     BaseCheckbox,
     TransitionRoot,
-    PlusIcon,
+    ArrowUpIcon,
+    ArrowDownIcon,
   },
   setup: () => {
     const router = useRouter();

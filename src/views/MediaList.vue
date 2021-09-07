@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col justify-center items-center">
+  <div class="flex flex-col justify-center items-center mb-2">
     <base-input
       id="search"
       v-model="searchByTitle"
@@ -8,10 +8,10 @@
       label-text=""
       class="w-full max-w-xl"
     ></base-input>
-    <div class="flex w-full"><filters></filters></div>
+    <div class="flex w-full mt-3 mb-8"><filters></filters></div>
   </div>
 
-  <div class="mt-4 grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  <div class="mt-2 grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     <media-card
       v-for="media in allMedia"
       :key="media.mediaID"
@@ -39,7 +39,7 @@
       <PlusIcon class="h-8 w-8 text-white" />
     </router-link>
   </div>
-  <div class="flex w-full py-4"><pagination></pagination></div>
+  <div class="flex w-full py-4 mt-6"><pagination></pagination></div>
 </template>
 
 <script lang="ts">

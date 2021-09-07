@@ -7,7 +7,7 @@
     >
     <select
       :id="name"
-      class="rounded"
+      class="rounded py-1"
       :value="modelValue.value"
       v-bind="$attrs"
       @change="handleChange"
