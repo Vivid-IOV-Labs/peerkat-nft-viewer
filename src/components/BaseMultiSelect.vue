@@ -8,7 +8,7 @@
     <Multiselect
       :id="name"
       class="rounded py-1"
-      :value="modelValue.value"
+      :value="modelValue"
       mode="tags"
       :label="label"
       :searchable="true"

@@ -77,27 +77,18 @@
         ES: "crypto,gaming,other"
       </p>
       <div>
-        <base-input
-          id="categories"
+        <base-multi-select
           v-model="data.formData.categories"
+          name="categories"
           label-text="categories"
-          type="text"
-          placeholder="categories"
-        ></base-input>
+        ></base-multi-select>
       </div>
-      <p>
-        You should separate hashtags by "," with no space in between and outside
-        <br />
-        ES: "crypto,thundercore,twitter"
-      </p>
       <div v-if="data.formData.details.twitter">
-        <base-input
-          id="hashtags"
+        <base-multi-select
           v-model="data.formData.details.twitter.hashtags"
+          name="hashtags"
           label-text="hashtags"
-          type="text"
-          placeholder="hashtags"
-        ></base-input>
+        ></base-multi-select>
       </div>
       <base-button class="w-full" @click="submit">Submit</base-button>
       <base-dialog
@@ -131,6 +122,7 @@ import BaseInput from "@/components/BaseInput.vue";
 import BaseButton from "../components/BaseButton.vue";
 import BaseCheckbox from "../components/BaseCheckbox.vue";
 import BaseDialog from "../components/BaseDialog.vue";
+import BaseMultiSelect from "@/components/BaseMultiSelect.vue";
 import { defineComponent, reactive, ref } from "vue";
 import MediaService from "../services/MediaService";
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
@@ -155,6 +147,7 @@ export default defineComponent({
     BaseCheckbox,
     BaseDialog,
     ArrowLeftIcon,
+    BaseMultiSelect,
   },
   setup() {
     const route = useRoute();
@@ -180,10 +173,9 @@ export default defineComponent({
     (async () => {
       if (route.params.mediaID) {
         data.formData = await MediaService.find(String(route.params.mediaID));
-        data.formData.categories =
-          data.formData.mediaCategories && data.formData.mediaCategories?.length
-            ? data.formData.mediaCategories.map(({ name }) => name).join(",")
-            : "";
+        data.formData.categories = data.formData.mediaCategories?.map(
+          (c) => c.name
+        );
       }
     })();
     return {
