@@ -266,11 +266,7 @@ export default defineComponent({
       balanceAvailable,
       categories,
     });
-    const categoriesOptions = [
-      { label: "Crypto", value: "crypto" },
-      { label: "Gaming", value: "gaming" },
-      { label: "Other", value: "other " },
-    ];
+    const categoriesOptions = ["crypto", "gaming", "other"];
     return {
       title,
       subtitle,

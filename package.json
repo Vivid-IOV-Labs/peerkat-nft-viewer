@@ -2,7 +2,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": " vite build",
+    "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview",
     "lint": "eslint --ext .ts,vue --ignore-path .gitignore .",
     "start": "node server.js"
@@ -12,12 +12,12 @@
     "@heroicons/vue": "^1.0.1",
     "@suadelabs/vue3-multiselect": "^1.0.2",
     "@tailwindcss/forms": "^0.3.3",
-    "@vueform/multiselect": "^2.1.2",
     "@vuelidate/core": "^2.0.0-alpha.19",
     "@vuelidate/validators": "^2.0.0-alpha.17",
     "axios": "^0.21.1",
     "ethers": "^5.4.0",
     "vue": "^3.0.5",
+    "vue-multiselect": "^3.0.0-alpha.2",
     "vue-router": "^4.0.9",
     "vuex": "^4.0.2"
   },

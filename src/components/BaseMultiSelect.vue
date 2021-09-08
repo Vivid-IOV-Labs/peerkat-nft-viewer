@@ -5,15 +5,15 @@
       :for="name"
       >{{ labelText }}</label
     >
-    <Multiselect
+    <VueMultiselect
       :model-value="modelValue"
       :options="options"
       mode="tags"
-      :searchable="true"
-      :create-tag="true"
+      :multiple="true"
+      :taggable="true"
       @update:model-value="$emit('update:modelValue', $event)"
     >
-    </Multiselect>
+    </VueMultiselect>
     <base-alert v-if="errors.length" :messages="errors" class="input-errors">
     </base-alert>
   </div>
@@ -22,11 +22,11 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import BaseAlert from "@/components/BaseAlert.vue";
-import Multiselect from "@vueform/multiselect";
+import VueMultiselect from "vue-multiselect";
 
 export default defineComponent({
   components: {
-    Multiselect,
+    VueMultiselect,
     BaseAlert,
   },
   props: {
@@ -70,4 +70,4 @@ export default defineComponent({
   },
 });
 </script>
-<style src="@vueform/multiselect/themes/default.css"></style>
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>
