@@ -5,12 +5,14 @@
       :for="name"
       >{{ labelText }}</label
     >
+    {{ tags }}
     <VueMultiselect
       :model-value="modelValue"
-      :options="options"
+      :options="tags"
       mode="tags"
       :multiple="true"
       :taggable="true"
+      @tag="addTag"
       @update:model-value="$emit('update:modelValue', $event)"
     >
     </VueMultiselect>
@@ -20,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import BaseAlert from "@/components/BaseAlert.vue";
 import VueMultiselect from "vue-multiselect";
 
@@ -61,10 +63,12 @@ export default defineComponent({
   },
   emits: { "update:modelValue": null },
   setup(props, { emit }) {
+    const tags = ref(props.options);
     return {
-      handleChange(value: Event): void {
-        console.log(value);
-        emit("update:modelValue", value);
+      tags,
+      addTag(newTag: string) {
+        tags.value.push(newTag);
+        emit("update:modelValue", [...props.modelValue, newTag]);
       },
     };
   },
