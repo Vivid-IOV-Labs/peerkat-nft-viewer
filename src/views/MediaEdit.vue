@@ -71,14 +71,10 @@
           placeholder="Order"
         ></base-input>
       </div>
-      <p>
-        You should separate categories by "," with no space in between and
-        outside <br />
-        ES: "crypto,gaming,other"
-      </p>
       <div>
         <base-multi-select
           v-model="data.formData.categories"
+          :options="data.formData.categories"
           name="categories"
           label-text="categories"
         ></base-multi-select>
@@ -86,6 +82,7 @@
       <div v-if="data.formData.details.twitter">
         <base-multi-select
           v-model="data.formData.details.twitter.hashtags"
+          :options="data.formData.details.twitter.hashtags"
           name="hashtags"
           label-text="hashtags"
         ></base-multi-select>
@@ -170,6 +167,14 @@ export default defineComponent({
     const showError = ref(false);
     const errorMessage = ref<string>("");
     const showSuccess = ref(false);
+    const selectedTags = ref(["first", "second"]);
+    const categoriesOptions = ref([
+      "first",
+      "second",
+      "third",
+      "fourth",
+      "fifth",
+    ]);
     (async () => {
       if (route.params.mediaID) {
         data.formData = await MediaService.find(String(route.params.mediaID));
@@ -178,11 +183,14 @@ export default defineComponent({
         );
       }
     })();
+
     return {
       data,
       showSuccess,
       showError,
       errorMessage,
+      selectedTags,
+      categoriesOptions,
       async submit(event: Event) {
         event.preventDefault();
         try {
