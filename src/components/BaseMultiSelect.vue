@@ -5,7 +5,6 @@
       :for="name"
       >{{ labelText }}</label
     >
-    {{ tags }}
     <VueMultiselect
       :model-value="modelValue"
       :options="tags"
