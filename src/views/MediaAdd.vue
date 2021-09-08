@@ -224,8 +224,8 @@ export default defineComponent({
     const walletAddress = ref("");
     const mediaID = ref("");
     const moreInfo = ref("");
-    const hashtags = ref("");
-    const categories = ref("");
+    const hashtags = ref([]);
+    const categories = ref([]);
     const earn = ref(false);
     const highlighted = ref(false);
     const order = ref<number>(0);
