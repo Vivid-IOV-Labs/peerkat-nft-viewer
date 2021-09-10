@@ -78,8 +78,8 @@
             flex
             py-1
             px-2
-            text-xs text-green-800
-            border-green-600 border-2
+            text-xs text-red-800
+            border-red-600 border-2
             rounded
             items-center
             mx-1

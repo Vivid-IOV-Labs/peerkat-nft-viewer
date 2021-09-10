@@ -1,18 +1,13 @@
-import { MediaState } from "./state";
-import { Media } from "../../../models/Media";
+import { NFTState } from "./state";
+import { NFT } from "../../../models/NFT";
 
 export default {
-  getAll: (state: MediaState): Array<Media> => state.all,
-  getTotal: (state: MediaState): number => state.totalItems,
-  getQuery: (state: MediaState): Record<string, string | number> => state.query,
-  find:
-    (state: MediaState) =>
-    (mediaID: string): Media | undefined => {
-      return state.all.find((media) => media.mediaID === mediaID);
-    },
+  getAll: (state: NFTState): Array<NFT> => state.all,
+  getTotal: (state: NFTState): number => state.totalItems,
+  getQuery: (state: NFTState): Record<string, string | number> => state.query,
   byTitle:
-    (state: MediaState) =>
-    (title: string): Array<Media> => {
+    (state: NFTState) =>
+    (title: string): Array<NFT> => {
       if (title) {
         return state.all.filter((media) => {
           const searchParams = title

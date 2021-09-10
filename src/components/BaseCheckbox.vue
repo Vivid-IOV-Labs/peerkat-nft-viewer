@@ -3,14 +3,7 @@
     <input
       :id="id"
       type="checkbox"
-      class="
-        rounded
-        w-5
-        h-5
-        border-grey-200
-        text-green-600
-        focus:ring-green-400
-      "
+      class="rounded w-5 h-5 border-grey-200 text-red-600 focus:ring-red-400"
       :checked="modelValue"
       @input="handleChange"
     /><label
@@ -18,6 +11,8 @@
       class="ml-2 block uppercase tracking-wide text-gray-700 text-xs font-bold"
       >{{ labelText }}</label
     >
+    <base-alert v-if="errors.length" :messages="errors" class="input-errors">
+    </base-alert>
   </div>
 </template>
 
@@ -42,6 +37,10 @@ export default defineComponent({
     modelValue: {
       type: Boolean,
       required: true,
+    },
+    errors: {
+      type: Array,
+      default: (): Array<unknown> => [],
     },
   },
   emits: ["update:modelValue"],

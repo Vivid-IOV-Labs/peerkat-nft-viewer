@@ -21,7 +21,7 @@ export default function useFilters(): Record<string, any> {
       replace: true,
       query: newQuery,
     });
-    store.dispatch("media/setQuery", newQuery);
+    store.dispatch("nft/setQuery", newQuery);
   }
   return {
     setQuery,

@@ -5,120 +5,72 @@
     </a>
     <hr class="clear-both my-6 border-none" />
     <form class="w-full max-w-lg space-y-5 mx-auto">
-      <div class="flex justify-between w-full items-start">
-        <base-checkbox
-          id="earn"
-          v-model="v$.earn.$model"
-          text="Is earn"
-          label-text="earn"
-          :errors="formatVuelidateErrors(v$.earn.$errors)"
-          @change="onEarnChange"
-        ></base-checkbox>
-        <div v-if="v$.earn.$model">
-          <div>
-            <base-input
-              id="balanceTotal"
-              v-model="v$.balanceTotal.$model"
-              label-text="balanceTotal"
-              type="number"
-              min="0"
-              placeholder="100"
-              :errors="formatVuelidateErrors(v$.balanceTotal.$errors)"
-            ></base-input>
-          </div>
-          <div>
-            <base-input
-              id="balanceAvailable"
-              v-model="v$.balanceAvailable.$model"
-              label-text="balanceAvailable"
-              type="number"
-              min="0"
-              placeholder="100"
-              :errors="formatVuelidateErrors(v$.balanceAvailable.$errors)"
-            ></base-input>
-          </div>
-        </div>
+      <div>
+        <base-input
+          id="token_name"
+          v-model="formData.token_name"
+          label-text="token_name"
+          type="text"
+          placeholder="Media ID"
+          :errors="formatVuelidateErrors(v$.token_name.$errors)"
+        ></base-input>
       </div>
       <div>
         <base-input
           id="title"
-          v-model="v$.title.$model"
+          v-model="formData.title"
           label-text="title"
           type="text"
           placeholder="Title"
           :errors="formatVuelidateErrors(v$.title.$errors)"
         ></base-input>
       </div>
-      <div v-if="v$.earn.$model">
+      <div>
         <base-input
           id="subtitle"
-          v-model="v$.subtitle.$model"
+          v-model="formData.subtitle"
           label-text="subtitle"
           type="text"
-          placeholder="Subtitile"
+          placeholder="subtitle"
           :errors="formatVuelidateErrors(v$.subtitle.$errors)"
         ></base-input>
       </div>
       <div>
         <base-input
-          id="mediaID"
-          v-model="v$.mediaID.$model"
-          label-text="mediaID"
+          id="mediaurl"
+          v-model="formData.mediaurl"
+          label-text="mediaurl"
           type="text"
-          placeholder="Media ID"
-          :errors="formatVuelidateErrors(v$.mediaID.$errors)"
+          placeholder="mediaurl"
+          :errors="formatVuelidateErrors(v$.mediaurl.$errors)"
         ></base-input>
       </div>
       <div>
-        <base-input
-          id="walletAddress"
-          v-model="v$.walletAddress.$model"
-          label-text="walletAddress"
+        <textarea
+          id="description"
+          v-model="formData.description"
+          label-text="description"
           type="text"
-          placeholder="Publisher walletAddress"
-          :errors="formatVuelidateErrors(v$.walletAddress.$errors)"
-        ></base-input>
+          placeholder="Publisher description"
+          :errors="formatVuelidateErrors(v$.description.$errors)"
+        ></textarea>
       </div>
-      <div v-if="v$.earn.$model">
+      <div>
         <base-input
-          id="moreInfo"
-          v-model="v$.moreInfo.$model"
-          label-text="moreInfo"
+          id="brand_name"
+          v-model="formData.brand_name"
+          label-text="brand_name"
           type="text"
-          placeholder="More Info Link"
-          :errors="formatVuelidateErrors(v$.moreInfo.$errors)"
+          placeholder="brand_name"
+          :errors="formatVuelidateErrors(v$.brand_name.$errors)"
         ></base-input>
-      </div>
-      <div
-        v-if="!v$.earn.$model"
-        class="flex justify-between w-full items-start"
-      >
-        <base-checkbox
-          id="highlighted:highlighted.value"
-          v-model="v$.highlighted.$model"
-          text="Is highlighted"
-          label-text="highlighted"
-          :errors="formatVuelidateErrors(v$.highlighted.$errors)"
-        ></base-checkbox>
-        <div v-if="v$.highlighted.$model">
-          <base-input
-            id="order"
-            v-model="v$.order.$model"
-            label-text="order"
-            type="number"
-            placeholder="Order"
-            min="0"
-            :errors="formatVuelidateErrors(v$.order.$errors)"
-          ></base-input>
-        </div>
       </div>
       <div>
         <base-multi-select
-          v-model="v$.categories.$model"
+          v-model="formData.categories"
           name="categories"
           label-text="categories"
           label="value"
-          :options="categoriesOptions"
           :errors="
             v$.categories.$errors &&
             formatVuelidateErrors(v$.categories.$errors)
@@ -127,13 +79,23 @@
       </div>
       <div>
         <base-multi-select
-          v-model="v$.hashtags.$model"
-          name="hashtags"
-          label-text="hashtags"
-          :errors="
-            v$.hashtags.$errors && formatVuelidateErrors(v$.hashtags.$errors)
-          "
+          v-model="formData.tags"
+          name="tags"
+          label-text="tags"
+          :errors="v$.tags.$errors && formatVuelidateErrors(v$.tags.$errors)"
         ></base-multi-select>
+      </div>
+      <div>
+        <base-checkbox
+          id="transferable_copyright"
+          v-model="formData.transferable_copyright"
+          text="Is transferable_copyright"
+          label-text="transferable_copyright"
+          :errors="
+            v$.transferable_copyright.$errors &&
+            formatVuelidateErrors(v$.transferable_copyright.$errors)
+          "
+        ></base-checkbox>
       </div>
       <base-dialog
         :show="showSuccess"
@@ -157,9 +119,7 @@
           </base-button>
         </template>
       </base-dialog>
-      <base-button :disabled="v$.$invalid" class="w-full" @click="submit"
-        >Submit</base-button
-      >
+      <base-button class="w-full" @click="submit">Submit</base-button>
     </form>
   </div>
 </template>
@@ -170,12 +130,11 @@ import BaseButton from "@/components/BaseButton.vue";
 import BaseCheckbox from "@/components/BaseCheckbox.vue";
 import BaseDialog from "@/components/BaseDialog.vue";
 import BaseMultiSelect from "@/components/BaseMultiSelect.vue";
-import { ref, defineComponent, computed, Ref } from "vue";
+import { reactive, defineComponent, computed, ref, Ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import useVuelidate from "@vuelidate/core";
-import { required, url, minValue } from "@vuelidate/validators";
-import { isAddress } from "../utils/validators";
+import { required, url } from "@vuelidate/validators";
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
 
 export interface ErrorObject {
@@ -188,24 +147,6 @@ export interface ErrorObject {
   $response: unknown;
   $uid: string;
 }
-type Proxy<T> = {
-  get(): T;
-  set(value: T): void;
-};
-
-interface ProxyArray<T> extends Array<T> {
-  handler(): Array<T>;
-  target(value: T): void;
-}
-
-type Proxify<T> = {
-  [P in keyof T]: Proxy<T[P]>;
-};
-
-type ProxifyArray<T> = {
-  [P in keyof T]: ProxyArray<T[P]>;
-};
-type ArrayErrors = ProxifyArray<ErrorObject>;
 
 export default defineComponent({
   components: {
@@ -219,109 +160,55 @@ export default defineComponent({
   setup: () => {
     const store = useStore();
     const router = useRouter();
-    const title = ref("");
-    const subtitle = ref("");
-    const walletAddress = ref("");
-    const mediaID = ref("");
-    const moreInfo = ref("");
-    const hashtags = ref([]);
-    const categories = ref([]);
-    const earn = ref(false);
-    const highlighted = ref(false);
-    const order = ref<number>(0);
-    const balanceTotal = ref<number>(0);
-    const balanceAvailable = ref<number>(0);
+
+    const formData = reactive({
+      token_name: "",
+      title: "",
+      subtitle: "",
+      description: "",
+      tags: [],
+      mediaurl: "",
+      categories: [],
+      brand_name: "",
+      transferable_copyright: false,
+      status: "",
+    });
     const showError = ref(false);
     const errorMessage = ref<string>("");
     const showSuccess = ref(false);
 
     const rules = computed(() => ({
       title: { required },
+      token_name: { required },
       subtitle: {},
-      walletAddress: {
+      description: {},
+      brand_name: {
         required,
-        isAddress,
       },
-      mediaID: { required },
-      moreInfo: { url },
-      earn: { required },
-      highlighted: { required },
-      order: { required, minValue: minValue(0) },
-      balanceTotal: { required, minValue: minValue(0) },
-      balanceAvailable: { required, minValue: minValue(0) },
-      hashtags: { required },
+      transferable_copyright: { required },
+      mediaurl: { required, url },
+      tags: { required },
       categories: { required },
     }));
-    const v$ = useVuelidate(rules, {
-      title,
-      subtitle,
-      mediaID,
-      walletAddress,
-      earn,
-      highlighted,
-      moreInfo,
-      order,
-      hashtags,
-      balanceTotal,
-      balanceAvailable,
-      categories,
-    });
-    const categoriesOptions = ["crypto", "gaming", "other"];
+    const v$ = useVuelidate(rules, formData);
     return {
-      title,
-      subtitle,
-      mediaID,
-      walletAddress,
-      earn,
-      highlighted,
-      moreInfo,
-      order,
-      balanceTotal,
-      balanceAvailable,
-      hashtags,
+      formData,
       v$,
       showError,
       showSuccess,
       errorMessage,
-      categoriesOptions,
       async submit(event: Event) {
         event.preventDefault();
         const isFormCorrect = await v$.value.$validate();
+        debugger;
         if (!isFormCorrect) return;
-        const newMedia = {
-          type: "video",
-          earn: earn.value,
-          publisher: {
-            walletAddress: walletAddress.value,
-          },
-          balanceAvailable: balanceAvailable.value,
-          balanceTotal: balanceTotal.value,
-          mediaID: mediaID.value,
-          list: {
-            highlighted: highlighted.value,
-            order: order.value,
-          },
-          categories: categories.value,
-          details: {
-            title: title.value,
-            subtitle: subtitle.value,
-            moreInfo: moreInfo.value,
-            twitter: {
-              hashtags: hashtags.value,
-            },
-          },
-        };
         try {
-          await store.dispatch("media/add", newMedia);
+          await store.dispatch("nft/create", formData);
           showSuccess.value = true;
         } catch (error) {
-          const {
-            response: {
-              data: { message },
-            },
-          } = error;
-          errorMessage.value = String(message);
-          showError.value = true;
+          console.log(error);
+          // errorMessage.value = String(message);
+          // showError.value = true;
         }
       },
       pushToMediaList() {
@@ -332,10 +219,6 @@ export default defineComponent({
         return errors.map((error) => {
           return { text: error.$message, key: error.$uid };
         });
-      },
-      onEarnChange(event: Event) {
-        const isChecked = (event.target as HTMLInputElement).checked;
-        highlighted.value = isChecked ? false : highlighted.value;
       },
     };
   },

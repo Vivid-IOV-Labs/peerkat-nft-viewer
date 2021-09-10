@@ -1,8 +1,8 @@
 import { createStore, createLogger } from "vuex";
-import media from "./modules/media";
+import nft from "./modules/nft";
 const store = createStore({
   modules: {
-    media,
+    nft,
   },
   strict: true,
   plugins: [createLogger()],

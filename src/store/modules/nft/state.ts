@@ -1,12 +1,12 @@
-import { Media } from "../../../models/Media";
+import { NFT } from "../../../models/NFT";
 
-export interface MediaState {
-  all: Array<Media>;
+export interface NFTState {
+  all: Array<NFT>;
   totalItems: number;
   query: Record<string, string | number>;
 }
 
-const state = (): MediaState => ({
+const state = (): NFTState => ({
   all: [],
   totalItems: 0,
   query: {},

@@ -1,26 +1,26 @@
-import MediaService from "../../../services/MediaService";
+import NFTService from "../../../services/NFTService";
 import { ActionTree } from "vuex";
-import { Media } from "../../../models/Media";
+import { NFT } from "../../../models/NFT";
 
 interface MediaState {
-  all: Array<Media>;
+  all: Array<NFT>;
 }
 
-const actions: ActionTree<Media, MediaState> = {
+const actions: ActionTree<NFT, MediaState> = {
   async fetchAll({ commit }, params): Promise<void> {
-    const { media, total } = await MediaService.list(params);
+    const { media, total } = await NFTService.list(params);
     commit("setAll", media);
     commit("setTotalItems", total);
   },
   setQuery({ commit }, query) {
     commit("setQuery", query);
   },
-  async add({ commit }, newVideo: Media): Promise<void> {
-    const newAddedMedia = await MediaService.add(newVideo);
+  async create({ commit }, newNFTH: NFT): Promise<void> {
+    const newAddedMedia = await NFTService.create(newNFTH);
     commit("add", newAddedMedia);
   },
   async remove({ commit }, mediaID: string): Promise<void> {
-    await MediaService.remove(mediaID);
+    await NFTService.remove(mediaID);
     commit("remove", mediaID);
   },
 };

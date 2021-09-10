@@ -21,7 +21,7 @@
       class="
         w-16
         h-16
-        bg-green-500
+        bg-red-500
         text-white
         font-bolder
         text-3xl
@@ -39,14 +39,14 @@
       <PlusIcon class="h-8 w-8 text-white" />
     </router-link>
   </div>
-  <div class="flex w-full py-4 mt-6"><pagination></pagination></div>
+  <!-- <div class="flex w-full py-4 mt-6"><pagination></pagination></div> -->
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, ref, watch } from "vue";
 import MediaCard from "../components/MediaCard.vue";
 import BaseInput from "@/components/BaseInput.vue";
-import Pagination from "@/components/Pagination.vue";
+// import Pagination from "@/components/Pagination.vue";
 import Filters from "@/components/Filters.vue";
 import { useStore } from "vuex";
 import { PlusIcon } from "@heroicons/vue/solid";
@@ -57,7 +57,7 @@ export default defineComponent({
     MediaCard,
     BaseInput,
     PlusIcon,
-    Pagination,
+    // Pagination,
     Filters,
   },
   setup: () => {
@@ -66,13 +66,13 @@ export default defineComponent({
 
     const searchByTitle = ref("");
     const allMedia = computed(() => {
-      return store.getters["media/byTitle"](searchByTitle.value);
+      return store.getters["nft/byTitle"](searchByTitle.value);
     });
-    store.dispatch("media/fetchAll", route.query);
+    store.dispatch("nft/fetchAll", route.query);
     watch(
       () => route.query,
       async () => {
-        await store.dispatch("media/fetchAll", route.query);
+        await store.dispatch("nft/fetchAll", route.query);
       }
     );
     return { allMedia, searchByTitle };

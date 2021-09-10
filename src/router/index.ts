@@ -3,15 +3,6 @@ import { createWebHistory, createRouter } from "vue-router";
 const routes = [
   {
     path: "/",
-    name: "Login",
-    component: () => import("../views/Login.vue"),
-    meta: {
-      guest: true,
-      title: "Login",
-    },
-  },
-  {
-    path: "/media",
     name: "MediaList",
     component: () => import("../views/MediaList.vue"),
     meta: {
@@ -37,15 +28,6 @@ const routes = [
       title: "Edit Media",
     },
   },
-  {
-    path: "/media/balance/edit/:mediaID",
-    name: "BalanceEdit",
-    component: () => import("../views/BalanceEdit.vue"),
-    meta: {
-      withAuth: true,
-      title: "Edit Balance",
-    },
-  },
 ];
 
 const router = createRouter({
@@ -53,19 +35,19 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.matched.some((record) => record.meta.withAuth)) {
-    if (localStorage.getItem("token") == null) {
-      next({
-        path: "/",
-        params: { nextUrl: to.fullPath },
-      });
-    } else {
-      next();
-    }
-  } else {
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   if (to.matched.some((record) => record.meta.withAuth)) {
+//     if (localStorage.getItem("token") == null) {
+//       next({
+//         path: "/",
+//         params: { nextUrl: to.fullPath },
+//       });
+//     } else {
+//       next();
+//     }
+//   } else {
+//     next();
+//   }
+// });
 
 export default router;

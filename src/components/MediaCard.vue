@@ -5,7 +5,7 @@
         <span class="pt-1 font-bold text-xl">{{ title }}</span>
         <div class="flex mt-2">
           <span
-            v-if="media.earn"
+            v-if="media.status"
             class="
               inline-flex
               items-center
@@ -16,29 +16,11 @@
               text-xs
               font-bold
               leading-none
-              text-green-100
-              bg-green-600
+              text-red-100
+              bg-red-600
               rounded-full
             "
-            >EARN</span
-          >
-          <span
-            v-if="media.list.highlighted"
-            class="
-              inline-flex
-              items-center
-              justify-center
-              px-2
-              py-1
-              mr-2
-              text-xs
-              font-bold
-              leading-none
-              text-green-100
-              bg-green-600
-              rounded-full
-            "
-            >TOP #{{ media.list.order }}</span
+            >{{ media.status }}</span
           >
         </div>
       </div>
@@ -60,22 +42,8 @@
         </div>
       </div>
       <div class="pt-1">
-        <a
-          v-if="moreInfo"
-          target="_blank"
-          :href="moreInfo"
-          class="mb-2 text-xs"
-        >
-          {{ moreInfo }}
-        </a>
+        <p>{{ description }}</p>
       </div>
-    </div>
-    <div class="border-t-2 p-4 flex justify-end">
-      <base-button v-if="media.earn" class="mr-2" @click="editMediaBalance"
-        >Edit Balance</base-button
-      >
-      <base-button @click="editMedia">Edit</base-button>
-      <base-button class="ml-2" @click="confirmDelete">Delete</base-button>
     </div>
     <base-dialog
       :show="isDeleteDialogOpen"
@@ -88,7 +56,6 @@
         </p>
       </template>
       <template #footer>
-        <base-button @click="deleteMedia"> Confirm </base-button>
         <base-button class="ml-2" @click="isDeleteDialogOpen = false">
           Cancel
         </base-button>
@@ -105,6 +72,7 @@ import { Media } from "../models/Media";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { ref, defineComponent } from "vue";
+import { NFT } from "../models/NFT";
 
 export default defineComponent({
   components: {
@@ -112,7 +80,7 @@ export default defineComponent({
     BaseDialog,
   },
   props: {
-    media: { type: Object as PropType<Media>, required: true },
+    media: { type: Object as PropType<NFT>, required: true },
   },
   setup: (props) => {
     const store = useStore();
@@ -120,26 +88,15 @@ export default defineComponent({
     const isDeleteDialogOpen = ref(false);
     return {
       isDeleteDialogOpen,
-      deleteMedia(): void {
-        store.dispatch("media/remove", props.media.mediaID);
-      },
-      confirmDelete(): void {
-        isDeleteDialogOpen.value = true;
-      },
-      editMedia(): void {
-        router.push({ path: `/media/edit/${props.media.mediaID}` });
-      },
-      editMediaBalance(): void {
-        router.push({ path: `/media/balance/edit/${props.media.mediaID}` });
-      },
+
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
     };
   },
   computed: {
-    mediaID(): string {
-      return this.media.mediaID;
+    tokenName(): string {
+      return this.media.details.token_name;
     },
     // videoUrl() {
     //   const url = `${env.media_server}/${this.mediaID}.mp4`;
@@ -150,8 +107,7 @@ export default defineComponent({
     //   return url;
     // },
     posterUrl(): string {
-      const url = `${imagesCDNUrl}/${this.media.mediaID}.png`;
-      return url;
+      return this.media.details.mediaurl;
     },
     title(): string {
       if (this.media && this.media.details && this.media.details.title) {
@@ -161,13 +117,8 @@ export default defineComponent({
       }
     },
     hashtags(): string {
-      if (
-        this.media &&
-        this.media.details &&
-        this.media.details.twitter &&
-        this.media.details.twitter.hashtags
-      ) {
-        return this.media.details.twitter.hashtags
+      if (this.media && this.media.details && this.media.details.tags) {
+        return this.media.details.tags
           .reduce((acc, tag) => {
             acc += ` #${tag},`;
             return acc;
@@ -184,9 +135,9 @@ export default defineComponent({
         return "";
       }
     },
-    moreInfo(): string {
-      if (this.media && this.media.details && this.media.details.moreInfo) {
-        return this.media.details.moreInfo;
+    description(): string {
+      if (this.media && this.media.details && this.media.details.description) {
+        return this.media.details.description;
       } else {
         return "";
       }
