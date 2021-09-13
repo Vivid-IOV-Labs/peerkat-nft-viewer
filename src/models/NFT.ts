@@ -16,5 +16,6 @@ export interface NFT {
     brand_name: string;
     transferable_copyright: boolean;
   };
-  status: string;
+  current_status: string;
+  previous_status: string;
 }

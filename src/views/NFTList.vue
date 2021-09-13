@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col justify-center items-center mb-2">
+  <!-- <div class="flex flex-col justify-center items-center mb-2">
     <base-input
       id="search"
       v-model="searchByTitle"
@@ -9,14 +9,10 @@
       class="w-full max-w-xl"
     ></base-input>
     <div class="flex w-full mt-3 mb-8"><filters></filters></div>
-  </div>
+  </div> -->
 
   <div class="mt-2 grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    <media-card
-      v-for="media in allMedia"
-      :key="media.mediaID"
-      :media="media"
-    ></media-card>
+    <nft-card v-for="nft in allNFT" :key="nft.id" :nft="nft"></nft-card>
     <router-link
       class="
         w-16
@@ -44,28 +40,26 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref, watch } from "vue";
-import MediaCard from "../components/MediaCard.vue";
-import BaseInput from "@/components/BaseInput.vue";
+import NftCard from "../components/NFTCard.vue";
 // import Pagination from "@/components/Pagination.vue";
-import Filters from "@/components/Filters.vue";
+// import Filters from "@/components/Filters.vue";
 import { useStore } from "vuex";
 import { PlusIcon } from "@heroicons/vue/solid";
 import { useRoute } from "vue-router";
 
 export default defineComponent({
   components: {
-    MediaCard,
-    BaseInput,
+    NftCard,
     PlusIcon,
     // Pagination,
-    Filters,
+    // Filters,
   },
   setup: () => {
     const store = useStore();
     const route = useRoute();
 
     const searchByTitle = ref("");
-    const allMedia = computed(() => {
+    const allNFT = computed(() => {
       return store.getters["nft/byTitle"](searchByTitle.value);
     });
     store.dispatch("nft/fetchAll", route.query);
@@ -75,7 +69,7 @@ export default defineComponent({
         await store.dispatch("nft/fetchAll", route.query);
       }
     );
-    return { allMedia, searchByTitle };
+    return { allNFT, searchByTitle };
   },
 });
 </script>

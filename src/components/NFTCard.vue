@@ -5,7 +5,7 @@
         <span class="pt-1 font-bold text-xl">{{ title }}</span>
         <div class="flex mt-2">
           <span
-            v-if="media.status"
+            v-if="nft.current_status"
             class="
               inline-flex
               items-center
@@ -20,7 +20,7 @@
               bg-red-600
               rounded-full
             "
-            >{{ media.status }}</span
+            >{{ nft.current_status }}</span
           >
         </div>
       </div>
@@ -34,7 +34,12 @@
     </figure>
     <div class="px-3 pb-2">
       <div class="pt-2">
-        <span class="text-sm text-gray-400 font-medium">{{ hashtags }}</span>
+        <span class="text-sm text-gray-400 font-medium"
+          >Categories: {{ categories }}</span
+        >
+      </div>
+      <div class="pt-2">
+        <span class="text-sm text-gray-400 font-medium">Tags:{{ tags }}</span>
       </div>
       <div class="pt-1">
         <div class="mb-2">
@@ -44,6 +49,17 @@
       <div class="pt-1">
         <p>{{ description }}</p>
       </div>
+      <div class="border-t-2 p-4 flex justify-end">
+        <base-button v-if="canDelete" class="mr-2" @click="deleteNFT"
+          >Delete</base-button
+        >
+        <base-button v-if="canApprove" class="mr-2" @click="deleteNFT"
+          >Approve</base-button
+        >
+        <base-button v-if="canReject" class="mr-2" @click="deleteNFT"
+          >Reject</base-button
+        >
+      </div>
     </div>
     <base-dialog
       :show="isDeleteDialogOpen"
@@ -52,27 +68,25 @@
     >
       <template #body>
         <p>
-          Do you want to delete <strong>{{ media.details.title }}</strong> ?
+          Do you want to delete <strong>{{ nft.details.title }}</strong> ?
         </p>
       </template>
       <template #footer>
         <base-button class="ml-2" @click="isDeleteDialogOpen = false">
-          Cancel
+          Delete
         </base-button>
       </template>
     </base-dialog>
   </div>
 </template>
 <script lang="ts">
-const imagesCDNUrl = import.meta.env.VITE_CDN_IMAGES_URL;
 import BaseButton from "../components/BaseButton.vue";
 import BaseDialog from "../components/BaseDialog.vue";
 import { PropType } from "vue";
-import { Media } from "../models/Media";
+import { NFT } from "../models/NFT";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { ref, defineComponent } from "vue";
-import { NFT } from "../models/NFT";
 
 export default defineComponent({
   components: {
@@ -80,7 +94,7 @@ export default defineComponent({
     BaseDialog,
   },
   props: {
-    media: { type: Object as PropType<NFT>, required: true },
+    nft: { type: Object as PropType<NFT>, required: true },
   },
   setup: (props) => {
     const store = useStore();
@@ -92,33 +106,57 @@ export default defineComponent({
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
+      deleteNFT(): void {
+        isDeleteDialogOpen.value = true;
+        console.log(213);
+      },
     };
   },
   computed: {
+    canDelete(): boolean {
+      return (
+        ["created", "deleted"].includes(this.nft.current_status) &&
+        ["brand/worker", "brand/manager"].includes(
+          localStorage.getItem("user-role") || ""
+        )
+      );
+    },
+    canApprove(): boolean {
+      return (
+        ["created"].includes(this.nft.current_status) &&
+        localStorage.getItem("user-role") == "brand/manager"
+      );
+    },
+    canReject(): boolean {
+      return (
+        ["created"].includes(this.nft.current_status) &&
+        localStorage.getItem("user-role") == "brand/manager"
+      );
+    },
     tokenName(): string {
-      return this.media.details.token_name;
+      return this.nft.details.token_name;
     },
     // videoUrl() {
-    //   const url = `${env.media_server}/${this.mediaID}.mp4`;
+    //   const url = `${env.media_server}/${this.nftID}.mp4`;
     //   return url;
     // },
     // hlsUrl() {
-    //   const url = `${env.media_hls}/${this.mediaID}.m3u8`;
+    //   const url = `${env.media_hls}/${this.nftID}.m3u8`;
     //   return url;
     // },
     posterUrl(): string {
-      return this.media.details.mediaurl;
+      return this.nft.details.mediaurl;
     },
     title(): string {
-      if (this.media && this.media.details && this.media.details.title) {
-        return this.media.details.title;
+      if (this.nft && this.nft.details && this.nft.details.title) {
+        return this.nft.details.title;
       } else {
         return "";
       }
     },
-    hashtags(): string {
-      if (this.media && this.media.details && this.media.details.tags) {
-        return this.media.details.tags
+    tags(): string {
+      if (this.nft && this.nft.details && this.nft.details.tags) {
+        return this.nft.details.tags
           .reduce((acc, tag) => {
             acc += ` #${tag},`;
             return acc;
@@ -128,16 +166,28 @@ export default defineComponent({
         return "";
       }
     },
+    categories(): string {
+      if (this.nft && this.nft.details && this.nft.details.categories) {
+        return this.nft.details.categories
+          .reduce((acc, tag) => {
+            acc += `${tag},`;
+            return acc;
+          }, "")
+          .slice(1, -1);
+      } else {
+        return "";
+      }
+    },
     subtitle(): string {
-      if (this.media && this.media.details && this.media.details.subtitle) {
-        return this.media.details.subtitle;
+      if (this.nft && this.nft.details && this.nft.details.subtitle) {
+        return this.nft.details.subtitle;
       } else {
         return "";
       }
     },
     description(): string {
-      if (this.media && this.media.details && this.media.details.description) {
-        return this.media.details.description;
+      if (this.nft && this.nft.details && this.nft.details.description) {
+        return this.nft.details.description;
       } else {
         return "";
       }

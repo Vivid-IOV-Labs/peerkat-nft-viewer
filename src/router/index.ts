@@ -3,8 +3,8 @@ import { createWebHistory, createRouter } from "vue-router";
 const routes = [
   {
     path: "/",
-    name: "MediaList",
-    component: () => import("../views/MediaList.vue"),
+    name: "NFTList",
+    component: () => import("../views/NFTList.vue"),
     meta: {
       withAuth: true,
       title: "Media Dashboard",
