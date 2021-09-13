@@ -20,8 +20,16 @@ const actions: ActionTree<NFT, MediaState> = {
     commit("add", newAddedMedia);
   },
   async approve({ commit }, NFT: NFT): Promise<void> {
-    const { nft: approvedNFT } = await NFTService.approve(NFT);
+    const approvedNFT = await NFTService.approve(NFT);
     commit("set", approvedNFT);
+  },
+  async issue({ commit }, NFT: NFT): Promise<void> {
+    const issuedNFT = await NFTService.issue(NFT);
+    commit("set", issuedNFT);
+  },
+  async claim({ commit }, NFT: NFT): Promise<void> {
+    const claimedNFT = await NFTService.claim(NFT);
+    commit("set", claimedNFT);
   },
   async remove({ commit }, mediaID: string): Promise<void> {
     await NFTService.remove(mediaID);

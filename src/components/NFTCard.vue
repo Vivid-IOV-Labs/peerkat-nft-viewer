@@ -28,7 +28,7 @@
     <figure class="w-full h-22">
       <img
         class="w-full object-cover object-centerz"
-        :src="posterUrl"
+        :src="showQRCode ? xumnQRCode : posterUrl"
         @error="fallbackImg"
       />
     </figure>
@@ -56,9 +56,18 @@
         <base-button v-if="canApprove" class="mr-2" @click="approveNFT"
           >Approve</base-button
         >
+        <base-button v-if="canIssue" class="mr-2" @click="issueNFT"
+          >Issue</base-button
+        >
+        <base-button v-if="canClaim" class="mr-2" @click="claimNFT"
+          >Claim</base-button
+        >
         <base-button v-if="canReject" class="mr-2" @click="deleteNFT"
           >Reject</base-button
         >
+      </div>
+      <div class="pt-1">
+        <a target="_blank" :href="xumnLink">Claim on Xumn App</a>
       </div>
     </div>
     <base-dialog
@@ -85,7 +94,6 @@ import BaseDialog from "../components/BaseDialog.vue";
 import { PropType } from "vue";
 import { NFT } from "../models/NFT";
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
 import { ref, defineComponent } from "vue";
 
 export default defineComponent({
@@ -98,11 +106,18 @@ export default defineComponent({
   },
   setup: (props) => {
     const store = useStore();
-    const router = useRouter();
     const isDeleteDialogOpen = ref(false);
+    const showQRCode = ref(false);
+    if (
+      props.nft.xumm &&
+      props.nft.xumm.length &&
+      props.nft.xumm[0].details.refs.qr_png
+    ) {
+      showQRCode.value = true;
+    }
     return {
       isDeleteDialogOpen,
-
+      showQRCode,
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
@@ -112,6 +127,13 @@ export default defineComponent({
       },
       approveNFT(): void {
         store.dispatch("nft/approve", props.nft);
+      },
+      issueNFT(): void {
+        store.dispatch("nft/issue", props.nft);
+      },
+      async claimNFT(): Promise<void> {
+        await store.dispatch("nft/claim", props.nft);
+        showQRCode.value = true;
       },
     };
   },
@@ -136,17 +158,33 @@ export default defineComponent({
         localStorage.getItem("user-role") == "brand/manager"
       );
     },
+    canIssue(): boolean {
+      return (
+        ["approved"].includes(this.nft.current_status) &&
+        localStorage.getItem("user-role") == "admin/worker"
+      );
+    },
+    canClaim(): boolean {
+      return (
+        ["issued"].includes(this.nft.current_status) &&
+        localStorage.getItem("user-role") == "public"
+      );
+    },
+    xumnQRCode(): string | 0 {
+      return (
+        this.nft.xumm &&
+        this.nft.xumm.length &&
+        this.nft.xumm[0].details.refs.qr_png
+      );
+    },
+    xumnLink(): string {
+      return this.nft.xumm && this.nft.xumm.length
+        ? this.nft.xumm[0].details.next.always
+        : "";
+    },
     tokenName(): string {
       return this.nft.details.token_name;
     },
-    // videoUrl() {
-    //   const url = `${env.media_server}/${this.nftID}.mp4`;
-    //   return url;
-    // },
-    // hlsUrl() {
-    //   const url = `${env.media_hls}/${this.nftID}.m3u8`;
-    //   return url;
-    // },
     posterUrl(): string {
       return this.nft.details.mediaurl;
     },

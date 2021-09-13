@@ -27,7 +27,7 @@ async function list(
   return { media, total };
 }
 
-async function create(newMedia: NFT): Promise<unknown> {
+async function create(newMedia: NFT["details"]): Promise<unknown> {
   const {
     data: { media },
   } = await ApiService.post(`${API_ENDPOINT}`, newMedia);
@@ -41,6 +41,24 @@ async function approve(NFT: NFT): Promise<ResponseNFT> {
   console.log(approvedNFT);
   debugger;
   return approvedNFT;
+}
+
+async function issue(NFT: NFT): Promise<ResponseNFT> {
+  const {
+    data: { nft: issuedNFT },
+  } = await ApiService.post(`${API_ENDPOINT}/issue`, NFT);
+  console.log(issuedNFT);
+  debugger;
+  return issuedNFT;
+}
+
+async function claim(NFT: NFT): Promise<ResponseNFT> {
+  const {
+    data: { nft: claimedNFT },
+  } = await ApiService.post(`${API_ENDPOINT}/claim`, NFT);
+  console.log(claimedNFT);
+  debugger;
+  return claimedNFT;
 }
 
 async function remove(mediaID: string): Promise<void> {
@@ -74,4 +92,6 @@ export default {
   remove,
   find,
   update,
+  issue,
+  claim,
 };
