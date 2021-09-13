@@ -15,9 +15,13 @@ const actions: ActionTree<NFT, MediaState> = {
   setQuery({ commit }, query) {
     commit("setQuery", query);
   },
-  async create({ commit }, newNFTH: NFT): Promise<void> {
+  async create({ commit }, newNFTH: NFT["details"]): Promise<void> {
     const newAddedMedia = await NFTService.create(newNFTH);
     commit("add", newAddedMedia);
+  },
+  async approve({ commit }, NFT: NFT): Promise<void> {
+    const { nft: approvedNFT } = await NFTService.approve(NFT);
+    commit("set", approvedNFT);
   },
   async remove({ commit }, mediaID: string): Promise<void> {
     await NFTService.remove(mediaID);

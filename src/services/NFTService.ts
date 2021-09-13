@@ -14,6 +14,10 @@ interface listResponse {
   media: NFT[];
   total: number;
 }
+interface ResponseNFT {
+  nft: NFT;
+}
+
 async function list(
   params: Record<string, string | number>
 ): Promise<listResponse> {
@@ -28,6 +32,15 @@ async function create(newMedia: NFT): Promise<unknown> {
     data: { media },
   } = await ApiService.post(`${API_ENDPOINT}`, newMedia);
   return media;
+}
+
+async function approve(NFT: NFT): Promise<ResponseNFT> {
+  const {
+    data: { nft: approvedNFT },
+  } = await ApiService.post(`${API_ENDPOINT}/approve`, NFT);
+  console.log(approvedNFT);
+  debugger;
+  return approvedNFT;
 }
 
 async function remove(mediaID: string): Promise<void> {
@@ -57,6 +70,7 @@ async function update(mediaToUpdate: NFT): Promise<NFT> {
 export default {
   list,
   create,
+  approve,
   remove,
   find,
   update,

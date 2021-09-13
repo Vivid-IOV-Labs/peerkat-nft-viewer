@@ -12,6 +12,9 @@ const mutations: MutationTree<NFTState> = {
   setQuery(state: NFTState, query: Record<string, string | number>): void {
     state.query = query;
   },
+  set(state: NFTState, newMedia: NFT): void {
+    console.log("mutation", newMedia);
+  },
   add(state: NFTState, newMedia: NFT): void {
     state.all = [newMedia, ...state.all];
   },

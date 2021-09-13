@@ -53,7 +53,7 @@
         <base-button v-if="canDelete" class="mr-2" @click="deleteNFT"
           >Delete</base-button
         >
-        <base-button v-if="canApprove" class="mr-2" @click="deleteNFT"
+        <base-button v-if="canApprove" class="mr-2" @click="approveNFT"
           >Approve</base-button
         >
         <base-button v-if="canReject" class="mr-2" @click="deleteNFT"
@@ -109,6 +109,9 @@ export default defineComponent({
       deleteNFT(): void {
         isDeleteDialogOpen.value = true;
         console.log(213);
+      },
+      approveNFT(): void {
+        store.dispatch("nft/approve", props.nft);
       },
     };
   },
