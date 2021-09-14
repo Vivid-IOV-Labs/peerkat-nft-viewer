@@ -24,6 +24,9 @@
           >
         </div>
       </div>
+      <div v-if="showQRCode" class="ml-auto">
+        <base-button @click="showQRCode = false">x</base-button>
+      </div>
     </div>
     <figure class="w-full h-22">
       <img
@@ -66,7 +69,7 @@
           >Reject</base-button
         >
       </div>
-      <div class="pt-1">
+      <div v-if="xumnLink" class="pt-1">
         <a target="_blank" :href="xumnLink">Claim on Xumn App</a>
       </div>
     </div>
@@ -140,10 +143,8 @@ export default defineComponent({
   computed: {
     canDelete(): boolean {
       return (
-        ["created", "deleted"].includes(this.nft.current_status) &&
-        ["brand/worker", "brand/manager"].includes(
-          localStorage.getItem("user-role") || ""
-        )
+        ["created", "rejected"].includes(this.nft.current_status) &&
+        ["brand/worker"].includes(localStorage.getItem("user-role") || "")
       );
     },
     canApprove(): boolean {
@@ -155,7 +156,9 @@ export default defineComponent({
     canReject(): boolean {
       return (
         ["created"].includes(this.nft.current_status) &&
-        localStorage.getItem("user-role") == "brand/manager"
+        ["admin/worker", "brand/manager"].includes(
+          localStorage.getItem("user-role") || ""
+        )
       );
     },
     canIssue(): boolean {
@@ -170,17 +173,13 @@ export default defineComponent({
         localStorage.getItem("user-role") == "public"
       );
     },
-    xumnQRCode(): string | 0 {
-      return (
-        this.nft.xumm &&
-        this.nft.xumm.length &&
-        this.nft.xumm[0].details.refs.qr_png
-      );
+    xumnQRCode(): string {
+      const { length, [length - 1]: last } = this.nft.xumm;
+      return length ? last.details.refs.qr_png : "";
     },
     xumnLink(): string {
-      return this.nft.xumm && this.nft.xumm.length
-        ? this.nft.xumm[0].details.next.always
-        : "";
+      const { length, [length - 1]: last } = this.nft.xumm;
+      return length ? last.details.next.always : "";
     },
     tokenName(): string {
       return this.nft.details.token_name;

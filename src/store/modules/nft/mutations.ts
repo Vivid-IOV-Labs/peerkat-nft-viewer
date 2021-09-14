@@ -12,8 +12,13 @@ const mutations: MutationTree<NFTState> = {
   setQuery(state: NFTState, query: Record<string, string | number>): void {
     state.query = query;
   },
-  set(state: NFTState, newMedia: NFT): void {
-    console.log("mutation", newMedia);
+  set(state: NFTState, updatedNft: NFT): void {
+    const index = state.all.findIndex((nft) => {
+      nft.id === updatedNft._id || nft.id === updatedNft.id;
+    });
+    if (index > 0) {
+      state.all[index] = updatedNft;
+    }
   },
   add(state: NFTState, newMedia: NFT): void {
     state.all = [newMedia, ...state.all];

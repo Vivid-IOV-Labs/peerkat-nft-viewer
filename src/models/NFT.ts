@@ -23,6 +23,7 @@ interface xumn_block {
 }
 export interface NFT {
   id: string;
+  _id: string;
   details: {
     token_name: string;
     title: string;
