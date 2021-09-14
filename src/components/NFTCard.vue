@@ -1,5 +1,38 @@
 <template>
-  <div class="rounded overflow-hidden border w-full bg-white shadow-lg">
+  <div class="rounded border bg-white shadow-lg">
+    <div class="w-full h-96 overflow-hidden relative">
+      <base-button
+        v-if="showQRCode"
+        class="absolute top-2 right-1"
+        @click="showQRCode = false"
+        >x</base-button
+      >
+      <img
+        class="object-cover object-center h-full w-full"
+        :src="showQRCode ? xumnQRCode : posterUrl"
+        @error="fallbackImg"
+      />
+      <div class="pt-1">
+        <a
+          v-if="showQRCode"
+          class="
+            absolute
+            bottom-0
+            right-0
+            d-block
+            bg-white
+            uppercase
+            font-bold
+            text-xs
+            py-4
+            px-6
+          "
+          target="_blank"
+          :href="xumnLink"
+          >Claim on Xumn App</a
+        >
+      </div>
+    </div>
     <div class="w-full flex justify-between p-3">
       <div class="flex w-full flex-col justify-between">
         <span class="pt-1 font-bold text-xl">{{ title }}</span>
@@ -24,18 +57,8 @@
           >
         </div>
       </div>
-      <div v-if="showQRCode" class="ml-auto">
-        <base-button @click="showQRCode = false">x</base-button>
-      </div>
     </div>
-    <figure class="w-full h-22">
-      <img
-        class="w-full object-cover object-centerz"
-        :src="showQRCode ? xumnQRCode : posterUrl"
-        @error="fallbackImg"
-      />
-    </figure>
-    <div class="px-3 pb-2">
+    <div class="px-3 pb-2 h-20 overflow-y-auto">
       <div class="pt-2">
         <span class="text-sm text-gray-400 font-medium"
           >Categories: {{ categories }}</span
@@ -44,34 +67,23 @@
       <div class="pt-2">
         <span class="text-sm text-gray-400 font-medium">Tags:{{ tags }}</span>
       </div>
-      <div class="pt-1">
-        <div class="mb-2">
-          {{ subtitle }}
-        </div>
-      </div>
-      <div class="pt-1">
-        <p>{{ description }}</p>
-      </div>
-      <div class="border-t-2 p-4 flex justify-end">
-        <base-button v-if="canDelete" class="mr-2" @click="deleteNFT"
-          >Delete</base-button
-        >
-        <base-button v-if="canApprove" class="mr-2" @click="approveNFT"
-          >Approve</base-button
-        >
-        <base-button v-if="canIssue" class="mr-2" @click="issueNFT"
-          >Issue</base-button
-        >
-        <base-button v-if="canClaim" class="mr-2" @click="claimNFT"
-          >Claim</base-button
-        >
-        <base-button v-if="canReject" class="mr-2" @click="deleteNFT"
-          >Reject</base-button
-        >
-      </div>
-      <div v-if="xumnLink" class="pt-1">
-        <a target="_blank" :href="xumnLink">Claim on Xumn App</a>
-      </div>
+    </div>
+    <div class="border-t-2 p-4 flex justify-end">
+      <base-button v-if="canDelete" class="mr-2" @click="deleteNFT"
+        >Delete</base-button
+      >
+      <base-button v-if="canApprove" class="mr-2" @click="approveNFT"
+        >Approve</base-button
+      >
+      <base-button v-if="canIssue" class="mr-2" @click="issueNFT"
+        >Issue</base-button
+      >
+      <base-button v-if="canClaim" class="mr-2" @click="claimNFT"
+        >Claim</base-button
+      >
+      <base-button v-if="canReject" class="mr-2" @click="deleteNFT"
+        >Reject</base-button
+      >
     </div>
     <base-dialog
       :show="isDeleteDialogOpen"
