@@ -1,6 +1,6 @@
 <template>
-  <div class="rounded border bg-white shadow-lg">
-    <div class="w-full h-96 overflow-hidden relative">
+  <div class="rounded-lg border bg-white shadow-lg">
+    <div class="w-full rounded-t-lg h-96 overflow-hidden relative">
       <base-button
         v-if="showQRCode"
         class="absolute top-2 right-1"
