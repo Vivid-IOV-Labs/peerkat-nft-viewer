@@ -46,14 +46,13 @@
         ></base-input>
       </div>
       <div>
-        <textarea
+        <base-text-area
           id="description"
           v-model="formData.description"
           label-text="description"
-          type="text"
           placeholder="Publisher description"
           :errors="formatVuelidateErrors(v$.description.$errors)"
-        ></textarea>
+        ></base-text-area>
       </div>
       <div>
         <base-input
@@ -126,6 +125,7 @@
 
 <script lang="ts">
 import BaseInput from "@/components/BaseInput.vue";
+import BaseTextArea from "@/components/BaseTextArea.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseCheckbox from "@/components/BaseCheckbox.vue";
 import BaseDialog from "@/components/BaseDialog.vue";
@@ -151,6 +151,7 @@ export interface ErrorObject {
 export default defineComponent({
   components: {
     BaseInput,
+    BaseTextArea,
     BaseButton,
     BaseCheckbox,
     BaseDialog,

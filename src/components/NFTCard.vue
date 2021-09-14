@@ -1,41 +1,51 @@
 <template>
   <div class="rounded-lg border bg-white shadow-lg">
-    <div class="w-full rounded-t-lg h-96 overflow-hidden relative">
-      <base-button
-        v-if="showQRCode"
-        class="absolute top-2 right-1"
-        @click="showQRCode = false"
-        >x</base-button
-      >
+    <div class="w-full rounded-t-lg h-80 overflow-hidden">
       <img
         class="object-cover object-center h-full w-full"
         :src="showQRCode ? xumnQRCode : posterUrl"
         @error="fallbackImg"
       />
-      <div class="pt-1">
-        <a
-          v-if="showQRCode"
-          class="
-            absolute
-            bottom-0
-            right-0
-            d-block
-            bg-white
-            uppercase
-            font-bold
-            text-xs
-            py-4
-            px-6
-          "
-          target="_blank"
-          :href="xumnLink"
-          >Claim on Xumn App</a
-        >
-      </div>
+    </div>
+    <div class="flex justify-between h-12 p-3 items-center">
+      <a
+        v-if="showQRCode"
+        class="
+          d-block
+          bg-white
+          border-2 border-red-600
+          uppercase
+          font-bold
+          text-xs text-red-600
+          py-1
+          px-2
+          rounded
+        "
+        target="_blank"
+        :href="xumnLink"
+        >Claim on Xumn App</a
+      >
+      <a
+        v-if="showQRCode"
+        class="
+          d-block
+          bg-white
+          border-2 border-red-600
+          uppercase
+          font-bold
+          text-xs text-red-600
+          py-1
+          px-2
+          rounded
+          cursor-pointer
+        "
+        @click="showQRCode = false"
+        >x</a
+      >
     </div>
     <div class="w-full flex justify-between p-3">
       <div class="flex w-full flex-col justify-between">
-        <span class="pt-1 font-bold text-xl">{{ title }}</span>
+        <span class="font-bold text-xl">{{ title }}</span>
         <div class="flex mt-2">
           <span
             v-if="nft.current_status"
