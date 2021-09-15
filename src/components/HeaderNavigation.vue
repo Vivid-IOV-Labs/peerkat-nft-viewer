@@ -1,6 +1,14 @@
 <template>
   <div class="sticky top-0 z-50 flex-1 flex flex-col">
-    <nav class="px-4 flex justify-between bg-white h-16 shadow">
+    <nav
+      :class="{
+        'bg-green-500': isBrandWorker(),
+        'bg-green-800': isBrandManager(),
+        'bg-red-800': isAdminWorker(),
+        'bg-pink-800': isPublic(),
+      }"
+      class="px-4 flex justify-between h-16 shadow"
+    >
       <!-- top bar left -->
       <ul class="flex items-center">
         <!-- add button -->
@@ -42,6 +50,12 @@
   </div>
 </template>
 <script lang="ts">
+/**
+ Brand worker - lighter shade of the peerkat green
+Brand manager - darker shade of the peerkat green
+Admin worker - purple
+Public User - amber
+ */
 const apiUrl = import.meta.env.VITE_API_URL;
 const isProduction =
   apiUrl == "https://media.peerkat.live" ||
@@ -49,6 +63,22 @@ const isProduction =
 import { useRoute, useRouter } from "vue-router";
 import { defineComponent, computed } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
+
+function getUserRole() {
+  return localStorage.getItem("user-role");
+}
+function isBrandWorker() {
+  return getUserRole() == "brand/worker";
+}
+function isBrandManager() {
+  return getUserRole() == "brand/manager";
+}
+function isAdminWorker() {
+  return getUserRole() == "admin/manager";
+}
+function isPublic() {
+  return getUserRole() == "public";
+}
 
 export default defineComponent({
   components: {
@@ -58,10 +88,15 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
     const title = computed(() => route.meta.title);
+    console.log(isBrandWorker());
     return {
       isProduction,
       title,
       route,
+      isBrandWorker,
+      isBrandManager,
+      isAdminWorker,
+      isPublic,
       logOut() {
         localStorage.removeItem("token");
         router.push({ path: "/" });
