@@ -2,10 +2,10 @@
   <div class="sticky top-0 z-50 flex-1 flex flex-col">
     <nav
       :class="{
-        'bg-green-500': isBrandWorker(),
-        'bg-green-800': isBrandManager(),
-        'bg-red-800': isAdminWorker(),
-        'bg-pink-800': isPublic(),
+        'bg-cyan-400': isBrandWorker,
+        'bg-cyan-600': isBrandManager,
+        'bg-purple-600': isAdminWorker,
+        'bg-amber-500': isPublic,
       }"
       class="px-4 flex justify-between h-16 shadow"
     >
@@ -64,20 +64,12 @@ import { useRoute, useRouter } from "vue-router";
 import { defineComponent, computed } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
 
-function getUserRole() {
+function getRole() {
   return localStorage.getItem("user-role");
 }
-function isBrandWorker() {
-  return getUserRole() == "brand/worker";
-}
-function isBrandManager() {
-  return getUserRole() == "brand/manager";
-}
-function isAdminWorker() {
-  return getUserRole() == "admin/manager";
-}
-function isPublic() {
-  return getUserRole() == "public";
+function withRole(roles: string[]) {
+  roles.includes(getRole() || "");
+  return roles.includes(getRole() || "");
 }
 
 export default defineComponent({
@@ -88,7 +80,11 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
     const title = computed(() => route.meta.title);
-    console.log(isBrandWorker());
+    const isBrandWorker = withRole(["brand/worker"]);
+    const isBrandManager = withRole(["brand/manager"]);
+    const isAdminWorker = withRole(["admin/worker"]);
+    const isPublic = withRole(["public"]);
+
     return {
       isProduction,
       title,
