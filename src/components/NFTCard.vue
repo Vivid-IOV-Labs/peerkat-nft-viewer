@@ -2,7 +2,8 @@
   <div class="rounded-lg border bg-white shadow-lg">
     <div class="w-full rounded-t-lg h-80 overflow-hidden">
       <img
-        class="object-cover object-center h-full w-full"
+        :class="{ 'object-contain': showQRCode, 'object-cover': !showQRCode }"
+        class="object-center h-full w-full"
         :src="showQRCode ? xumnQRCode : posterUrl"
         @error="fallbackImg"
       />
@@ -120,6 +121,7 @@ import { PropType } from "vue";
 import { NFT } from "../models/NFT";
 import { useStore } from "vuex";
 import { ref, defineComponent } from "vue";
+import webSocket from "../utils/websocketAdaptor";
 function getRole() {
   return localStorage.getItem("user-role");
 }
@@ -146,6 +148,21 @@ export default defineComponent({
     ) {
       showQRCode.value = true;
     }
+    if (showQRCode.value) {
+      webSocket.socket.on("expired", (data) => {
+        console.log("expired", data);
+      });
+      webSocket.socket.on("scanned", (data) => {
+        console.log("scanned", data);
+      });
+      webSocket.socket.on("signed", (data) => {
+        console.log("signed", data);
+      });
+      webSocket.socket.on("rejected", (data) => {
+        console.log("rejected", data);
+      });
+    }
+
     return {
       isDeleteDialogOpen,
       showQRCode,

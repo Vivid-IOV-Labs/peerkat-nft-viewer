@@ -1,7 +1,7 @@
 {
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview",
     "lint": "eslint --ext .ts,vue --ignore-path .gitignore .",
@@ -16,6 +16,8 @@
     "@vuelidate/validators": "^2.0.0-alpha.17",
     "axios": "^0.21.1",
     "ethers": "^5.4.0",
+    "sails.io.js": "^1.2.1",
+    "socket.io-client": "^2.4.0",
     "vue": "^3.0.5",
     "vue-multiselect": "^3.0.0-alpha.2",
     "vue-router": "^4.0.9",
@@ -23,6 +25,7 @@
   },
   "devDependencies": {
     "@types/node": "^15.12.4",
+    "@types/sails.io.js": "^1.0.5",
     "@types/vuelidate": "^0.7.14",
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/parser": "^4.28.0",
