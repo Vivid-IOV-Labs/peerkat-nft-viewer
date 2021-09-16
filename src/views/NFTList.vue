@@ -13,6 +13,7 @@
   <div class="mt-2 grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     <nft-card v-for="nft in allNFT" :key="nft.id" :nft="nft"></nft-card>
     <router-link
+      v-if="canCreate"
       class="
         w-16
         h-16
@@ -43,7 +44,13 @@ import BaseInput from "../components/BaseInput.vue";
 import { useStore } from "vuex";
 import { PlusIcon } from "@heroicons/vue/solid";
 import { useRoute } from "vue-router";
-
+function getRole() {
+  return localStorage.getItem("user-role");
+}
+function withRole(roles: string[]) {
+  roles.includes(getRole() || "");
+  return roles.includes(getRole() || "");
+}
 export default defineComponent({
   components: {
     NftCard,
@@ -58,6 +65,10 @@ export default defineComponent({
     const allNFT = computed(() => {
       return store.getters["nft/byTitle"](searchByTitle.value);
     });
+    const canCreate = computed(() => {
+      return withRole(["brand/worker"]);
+    });
+
     store.dispatch("nft/fetchAll", route.query);
     watch(
       () => route.query,
@@ -65,7 +76,7 @@ export default defineComponent({
         await store.dispatch("nft/fetchAll", route.query);
       }
     );
-    return { allNFT, searchByTitle };
+    return { allNFT, searchByTitle, canCreate };
   },
 });
 </script>

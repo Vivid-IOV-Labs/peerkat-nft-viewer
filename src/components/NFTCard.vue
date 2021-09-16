@@ -120,7 +120,13 @@ import { PropType } from "vue";
 import { NFT } from "../models/NFT";
 import { useStore } from "vuex";
 import { ref, defineComponent } from "vue";
-
+function getRole() {
+  return localStorage.getItem("user-role");
+}
+function withRole(roles: string[]) {
+  roles.includes(getRole() || "");
+  return roles.includes(getRole() || "");
+}
 export default defineComponent({
   components: {
     BaseButton,
@@ -166,33 +172,30 @@ export default defineComponent({
     canDelete(): boolean {
       return (
         ["created", "rejected"].includes(this.nft.current_status) &&
-        ["brand/worker"].includes(localStorage.getItem("user-role") || "")
+        withRole(["brand/worker"])
       );
     },
     canApprove(): boolean {
       return (
         ["created"].includes(this.nft.current_status) &&
-        localStorage.getItem("user-role") == "brand/manager"
+        withRole(["brand/manager"])
       );
     },
     canReject(): boolean {
       return (
         ["created"].includes(this.nft.current_status) &&
-        ["admin/worker", "brand/manager"].includes(
-          localStorage.getItem("user-role") || ""
-        )
+        withRole(["admin/worker", "brand/manager"])
       );
     },
     canIssue(): boolean {
       return (
         ["approved"].includes(this.nft.current_status) &&
-        localStorage.getItem("user-role") == "admin/worker"
+        withRole(["admin/worker"])
       );
     },
     canClaim(): boolean {
       return (
-        ["issued"].includes(this.nft.current_status) &&
-        localStorage.getItem("user-role") == "public"
+        ["issued"].includes(this.nft.current_status) && withRole(["public"])
       );
     },
     xumnQRCode(): string {
