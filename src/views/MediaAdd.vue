@@ -191,7 +191,7 @@ export default defineComponent({
       tags: { required },
       categories: { required },
     }));
-    const v$ = useVuelidate(rules, formData, { $lazy: true, $autoDirty: true });
+    const v$ = useVuelidate(rules, formData, { $autoDirty: true });
     return {
       formData,
       v$,
