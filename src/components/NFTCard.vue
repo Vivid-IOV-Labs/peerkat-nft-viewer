@@ -61,8 +61,9 @@
           cursor-pointer
         "
         @click="showQRCode = true"
-        >qr</a
       >
+        <QrcodeIcon class="h-4 w-4 text-red-600" />
+      </a>
     </div>
     <div class="w-full flex justify-between p-3">
       <div class="flex w-full flex-col justify-between">
@@ -142,6 +143,8 @@ import { NFT } from "../models/NFT";
 import { useStore } from "vuex";
 import { ref, defineComponent } from "vue";
 import webSocket from "../utils/websocketAdaptor";
+import { QrcodeIcon } from "@heroicons/vue/solid";
+
 function getRole() {
   return localStorage.getItem("user-role");
 }
@@ -153,6 +156,7 @@ export default defineComponent({
   components: {
     BaseButton,
     BaseDialog,
+    QrcodeIcon,
   },
   props: {
     nft: { type: Object as PropType<NFT>, required: true },
