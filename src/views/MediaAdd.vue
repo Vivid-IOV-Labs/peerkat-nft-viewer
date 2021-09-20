@@ -134,7 +134,7 @@ import { reactive, defineComponent, computed, ref, Ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import useVuelidate from "@vuelidate/core";
-import { required, url } from "@vuelidate/validators";
+import { required, url, maxLength } from "@vuelidate/validators";
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
 
 export interface ErrorObject {
@@ -180,7 +180,7 @@ export default defineComponent({
     // brand/manager brand/worker
     const rules = computed(() => ({
       title: { required },
-      token_name: { required }, //max 40 chatracters
+      token_name: { required, maxLength: maxLength(40) }, //max 40 chatracters
       subtitle: {},
       description: {},
       brand_name: {
@@ -191,7 +191,7 @@ export default defineComponent({
       tags: { required },
       categories: { required },
     }));
-    const v$ = useVuelidate(rules, formData);
+    const v$ = useVuelidate(rules, formData, { $lazy: true, $autoDirty: true });
     return {
       formData,
       v$,
