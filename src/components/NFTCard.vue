@@ -2,15 +2,18 @@
   <div class="rounded-lg border bg-white shadow-lg">
     <div class="w-full rounded-t-lg h-80 overflow-hidden">
       <img
-        :class="{ 'object-contain': showQRCode, 'object-cover': !showQRCode }"
+        :class="{
+          'object-contain': showQRCode && !invalidQR,
+          'object-cover': !showQRCode || invalidQR,
+        }"
         class="object-center h-full w-full"
-        :src="showQRCode ? xumnQRCode : posterUrl"
+        :src="showQRCode && !invalidQR ? xumnQRCode : posterUrl"
         @error="fallbackImg"
       />
     </div>
     <div class="flex justify-between h-12 p-3 items-center">
       <a
-        v-if="showQRCode"
+        v-if="showQRCode && !invalidQR"
         class="
           d-block
           bg-white
@@ -27,7 +30,7 @@
         >Claim on Xumn App</a
       >
       <a
-        v-if="showQRCode"
+        v-if="showQRCode && !invalidQR"
         class="
           d-block
           bg-white
@@ -42,6 +45,23 @@
         "
         @click="showQRCode = false"
         >x</a
+      >
+      <a
+        v-if="!showQRCode || invalidQR"
+        class="
+          d-block
+          bg-white
+          border-2 border-red-600
+          uppercase
+          font-bold
+          text-xs text-red-600
+          py-1
+          px-2
+          rounded
+          cursor-pointer
+        "
+        @click="showQRCode = true"
+        >qr</a
       >
     </div>
     <div class="w-full flex justify-between p-3">
@@ -141,6 +161,7 @@ export default defineComponent({
     const store = useStore();
     const isDeleteDialogOpen = ref(false);
     const showQRCode = ref(false);
+    const invalidQR = ref(false);
     if (
       props.nft.xumm &&
       props.nft.xumm.length &&
@@ -151,21 +172,25 @@ export default defineComponent({
     if (showQRCode.value) {
       webSocket.socket.on("expired", (data) => {
         console.log("expired", data);
+        invalidQR.value = true;
       });
       webSocket.socket.on("scanned", (data) => {
         console.log("scanned", data);
       });
       webSocket.socket.on("signed", (data) => {
         console.log("signed", data);
+        invalidQR.value = true;
       });
       webSocket.socket.on("rejected", (data) => {
         console.log("rejected", data);
+        invalidQR.value = true;
       });
     }
 
     return {
       isDeleteDialogOpen,
       showQRCode,
+      invalidQR,
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
