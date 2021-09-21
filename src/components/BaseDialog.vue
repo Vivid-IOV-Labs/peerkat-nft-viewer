@@ -1,6 +1,6 @@
 <template>
   <TransitionRoot appear :show="show" as="template">
-    <Dialog as="div" @close="close">
+    <Dialog as="div" @close="$emit('close')">
       <div class="fixed inset-0 z-10 overflow-y-auto">
         <div class="min-h-screen px-4 text-center">
           <TransitionChild
@@ -16,7 +16,7 @@
           </TransitionChild>
 
           <span class="inline-block h-screen align-middle" aria-hidden="true">
-            &#8203;
+            &#8203; X
           </span>
 
           <TransitionChild
@@ -95,10 +95,13 @@ export default defineComponent({
     },
   },
   emits: ["close"],
-  methods: {
-    close(): void {
-      this.$emit("close");
-    },
+  setup(props, { emit }) {
+    return {
+      ...props,
+      close(): void {
+        emit("close");
+      },
+    };
   },
 });
 </script>

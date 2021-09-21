@@ -1,20 +1,20 @@
 <template>
-  <div v-if="modelValue" class="p-1">
+  <div v-if="modelValue">
     <label
       class="uppercase tracking-wide text-gray-700 text-xs font-bold mr-2"
-      :for="name"
-      >{{ label }}</label
+      :for="id"
+      >{{ labelText }}</label
     >
     <select
-      :id="name"
-      class="rounded py-1"
+      :id="id"
+      class="shadow-inner w-full text-gray-700 rounded py-3 px-4 mb-3"
       :value="modelValue.value"
       v-bind="$attrs"
       @change="handleChange"
     >
       <option
         v-for="choice in choices"
-        :key="choice.label"
+        :key="choice.value"
         :value="choice.value"
       >
         {{ choice.label }}
@@ -35,11 +35,11 @@ export default defineComponent({
       type: Array as PropType<Choice[]>,
       default: () => [],
     },
-    name: {
+    id: {
       type: String,
       default: () => "",
     },
-    label: {
+    labelText: {
       type: String,
       default: () => "",
     },
@@ -51,6 +51,7 @@ export default defineComponent({
   emits: { "update:modelValue": null },
   setup(props, { emit }) {
     return {
+      ...props,
       handleChange(event: Event): void {
         const value = (event.target as HTMLSelectElement).value;
         if (value) {

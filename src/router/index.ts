@@ -7,25 +7,7 @@ const routes = [
     component: () => import("../views/NFTList.vue"),
     meta: {
       withAuth: true,
-      title: "Media Dashboard",
-    },
-  },
-  {
-    path: "/media/add",
-    name: "MediaAdd",
-    component: () => import("../views/MediaAdd.vue"),
-    meta: {
-      withAuth: true,
-      title: "Add New Media",
-    },
-  },
-  {
-    path: "/media/edit/:mediaID",
-    name: "MediaEdit",
-    component: () => import("../views/MediaEdit.vue"),
-    meta: {
-      withAuth: true,
-      title: "Edit Media",
+      title: "Wallet",
     },
   },
 ];

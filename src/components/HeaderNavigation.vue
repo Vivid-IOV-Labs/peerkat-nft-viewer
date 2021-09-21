@@ -1,14 +1,6 @@
 <template>
   <div class="sticky top-0 z-50 flex-1 flex flex-col">
-    <nav
-      :class="{
-        'bg-cyan-400': isBrandWorker,
-        'bg-cyan-600': isBrandManager,
-        'bg-purple-600': isAdminWorker,
-        'bg-amber-500': isPublic,
-      }"
-      class="px-4 flex justify-between h-16 shadow"
-    >
+    <nav class="px-4 bg-green-400 flex justify-between h-16 shadow">
       <!-- top bar left -->
       <ul class="flex items-center">
         <!-- add button -->

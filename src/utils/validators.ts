@@ -1,10 +1,21 @@
 import { ethers } from "ethers";
 import { helpers } from "@vuelidate/validators";
-function validateAddress(value: any): boolean {
+import rippleRegex from "ripple-regex";
+
+function validateEtherAddress(value: any): boolean {
   return ethers.utils.isAddress(value);
 }
 
-export const isAddress = helpers.withMessage(
+export const isEtherAddress = helpers.withMessage(
   "Not a Valid address",
-  validateAddress
+  validateEtherAddress
+);
+
+function validateRippleAddress(value: any): boolean {
+  return rippleRegex().test(value);
+}
+
+export const isRippleAddress = helpers.withMessage(
+  "Not a Valid address",
+  validateRippleAddress
 );
