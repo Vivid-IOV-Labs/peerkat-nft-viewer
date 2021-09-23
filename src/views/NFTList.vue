@@ -16,8 +16,6 @@
             class="w-full max-w-xl"
             :errors="formatVuelidateErrors(v$.walletAddress.$errors)"
           ></base-input>
-          {{ type_network }}
-          {{ network }}
           <base-select
             id="type_networks"
             v-model="type_network"

@@ -1,8 +1,8 @@
 <template>
-  <div class="border bg-white shadow-lg">
-    <div class="w-full rounded-lg h-60 overflow-hidden">
+  <div class="bg-white shadow-lg">
+    <div class="w-full rounded-lg overflow-hidden">
       <img
-        class="object-cover' object-center h-full w-full"
+        class="object-contain object-center"
         :src="posterUrl"
         @error="fallbackImg"
       />
