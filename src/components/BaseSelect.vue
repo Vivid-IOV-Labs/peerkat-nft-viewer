@@ -8,8 +8,8 @@
     <select
       :id="id"
       class="shadow-inner w-full text-gray-700 rounded py-3 px-4 mb-3"
-      :value="modelValue.value"
       v-bind="$attrs"
+      :selected="modelValue.value"
       @change="handleChange"
     >
       <option

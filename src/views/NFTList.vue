@@ -16,6 +16,8 @@
             class="w-full max-w-xl"
             :errors="formatVuelidateErrors(v$.walletAddress.$errors)"
           ></base-input>
+          {{ type_network }}
+          {{ network }}
           <base-select
             id="type_networks"
             v-model="type_network"
@@ -40,7 +42,10 @@
             label-text="Network"
             class="w-full max-w-xl"
           ></base-select>
-          <base-button :disabled="v$.$invalid" @click="populateNFTs"
+          <base-button
+            class="mt-4"
+            :disabled="v$.$invalid"
+            @click="populateNFTs"
             >Enter</base-button
           >
         </div>
@@ -49,7 +54,7 @@
   </div>
 
   <div class="mt-2 grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    <nft-card v-for="nft in NFTMedia" :key="nft.url" :nft="nft"></nft-card>
+    <nft-card v-for="(nft, i) in NFTMedia" :key="i" :nft="nft"></nft-card>
   </div>
 </template>
 
@@ -63,6 +68,7 @@ import NftCard from "@/components/NftCard.vue";
 import useVuelidate from "@vuelidate/core";
 import { isRippleAddress } from "../utils/validators";
 import { required } from "@vuelidate/validators";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { XrplClient } = require("xrpl-client");
 type line = {
   balance: string;
@@ -103,13 +109,16 @@ const main = async (walletAddress: string, network: string) => {
   }
 
   const NFTMedia = await Promise.all(
-    NFTs.map(async ({ account, currency }: line) => {
-      const {
-        account_data: { Domain },
-      } = await xrpClient.send({
+    NFTs.map(async (line: line) => {
+      const { account, currency } = line;
+      console.log("line", line);
+      const { account_data } = await xrpClient.send({
         command: "account_info",
         account,
       });
+      const { Domain } = account_data;
+      console.log("account_data", account_data);
+
       const protocol = hexToString(Domain);
       const domain = hexToString(currency);
       return { url: protocol + domain };

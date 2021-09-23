@@ -1,6 +1,6 @@
 <template>
-  <div class="rounded-lg border bg-white shadow-lg">
-    <div class="w-full rounded-t-lg h-80 overflow-hidden">
+  <div class="border bg-white shadow-lg">
+    <div class="w-full rounded-lg h-60 overflow-hidden">
       <img
         class="object-cover' object-center h-full w-full"
         :src="posterUrl"
