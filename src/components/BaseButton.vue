@@ -9,6 +9,7 @@
       px-4
       rounded-md
       shadow-sm
+      disabled:opacity-80
     "
     v-bind="$attrs"
   >

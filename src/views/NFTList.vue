@@ -1,8 +1,12 @@
 <template>
   <div class="flex flex-col justify-center items-center mb-2">
-    <base-dialog :show="show" title="Welcome" @close="show = false">
+    <base-dialog
+      :show="isDialogWalletConnection"
+      title="Welcome"
+      @close="isDialogWalletConnection = false"
+    >
       <template #body>
-        <div class="w-full">
+        <div class="w-full justify-center flex flex-col">
           <base-input
             id="walletaddress"
             v-model="v$.walletAddress.$model"
@@ -13,51 +17,75 @@
             :errors="formatVuelidateErrors(v$.walletAddress.$errors)"
           ></base-input>
           <base-select
-            id="network"
-            v-model="network"
-            :choices="networks"
-            type="network"
-            label-text="Select your Network"
+            id="type_networks"
+            v-model="type_network"
+            :choices="type_networks"
+            type="type_networks"
+            label-text="Type Networks"
             class="w-full max-w-xl"
           ></base-select>
+          <base-select
+            v-if="type_network.value == 'test'"
+            id="network"
+            v-model="network"
+            :choices="test_networks"
+            label-text="Network"
+            class="w-full max-w-xl"
+          ></base-select>
+          <base-select
+            v-else
+            id="network"
+            v-model="network"
+            :choices="main_networks"
+            label-text="Network"
+            class="w-full max-w-xl"
+          ></base-select>
+          <base-button :disabled="v$.$invalid" @click="populateNFTs"
+            >Enter</base-button
+          >
         </div>
       </template>
     </base-dialog>
   </div>
 
   <div class="mt-2 grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    <!-- <nft-card v-for="nft in allNFT" :key="nft.id" :nft="nft"></nft-card> -->
+    <nft-card v-for="nft in NFTMedia" :key="nft.url" :nft="nft"></nft-card>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
+import BaseButton from "@/components/BaseButton.vue";
 import BaseInput from "@/components/BaseInput.vue";
 import BaseSelect from "@/components/BaseSelect.vue";
 import BaseDialog from "@/components/BaseDialog.vue";
+import NftCard from "@/components/NftCard.vue";
 import useVuelidate from "@vuelidate/core";
 import { isRippleAddress } from "../utils/validators";
 import { required } from "@vuelidate/validators";
 const { XrplClient } = require("xrpl-client");
-const main = async () => {
-  const X_url = "wss://s.altnet.rippletest.net:51233";
+type line = {
+  balance: string;
+  limit: string;
+  account: string;
+  currency: string;
+};
+const main = async (walletAddress: string, network: string) => {
+  const X_url = network;
+  // const X_url = "wss://s.altnet.rippletest.net:51233";
 
   const xrpClient = new XrplClient(X_url);
 
   // Query the user wallet to get a list of all Assets they own
   const accountLines = await xrpClient.send({
     command: "account_lines",
-    account: "reWmfYP8FbRyWWEEkhpKzCpEnksg4sAwx",
+    // account: "reWmfYP8FbRyWWEEkhpKzCpEnksg4sAwx",
+    account: walletAddress,
   });
 
   // Check for assets which have a balance of '1000000000000000e-96' and limit of '1000000000000000e-96'; we will assume it is an NFT
   const { lines } = accountLines;
-  type line = {
-    balance: string;
-    limit: string;
-    account: string;
-    currency: string;
-  };
+
   function isNFT(l: line): boolean {
     return (
       l.balance == "1000000000000000e-96" && l.limit == "1000000000000000e-96"
@@ -89,6 +117,7 @@ const main = async () => {
   );
 
   console.log(NFTMedia);
+  return NFTMedia;
   // For each identified NFT object, look up the address in the account value 'rE1FzsMa4N8xoUia5AKtoWtziyM9uxNhCv'
   // const resp1 = await xrpClient.send({
   //   command: "account_info",
@@ -108,9 +137,38 @@ export default defineComponent({
     BaseInput,
     BaseDialog,
     BaseSelect,
+    BaseButton,
+    NftCard,
   },
   setup: () => {
+    const isDialogWalletConnection = ref(true);
     const walletAddress = ref("");
+    const NFTMedia = ref([]);
+    const type_network = ref({ label: "Main", value: "main" });
+    const type_networks = [
+      { label: "Main", value: "main" },
+      { label: "Test", value: "test" },
+    ];
+    const main_networks = [
+      { label: "wss://xrpcluster.com", value: "wss://xrpcluster.com" },
+      { label: "wss://xrpl.link", value: "wss://xrpl.link" },
+      { label: "wss://s2.ripple.com", value: "wss://s2.ripple.com" },
+    ];
+    const test_networks = [
+      {
+        label: "wss://s.altnet.rippletest.net:51233",
+        value: "wss://s.altnet.rippletest.net:51233",
+      },
+      {
+        label: "wss://xrpl.linkwss://testnet.xrpl-labs.com",
+        value: "wss://xrpl.link",
+      },
+    ];
+    const network = computed(() => {
+      return type_network.value.value == "main"
+        ? main_networks[0]
+        : test_networks[0];
+    });
     const rules = computed(() => ({
       walletAddress: {
         required,
@@ -120,21 +178,23 @@ export default defineComponent({
     const v$ = useVuelidate(rules, {
       walletAddress,
     });
-
-    main();
     return {
-      show: ref(true),
-      walletAddress,
+      isDialogWalletConnection,
+      main_networks,
+      test_networks,
+      network,
       v$,
-      networks: [
-        { label: "Main", value: "main" },
-        { label: "Test", value: "test" },
-      ],
-      network: { label: "Main", value: "main" },
+      type_network,
+      type_networks,
+      NFTMedia,
       formatVuelidateErrors(errors: any[]) {
         return errors.map((error) => {
           return { text: error.$message, key: error.$uid };
         });
+      },
+      async populateNFTs() {
+        NFTMedia.value = await main(walletAddress.value, network.value.value);
+        isDialogWalletConnection.value = false;
       },
     };
   },
