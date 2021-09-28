@@ -74,6 +74,21 @@ type line = {
   account: string;
   currency: string;
 };
+function truncate(
+  fullStr: string,
+  strLen = 8,
+  separator = "......",
+  frontChars = 3,
+  backChars = 4
+) {
+  if (fullStr.length <= strLen) return fullStr;
+
+  return (
+    fullStr.substr(0, frontChars) +
+    separator +
+    fullStr.substr(fullStr.length - backChars)
+  );
+}
 const main = async (walletAddress: string, network: string) => {
   const X_url = network;
   // const X_url = "wss://s.altnet.rippletest.net:51233";
@@ -119,7 +134,11 @@ const main = async (walletAddress: string, network: string) => {
 
       const protocol = hexToString(Domain);
       const domain = hexToString(currency);
-      return { url: protocol + domain };
+      return {
+        issuer: truncate(account),
+        currency: domain,
+        url: protocol + domain,
+      };
     })
   );
 

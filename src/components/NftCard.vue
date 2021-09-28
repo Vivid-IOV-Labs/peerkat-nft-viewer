@@ -1,11 +1,20 @@
 <template>
-  <div class="bg-white shadow-lg">
-    <div class="w-full rounded-lg overflow-hidden">
+  <div class="bg-white shadow-lg rounded-b-lg">
+    <div class="w-full rounded-t-lg overflow-hidden">
       <img
         class="object-contain object-center"
         :src="posterUrl"
         @error="fallbackImg"
       />
+    </div>
+    <div class="p-4">
+      <ul>
+        <li><strong>Issuer </strong>{{ nft.issuer }}</li>
+        <li>
+          <strong>Currency </strong>
+          <a :href="nft.url" target="_blank">{{ nft.currency }}</a>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
