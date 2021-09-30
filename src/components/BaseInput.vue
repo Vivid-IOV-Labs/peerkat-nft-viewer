@@ -1,13 +1,9 @@
 <template>
   <div>
-    <label
-      class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-      :for="id"
-      >{{ labelText }}</label
-    >
+    <label class="col-form-label" :for="id">{{ labelText }}</label>
     <input
       :id="id"
-      class="shadow-inner w-full text-gray-700 rounded py-3 px-4 mb-3"
+      class="form-control form-control-lg"
       :class="{ 'border-red-500': errors.length }"
       :value="modelValue"
       :type="type"

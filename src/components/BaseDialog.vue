@@ -1,89 +1,39 @@
 <template>
-  <TransitionRoot appear :show="show" as="template">
-    <Dialog as="div" @close="close">
-      <div class="fixed inset-0 z-10 overflow-y-auto">
-        <div class="min-h-screen px-4 text-center">
-          <TransitionChild
-            as="template"
-            enter="duration-300 ease-out"
-            enter-from="opacity-0"
-            enter-to="opacity-100"
-            leave="duration-200 ease-in"
-            leave-from="opacity-100"
-            leave-to="opacity-0"
+  <div
+    class="modal"
+    :class="{ 'show fade pr-4 d-block': show }"
+    tabindex="-1"
+    role="dialog"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ title }}</h5>
+          <button
+            v-if="cancellable"
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
           >
-            <DialogOverlay class="fixed inset-20 opacity-20" />
-          </TransitionChild>
-
-          <span class="inline-block h-screen align-middle" aria-hidden="true">
-            &#8203;
-          </span>
-
-          <TransitionChild
-            as="template"
-            enter="duration-300 ease-out"
-            enter-from="opacity-0 scale-95"
-            enter-to="opacity-100 scale-100"
-            leave="duration-200 ease-in"
-            leave-from="opacity-100 scale-100"
-            leave-to="opacity-0 scale-95"
-          >
-            <div
-              class="
-                inline-block
-                w-full
-                max-w-lg
-                p-8
-                my-8
-                overflow-hidden
-                text-left
-                align-middle
-                transition-all
-                transform
-                bg-white
-                shadow-lg
-                rounded
-              "
-            >
-              <DialogTitle
-                as="h3"
-                class="text-lg font-medium leading-6 text-gray-900"
-              >
-                {{ title }}
-              </DialogTitle>
-              <div class="mt-2">
-                <slot name="body"></slot>
-              </div>
-
-              <div class="flex justify-end mt-8">
-                <slot name="footer"></slot>
-              </div>
-            </div>
-          </TransitionChild>
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <slot name="body"></slot>
+        </div>
+        <div class="modal-footer">
+          <slot name="footer"></slot>
         </div>
       </div>
-    </Dialog>
-  </TransitionRoot>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
-import {
-  TransitionRoot,
-  TransitionChild,
-  Dialog,
-  DialogOverlay,
-  DialogTitle,
-} from "@headlessui/vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  components: {
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogOverlay,
-    DialogTitle,
-  },
   props: {
     show: {
       type: Boolean,
@@ -92,6 +42,10 @@ export default defineComponent({
     title: {
       type: String,
       required: true,
+    },
+    cancellable: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: ["close"],

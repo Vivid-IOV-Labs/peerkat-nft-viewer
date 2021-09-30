@@ -6,6 +6,8 @@
   <link rel="icon" href="/favicon.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Peerkat NFT Wallet</title>
+  <link rel="stylesheet" href="//use.typekit.net/vtt7ckl.css">
+
   <script src="https://cdn.jsdelivr.net/npm/xrpl-client/dist/browser.min.js"></script>
 </head>
 
@@ -13,5 +15,15 @@
   <div id="app"></div>
   <script type="module" src="/src/main.ts"></script>
 </body>
+<script>
+  var theme = ((new URLSearchParams(document.location.href))
+               .get('xAppStyle') || 'light').toLowerCase()
+  var link = document.createElement('link')
+  link.href = 'https://xumm.app/assets/themes/xapp/xumm-'
+    + theme + '/bootstrap.min.css'
+  link.type = 'text/css'
+  link.rel = 'stylesheet'
+  document.getElementsByTagName('head')[0].appendChild(link)
+</script>
 
 </html>

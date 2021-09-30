@@ -1,13 +1,9 @@
 <template>
   <div v-if="modelValue">
-    <label
-      class="uppercase tracking-wide text-gray-700 text-xs font-bold mr-2"
-      :for="id"
-      >{{ labelText }}</label
-    >
+    <label class="col-form-label" :for="id">{{ labelText }}</label>
     <select
       :id="id"
-      class="shadow-inner w-full text-gray-700 rounded py-3 px-4 mb-3"
+      class="form-control form-control-lg"
       v-bind="$attrs"
       :selected="modelValue.value"
       @change="handleChange"

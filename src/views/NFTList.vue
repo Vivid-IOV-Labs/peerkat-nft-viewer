@@ -1,58 +1,67 @@
 <template>
-  <div class="flex flex-col justify-center items-center mb-2">
+  <div class="row">
+    <div class="row">
+      <nft-card
+        v-for="(nft, i) in NFTMedia"
+        :key="i"
+        class="col"
+        :nft="nft"
+      ></nft-card>
+    </div>
     <base-dialog
       :show="isDialogWalletConnection"
       title="Welcome"
       @close="isDialogWalletConnection = false"
     >
       <template #body>
-        <div class="w-full justify-center flex flex-col">
-          <base-input
-            id="walletaddress"
-            v-model="v$.walletAddress.$model"
-            placeholder="Enter your Ripple Wallet Address"
-            type="walletaddress"
-            label-text="walletaddress"
-            class="w-full max-w-xl"
-            :errors="formatVuelidateErrors(v$.walletAddress.$errors)"
-          ></base-input>
-          <base-select
-            id="type_networks"
-            v-model="type_network"
-            :choices="type_networks"
-            type="type_networks"
-            label-text="Type Networks"
-            class="w-full max-w-xl"
-          ></base-select>
-          <base-select
-            v-if="type_network.value == 'test'"
-            id="network"
-            v-model="network"
-            :choices="test_networks"
-            label-text="Network"
-            class="w-full max-w-xl"
-          ></base-select>
-          <base-select
-            v-else
-            id="network"
-            v-model="network"
-            :choices="main_networks"
-            label-text="Network"
-            class="w-full max-w-xl"
-          ></base-select>
-          <base-button
-            class="mt-4"
-            :disabled="v$.$invalid"
-            @click="populateNFTs"
-            >Enter</base-button
-          >
-        </div>
+        <form>
+          <div class="form-group">
+            <base-input
+              id="walletaddress"
+              v-model="v$.walletAddress.$model"
+              placeholder="Enter your Ripple Wallet Address"
+              type="walletaddress"
+              label-text="walletaddress"
+              class="w-full max-w-xl"
+              :errors="formatVuelidateErrors(v$.walletAddress.$errors)"
+            ></base-input>
+          </div>
+          <div class="form-group">
+            <base-select
+              id="type_networks"
+              v-model="type_network"
+              :choices="type_networks"
+              type="type_networks"
+              label-text="Type Networks"
+              class="w-full max-w-xl"
+            ></base-select>
+          </div>
+          <div v-if="type_network.value == 'test'" class="form-group">
+            <base-select
+              id="network"
+              v-model="network"
+              :choices="test_networks"
+              label-text="Network"
+              class="w-full max-w-xl"
+            ></base-select>
+          </div>
+          <div v-else class="form-group">
+            <base-select
+              id="network"
+              v-model="network"
+              :choices="main_networks"
+              label-text="Network"
+              class="w-full max-w-xl"
+            ></base-select>
+          </div>
+        </form>
+      </template>
+      <template #footer>
+        <base-button class="mt-4" :disabled="v$.$invalid" @click="populateNFTs"
+          >Enter</base-button
+        >
       </template>
     </base-dialog>
-  </div>
-
-  <div class="mt-2 grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    <nft-card v-for="(nft, i) in NFTMedia" :key="i" :nft="nft"></nft-card>
   </div>
 </template>
 

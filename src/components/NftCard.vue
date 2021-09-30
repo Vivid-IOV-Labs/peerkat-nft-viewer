@@ -1,20 +1,17 @@
 <template>
-  <div class="bg-white shadow-lg rounded-b-lg">
-    <div class="w-full rounded-t-lg overflow-hidden">
-      <img
-        class="object-contain object-center"
-        :src="posterUrl"
-        @error="fallbackImg"
-      />
-    </div>
-    <div class="p-4">
-      <ul>
-        <li><strong>Issuer </strong>{{ nft.issuer }}</li>
-        <li>
-          <strong>Currency </strong>
-          <a :href="nft.url" target="_blank">{{ nft.currency }}</a>
-        </li>
-      </ul>
+  <div class="card m-4">
+    <img
+      class="card-img-top"
+      :src="posterUrl"
+      alt="Card image cap"
+      @error="fallbackImg"
+    />
+    <div class="card-body">
+      <h5 class="card-title">
+        <strong>Token Name </strong> {{ nft.currency }}
+      </h5>
+      <p class="card-text"><strong>Issuer </strong>{{ nft.issuer }}</p>
+      <a href="#" class="btn btn-primary" target="_blank">link</a>
     </div>
   </div>
 </template>
