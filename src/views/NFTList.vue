@@ -1,12 +1,13 @@
 <template>
   <div class="row">
     <div class="row">
-      <nft-card
+      <div
         v-for="(nft, i) in NFTMedia"
         :key="i"
-        class="col"
-        :nft="nft"
-      ></nft-card>
+        class="col-sm-6 col-md-4 col-xs-12"
+      >
+        <nft-card :nft="nft"></nft-card>
+      </div>
     </div>
     <base-dialog
       :show="isDialogWalletConnection"
@@ -58,8 +59,15 @@
       </template>
       <template #footer>
         <base-button class="mt-4" :disabled="v$.$invalid" @click="populateNFTs"
-          >Enter</base-button
-        >
+          >Enter
+          <div
+            v-if="isLoading"
+            class="spinner-grow spinner-grow-sm"
+            role="status"
+          >
+            <span class="sr-only">Loading...</span>
+          </div>
+        </base-button>
       </template>
     </base-dialog>
   </div>
@@ -177,6 +185,8 @@ export default defineComponent({
   },
   setup: () => {
     const isDialogWalletConnection = ref(true);
+    const isLoading = ref(false);
+
     const walletAddress = ref("");
     const NFTMedia = ref([]);
     const type_network = ref({ label: "Main", value: "main" });
@@ -222,14 +232,18 @@ export default defineComponent({
       type_network,
       type_networks,
       NFTMedia,
+      isLoading,
       formatVuelidateErrors(errors: any[]) {
         return errors.map((error) => {
           return { text: error.$message, key: error.$uid };
         });
       },
       async populateNFTs() {
+        isLoading.value = true;
         NFTMedia.value = await main(walletAddress.value, network.value.value);
+
         isDialogWalletConnection.value = false;
+        isLoading.value = false;
       },
     };
   },

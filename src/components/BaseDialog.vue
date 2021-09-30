@@ -1,7 +1,7 @@
 <template>
   <div
-    class="modal"
-    :class="{ 'show fade pr-4 d-block': show }"
+    class="modal fade"
+    :class="{ 'show pr-4 d-block': show }"
     tabindex="-1"
     role="dialog"
   >
