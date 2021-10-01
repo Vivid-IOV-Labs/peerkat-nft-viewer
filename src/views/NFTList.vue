@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="container">
     <div class="row">
       <div
         v-for="(nft, i) in NFTMedia"
@@ -85,6 +85,13 @@ import { isRippleAddress } from "../utils/validators";
 import { required } from "@vuelidate/validators";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { XrplClient } = require("xrpl-client");
+
+interface NFT {
+  url: string;
+  issuer: string;
+  currency: string;
+}
+
 type line = {
   balance: string;
   limit: string;
@@ -106,7 +113,7 @@ function truncate(
     fullStr.substr(fullStr.length - backChars)
   );
 }
-const main = async (walletAddress: string, network: string) => {
+const main = async (walletAddress: string, network: string): Promise<NFT[]> => {
   const X_url = network;
   // const X_url = "wss://s.altnet.rippletest.net:51233";
 
@@ -138,7 +145,7 @@ const main = async (walletAddress: string, network: string) => {
     return str.trim();
   }
 
-  const NFTMedia = await Promise.all(
+  const NFTMedia: NFT[] = await Promise.all(
     NFTs.map(async (line: line) => {
       const { account, currency } = line;
       console.log("line", line);
@@ -159,20 +166,7 @@ const main = async (walletAddress: string, network: string) => {
     })
   );
 
-  console.log(NFTMedia);
   return NFTMedia;
-  // For each identified NFT object, look up the address in the account value 'rE1FzsMa4N8xoUia5AKtoWtziyM9uxNhCv'
-  // const resp1 = await xrpClient.send({
-  //   command: "account_info",
-  //   account: "rE1FzsMa4N8xoUia5AKtoWtziyM9uxNhCv",
-  // });
-
-  // // Retrieve the value in domain '687474703A2F2F'
-  // console.log("account_lines", resp1);
-
-  // Then convert the Hex values of 'domain' and 'currency' to utf8
-  // Concatenate 'domain' + 'currency' to create url
-  // Use url to retrieve the nft image
 };
 
 export default defineComponent({
@@ -188,7 +182,7 @@ export default defineComponent({
     const isLoading = ref(false);
 
     const walletAddress = ref("");
-    const NFTMedia = ref([]);
+    const NFTMedia = ref<NFT[]>([]);
     const type_network = ref({ label: "Main", value: "main" });
     const type_networks = [
       { label: "Main", value: "main" },

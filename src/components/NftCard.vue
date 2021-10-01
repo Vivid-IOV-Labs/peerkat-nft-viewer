@@ -11,6 +11,8 @@
         <strong>Token Name </strong> {{ nft.currency }}
       </h5>
       <p class="card-text"><strong>Issuer </strong>{{ nft.issuer }}</p>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
       <a href="#" class="btn btn-primary" target="_blank">link</a>
     </div>
   </div>

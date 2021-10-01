@@ -4,13 +4,15 @@
       <img
         src="@/assets/img/logopeerkat.png"
         alt="Peerkat logo"
-        width="50"
-        height="50"
+        width="40"
+        height="40"
         class="d-inline-block align-top"
       />
     </span>
-    <h2 class="text-lg uppercase font-bold">Test Wallet</h2>
-    <h1 class="text-lg uppercase font-bold"></h1>
+    <h6 style="text-transform: uppercase; font-weight: bold">
+      NFT Test Wallet
+    </h6>
+    <span class="text-lg uppercase font-bold"></span>
   </nav>
 </template>
 <script lang="ts"></script>

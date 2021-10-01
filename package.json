@@ -26,6 +26,7 @@
     "xrpl-client": "^1.5.0"
   },
   "devDependencies": {
+    "@babel/types": "^7.15.6",
     "@types/node": "^15.12.4",
     "@types/sails.io.js": "^1.0.5",
     "@types/vuelidate": "^0.7.14",
