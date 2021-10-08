@@ -154,7 +154,6 @@ const main = async (walletAddress: string, network: string): Promise<NFT[]> => {
         account,
       });
       const { Domain } = account_data;
-      console.log("account_data", account_data);
 
       const protocol = hexToString(Domain);
       const domain = hexToString(currency);
@@ -165,7 +164,7 @@ const main = async (walletAddress: string, network: string): Promise<NFT[]> => {
       };
     })
   );
-
+  console.log(NFTMedia);
   return NFTMedia;
 };
 
