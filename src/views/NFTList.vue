@@ -1,5 +1,11 @@
 <template>
   <div class="container">
+    <div class="flex flex-col justify-center items-center mb-2">
+      <h2>
+        <span>{{ $t("welcome") }}</span>
+      </h2>
+      <hr />
+    </div>
     <div class="row">
       <div
         v-for="(nft, i) in NFTMedia"

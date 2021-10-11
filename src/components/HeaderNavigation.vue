@@ -12,7 +12,17 @@
     <h6 style="text-transform: uppercase; font-weight: bold">
       NFT Test Wallet
     </h6>
-    <span class="text-lg uppercase font-bold"></span>
+    <div class="locale-changer">
+      <select v-model="$i18n.locale">
+        <option
+          v-for="locale in $i18n.availableLocales"
+          :key="`locale-${locale}`"
+          :value="locale"
+        >
+          {{ locale }}
+        </option>
+      </select>
+    </div>
   </nav>
 </template>
 <script lang="ts"></script>
