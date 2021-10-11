@@ -9,7 +9,7 @@ locizer.init({
   apiKey,
 });
 export const i18n = createI18n({
-  locale: "en", //locizer.lng,
+  locale: locizer.lng.split("-")[0], //locizer.lng,
   fallbackLocale: "en",
   referenceLng: "en",
 });
