@@ -9,8 +9,9 @@ locizer.init({
   apiKey,
 });
 export const i18n = createI18n({
-  locale: locizer.lng,
+  locale: "en", //locizer.lng,
   fallbackLocale: "en",
+  referenceLng: "en",
 });
 export const loadMessagesPromise = new Promise((resolve, reject) => {
   locizer.loadAll(
