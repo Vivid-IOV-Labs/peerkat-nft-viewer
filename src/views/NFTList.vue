@@ -172,10 +172,8 @@ const main = async (
     connectAttemptTimeoutSeconds: 3,
   });
   const queryString = window.location.search;
-  console.log(queryString);
   const urlParams = new URLSearchParams(queryString);
   console.log("urlParams", urlParams);
-  const xAppStyle = urlParams.get("xAppStyle");
 
   // await new Promise((resolve, reject) => {
   //   xrpClient.on("error", (error: string) => {
@@ -186,8 +184,6 @@ const main = async (
     handleError(error);
   });
 
-  const connectionState = xrpClient.getState();
-  console.log("connectionState", connectionState);
   await xrpClient.ready();
   const serverInfo = await xrpClient.send({ command: "server_info" });
   console.log("serverInfo", serverInfo);
@@ -200,7 +196,6 @@ const main = async (
   const NFTMedia: NFT[] = await Promise.all(
     NFTs.map(async (line: line) => {
       const { account, currency } = line;
-      console.log("line", line);
       const { account_data } = await xrpClient.send({
         command: "account_info",
         account,
@@ -267,6 +262,7 @@ export default defineComponent({
     const v$ = useVuelidate(rules, {
       walletAddress,
     });
+    console.log(xAppToken);
     const Sdk = new XummSdkJwt(xAppToken);
 
     Sdk.getOttData().then((c: Record<string, unknown>) => {
@@ -296,7 +292,6 @@ export default defineComponent({
       async populateNFTs() {
         isLoading.value = true;
         function handleError(error: string): void {
-          console.log(error);
           isDialogWalletConnection.value = false;
           showError.value = true;
           isLoading.value = false;
