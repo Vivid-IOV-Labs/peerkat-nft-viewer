@@ -5,13 +5,20 @@
       :id="id"
       class="form-control form-control-lg"
       :class="{ 'border-red-500': errors.length }"
+      :aria-valid="errors.length"
+      :required="isRequeired"
+      :aria-required="isRequeired"
       :value="modelValue"
       :type="type"
       :placeholder="placeholder"
-      v-bind="$attrs"
       @input="handleChange"
     />
-    <base-alert v-if="errors.length" :messages="errors" class="input-errors">
+    <base-alert
+      v-if="errors.length"
+      :messages="errors"
+      role="alert"
+      class="input-errors"
+    >
     </base-alert>
   </div>
 </template>
@@ -56,6 +63,10 @@ export default defineComponent({
     errors: {
       type: Array,
       default: (): Array<unknown> => [],
+    },
+    isRequeired: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: { "update:modelValue": null },

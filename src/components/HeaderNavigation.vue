@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar sticky-top navbar-light bg-light">
+  <nav :class="`navbar-${theme} bg-${theme}`" class="navbar sticky-top">
     <span class="navbar-brand">
       <img
         src="@/assets/img/logopeerkat.png"
@@ -30,7 +30,9 @@ import { defineComponent } from "vue";
 import BaseSelect from "@/components/BaseSelect.vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { XrplClient } = require("xrpl-client");
-
+var theme = (
+  new URLSearchParams(document.location.href).get("xAppStyle") || "light"
+).toLowerCase();
 interface NFT {
   url: string;
   issuer: string;
@@ -119,6 +121,7 @@ export default defineComponent({
   },
   setup: () => {
     return {
+      theme,
       languages: [
         { label: "EN", value: "en" },
         { label: "EL", value: "el" },

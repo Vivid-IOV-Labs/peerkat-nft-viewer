@@ -76,6 +76,29 @@
         </base-button>
       </template>
     </base-dialog>
+    <base-dialog
+      :show="showError"
+      title="An Error occurs"
+      @close="
+        showError = false;
+        isDialogWalletConnection = true;
+      "
+    >
+      <template #body>
+        <h3>Unable to connect</h3>
+        <p>Please try another network</p>
+      </template>
+      <template #footer>
+        <base-button
+          class="mt-4"
+          @click="
+            showError = false;
+            isDialogWalletConnection = true;
+          "
+          >Ok
+        </base-button>
+      </template>
+    </base-dialog>
   </div>
 </template>
 
@@ -91,6 +114,7 @@ import { isRippleAddress } from "../utils/validators";
 import { required } from "@vuelidate/validators";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { XrplClient } = require("xrpl-client");
+//import { XrplClient } from "../xrp-client";
 
 interface NFT {
   url: string;
@@ -104,10 +128,22 @@ type line = {
   account: string;
   currency: string;
 };
+function isNFT(l: line): boolean {
+  return (
+    l.balance == "1000000000000000e-96" && l.limit == "1000000000000000e-96"
+  );
+}
+function hexToString(hex: string) {
+  var strhex = hex.toString(); //force conversion
+  var str = "";
+  for (var i = 0; i < strhex.length; i += 2)
+    str += String.fromCharCode(parseInt(strhex.substr(i, 2), 16));
+  return str.trim();
+}
 function truncate(
   fullStr: string,
   strLen = 8,
-  separator = "......",
+  separator = " ............. ",
   frontChars = 3,
   backChars = 4
 ) {
@@ -119,38 +155,43 @@ function truncate(
     fullStr.substr(fullStr.length - backChars)
   );
 }
-const main = async (walletAddress: string, network: string): Promise<NFT[]> => {
+const main = async (
+  walletAddress: string,
+  network: string,
+  handleError
+): Promise<NFT[]> => {
   const X_url = network;
-  // const X_url = "wss://s.altnet.rippletest.net:51233";
+  const xrpClient = new XrplClient(X_url, {
+    assumeOfflineAfterSeconds: 15,
+    maxConnectionAttempts: 2,
+    connectAttemptTimeoutSeconds: 3,
+  });
+  const queryString = window.location.search;
+  console.log(queryString);
+  const urlParams = new URLSearchParams(queryString);
+  console.log("urlParams", urlParams);
+  const xAppStyle = urlParams.get("xAppStyle");
 
-  const xrpClient = new XrplClient(X_url);
-
-  // Query the user wallet to get a list of all Assets they own
-  const accountLines = await xrpClient.send({
-    command: "account_lines",
-    // account: "reWmfYP8FbRyWWEEkhpKzCpEnksg4sAwx",
-    account: walletAddress,
+  // await new Promise((resolve, reject) => {
+  //   xrpClient.on("error", (error: string) => {
+  //     reject(error);
+  //   });
+  // });
+  xrpClient.on("error", (error: string) => {
+    handleError(error);
   });
 
-  // Check for assets which have a balance of '1000000000000000e-96' and limit of '1000000000000000e-96'; we will assume it is an NFT
+  const connectionState = xrpClient.getState();
+  console.log("connectionState", connectionState);
+  await xrpClient.ready();
+  const serverInfo = await xrpClient.send({ command: "server_info" });
+  console.log("serverInfo", serverInfo);
+  const accountLines = await xrpClient.send({
+    command: "account_lines",
+    account: walletAddress,
+  });
   const { lines } = accountLines;
-
-  function isNFT(l: line): boolean {
-    return (
-      l.balance == "1000000000000000e-96" && l.limit == "1000000000000000e-96"
-    );
-  }
-
   const NFTs = lines.filter(isNFT);
-  // If NFT retrieve the value in currency '786E66742E706565726B61742E6C697665202020'
-  function hexToString(hex: string) {
-    var strhex = hex.toString(); //force conversion
-    var str = "";
-    for (var i = 0; i < strhex.length; i += 2)
-      str += String.fromCharCode(parseInt(strhex.substr(i, 2), 16));
-    return str.trim();
-  }
-
   const NFTMedia: NFT[] = await Promise.all(
     NFTs.map(async (line: line) => {
       const { account, currency } = line;
@@ -160,7 +201,6 @@ const main = async (walletAddress: string, network: string): Promise<NFT[]> => {
         account,
       });
       const { Domain } = account_data;
-
       const protocol = hexToString(Domain);
       const domain = hexToString(currency);
       return {
@@ -170,7 +210,6 @@ const main = async (walletAddress: string, network: string): Promise<NFT[]> => {
       };
     })
   );
-  console.log(NFTMedia);
   return NFTMedia;
 };
 
@@ -183,6 +222,7 @@ export default defineComponent({
     NftCard,
   },
   setup: () => {
+    const showError = ref(false);
     const isDialogWalletConnection = ref(true);
     const isLoading = ref(false);
 
@@ -232,6 +272,7 @@ export default defineComponent({
       type_networks,
       NFTMedia,
       isLoading,
+      showError,
       formatVuelidateErrors(errors: any[]) {
         return errors.map((error) => {
           return { text: error.$message, key: error.$uid };
@@ -239,10 +280,25 @@ export default defineComponent({
       },
       async populateNFTs() {
         isLoading.value = true;
-        NFTMedia.value = await main(walletAddress.value, network.value.value);
-
-        isDialogWalletConnection.value = false;
-        isLoading.value = false;
+        function handleError(error: string) {
+          console.log(error);
+          isDialogWalletConnection.value = false;
+          showError.value = true;
+          isLoading.value = false;
+        }
+        try {
+          NFTMedia.value = await main(
+            walletAddress.value,
+            network.value.value,
+            handleError
+          );
+          isDialogWalletConnection.value = false;
+          isLoading.value = false;
+        } catch (err) {
+          showError.value = true;
+          isDialogWalletConnection.value = false;
+          isLoading.value = false;
+        }
       },
     };
   },
