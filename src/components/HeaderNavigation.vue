@@ -24,13 +24,9 @@
       </select>
     </div>
   </nav>
-  <pre>{{ urlParams }}</pre>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-const queryString = window.location.search;
-console.log(queryString);
-const urlParams = new URLSearchParams(queryString);
 
 var theme = (
   new URLSearchParams(document.location.href).get("xAppStyle") || "light"
@@ -39,7 +35,6 @@ export default defineComponent({
   setup: () => {
     return {
       theme,
-      urlParams,
       languages: [
         { label: "EN", value: "en" },
         { label: "EL", value: "el" },

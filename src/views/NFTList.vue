@@ -1,5 +1,7 @@
 <template>
   <div class="container">
+    <pre>{{ urlParams }}</pre>
+    <hr />
     <div class="flex flex-col justify-center items-center mb-2">
       <h2>
         <span>{{ $t("welcome") }}</span>
@@ -115,7 +117,9 @@ import { required } from "@vuelidate/validators";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { XrplClient } = require("xrpl-client");
 //import { XrplClient } from "../xrp-client";
-
+const queryString = window.location.search;
+console.log(queryString);
+const urlParams = new URLSearchParams(queryString);
 interface NFT {
   url: string;
   issuer: string;
@@ -263,6 +267,7 @@ export default defineComponent({
       walletAddress,
     });
     return {
+      urlParams,
       isDialogWalletConnection,
       main_networks,
       test_networks,
