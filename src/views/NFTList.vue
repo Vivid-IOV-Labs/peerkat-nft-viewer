@@ -116,10 +116,11 @@ import { isRippleAddress } from "../utils/validators";
 import { required } from "@vuelidate/validators";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { XrplClient } = require("xrpl-client");
-//import { XrplClient } from "../xrp-client";
+const { XummSdkJwt } = require("xumm-sdk");
 const queryString = window.location.search;
-console.log(queryString);
 const urlParams = new URLSearchParams(queryString);
+const xAppToken = urlParams.get("xAppToken");
+
 interface NFT {
   url: string;
   issuer: string;
@@ -265,6 +266,15 @@ export default defineComponent({
     }));
     const v$ = useVuelidate(rules, {
       walletAddress,
+    });
+    const Sdk = new XummSdkJwt(xAppToken);
+
+    Sdk.getOttData().then((c: Record<string, unknown>) => {
+      console.log("OTT Data", c);
+
+      Sdk.ping().then((c: Record<string, unknown>) => {
+        console.log("Pong", c);
+      });
     });
     return {
       urlParams,
