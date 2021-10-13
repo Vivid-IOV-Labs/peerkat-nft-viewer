@@ -158,7 +158,7 @@ function truncate(
 const main = async (
   walletAddress: string,
   network: string,
-  handleError
+  handleError: (error: string) => void
 ): Promise<NFT[]> => {
   const X_url = network;
   const xrpClient = new XrplClient(X_url, {
@@ -280,7 +280,7 @@ export default defineComponent({
       },
       async populateNFTs() {
         isLoading.value = true;
-        function handleError(error: string) {
+        function handleError(error: string): void {
           console.log(error);
           isDialogWalletConnection.value = false;
           showError.value = true;
