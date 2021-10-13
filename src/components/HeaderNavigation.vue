@@ -24,104 +24,22 @@
       </select>
     </div>
   </nav>
+  <pre>{{ urlParams }}</pre>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import BaseSelect from "@/components/BaseSelect.vue";
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { XrplClient } = require("xrpl-client");
+const queryString = window.location.search;
+console.log(queryString);
+const urlParams = new URLSearchParams(queryString);
+
 var theme = (
   new URLSearchParams(document.location.href).get("xAppStyle") || "light"
 ).toLowerCase();
-interface NFT {
-  url: string;
-  issuer: string;
-  currency: string;
-}
-
-type line = {
-  balance: string;
-  limit: string;
-  account: string;
-  currency: string;
-};
-function truncate(
-  fullStr: string,
-  strLen = 8,
-  separator = "......",
-  frontChars = 3,
-  backChars = 4
-) {
-  if (fullStr.length <= strLen) return fullStr;
-
-  return (
-    fullStr.substr(0, frontChars) +
-    separator +
-    fullStr.substr(fullStr.length - backChars)
-  );
-}
-const main = async (walletAddress: string, network: string): Promise<NFT[]> => {
-  const X_url = network;
-  // const X_url = "wss://s.altnet.rippletest.net:51233";
-
-  const xrpClient = new XrplClient(X_url);
-
-  // Query the user wallet to get a list of all Assets they own
-  const accountLines = await xrpClient.send({
-    command: "account_lines",
-    // account: "reWmfYP8FbRyWWEEkhpKzCpEnksg4sAwx",
-    account: walletAddress,
-  });
-
-  // Check for assets which have a balance of '1000000000000000e-96' and limit of '1000000000000000e-96'; we will assume it is an NFT
-  const { lines } = accountLines;
-
-  function isNFT(l: line): boolean {
-    return (
-      l.balance == "1000000000000000e-96" && l.limit == "1000000000000000e-96"
-    );
-  }
-
-  const NFTs = lines.filter(isNFT);
-  // If NFT retrieve the value in currency '786E66742E706565726B61742E6C697665202020'
-  function hexToString(hex: string) {
-    var strhex = hex.toString(); //force conversion
-    var str = "";
-    for (var i = 0; i < strhex.length; i += 2)
-      str += String.fromCharCode(parseInt(strhex.substr(i, 2), 16));
-    return str.trim();
-  }
-
-  const NFTMedia: NFT[] = await Promise.all(
-    NFTs.map(async (line: line) => {
-      const { account, currency } = line;
-      console.log("line", line);
-      const { account_data } = await xrpClient.send({
-        command: "account_info",
-        account,
-      });
-      const { Domain } = account_data;
-
-      const protocol = hexToString(Domain);
-      const domain = hexToString(currency);
-      return {
-        issuer: truncate(account),
-        currency: domain,
-        url: protocol + domain,
-      };
-    })
-  );
-  console.log(NFTMedia);
-  return NFTMedia;
-};
-
 export default defineComponent({
-  components: {
-    BaseSelect,
-  },
   setup: () => {
     return {
       theme,
+      urlParams,
       languages: [
         { label: "EN", value: "en" },
         { label: "EL", value: "el" },
