@@ -16,26 +16,16 @@
             </template>
             <template #fallback>
               <div
-                class="
-                  top-0
-                  right-0
-                  h-screen
-                  w-screen
-                  z-50
-                  flex
-                  justify-center
-                  items-center
-                "
+                style="height: 100%; width: 100%"
+                class="d-flex align-items-center justify-content-center"
               >
                 <div
-                  class="
-                    animate-spin
-                    rounded-full
-                    h-32
-                    w-32
-                    border-t-2 border-b-2 border-green-700
-                  "
-                ></div>
+                  class="spinner-border"
+                  style="width: 4rem; height: 4rem"
+                  role="status"
+                >
+                  <span class="sr-only">Loading...</span>
+                </div>
               </div>
             </template>
           </Suspense>
