@@ -119,7 +119,8 @@ const { XrplClient } = require("xrpl-client");
 const { XummSdkJwt } = require("xumm-sdk");
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const xAppToken = urlParams.get("xAppToken");
+const xAppToken = urlParams.get("xAppToken") || ;
+const xummApiKey = import.meta.env.VITE_XUMM_API_KEY;
 
 interface NFT {
   url: string;
@@ -173,20 +174,13 @@ const main = async (
   });
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  console.log("urlParams", urlParams);
 
-  // await new Promise((resolve, reject) => {
-  //   xrpClient.on("error", (error: string) => {
-  //     reject(error);
-  //   });
-  // });
   xrpClient.on("error", (error: string) => {
     handleError(error);
   });
 
   await xrpClient.ready();
   const serverInfo = await xrpClient.send({ command: "server_info" });
-  console.log("serverInfo", serverInfo);
   const accountLines = await xrpClient.send({
     command: "account_lines",
     account: walletAddress,
@@ -226,7 +220,7 @@ export default defineComponent({
     const isDialogWalletConnection = ref(true);
     const isLoading = ref(false);
 
-    const walletAddress = ref("");
+    const walletAddress = ref("rMfVCZ6QcVsnkzdbTQhFr2idpcakgxeqEM");
     const NFTMedia = ref<NFT[]>([]);
     const type_network = ref({ label: "Main", value: "main" });
     const type_networks = [
@@ -262,16 +256,20 @@ export default defineComponent({
     const v$ = useVuelidate(rules, {
       walletAddress,
     });
-    console.log(xAppToken);
-    const Sdk = new XummSdkJwt(xAppToken);
+    console.log("xAppToken",xAppToken);
+    console.log("xummApiKey",xummApiKey);
+    if(xAppToken){
+      const Sdk = new XummSdkJwt(xummApiKey,xAppToken);
 
-    Sdk.getOttData().then((c: Record<string, unknown>) => {
-      console.log("OTT Data", c);
+      Sdk.getOttData().then((c: Record<string, unknown>) => {
+        console.log("OTT Data", c);
 
-      Sdk.ping().then((c: Record<string, unknown>) => {
-        console.log("Pong", c);
+        Sdk.ping().then((c: Record<string, unknown>) => {
+          console.log("Pong", c);
+        });
       });
-    });
+    }
+
     return {
       urlParams,
       isDialogWalletConnection,
