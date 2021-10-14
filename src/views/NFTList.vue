@@ -291,7 +291,10 @@ export default defineComponent({
       //   pingdata.value = c;
       // });
       // });
-      const net = nodetype == "TESTNET" ? test_networks : main_networks;
+      const net =
+        ottdata.nodetype == "TESTNET"
+          ? test_networks.map((n) => n.value)
+          : main_networks.map((n) => n.value);
       NFTMedia.value = await main(ottdata.account, net, handleError);
     } else {
       isDialogWalletConnection.value = true;
