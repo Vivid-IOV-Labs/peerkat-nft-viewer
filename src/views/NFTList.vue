@@ -119,8 +119,7 @@ const { XrplClient } = require("xrpl-client");
 const { XummSdkJwt } = require("xumm-sdk");
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const xAppToken =
-  urlParams.get("xAppToken") || "21df3537-65a3-40c1-8a82-8a7439e1c9f8";
+const xAppToken = urlParams.get("xAppToken"); // || "21df3537-65a3-40c1-8a82-8a7439e1c9f8";
 const xummApiKey = import.meta.env.VITE_XUMM_API_KEY;
 
 interface NFT {
@@ -260,7 +259,7 @@ export default defineComponent({
     console.log("xAppToken", xAppToken);
     console.log("xummApiKey", xummApiKey);
     if (xAppToken) {
-      const Sdk = new XummSdkJwt(xummApiKey, xAppToken);
+      const Sdk = new XummSdkJwt(xummApiKey);
 
       Sdk.getOttData().then((c: Record<string, unknown>) => {
         console.log("OTT Data", c);
