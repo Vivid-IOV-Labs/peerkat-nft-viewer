@@ -1,11 +1,11 @@
 <template>
-  <div v-if="modelValue">
+  <div>
     <label class="col-form-label" :for="id">{{ labelText }}</label>
     <select
       :id="id"
       class="form-control form-control-lg"
       v-bind="$attrs"
-      :selected="modelValue.value"
+      :selected="modelValue?.value || ''"
       @change="handleChange"
     >
       <option

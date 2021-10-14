@@ -209,6 +209,8 @@ const main = async (
       const { Domain } = account_data;
       const protocol = hexToString(Domain);
       const domain = hexToString(currency);
+      console.log("currency", currency);
+      console.log("domain", domain);
       return {
         issuer: truncate(account),
         currency: domain,
@@ -239,7 +241,7 @@ export default defineComponent({
     // const ottdata = ref({});
     // const pingdata = ref({});
 
-    const walletAddress = ref("rMfVCZ6QcVsnkzdbTQhFr2idpcakgxeqEM");
+    const walletAddress = ref("");
     const NFTMedia = ref<NFT[]>([]);
     const type_network = ref({ label: "Main", value: "main" });
     const type_networks = [
@@ -261,11 +263,12 @@ export default defineComponent({
         value: "wss://xrpl.link",
       },
     ];
-    const network = computed(() => {
-      return type_network.value.value == "main"
-        ? main_networks[0]
-        : test_networks[0];
-    });
+    // const network = computed(() => {
+    //   return type_network.value.value == "main"
+    //     ? main_networks[0]
+    //     : test_networks[0];
+    // });
+    const network = ref({ value: "", label: "" });
     const rules = computed(() => ({
       walletAddress: {
         required,
