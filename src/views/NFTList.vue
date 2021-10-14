@@ -1,15 +1,5 @@
 <template>
   <div class="container">
-    <pre>{{ urlParams }}</pre>
-    <hr />
-    <h1>ottdata</h1>
-
-    <pre>{{ ottdata }}</pre>
-    <hr />
-    <h1>PingDAta</h1>
-    <pre>{{ pingdata }}</pre>
-    <hr />
-
     <div class="flex flex-col justify-center items-center mb-2">
       <h2>
         <span>{{ $t("welcome") }}</span>
@@ -136,6 +126,20 @@ interface NFT {
   currency: string;
 }
 
+interface OTTData {
+  version: string;
+  locale: string;
+  currency: string;
+  style: string;
+  nodetype: string; //TESTNET
+  account: string;
+  accounttype: string;
+  user: string;
+  user_device: {
+    currency: string;
+  };
+}
+
 type line = {
   balance: string;
   limit: string;
@@ -171,7 +175,7 @@ function truncate(
 }
 const main = async (
   walletAddress: string,
-  network: string,
+  network: string | string[],
   handleError: (error: string) => void
 ): Promise<NFT[]> => {
   const X_url = network;
@@ -223,12 +227,17 @@ export default defineComponent({
     BaseButton,
     NftCard,
   },
-  setup: () => {
+  async setup() {
+    function handleError(error: string): void {
+      isDialogWalletConnection.value = false;
+      showError.value = true;
+      isLoading.value = false;
+    }
     const showError = ref(false);
     const isDialogWalletConnection = ref(false);
     const isLoading = ref(false);
-    const ottdata = ref({});
-    const pingdata = ref({});
+    // const ottdata = ref({});
+    // const pingdata = ref({});
 
     const walletAddress = ref("rMfVCZ6QcVsnkzdbTQhFr2idpcakgxeqEM");
     const NFTMedia = ref<NFT[]>([]);
@@ -271,23 +280,25 @@ export default defineComponent({
     if (xAppToken) {
       const Sdk = new XummSdkJwt(xummApiKey);
 
-      Sdk.getOttData().then((c: Record<string, unknown>) => {
-        console.log("OTT Data", c);
-        ottdata.value = c;
+      const ottdata: OTTData = await Sdk.getOttData();
+      // .then((c: Record<string, unknown>) => {
+      //   console.log("OTT Data", c);
+      //   ottdata.value = c;
 
-        Sdk.ping().then((c: Record<string, unknown>) => {
-          console.log("Pong", c);
-          pingdata.value = c;
-        });
-      });
+      //const pingdata = await Sdk.ping();
+      // .then((c: Record<string, unknown>) => {
+      //   console.log("Pong", c);
+      //   pingdata.value = c;
+      // });
+      // });
+      const net = nodetype == "TESTNET" ? test_networks : main_networks;
+      NFTMedia.value = await main(ottdata.account, net, handleError);
     } else {
       isDialogWalletConnection.value = true;
     }
 
     return {
       urlParams,
-      ottdata,
-      pingdata,
       isDialogWalletConnection,
       main_networks,
       test_networks,
@@ -305,11 +316,7 @@ export default defineComponent({
       },
       async populateNFTs() {
         isLoading.value = true;
-        function handleError(error: string): void {
-          isDialogWalletConnection.value = false;
-          showError.value = true;
-          isLoading.value = false;
-        }
+
         try {
           NFTMedia.value = await main(
             walletAddress.value,
