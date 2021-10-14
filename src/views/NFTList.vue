@@ -2,6 +2,14 @@
   <div class="container">
     <pre>{{ urlParams }}</pre>
     <hr />
+    <h1>ottdata</h1>
+
+    <pre>{{ ottdata }}</pre>
+    <hr />
+    <h1>PingDAta</h1>
+    <pre>{{ pingdata }}</pre>
+    <hr />
+
     <div class="flex flex-col justify-center items-center mb-2">
       <h2>
         <span>{{ $t("welcome") }}</span>
@@ -217,8 +225,10 @@ export default defineComponent({
   },
   setup: () => {
     const showError = ref(false);
-    const isDialogWalletConnection = ref(true);
+    const isDialogWalletConnection = ref(false);
     const isLoading = ref(false);
+    const ottdata = ref({});
+    const pingdata = ref({});
 
     const walletAddress = ref("rMfVCZ6QcVsnkzdbTQhFr2idpcakgxeqEM");
     const NFTMedia = ref<NFT[]>([]);
@@ -263,15 +273,21 @@ export default defineComponent({
 
       Sdk.getOttData().then((c: Record<string, unknown>) => {
         console.log("OTT Data", c);
+        ottdata.value = c;
 
         Sdk.ping().then((c: Record<string, unknown>) => {
           console.log("Pong", c);
+          pingdata.value = c;
         });
       });
+    } else {
+      isDialogWalletConnection.value = true;
     }
 
     return {
       urlParams,
+      ottdata,
+      pingdata,
       isDialogWalletConnection,
       main_networks,
       test_networks,
