@@ -1,14 +1,17 @@
 <template>
   <div
+    :id="key"
     class="modal fade"
     :class="{ 'show pr-4 d-block': show }"
-    tabindex="-1"
     role="dialog"
+    aria-labelledby="modal-label"
+    aria-describedby="modal-desc"
+    aria-modal="true"
   >
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">{{ title }}</h5>
+          <h5 id="modal-label" class="modal-title">{{ title }}</h5>
           <button
             v-if="cancellable"
             type="button"
@@ -20,7 +23,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <slot name="body"></slot>
+          <slot id="modal-desc" name="body"></slot>
         </div>
         <div class="modal-footer">
           <slot name="footer"></slot>
@@ -49,6 +52,10 @@ export default defineComponent({
     },
   },
   emits: ["close"],
+  setup(props) {
+    const key = props.title.trim().toLowerCase().replace(" ", "_");
+    return { key };
+  },
   methods: {
     close(): void {
       this.$emit("close");
