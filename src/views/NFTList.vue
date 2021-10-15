@@ -193,6 +193,7 @@ const main = async (
   handleError: (error: string) => void
 ): Promise<NFT[]> => {
   const X_url = network;
+  console.log("X_url", X_url);
   const xrpClient = new XrplClient(X_url, {
     assumeOfflineAfterSeconds: 15,
     maxConnectionAttempts: 2,
@@ -275,8 +276,8 @@ export default defineComponent({
         value: "wss://xrpl.linkwss://testnet.xrpl-labs.com",
       },
     ];
-    const test_network = ref<Choice>({ label: "", value: "" });
-    const main_network = ref<Choice>({ label: "", value: "" });
+    const test_network = ref<Choice>(test_networks[0]);
+    const main_network = ref<Choice>(main_networks[0]);
 
     const rules = computed(() => ({
       walletAddress: {
@@ -323,12 +324,13 @@ export default defineComponent({
         });
       },
       async populateNFTs() {
-        isLoading.value = true;
         const network =
           type_network.value.value == "test"
             ? test_network.value.value
             : main_network.value.value;
         if (network) {
+          isLoading.value = true;
+
           try {
             NFTMedia.value = await main(
               walletAddress.value,

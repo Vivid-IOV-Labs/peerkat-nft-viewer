@@ -1,13 +1,14 @@
 <template>
   <div>
     <label class="col-form-label w-100" :for="id"
-      >{{ labelText }}
+      >{{ labelText }} {{ isRequeired }}
       <input
         :id="id"
         class="form-control form-control-lg"
         :class="{ 'border-red-500': errors.length }"
         :required="isRequeired"
         :aria-required="isRequeired"
+        :aria-invalid="isInvalid"
         :value="modelValue"
         :type="type"
         :placeholder="placeholder"
@@ -67,6 +68,10 @@ export default defineComponent({
       default: (): Array<unknown> => [],
     },
     isRequeired: {
+      type: Boolean,
+      default: false,
+    },
+    isInvalid: {
       type: Boolean,
       default: false,
     },

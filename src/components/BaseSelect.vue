@@ -1,9 +1,9 @@
 <template>
   <div>
-    <label class="col-form-label w-100" for="id"
+    <label class="col-form-label w-100" :for="id"
       >{{ labelText }}
       <select
-        id="id"
+        :id="id"
         class="form-control form-control-lg"
         v-bind="$attrs"
         :selected="modelValue?.value"
@@ -13,6 +13,8 @@
           v-for="choice in choices"
           :key="choice.value"
           :value="choice.value"
+          @blur="handleChange"
+          @change="handleChange"
         >
           {{ choice.label }}
         </option>
