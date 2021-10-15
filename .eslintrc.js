@@ -7,6 +7,7 @@ module.exports = {
   },
   extends: [
     "plugin:vue/vue3-recommended",
+    "plugin:vuejs-accessibility/recommended",
     "eslint:recommended",
     "@vue/typescript/recommended",
     "@vue/prettier",
@@ -15,7 +16,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2021,
   },
-  plugins: [],
+  plugins: ["vuejs-accessibility"],
   rules: {
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",

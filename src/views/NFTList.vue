@@ -45,8 +45,8 @@
           </div>
           <div v-if="type_network.value == 'test'" class="form-group">
             <base-select
-              id="network"
-              v-model="network"
+              id="test_network"
+              v-model="test_network"
               :choices="test_networks"
               label-text="Network"
               class="w-full max-w-xl"
@@ -54,8 +54,8 @@
           </div>
           <div v-else class="form-group">
             <base-select
-              id="network"
-              v-model="network"
+              id="main_network"
+              v-model="main_network"
               :choices="main_networks"
               label-text="Network"
               class="w-full max-w-xl"
@@ -114,7 +114,6 @@ import { isRippleAddress } from "../utils/validators";
 import { required } from "@vuelidate/validators";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { XrplClient } = require("xrpl-client");
-const { XummSdkJwt } = require("xumm-sdk");
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const xAppToken = urlParams.get("xAppToken"); // || "21df3537-65a3-40c1-8a82-8a7439e1c9f8";
@@ -124,6 +123,11 @@ interface NFT {
   url: string;
   issuer: string;
   currency: string;
+}
+
+interface Choice {
+  label: string;
+  value: string;
 }
 
 interface OTTData {
@@ -151,6 +155,16 @@ function isNFT(l: line): boolean {
     l.balance == "1000000000000000e-96" && l.limit == "1000000000000000e-96"
   );
 }
+function is_hexadecimal(str: string): boolean {
+  const regexp = /^[0-9a-fA-F]+$/;
+
+  if (regexp.test(str)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 function hexToString(hex: string) {
   var strhex = hex.toString(); //force conversion
   var str = "";
@@ -184,15 +198,10 @@ const main = async (
     maxConnectionAttempts: 2,
     connectAttemptTimeoutSeconds: 3,
   });
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-
   xrpClient.on("error", (error: string) => {
     handleError(error);
   });
-
   await xrpClient.ready();
-  const serverInfo = await xrpClient.send({ command: "server_info" });
   const accountLines = await xrpClient.send({
     command: "account_lines",
     account: walletAddress,
@@ -207,10 +216,15 @@ const main = async (
         account,
       });
       const { Domain } = account_data;
-      const protocol = hexToString(Domain);
+      console.log("account_data", account_data);
+      console.log("isHEx", is_hexadecimal(hexToString(Domain)));
+      const protocol = is_hexadecimal(hexToString(Domain))
+        ? hexToString(hexToString(Domain))
+        : hexToString(Domain);
       const domain = hexToString(currency);
-      console.log("currency", currency);
+      console.log("protocol", protocol);
       console.log("domain", domain);
+      console.log("url", protocol + domain);
       return {
         issuer: truncate(account),
         currency: domain,
@@ -238,8 +252,6 @@ export default defineComponent({
     const showError = ref(false);
     const isDialogWalletConnection = ref(false);
     const isLoading = ref(false);
-    // const ottdata = ref({});
-    // const pingdata = ref({});
 
     const walletAddress = ref("");
     const NFTMedia = ref<NFT[]>([]);
@@ -260,15 +272,12 @@ export default defineComponent({
       },
       {
         label: "wss://xrpl.linkwss://testnet.xrpl-labs.com",
-        value: "wss://xrpl.link",
+        value: "wss://xrpl.linkwss://testnet.xrpl-labs.com",
       },
     ];
-    // const network = computed(() => {
-    //   return type_network.value.value == "main"
-    //     ? main_networks[0]
-    //     : test_networks[0];
-    // });
-    const network = ref({ value: "", label: "" });
+    const test_network = ref<Choice>({ label: "", value: "" });
+    const main_network = ref<Choice>({ label: "", value: "" });
+
     const rules = computed(() => ({
       walletAddress: {
         required,
@@ -281,19 +290,11 @@ export default defineComponent({
     console.log("xAppToken", xAppToken);
     console.log("xummApiKey", xummApiKey);
     if (xAppToken) {
+      // eslint-disable-next-line no-undef
       const Sdk = new XummSdkJwt(xummApiKey);
 
       const ottdata: OTTData = await Sdk.getOttData();
-      // .then((c: Record<string, unknown>) => {
-      //   console.log("OTT Data", c);
-      //   ottdata.value = c;
 
-      //const pingdata = await Sdk.ping();
-      // .then((c: Record<string, unknown>) => {
-      //   console.log("Pong", c);
-      //   pingdata.value = c;
-      // });
-      // });
       const net =
         ottdata.nodetype == "TESTNET"
           ? test_networks.map((n) => n.value)
@@ -308,7 +309,8 @@ export default defineComponent({
       isDialogWalletConnection,
       main_networks,
       test_networks,
-      network,
+      test_network,
+      main_network,
       v$,
       type_network,
       type_networks,
@@ -322,19 +324,24 @@ export default defineComponent({
       },
       async populateNFTs() {
         isLoading.value = true;
-
-        try {
-          NFTMedia.value = await main(
-            walletAddress.value,
-            network.value.value,
-            handleError
-          );
-          isDialogWalletConnection.value = false;
-          isLoading.value = false;
-        } catch (err) {
-          showError.value = true;
-          isDialogWalletConnection.value = false;
-          isLoading.value = false;
+        const network =
+          type_network.value.value == "test"
+            ? test_network.value.value
+            : main_network.value.value;
+        if (network) {
+          try {
+            NFTMedia.value = await main(
+              walletAddress.value,
+              network,
+              handleError
+            );
+            isDialogWalletConnection.value = false;
+            isLoading.value = false;
+          } catch (err) {
+            showError.value = true;
+            isDialogWalletConnection.value = false;
+            isLoading.value = false;
+          }
         }
       },
     };

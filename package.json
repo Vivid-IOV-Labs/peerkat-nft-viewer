@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@babel/types": "^7.15.6",
-    "@types/node": "^15.12.4",
+    "@types/node": "^15.14.9",
     "@types/sails.io.js": "^1.0.5",
     "@types/vuelidate": "^0.7.14",
     "@typescript-eslint/eslint-plugin": "^4.28.0",
@@ -44,6 +44,7 @@
     "eslint": "^7.28.0",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-vue": "^7.11.1",
+    "eslint-plugin-vuejs-accessibility": "^1.1.0",
     "express": "^4.17.1",
     "express-static-gzip": "^2.1.1",
     "postcss": "^8.3.5",

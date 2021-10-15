@@ -1,21 +1,23 @@
 <template>
   <div>
-    <label class="col-form-label" :for="id">{{ labelText }}</label>
-    <select
-      :id="id"
-      class="form-control form-control-lg"
-      v-bind="$attrs"
-      :selected="modelValue?.value || ''"
-      @change="handleChange"
-    >
-      <option
-        v-for="choice in choices"
-        :key="choice.value"
-        :value="choice.value"
+    <label class="col-form-label w-100" for="id"
+      >{{ labelText }}
+      <select
+        id="id"
+        class="form-control form-control-lg"
+        v-bind="$attrs"
+        :selected="modelValue?.value"
+        @blur="handleChange"
       >
-        {{ choice.label }}
-      </option>
-    </select>
+        <option
+          v-for="choice in choices"
+          :key="choice.value"
+          :value="choice.value"
+        >
+          {{ choice.label }}
+        </option>
+      </select>
+    </label>
   </div>
 </template>
 

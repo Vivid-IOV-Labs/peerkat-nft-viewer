@@ -1,18 +1,20 @@
 <template>
   <div>
-    <label class="col-form-label" :for="id">{{ labelText }}</label>
-    <input
-      :id="id"
-      class="form-control form-control-lg"
-      :class="{ 'border-red-500': errors.length }"
-      :aria-valid="errors.length"
-      :required="isRequeired"
-      :aria-required="isRequeired"
-      :value="modelValue"
-      :type="type"
-      :placeholder="placeholder"
-      @input="handleChange"
-    />
+    <label class="col-form-label w-100" :for="id"
+      >{{ labelText }}
+      <input
+        :id="id"
+        class="form-control form-control-lg"
+        :class="{ 'border-red-500': errors.length }"
+        :required="isRequeired"
+        :aria-required="isRequeired"
+        :value="modelValue"
+        :type="type"
+        :placeholder="placeholder"
+        @input="handleChange"
+      />
+    </label>
+
     <base-alert
       v-if="errors.length"
       :messages="errors"

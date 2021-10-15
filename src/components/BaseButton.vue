@@ -1,9 +1,5 @@
 <template>
-  <button
-    :class="`btn-${theme} btn-${status}`"
-    class="btn btn-primary"
-    v-bind="$attrs"
-  >
+  <button :class="`btn-${theme} btn-${status}`" class="btn btn-primary">
     <slot />
   </button>
 </template>
