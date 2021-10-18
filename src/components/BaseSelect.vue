@@ -51,7 +51,6 @@ export default defineComponent({
   emits: { "update:modelValue": null },
   setup(props, { emit }) {
     return {
-      ...props,
       handleChange(event: Event): void {
         const value = (event.target as HTMLSelectElement).value;
         if (value) {

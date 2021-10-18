@@ -19,4 +19,18 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped></style>
+<style scoped>
+.btn-success {
+  background: #3bdc96;
+}
+.btn-info {
+  background: #3052ff;
+}
+.btn-warning {
+  background: #f8bf4c;
+}
+
+.btn-danger {
+  background: #ff5b5b;
+}
+</style>
