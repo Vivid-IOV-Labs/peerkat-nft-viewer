@@ -6,7 +6,6 @@
       </h2>
       <hr />
     </div>
-    <pre>{{ NFTMedia }}</pre>
     <div class="row">
       <div
         v-for="(nft, i) in NFTMedia"
