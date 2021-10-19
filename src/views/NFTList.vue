@@ -103,8 +103,6 @@
 </template>
 
 <script lang="ts">
-console.log("test");
-
 import { defineComponent, ref, computed } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseInput from "@/components/BaseInput.vue";
@@ -114,13 +112,14 @@ import NftCard from "@/components/NftCard.vue";
 import useVuelidate from "@vuelidate/core";
 import { isRippleAddress } from "../utils/validators";
 import { required } from "@vuelidate/validators";
+import { useI18n } from "vue-i18n";
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { XrplClient } = require("xrpl-client");
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const xAppToken = urlParams.get("xAppToken"); // || "21df3537-65a3-40c1-8a82-8a7439e1c9f8";
 const xummApiKey = import.meta.env.VITE_XUMM_API_KEY;
-console.log("asdasdasdasd");
 
 interface NFT {
   url: string;
@@ -214,15 +213,10 @@ const main = async (
         account,
       });
       const { Domain } = account_data;
-      console.log("account_data", account_data);
-      console.log("isHEx", is_hexadecimal(hexToString(Domain)));
       const protocol = is_hexadecimal(hexToString(Domain))
         ? hexToString(hexToString(Domain))
         : hexToString(Domain);
       const domain = hexToString(currency);
-      console.log("protocol", protocol);
-      console.log("domain", domain);
-      console.log("url", protocol + domain);
       return {
         issuer: truncate(account),
         currency: domain,
@@ -242,13 +236,12 @@ export default defineComponent({
     NftCard,
   },
   async setup() {
-    console.log(1);
+    const { locale } = useI18n({ useScope: "global" });
 
     function handleError(error: string): void {
       isDialogWalletConnection.value = false;
       showError.value = true;
       isLoading.value = false;
-      console.log("err", error);
     }
 
     const showError = ref(false);
@@ -277,7 +270,6 @@ export default defineComponent({
         value: "wss://xrpl.linkwss://testnet.xrpl-labs.com",
       },
     ];
-    console.log(2);
 
     const test_network = ref<Choice>(test_networks[0]);
     const main_network = ref<Choice>(main_networks[0]);
@@ -293,23 +285,20 @@ export default defineComponent({
     const v$ = useVuelidate(rules, {
       walletAddress,
     });
-    console.log("xAppToken", xAppToken);
-    console.log("xummApiKey", xummApiKey);
+
     if (xAppToken) {
-      console.log("APP ENV");
       // eslint-disable-next-line no-undef
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { XummSdkJwt } = require("xumm-sdk");
       const Sdk = new XummSdkJwt(xummApiKey);
 
       const ottdata: OTTData = await Sdk.getOttData();
-
+      locale.value = ottdata.locale;
       const net =
         ottdata.nodetype == "TESTNET"
           ? test_networks.map((n) => n.value)
           : main_networks.map((n) => n.value);
       NFTMedia.value = await main(ottdata.account, net, handleError);
-      console.log("APP ENV", NFTMedia.value);
     } else {
       isDialogWalletConnection.value = true;
     }
