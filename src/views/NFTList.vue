@@ -6,6 +6,7 @@
       </h2>
       <hr />
     </div>
+    <pre>{{ NFTMedia }}</pre>
     <div class="row">
       <div
         v-for="(nft, i) in NFTMedia"
@@ -298,6 +299,8 @@ export default defineComponent({
     if (xAppToken) {
       console.log("APP ENV");
       // eslint-disable-next-line no-undef
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { XummSdkJwt } = require("xumm-sdk");
       const Sdk = new XummSdkJwt(xummApiKey);
 
       const ottdata: OTTData = await Sdk.getOttData();
