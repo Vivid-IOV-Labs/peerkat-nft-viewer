@@ -1,15 +1,10 @@
 <template>
   <div
-    class="
-      bg-red-100
-      border-t-4 border-red-400
-      text-red-700
-      px-4
-      py-3
-      rounded
-      relative
-    "
+    :id="id"
+    class="alert"
+    :class="`alert-${status}`"
     role="alert"
+    aria-live="assertive"
   >
     <strong class="font-bold">{{ title }}</strong>
     <ul>
@@ -46,6 +41,10 @@ interface Message {
 }
 export default {
   props: {
+    id: {
+      type: String,
+      required: true,
+    },
     title: {
       type: String,
       required: true,

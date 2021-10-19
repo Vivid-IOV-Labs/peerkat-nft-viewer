@@ -1,5 +1,5 @@
 <template>
-  <button :class="`btn-${theme} btn-${status}`" class="btn btn-primary">
+  <button :class="`btn-${status}`" class="btn">
     <slot />
   </button>
 </template>
@@ -19,18 +19,3 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
-.btn-success {
-  background: #3bdc96;
-}
-.btn-info {
-  background: #3052ff;
-}
-.btn-warning {
-  background: #f8bf4c;
-}
-
-.btn-danger {
-  background: #ff5b5b;
-}
-</style>

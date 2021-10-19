@@ -1,15 +1,15 @@
 <template>
   <div class="card m-4">
-    <img
-      class="card-img-top"
-      :src="posterUrl"
-      alt="Card image cap"
-      @error="fallbackImg"
-    />
+    <figure>
+      <img
+        class="card-img-top"
+        :src="posterUrl"
+        alt="Card image cap"
+        @error="fallbackImg"
+      />
+    </figure>
     <div class="card-body">
-      <h5 class="card-title">
-        <strong>Token Name </strong> {{ nft.currency }}
-      </h5>
+      <p class="card-title"><strong>Token Name </strong> {{ nft.currency }}</p>
       <p class="card-text"><strong>Issuer </strong>{{ nft.issuer }}</p>
     </div>
     <div class="card-footer d-flex justify-content-end">

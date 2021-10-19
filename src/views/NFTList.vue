@@ -64,7 +64,11 @@
         </form>
       </template>
       <template #footer>
-        <base-button class="mt-4" :disabled="v$.$invalid" @click="populateNFTs"
+        <base-button
+          status="success"
+          class="mt-4"
+          :disabled="v$.$invalid"
+          @click="populateNFTs"
           >Enter
           <div
             v-if="isLoading"
@@ -91,6 +95,7 @@
       <template #footer>
         <base-button
           class="mt-4"
+          status="warning"
           @click="
             showError = false;
             isDialogWalletConnection = true;

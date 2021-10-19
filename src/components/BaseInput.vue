@@ -7,6 +7,7 @@
         class="form-control form-control-lg"
         :class="{ 'border-red-500': errors.length }"
         :required="isRequeired"
+        :aria-describedby="`alert-${id}`"
         :aria-required="isRequeired"
         :aria-invalid="isInvalid"
         :value="modelValue"
@@ -18,9 +19,10 @@
 
     <base-alert
       v-if="errors.length"
+      :id="`alert-${id}`"
       :messages="errors"
       role="alert"
-      class="input-errors"
+      status="danger"
     >
     </base-alert>
   </div>

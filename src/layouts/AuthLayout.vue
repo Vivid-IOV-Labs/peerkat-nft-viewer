@@ -1,8 +1,8 @@
 <template>
   <HeaderNavigation />
-  <div class="mt-4">
+  <main class="mt-4">
     <slot></slot>
-  </div>
+  </main>
 </template>
 
 <script lang="ts">

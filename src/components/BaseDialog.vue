@@ -4,14 +4,15 @@
     class="modal fade"
     :class="{ 'show pr-4 d-block': show }"
     role="dialog"
-    aria-labelledby="modal-label"
-    aria-describedby="modal-desc"
-    aria-modal="true"
+    :aria-labelledby="`modal-label-${key}`"
+    :aria-describedby="`modal-desc-${key}`"
+    :aria-modal="show"
+    tabindex="-1"
   >
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 id="modal-label" class="modal-title">{{ title }}</h5>
+          <h3 :id="`modal-label-${key}`" class="modal-title">{{ title }}</h3>
           <button
             v-if="cancellable"
             type="button"
@@ -23,7 +24,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <slot id="modal-desc" name="body"></slot>
+          <slot :id="`modal-desc-${key}`" name="body"></slot>
         </div>
         <div class="modal-footer">
           <slot name="footer"></slot>

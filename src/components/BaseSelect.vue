@@ -1,18 +1,19 @@
 <template>
   <div>
-    <label class="col-form-label w-100" :for="id"
-      >{{ labelText }}
+    <label class="col-form-label w-100" :for="id">
+      <span v-if="labelHidden"> {{ labelText }}</span>
       <select
         :id="id"
         class="form-control form-control-lg"
-        v-bind="$attrs"
-        :selected="modelValue?.value"
+        :aria-label="labelText"
         @blur="handleChange"
       >
         <option
           v-for="choice in choices"
           :key="choice.value"
           :value="choice.value"
+          :selected="choice.value == model"
+          :aria-describedby="`modal-desc-${id}`"
           @blur="handleChange"
           @change="handleChange"
         >
@@ -20,6 +21,14 @@
         </option>
       </select>
     </label>
+    <base-alert
+      v-if="errors.length"
+      :id="`alert-${id}`"
+      :messages="errors"
+      role="alert"
+      status="danger"
+    >
+    </base-alert>
   </div>
 </template>
 
@@ -47,10 +56,25 @@ export default defineComponent({
       type: Object as PropType<Choice>,
       default: () => undefined,
     },
+    errors: {
+      type: Array,
+      default: (): Array<unknown> => [],
+    },
+    isRequeired: {
+      type: Boolean,
+      default: false,
+    },
+    isInvalid: {
+      type: Boolean,
+      default: false,
+    },
+    asVal: { type: Boolean, default: () => false },
+    labelHidden: { type: Boolean, default: () => false },
   },
   emits: { "update:modelValue": null },
   setup(props, { emit }) {
     return {
+      model: props.asVal ? props.modelValue : props.modelValue?.value,
       handleChange(event: Event): void {
         const value = (event.target as HTMLSelectElement).value;
         if (value) {
