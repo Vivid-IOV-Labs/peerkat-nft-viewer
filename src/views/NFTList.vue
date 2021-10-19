@@ -103,6 +103,8 @@
 </template>
 
 <script lang="ts">
+console.log("test");
+
 import { defineComponent, ref, computed } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseInput from "@/components/BaseInput.vue";
@@ -118,18 +120,17 @@ const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const xAppToken = urlParams.get("xAppToken"); // || "21df3537-65a3-40c1-8a82-8a7439e1c9f8";
 const xummApiKey = import.meta.env.VITE_XUMM_API_KEY;
+console.log("asdasdasdasd");
 
 interface NFT {
   url: string;
   issuer: string;
   currency: string;
 }
-
 interface Choice {
   label: string;
   value: string;
 }
-
 interface OTTData {
   version: string;
   locale: string;
@@ -143,7 +144,6 @@ interface OTTData {
     currency: string;
   };
 }
-
 type line = {
   balance: string;
   limit: string;
@@ -157,14 +157,12 @@ function isNFT(l: line): boolean {
 }
 function is_hexadecimal(str: string): boolean {
   const regexp = /^[0-9a-fA-F]+$/;
-
   if (regexp.test(str)) {
     return true;
   } else {
     return false;
   }
 }
-
 function hexToString(hex: string) {
   var strhex = hex.toString(); //force conversion
   var str = "";
@@ -180,7 +178,6 @@ function truncate(
   backChars = 4
 ) {
   if (fullStr.length <= strLen) return fullStr;
-
   return (
     fullStr.substr(0, frontChars) +
     separator +
@@ -245,12 +242,15 @@ export default defineComponent({
     NftCard,
   },
   async setup() {
+    console.log(1);
+
     function handleError(error: string): void {
       isDialogWalletConnection.value = false;
       showError.value = true;
       isLoading.value = false;
       console.log("err", error);
     }
+
     const showError = ref(false);
     const isDialogWalletConnection = ref(false);
     const isLoading = ref(false);
@@ -277,6 +277,8 @@ export default defineComponent({
         value: "wss://xrpl.linkwss://testnet.xrpl-labs.com",
       },
     ];
+    console.log(2);
+
     const test_network = ref<Choice>(test_networks[0]);
     const main_network = ref<Choice>(main_networks[0]);
 
@@ -286,6 +288,8 @@ export default defineComponent({
         isRippleAddress,
       },
     }));
+    console.log(3);
+
     const v$ = useVuelidate(rules, {
       walletAddress,
     });
