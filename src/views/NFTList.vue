@@ -249,6 +249,7 @@ export default defineComponent({
       isDialogWalletConnection.value = false;
       showError.value = true;
       isLoading.value = false;
+      console.log("err", error);
     }
     const showError = ref(false);
     const isDialogWalletConnection = ref(false);
@@ -291,6 +292,7 @@ export default defineComponent({
     console.log("xAppToken", xAppToken);
     console.log("xummApiKey", xummApiKey);
     if (xAppToken) {
+      console.log("APP ENV");
       // eslint-disable-next-line no-undef
       const Sdk = new XummSdkJwt(xummApiKey);
 
@@ -301,6 +303,7 @@ export default defineComponent({
           ? test_networks.map((n) => n.value)
           : main_networks.map((n) => n.value);
       NFTMedia.value = await main(ottdata.account, net, handleError);
+      console.log("APP ENV", NFTMedia.value);
     } else {
       isDialogWalletConnection.value = true;
     }
