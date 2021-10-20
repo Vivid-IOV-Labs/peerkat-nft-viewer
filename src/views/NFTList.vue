@@ -30,6 +30,8 @@
               type="walletaddress"
               label-text="walletaddress"
               class="w-full max-w-xl"
+              :is-required="v$.walletAddress.required"
+              :is-invalid="v$.walletAddress.$dirty && v$.walletAddress.$invalid"
               :errors="formatVuelidateErrors(v$.walletAddress.$errors)"
             ></base-input>
           </div>

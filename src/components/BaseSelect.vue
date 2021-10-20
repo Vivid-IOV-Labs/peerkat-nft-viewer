@@ -81,7 +81,11 @@ export default defineComponent({
           const selected = props.choices.find((choice: Choice) => {
             return choice.value == value;
           });
-          emit("update:modelValue", selected);
+          if (props.asVal) {
+            emit("update:modelValue", selected?.value);
+          } else {
+            emit("update:modelValue", selected);
+          }
         }
       },
     };

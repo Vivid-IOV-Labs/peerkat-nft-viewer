@@ -1,7 +1,7 @@
 <template>
   <div>
     <label class="col-form-label w-100" :for="id"
-      >{{ labelText }} {{ isRequeired }}
+      >{{ labelText }}
       <input
         :id="id"
         class="form-control form-control-lg"
