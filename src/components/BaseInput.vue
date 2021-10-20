@@ -1,18 +1,18 @@
 <template>
   <div>
     <label class="col-form-label w-100" :for="id"
-      >{{ labelText }}
+      >{{ labelText }} {{ isRequeired }} {{ isInvalid }}
       <input
         :id="id"
         class="form-control form-control-lg"
         :class="{ 'border-red-500': errors.length }"
         :required="isRequeired"
-        :aria-describedby="`alert-${id}`"
         :aria-required="isRequeired"
         :aria-invalid="isInvalid"
         :value="modelValue"
         :type="type"
         :placeholder="placeholder"
+        v-bind="describedBy"
         @input="handleChange"
       />
     </label>
@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import BaseAlert from "@/components/BaseAlert.vue";
-import { defineComponent } from "vue";
+import { defineComponent, computed } from "vue";
 
 const getValue = (event: Event): string | number | undefined => {
   const value =
@@ -79,11 +79,17 @@ export default defineComponent({
     },
   },
   emits: { "update:modelValue": null },
-  methods: {
-    handleChange(event: Event): void {
-      const value = getValue(event);
-      this.$emit("update:modelValue", value);
-    },
+  setup(props, { emit }) {
+    const describedBy = computed(() => {
+      return props.isInvalid ? { ariaDescribedby: `alert-${props.id}` } : {};
+    });
+    return {
+      describedBy,
+      handleChange(event: Event): void {
+        const value = getValue(event);
+        emit("update:modelValue", value);
+      },
+    };
   },
 });
 </script>

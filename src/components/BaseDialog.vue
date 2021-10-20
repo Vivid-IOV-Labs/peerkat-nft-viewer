@@ -4,9 +4,9 @@
     class="modal fade"
     :class="{ 'show pr-4 d-block': show }"
     role="dialog"
-    :aria-labelledby="`modal-label-${key}`"
-    :aria-describedby="`modal-desc-${key}`"
-    :aria-modal="show"
+    v-bind="describedBy"
+    aria-modal="true"
+    :aria-hidden="!show"
     tabindex="-1"
   >
     <div class="modal-dialog" role="document">
@@ -23,8 +23,8 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
-          <slot :id="`modal-desc-${key}`" name="body"></slot>
+        <div :id="`modal-desc-${key}`" class="modal-body">
+          <slot name="body"></slot>
         </div>
         <div class="modal-footer">
           <slot name="footer"></slot>
@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, computed } from "vue";
 
 export default defineComponent({
   props: {
@@ -55,7 +55,15 @@ export default defineComponent({
   emits: ["close"],
   setup(props) {
     const key = props.title.trim().toLowerCase().replace(" ", "_");
-    return { key };
+    const describedBy = computed(() => {
+      return props.show
+        ? {
+            ariaDescribedby: `modal-desc-${key}`,
+            ariaLabelledby: `modal-label-${key}`,
+          }
+        : {};
+    });
+    return { describedBy, key };
   },
   methods: {
     close(): void {

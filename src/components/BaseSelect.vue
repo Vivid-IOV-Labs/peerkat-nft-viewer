@@ -6,16 +6,18 @@
         :id="id"
         class="form-control form-control-lg"
         :aria-label="labelText"
+        :required="isRequeired"
+        :aria-required="isRequeired"
+        :aria-invalid="isInvalid"
+        v-bind="describedBy"
         @blur="handleChange"
+        @change="handleChange"
       >
         <option
           v-for="choice in choices"
           :key="choice.value"
           :value="choice.value"
           :selected="choice.value == model"
-          :aria-describedby="`modal-desc-${id}`"
-          @blur="handleChange"
-          @change="handleChange"
         >
           {{ choice.label }}
         </option>
@@ -33,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, computed } from "vue";
 interface Choice {
   label: string;
   value?: string | number;
@@ -73,8 +75,12 @@ export default defineComponent({
   },
   emits: { "update:modelValue": null },
   setup(props, { emit }) {
+    const describedBy = computed(() => {
+      return props.isInvalid ? { ariaDescribedby: `alert-${props.id}` } : {};
+    });
     return {
       model: props.asVal ? props.modelValue : props.modelValue?.value,
+      describedBy,
       handleChange(event: Event): void {
         const value = (event.target as HTMLSelectElement).value;
         if (value) {
