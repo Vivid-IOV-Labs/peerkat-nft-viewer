@@ -1,5 +1,5 @@
 <template>
-  <base-dialog :show="isOpen" title="Welcome" @close="isOpen = false">
+  <base-dialog :show="isOpen" title="Welcome">
     <template #body>
       <form>
         <div class="form-group">
@@ -149,7 +149,7 @@ export default defineComponent({
         });
       },
       async runAsyncFunction() {
-        await props.runAsyncFunction();
+        await props.asyncFun();
       },
     };
   },
