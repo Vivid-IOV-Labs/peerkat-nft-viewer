@@ -20,6 +20,7 @@
           :choices="languages"
           label-text="Lang"
           as-val="true"
+          label-hidden="true"
         ></base-select>
       </div>
     </nav>

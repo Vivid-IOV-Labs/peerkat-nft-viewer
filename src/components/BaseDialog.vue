@@ -53,7 +53,7 @@ export default defineComponent({
     },
   },
   emits: ["close"],
-  setup(props) {
+  setup(props, { emit }) {
     const key = props.title.trim().toLowerCase().replace(" ", "_");
     const describedBy = computed(() => {
       return props.show
@@ -63,12 +63,13 @@ export default defineComponent({
           }
         : {};
     });
-    return { describedBy, key };
-  },
-  methods: {
-    close(): void {
-      this.$emit("close");
-    },
+    return {
+      describedBy,
+      key,
+      close(): void {
+        emit("close");
+      },
+    };
   },
 });
 </script>

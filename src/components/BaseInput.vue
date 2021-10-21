@@ -1,7 +1,7 @@
 <template>
   <div>
-    <label class="col-form-label w-100" :for="id"
-      >{{ labelText }} {{ isRequeired }} {{ isInvalid }}
+    <label class="col-form-label w-100" :for="id">
+      <span v-if="!labelHidden"> {{ labelText }}</span>
       <input
         :id="id"
         class="form-control form-control-lg"
@@ -77,6 +77,7 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    labelHidden: { type: Boolean, default: () => false },
   },
   emits: { "update:modelValue": null },
   setup(props, { emit }) {

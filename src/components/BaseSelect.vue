@@ -1,7 +1,7 @@
 <template>
   <div>
     <label class="col-form-label w-100" :for="id">
-      <span v-if="labelHidden"> {{ labelText }}</span>
+      <span v-if="!labelHidden"> {{ labelText }}</span>
       <select
         :id="id"
         class="form-control form-control-lg"
