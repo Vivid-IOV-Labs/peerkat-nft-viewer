@@ -2,7 +2,7 @@
   <div class="container">
     <div class="flex flex-col justify-center items-center mb-2">
       <h2>
-        <span>{{ $t("welcome") }}</span>
+        <span>{{ $t("Welcome!") }}</span>
       </h2>
       <hr />
     </div>
@@ -71,13 +71,13 @@
           class="mt-4"
           :disabled="v$.$invalid"
           @click="populateNFTs"
-          >Enter
+          >{{ $t("Enter") }}
           <div
             v-if="isLoading"
             class="spinner-grow spinner-grow-sm"
             role="status"
           >
-            <span class="sr-only">Loading...</span>
+            <span class="sr-only">{{ $t("Loading...") }}</span>
           </div>
         </base-button>
       </template>
@@ -91,8 +91,8 @@
       "
     >
       <template #body>
-        <h3>Unable to connect</h3>
-        <p>Please try another network</p>
+        <h3>{{ $t("Unable to connect") }}</h3>
+        <p>{{ $t("Please try another network") }}</p>
       </template>
       <template #footer>
         <base-button
