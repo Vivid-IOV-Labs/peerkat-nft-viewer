@@ -1,6 +1,5 @@
 import { createI18n } from "vue-i18n";
 import locizer from "locizer";
-
 function getBrowserLocale(options = {}) {
   const defaultOptions = { countryCodeOnly: false };
 
@@ -33,7 +32,7 @@ locizer.init({
   apiKey,
 });
 export const i18n = createI18n({
-  locale: getStartingLocale() || locizer.lng.split("-")[0], //locizer.lng,
+  locale: locizer.lng,
   fallbackLocale: "en",
   referenceLng: "en",
 });
