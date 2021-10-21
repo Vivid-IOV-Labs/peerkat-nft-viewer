@@ -55,7 +55,7 @@ export default defineComponent({
       default: () => "",
     },
     modelValue: {
-      type: Object as PropType<Choice>,
+      type: [String, Object] as PropType<string | Choice>,
       default: () => undefined,
     },
     errors: {

@@ -2,7 +2,7 @@
   <div class="container">
     <div class="flex flex-col justify-center items-center mb-2">
       <h2>
-        <span>{{ $t("Welcome!") }}</span>
+        <span>{{ $t("welcome") }}</span>
       </h2>
       <hr />
     </div>

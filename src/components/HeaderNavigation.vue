@@ -20,9 +20,9 @@
           id="lang"
           v-model="$i18n.locale"
           :choices="languages"
-          label-text="Lang"
-          as-val="true"
-          label-hidden="true"
+          label-text="Select Language"
+          :as-val="true"
+          :label-hidden="true"
         ></base-select>
       </div>
     </nav>
