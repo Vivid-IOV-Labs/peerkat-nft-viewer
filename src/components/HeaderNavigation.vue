@@ -10,7 +10,9 @@
           class="d-inline-block align-top"
         />
       </span>
-      <h1 style="text-transform: uppercase; font-weight: bold">
+      <h1
+        style="text-transform: uppercase; font-weight: bold; font-size: 0.9rem"
+      >
         NFT Test Wallet
       </h1>
       <div class="locale-changer">
