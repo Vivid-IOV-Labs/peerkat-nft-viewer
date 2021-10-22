@@ -16,7 +16,6 @@
         NFT Test Wallet
       </h1>
       <div class="locale-changer">
-        {{ $i18n.locale }}
         <base-select
           id="lang"
           v-model="$i18n.locale"

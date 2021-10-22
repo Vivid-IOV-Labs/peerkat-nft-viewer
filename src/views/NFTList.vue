@@ -292,7 +292,6 @@ export default defineComponent({
     const v$ = useVuelidate(rules, {
       walletAddress,
     });
-    locale.value = "de";
 
     if (xAppToken) {
       // eslint-disable-next-line no-undef
