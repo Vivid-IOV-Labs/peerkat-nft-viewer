@@ -38,7 +38,7 @@
 import { defineComponent, PropType, computed } from "vue";
 interface Choice {
   label: string;
-  value?: string | number;
+  value?: string;
 }
 export default defineComponent({
   props: {
@@ -78,11 +78,13 @@ export default defineComponent({
     const describedBy = computed(() => {
       return props.isInvalid ? { ariaDescribedby: `alert-${props.id}` } : {};
     });
+    const model = computed(() => {
+      return typeof props.modelValue == "string"
+        ? props.modelValue
+        : props.modelValue?.value;
+    });
     return {
-      model:
-        typeof props.modelValue == "string"
-          ? props.modelValue
-          : props.modelValue?.value,
+      model,
       describedBy,
       handleChange(event: Event): void {
         const value = (event.target as HTMLSelectElement).value;

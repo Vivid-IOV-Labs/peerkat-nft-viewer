@@ -292,6 +292,7 @@ export default defineComponent({
     const v$ = useVuelidate(rules, {
       walletAddress,
     });
+    locale.value = "de";
 
     if (xAppToken) {
       // eslint-disable-next-line no-undef
@@ -300,7 +301,7 @@ export default defineComponent({
       const Sdk = new XummSdkJwt(xummApiKey);
 
       const ottdata: OTTData = await Sdk.getOttData();
-      locale.value = ottdata.locale;
+      locale.value = ottdata.locale?.split("-")[0];
       const net =
         ottdata.nodetype == "TESTNET"
           ? test_networks.map((n) => n.value)
