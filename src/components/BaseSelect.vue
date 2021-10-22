@@ -79,7 +79,10 @@ export default defineComponent({
       return props.isInvalid ? { ariaDescribedby: `alert-${props.id}` } : {};
     });
     return {
-      model: props.asVal ? props.modelValue : props.modelValue?.value,
+      model:
+        typeof props.modelValue == "string"
+          ? props.modelValue
+          : props.modelValue?.value,
       describedBy,
       handleChange(event: Event): void {
         const value = (event.target as HTMLSelectElement).value;
