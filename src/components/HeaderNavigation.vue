@@ -11,9 +11,9 @@
         />
       </span>
       <h1
-        style="text-transform: uppercase; font-weight: bold; font-size: 0.9rem"
+        style="text-transform: uppercase; font-weight: bold; font-size: 1.2rem"
       >
-        NFT Test Wallet
+        Peerkat
       </h1>
       <div class="locale-changer">
         <base-select

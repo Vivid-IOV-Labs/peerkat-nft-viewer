@@ -4,7 +4,7 @@
       <span v-if="!labelHidden"> {{ labelText }}</span>
       <select
         :id="id"
-        class="form-control form-control-lg"
+        class="form-control form-control-lg mt-2"
         :aria-label="labelText"
         :required="isRequeired"
         :aria-required="isRequeired"

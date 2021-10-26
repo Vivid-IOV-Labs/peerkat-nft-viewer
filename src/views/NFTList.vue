@@ -27,8 +27,8 @@
               id="walletaddress"
               v-model="v$.walletAddress.$model"
               placeholder="Enter your XRP Wallet Address"
-              type="walletaddress"
-              label-text="walletaddress"
+              type="text"
+              label-text="Wallet Address"
               class="w-full max-w-xl"
               :is-required="v$.walletAddress.required"
               :is-invalid="v$.walletAddress.$dirty && v$.walletAddress.$invalid"
@@ -41,7 +41,7 @@
               v-model="type_network"
               :choices="type_networks"
               type="type_networks"
-              label-text="Type Networks"
+              label-text="Network Type"
               class="w-full max-w-xl"
             ></base-select>
           </div>

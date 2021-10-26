@@ -4,7 +4,7 @@
       <span v-if="!labelHidden"> {{ labelText }}</span>
       <input
         :id="id"
-        class="form-control form-control-lg"
+        class="form-control form-control-lg mt-2"
         :class="{ 'border-red-500': errors.length }"
         :required="isRequeired"
         :aria-required="isRequeired"
