@@ -1,5 +1,5 @@
 <template>
-  <did>
+  <div>
     <VueAnnouncer />
     <div v-if="withAuthLayout">
       <auth-layout>
@@ -40,7 +40,7 @@
     <div v-else class="container px-6 pt-4 pb-6 h-screen">
       <router-view></router-view>
     </div>
-  </did>
+  </div>
 </template>
 
 <script lang="ts">

@@ -35,12 +35,16 @@
 </template>
 
 <script lang="ts">
+import BaseAlert from "@/components/BaseAlert.vue";
 import { defineComponent, PropType, computed } from "vue";
 interface Choice {
   label: string;
   value?: string;
 }
 export default defineComponent({
+  components: {
+    BaseAlert,
+  },
   props: {
     choices: {
       type: Array as PropType<Choice[]>,

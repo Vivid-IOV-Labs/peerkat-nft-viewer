@@ -13,15 +13,16 @@
       <p class="card-text"><strong>Issuer </strong>{{ nft.issuer }}</p>
     </div>
     <div class="card-footer d-flex justify-content-end">
-      <a href="#" class="btn" target="_blank">link</a>
+      <base-button class="mt-4" href="#" target="_blank">link </base-button>
     </div>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
+import BaseButton from "@/components/BaseButton.vue";
 
 export default defineComponent({
-  components: {},
+  components: { BaseButton },
   props: {
     nft: { type: Object, required: true },
   },

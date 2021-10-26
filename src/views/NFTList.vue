@@ -8,8 +8,8 @@
     </div>
     <div class="row">
       <div
-        v-for="(nft, i) in NFTMedia"
-        :key="i"
+        v-for="nft in NFTMedia"
+        :key="nft.issuer"
         class="col-sm-6 col-md-4 col-xs-12"
       >
         <nft-card :nft="nft"></nft-card>
@@ -26,7 +26,7 @@
             <base-input
               id="walletaddress"
               v-model="v$.walletAddress.$model"
-              placeholder="Enter your Ripple Wallet Address"
+              placeholder="Enter your XRP Wallet Address"
               type="walletaddress"
               label-text="walletaddress"
               class="w-full max-w-xl"

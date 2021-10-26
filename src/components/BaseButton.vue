@@ -1,5 +1,5 @@
 <template>
-  <button :class="`btn-${status}`" class="btn">
+  <button :class="`btn-primary`" class="btn btn-primary">
     <slot />
   </button>
 </template>
@@ -10,7 +10,7 @@ var theme = (
 ).toLowerCase();
 export default defineComponent({
   props: {
-    status: { type: String, default: () => "success" },
+    status: { type: String, default: () => "primary" },
   },
   setup: () => {
     return {
@@ -19,3 +19,15 @@ export default defineComponent({
   },
 });
 </script>
+
+<style>
+.btn-primary {
+  background: #3052ff;
+}
+.btn-light {
+  background: #f3f5ff;
+}
+.btn-light {
+  background: #7082f9;
+}
+</style>
