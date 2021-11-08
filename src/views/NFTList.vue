@@ -6,7 +6,7 @@
       </h2>
       <hr />
     </div>
-    <div class="row">
+    <div v-if="NFTMedia.length" class="row">
       <div
         v-for="nft in NFTMedia"
         :key="nft.issuer"
@@ -14,6 +14,9 @@
       >
         <nft-card :nft="nft"></nft-card>
       </div>
+    </div>
+    <div v-else>
+      <h3 class="text-center mt-4">You don't have any NFT's at the moment</h3>
     </div>
     <base-dialog
       :show="isDialogWalletConnection"
@@ -220,10 +223,16 @@ const main = async (
         account,
       });
       const { Domain } = account_data;
+
       const protocol = is_hexadecimal(hexToString(Domain))
         ? hexToString(hexToString(Domain))
         : hexToString(Domain);
-      const domain = hexToString(currency);
+      const domain = hexToString(currency.replace("02", "00"));
+
+      console.log("protocol", protocol);
+      console.log("domain", domain);
+      //console.log("currency", currency.replace("02", ""));
+
       return {
         issuer: truncate(account),
         currency: domain,
@@ -245,7 +254,7 @@ export default defineComponent({
   async setup() {
     const { locale } = useI18n({ useScope: "global" });
 
-    function handleError(error: string): void {
+    function handleError(): void {
       isDialogWalletConnection.value = false;
       showError.value = true;
       isLoading.value = false;
