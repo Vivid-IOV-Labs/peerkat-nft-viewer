@@ -199,7 +199,6 @@ const main = async (
   handleError: (error: string) => void
 ): Promise<NFT[]> => {
   const X_url = network;
-  console.log("X_url", X_url);
   const xrpClient = new XrplClient(X_url, {
     assumeOfflineAfterSeconds: 15,
     maxConnectionAttempts: 2,
@@ -227,14 +226,10 @@ const main = async (
       const protocol = is_hexadecimal(hexToString(Domain))
         ? hexToString(hexToString(Domain))
         : hexToString(Domain);
-      const domain = hexToString(currency.replace("02", "00"));
-
-      console.log("protocol", protocol);
-      console.log("domain", domain);
-      //console.log("currency", currency.replace("02", ""));
+      const domain = hexToString(currency.replace("02", ""));
 
       return {
-        issuer: truncate(account),
+        issuer: account,
         currency: domain,
         url: protocol + domain,
       };
@@ -296,7 +291,6 @@ export default defineComponent({
         isRippleAddress,
       },
     }));
-    console.log(3);
 
     const v$ = useVuelidate(rules, {
       walletAddress,
