@@ -7,11 +7,7 @@
       <hr />
     </div>
     <div v-if="NFTMedia.length" class="row">
-      <div
-        v-for="nft in NFTMedia"
-        :key="nft.issuer"
-        class="col-sm-6 col-md-4 col-xs-12"
-      >
+      <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-12 col-lg-4">
         <nft-card :nft="nft"></nft-card>
       </div>
     </div>
@@ -183,14 +179,14 @@ function truncate(
   fullStr: string,
   strLen = 8,
   separator = " ............. ",
-  frontChars = 3,
+  frontChars = 8,
   backChars = 4
 ) {
   if (fullStr.length <= strLen) return fullStr;
   return (
-    fullStr.substr(0, frontChars) +
-    separator +
-    fullStr.substr(fullStr.length - backChars)
+    fullStr.substr(0, frontChars) + separator
+    //+
+    ///fullStr.substr(fullStr.length - backChars)
   );
 }
 const main = async (
@@ -230,6 +226,7 @@ const main = async (
 
       return {
         issuer: account,
+        issuerTruncated: truncate(account),
         currency: domain,
         url: protocol + domain,
       };
