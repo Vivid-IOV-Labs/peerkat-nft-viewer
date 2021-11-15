@@ -1,0 +1,63 @@
+<template>
+  <div class="row flex items-center">
+    <div class="col-sm-4 col-offset-1 col-xs-12 px-4">
+      <div class="">
+        <figure>
+          <img
+            class="card-img-top"
+            :src="nft.url"
+            alt="Card image cap"
+            @error="fallbackImg"
+          />
+        </figure>
+      </div>
+    </div>
+    <div class="col-sm-6 col-xs-12 d-flex flex-column pb-3">
+      <h1>Details</h1>
+      <div class="pt-4" style="flex-grow: 1">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <h5>Token Name</h5>
+            {{ nft.currency }}
+          </li>
+          <li class="list-group-item">
+            <h5>Issuer</h5>
+            {{ nft.issuer }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="mt-auto d-flex justify-content-end">
+        <base-button size="large" class="mr-2">Inspect</base-button>
+        <base-button class="mr-2">View</base-button>
+        <base-button class="mr-2">Share</base-button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+import BaseButton from "@/components/BaseButton.vue";
+import { useRoute } from "vue-router";
+import { useStore } from "vuex";
+
+export default defineComponent({
+  components: { BaseButton },
+  async setup() {
+    const route = useRoute();
+    const store = useStore();
+    console.log(route.params.nftAddress);
+    const nft = await store.getters["nft/getByAddress"](
+      route.params.nftAddress as string
+    );
+
+    return {
+      nft,
+      fallbackImg(event: Event): void {
+        (event.target as HTMLImageElement).src = "thumbnail.jpg";
+      },
+    };
+  },
+});
+</script>

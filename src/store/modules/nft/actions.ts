@@ -1,39 +1,36 @@
-import NFTService from "../../../services/NFTService";
+import { fetchWallet } from "../../../services/XummService";
 import { ActionTree } from "vuex";
-import { NFT } from "../../../models/NFT";
-
+interface NFT {
+  url: string;
+  issuer: string;
+  currency: string;
+}
 interface MediaState {
   all: Array<NFT>;
 }
 
+interface FetchParams {
+  walletAddress: string;
+  network: string;
+  handleError: (error: string) => void;
+}
 const actions: ActionTree<NFT, MediaState> = {
-  async fetchAll({ commit }, params): Promise<void> {
-    const { media, total } = await NFTService.list(params);
-    commit("setAll", media);
-    commit("setTotalItems", total);
+  async fetchAll(
+    { commit },
+    { walletAddress, network, handleError }: FetchParams
+  ): Promise<void> {
+    debugger;
+    const all = await fetchWallet(walletAddress, network, handleError);
+    debugger;
+    commit("setAll", all);
   },
-  setQuery({ commit }, query) {
-    commit("setQuery", query);
-  },
-  async create({ commit }, newNFTH: NFT["details"]): Promise<void> {
-    const newAddedMedia = await NFTService.create(newNFTH);
-    commit("add", newAddedMedia);
-  },
-  async approve({ commit }, NFT: NFT): Promise<void> {
-    const approvedNFT = await NFTService.approve(NFT);
-    commit("set", approvedNFT);
-  },
-  async issue({ commit }, NFT: NFT): Promise<void> {
-    const issuedNFT = await NFTService.issue(NFT);
-    commit("set", issuedNFT);
-  },
-  async claim({ commit }, NFT: NFT): Promise<void> {
-    const claimedNFT = await NFTService.claim(NFT);
-    commit("set", claimedNFT);
-  },
-  async remove({ commit }, mediaID: string): Promise<void> {
-    await NFTService.remove(mediaID);
-    commit("remove", mediaID);
-  },
+  // async claim({ commit }, NFT: NFT): Promise<void> {
+  //   const claimedNFT = await NFTService.claim(NFT);
+  //   commit("set", claimedNFT);
+  // },
+  // async remove({ commit }, mediaID: string): Promise<void> {
+  //   await NFTService.remove(mediaID);
+  //   commit("remove", mediaID);
+  // },
 };
 export default actions;

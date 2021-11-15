@@ -10,34 +10,30 @@
     </figure>
     <div class="card-body">
       <p class="card-title">
-        <strong class="h6 font-weight-bold">Token Name </strong>
+        <strong class="h6 font-weight-bold">Token Name </strong><br />
         {{ nft.currency }}
       </p>
-      <p class="card-text flex">
-        <strong class="h7 font-weight-bold">Issuer </strong>
+      <div class="card-text flex">
+        <strong class="h7 font-weight-bold">Issuer </strong><br />
         <a
-          class="btn btn-link d-inline-block text-truncate"
-          style="min-width: 180px; max-width: 200px; width: 100%"
+          class="btn-link d-block"
+          :class="{
+            'text-truncate truncate': !showIssuer,
+            untruncate: showIssuer,
+          }"
           href="#"
           aria-expanded="true"
           @click.prevent="showIssuer = !showIssuer"
           >{{ nft.issuer }}</a
         >
-      </p>
-      <transition name="fade">
-        <span
-          v-if="showIssuer"
-          :class="{ show: showIssuer }"
-          class="collapse block"
-        >
-          {{ nft.issuer }}
-        </span>
-      </transition>
+      </div>
     </div>
     <div class="card-footer d-flex justify-content-end">
-      <a class="mt-4 btn btn-link" href="https://peerkat.io/" target="_blank"
+      <router-link
+        :to="{ path: `/nft/${nft.issuer}` }"
+        class="mt-4 btn btn-link"
         >link
-      </a>
+      </router-link>
     </div>
   </div>
 </template>
@@ -64,3 +60,14 @@ export default defineComponent({
   },
 });
 </script>
+<style>
+.truncate {
+  min-width: 180px;
+  max-width: 200px;
+  width: 100%;
+}
+.untruncate {
+  min-width: auto;
+  max-width: auto;
+}
+</style>

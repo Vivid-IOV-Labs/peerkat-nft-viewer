@@ -7,7 +7,18 @@ const routes = [
     component: () => import("../views/NFTList.vue"),
     meta: {
       withAuth: true,
-      title: "Wallet",
+      title: "Home Wallet Page",
+    },
+  },
+  {
+    path: "/nft/:nftAddress",
+    name: "NFTEdit",
+    component: () => import("../views/NFTDetail.vue"),
+    meta: {
+      withAuth: true,
+      announcer: {
+        message: "NFT Detail Page",
+      },
     },
   },
 ];

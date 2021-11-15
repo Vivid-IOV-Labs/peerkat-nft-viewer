@@ -1,5 +1,5 @@
 <template>
-  <button class="btn btn-primary">
+  <button :class="`btn-${skin} btn-${size}`" class="btn">
     <slot />
   </button>
 </template>
@@ -10,7 +10,8 @@ var theme = (
 ).toLowerCase();
 export default defineComponent({
   props: {
-    status: { type: String, default: () => "primary" },
+    skin: { type: String, default: () => "primary" },
+    size: { type: String, default: () => "sm" },
   },
   setup: () => {
     return {
@@ -22,7 +23,10 @@ export default defineComponent({
 
 <style>
 .btn-primary {
-  background: #3052ff;
+  background: #3052ff !important;
+}
+.btn-primary:hover {
+  background: #7082f9 !important;
 }
 .btn-light {
   background: #f3f5ff;

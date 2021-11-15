@@ -116,22 +116,16 @@ import BaseSelect from "@/components/BaseSelect.vue";
 import BaseDialog from "@/components/BaseDialog.vue";
 import NftCard from "@/components/NftCard.vue";
 import useVuelidate from "@vuelidate/core";
+import { useStore } from "vuex";
 import { isRippleAddress } from "../utils/validators";
 import { required } from "@vuelidate/validators";
 import { useI18n } from "vue-i18n";
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { XrplClient } = require("xrpl-client");
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const xAppToken = urlParams.get("xAppToken"); // || "21df3537-65a3-40c1-8a82-8a7439e1c9f8";
 const xummApiKey = import.meta.env.VITE_XUMM_API_KEY;
 
-interface NFT {
-  url: string;
-  issuer: string;
-  currency: string;
-}
 interface Choice {
   label: string;
   value: string;
@@ -149,91 +143,6 @@ interface OTTData {
     currency: string;
   };
 }
-type line = {
-  balance: string;
-  limit: string;
-  account: string;
-  currency: string;
-};
-function isNFT(l: line): boolean {
-  return (
-    l.balance == "1000000000000000e-96" && l.limit == "1000000000000000e-96"
-  );
-}
-function is_hexadecimal(str: string): boolean {
-  const regexp = /^[0-9a-fA-F]+$/;
-  if (regexp.test(str)) {
-    return true;
-  } else {
-    return false;
-  }
-}
-function hexToString(hex: string) {
-  var strhex = hex.toString(); //force conversion
-  var str = "";
-  for (var i = 0; i < strhex.length; i += 2)
-    str += String.fromCharCode(parseInt(strhex.substr(i, 2), 16));
-  return str.trim();
-}
-function truncate(
-  fullStr: string,
-  strLen = 8,
-  separator = " ............. ",
-  frontChars = 8,
-  backChars = 4
-) {
-  if (fullStr.length <= strLen) return fullStr;
-  return (
-    fullStr.substr(0, frontChars) + separator
-    //+
-    ///fullStr.substr(fullStr.length - backChars)
-  );
-}
-const main = async (
-  walletAddress: string,
-  network: string | string[],
-  handleError: (error: string) => void
-): Promise<NFT[]> => {
-  const X_url = network;
-  const xrpClient = new XrplClient(X_url, {
-    assumeOfflineAfterSeconds: 15,
-    maxConnectionAttempts: 2,
-    connectAttemptTimeoutSeconds: 3,
-  });
-  xrpClient.on("error", (error: string) => {
-    handleError(error);
-  });
-  await xrpClient.ready();
-  const accountLines = await xrpClient.send({
-    command: "account_lines",
-    account: walletAddress,
-  });
-  const { lines } = accountLines;
-  const NFTs = lines.filter(isNFT);
-  const NFTMedia: NFT[] = await Promise.all(
-    NFTs.map(async (line: line) => {
-      const { account, currency } = line;
-      const { account_data } = await xrpClient.send({
-        command: "account_info",
-        account,
-      });
-      const { Domain } = account_data;
-
-      const protocol = is_hexadecimal(hexToString(Domain))
-        ? hexToString(hexToString(Domain))
-        : hexToString(Domain);
-      const domain = hexToString(currency.replace("02", ""));
-
-      return {
-        issuer: account,
-        issuerTruncated: truncate(account),
-        currency: domain,
-        url: protocol + domain,
-      };
-    })
-  );
-  return NFTMedia;
-};
 
 export default defineComponent({
   components: {
@@ -244,6 +153,7 @@ export default defineComponent({
     NftCard,
   },
   async setup() {
+    const store = useStore();
     const { locale } = useI18n({ useScope: "global" });
 
     function handleError(): void {
@@ -257,7 +167,7 @@ export default defineComponent({
     const isLoading = ref(false);
 
     const walletAddress = ref("");
-    const NFTMedia = ref<NFT[]>([]);
+    const NFTMedia = computed(() => store.getters["nft/getAll"]);
     const type_network = ref({ label: "Main", value: "main" });
     const type_networks = [
       { label: "Main", value: "main" },
@@ -305,7 +215,12 @@ export default defineComponent({
         ottdata.nodetype == "TESTNET"
           ? test_networks.map((n) => n.value)
           : main_networks.map((n) => n.value);
-      NFTMedia.value = await main(ottdata.account, net, handleError);
+      // NFTMedia.value = await main(ottdata.account, net, handleError);
+      await store.dispatch("nft/fetchAll", {
+        walletAddress: ottdata.account,
+        network: net,
+        handleError,
+      });
     } else {
       isDialogWalletConnection.value = true;
     }
@@ -337,11 +252,11 @@ export default defineComponent({
           isLoading.value = true;
 
           try {
-            NFTMedia.value = await main(
-              walletAddress.value,
+            await store.dispatch("nft/fetchAll", {
+              walletAddress: walletAddress.value,
               network,
-              handleError
-            );
+              handleError,
+            });
             isDialogWalletConnection.value = false;
             isLoading.value = false;
           } catch (err) {
