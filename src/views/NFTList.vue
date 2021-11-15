@@ -167,7 +167,7 @@ export default defineComponent({
     const isLoading = ref(false);
 
     const walletAddress = ref("");
-    const NFTMedia = computed(() => store.getters["nft/getAll"]);
+    const NFTMedia = computed(() => store.getters["nft/getAll"] || []);
     const type_network = ref({ label: "Main", value: "main" });
     const type_networks = [
       { label: "Main", value: "main" },
