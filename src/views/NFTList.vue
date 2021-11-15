@@ -210,16 +210,18 @@ export default defineComponent({
       const Sdk = new XummSdkJwt(xummApiKey);
 
       // const ottdata: OTTData = await Sdk.getOttData();
-      const ottdata: OTTData = await store.dispatch("nft/getOttData");
-      console.log(ottdata);
-      locale.value = ottdata.locale?.split("-")[0];
+      await store.dispatch("nft/getOttData");
+      const {
+        value: { locale, nodetype, account },
+      } = computed(() => store.getters["xumm/getOttData"]);
+      locale.value = locale.split("-")[0];
       const net =
-        ottdata.nodetype == "TESTNET"
+        nodetype == "TESTNET"
           ? test_networks.map((n) => n.value)
           : main_networks.map((n) => n.value);
       // NFTMedia.value = await main(ottdata.account, net, handleError);
       await store.dispatch("nft/fetchAll", {
-        walletAddress: ottdata.account,
+        walletAddress: account,
         network: net,
         handleError,
       });
