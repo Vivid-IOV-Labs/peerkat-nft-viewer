@@ -210,7 +210,7 @@ export default defineComponent({
       const Sdk = new XummSdkJwt(xummApiKey);
 
       // const ottdata: OTTData = await Sdk.getOttData();
-      await store.dispatch("nft/getOttData");
+      await store.dispatch("xumm/getOttData");
       const {
         value: { locale, nodetype, account },
       } = computed(() => store.getters["xumm/getOttData"]);
