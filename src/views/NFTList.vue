@@ -206,14 +206,15 @@ export default defineComponent({
     if (xAppToken) {
       // eslint-disable-next-line no-undef
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { XummSdkJwt } = require("xumm-sdk");
-      const Sdk = new XummSdkJwt(xummApiKey);
 
       // const ottdata: OTTData = await Sdk.getOttData();
+      console.log("dispatch");
+
       await store.dispatch("xumm/getOttData");
       const {
         value: { locale, nodetype, account },
       } = computed(() => store.getters["xumm/getOttData"]);
+      console.log("locale, nodetype, account");
       console.log(locale, nodetype, account);
       locale.value = locale.split("-")[0];
       const net =
