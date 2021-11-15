@@ -214,6 +214,7 @@ export default defineComponent({
       const {
         value: { locale, nodetype, account },
       } = computed(() => store.getters["xumm/getOttData"]);
+      console.log(locale, nodetype, account);
       locale.value = locale.split("-")[0];
       const net =
         nodetype == "TESTNET"
