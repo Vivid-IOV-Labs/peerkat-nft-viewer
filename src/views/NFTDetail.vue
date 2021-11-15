@@ -83,7 +83,7 @@ export default defineComponent({
       },
       async createTrustline() {
         const created = await Sdk.payload.create(newPayload);
-        trustLinePayload.value = created;
+        console.log(created);
       },
     };
   },
