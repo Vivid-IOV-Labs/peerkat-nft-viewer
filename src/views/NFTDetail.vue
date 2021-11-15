@@ -41,26 +41,26 @@ import { defineComponent } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-const xummApiKey = import.meta.env.VITE_XUMM_API_KEY;
+const xummApiKey = import.meta.env.VITE_XUMM_API_KEY as string;
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-// import { XummSdk, XummTypes } from "xumm-sdk";
-// const Sdk = new XummSdkJwt(xummApiKey);
+import { XummSdkJwt } from "xumm-sdk";
+import type { XummTypes } from "xumm-sdk";
+const Sdk = new XummSdkJwt(xummApiKey);
 
-// const trustlinePayload = {
-//   TransactionType: "TrustSet",
-//   Account: "//USER ADDRESS",
-//   Flags: 131072,
-//   LimitAmount: {
-//     currency: "CURRENCY",
-//     issuer: "//NFT WALLET ADDRESS",
-//     value: "1000000000000000e-96",
-//   },
-// };
-// const newPayload: XummTypes.CreatedPayload = {
-//   user_token: "c5bc4ccc-28fa-4080-b702-0d3aac97b993",
-//   txjson: trustlinePayload,
-// };
+const newPayload: XummTypes.CreatePayload = {
+  user_token: "c5bc4ccc-28fa-4080-b702-0d3aac97b993",
+  txjson: {
+    TransactionType: "TrustSet",
+    Account: "aaaaaaaa-bbbb-cccc-dddd-1234567890ab",
+    Flags: 131072,
+    LimitAmount: {
+      currency: "CURRENCY",
+      issuer: "aaaaaaaa-bbbb-cccc-dddd-1234567890ab",
+      value: "1000000000000000e-96",
+    },
+  },
+};
 export default defineComponent({
   components: { BaseButton },
   async setup() {
@@ -76,9 +76,9 @@ export default defineComponent({
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
-      // async createTrustline(): Promise<CreatedPayload | null>> {
-      //   const created = await Sdk.payload.create(newPayload);
-      // },
+      async createTrustline() {
+        const created = await Sdk.payload.create(newPayload);
+      },
     };
   },
 });

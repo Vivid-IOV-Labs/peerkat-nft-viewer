@@ -1,4 +1,4 @@
-import { fetchWallet } from "../../../services/XummService";
+import { fetchWallet } from "../../../services/XrpService";
 import { ActionTree } from "vuex";
 interface NFT {
   url: string;
