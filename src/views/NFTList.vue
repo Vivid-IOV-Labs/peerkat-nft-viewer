@@ -210,6 +210,7 @@ export default defineComponent({
       const Sdk = new XummSdkJwt(xummApiKey);
 
       const ottdata: OTTData = await Sdk.getOttData();
+      console.log(ottdata);
       locale.value = ottdata.locale?.split("-")[0];
       const net =
         ottdata.nodetype == "TESTNET"

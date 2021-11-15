@@ -41,7 +41,25 @@ import { defineComponent } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
+const xummApiKey = import.meta.env.VITE_XUMM_API_KEY;
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+import { XummSdk, XummTypes } from "xumm-sdk";
+const Sdk = new XummSdkJwt(xummApiKey);
+
+const trustlinePayload = {
+  TransactionType: "TrustSet",
+  Account: "//USER ADDRESS",
+  Flags: 131072,
+  LimitAmount: {
+    currency: "CURRENCY",
+    issuer: "//NFT WALLET ADDRESS",
+    value: "1000000000000000e-96",
+  },
+};
+const newPayload: XummTypes.CreatedPayload = {
+  txjson: trustlinePayload,
+};
 export default defineComponent({
   components: { BaseButton },
   async setup() {
@@ -57,6 +75,9 @@ export default defineComponent({
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
+      // async createTrustline(): Promise<CreatedPayload | null>> {
+      //   const created = await Sdk.payload.create(newPayload);
+      // },
     };
   },
 });
