@@ -34,6 +34,7 @@
     "@types/node": "^15.14.9",
     "@types/sails.io.js": "^1.0.5",
     "@types/vuelidate": "^0.7.14",
+    "@types/ws": "^8.2.0",
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/parser": "^4.28.0",
     "@vitejs/plugin-vue": "^1.2.3",

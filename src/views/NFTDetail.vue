@@ -14,7 +14,7 @@
     </div>
     <div class="col-sm-6 col-xs-12 d-flex flex-column pb-3">
       <h1>Details</h1>
-      <div class="pt-4" style="flex-grow: 1">
+      <div class="pt-4" style="flex: 1">
         <ul class="list-group">
           <li class="list-group-item">
             <h5>Token Name</h5>
@@ -44,22 +44,23 @@ import { useStore } from "vuex";
 const xummApiKey = import.meta.env.VITE_XUMM_API_KEY;
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-import { XummSdk, XummTypes } from "xumm-sdk";
-const Sdk = new XummSdkJwt(xummApiKey);
+// import { XummSdk, XummTypes } from "xumm-sdk";
+// const Sdk = new XummSdkJwt(xummApiKey);
 
-const trustlinePayload = {
-  TransactionType: "TrustSet",
-  Account: "//USER ADDRESS",
-  Flags: 131072,
-  LimitAmount: {
-    currency: "CURRENCY",
-    issuer: "//NFT WALLET ADDRESS",
-    value: "1000000000000000e-96",
-  },
-};
-const newPayload: XummTypes.CreatedPayload = {
-  txjson: trustlinePayload,
-};
+// const trustlinePayload = {
+//   TransactionType: "TrustSet",
+//   Account: "//USER ADDRESS",
+//   Flags: 131072,
+//   LimitAmount: {
+//     currency: "CURRENCY",
+//     issuer: "//NFT WALLET ADDRESS",
+//     value: "1000000000000000e-96",
+//   },
+// };
+// const newPayload: XummTypes.CreatedPayload = {
+//   user_token: "c5bc4ccc-28fa-4080-b702-0d3aac97b993",
+//   txjson: trustlinePayload,
+// };
 export default defineComponent({
   components: { BaseButton },
   async setup() {

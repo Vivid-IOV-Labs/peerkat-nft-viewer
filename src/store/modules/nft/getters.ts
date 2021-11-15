@@ -13,24 +13,24 @@ export default {
     (address: string): NFT | undefined => {
       return state.all.find(({ issuer }) => issuer == address);
     },
-  byTitle:
-    (state: NFTState) =>
-    (title: string): Array<NFT> => {
-      if (title) {
-        return state.all.filter((media) => {
-          const searchParams = title
-            .toLocaleLowerCase()
-            .trim()
-            .split(" ")
-            .join(".*$/|^.*");
-          const searchString = `^.*${searchParams}.*$`;
-          const normalizedTitle = media.details.title
-            .toLocaleLowerCase()
-            .trim();
-          return new RegExp(searchString).test(normalizedTitle);
-        });
-      } else {
-        return state.all;
-      }
-    },
+  // byTitle:
+  //   (state: NFTState) =>
+  //   (title: string): Array<NFT> => {
+  //     if (title) {
+  //       return state.all.filter((media) => {
+  //         const searchParams = title
+  //           .toLocaleLowerCase()
+  //           .trim()
+  //           .split(" ")
+  //           .join(".*$/|^.*");
+  //         const searchString = `^.*${searchParams}.*$`;
+  //         const normalizedTitle = media.details.title
+  //           .toLocaleLowerCase()
+  //           .trim();
+  //         return new RegExp(searchString).test(normalizedTitle);
+  //       });
+  //     } else {
+  //       return state.all;
+  //     }
+  //   },
 };
