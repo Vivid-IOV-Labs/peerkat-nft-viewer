@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
+import { defineComponent, computed, ref } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
