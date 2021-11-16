@@ -1,9 +1,10 @@
-import mutations from "./mutations";
-import actions from "./actions";
-import getters from "./getters";
-import state from "./state";
+import mutations from "../nft/mutations";
+import actions from "../nft/actions";
+import getters from "../nft/getters";
+import state from "../nft/state";
+import { Module } from "vuex";
 
-export default {
+export const NftModule: Module<any, any> = {
   namespaced: true,
   state: state(),
   actions,

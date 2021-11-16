@@ -1,11 +1,11 @@
-import { OttData } from "../../../models/OttData";
+import { xAppOttData } from "xumm-sdk/dist/src/types";
 
 export interface XummState {
-  OttData: OttData | null;
+  ottData: xAppOttData | null;
 }
 
 const state = (): XummState => ({
-  OttData: null,
+  ottData: null,
 });
 
 export default state;

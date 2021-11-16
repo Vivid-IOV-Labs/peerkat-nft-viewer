@@ -1,8 +1,11 @@
 import { createStore, createLogger } from "vuex";
-import nft from "./modules/nft";
+import { NftModule } from "./modules/nft";
+import { XummModule } from "./modules/xumm";
+
 const store = createStore({
   modules: {
-    nft,
+    xumm: XummModule,
+    nft: NftModule,
   },
   strict: true,
   plugins: [createLogger()],

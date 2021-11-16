@@ -1,10 +1,10 @@
 import { MutationTree } from "vuex";
-import { OttData } from "../../../models/OttData";
+import { xAppOttData } from "xumm-sdk/dist/src/types";
 import { XummState } from "./state";
 
 const mutations: MutationTree<XummState> = {
-  setOttData(state: XummState, OttData: OttData): void {
-    state.OttData = OttData;
+  setOttData(state: XummState, OttData: xAppOttData | null): void {
+    state.ottData = OttData;
   },
 };
 

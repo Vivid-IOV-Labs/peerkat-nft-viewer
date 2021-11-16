@@ -1,9 +1,10 @@
-import mutations from "./mutations";
-import actions from "./actions";
-import getters from "./getters";
-import state from "./state";
+import mutations from "../xumm/mutations";
+import actions from "../xumm/actions";
+import getters from "../xumm/getters";
+import state from "../xumm/state";
+import { Module } from "vuex";
 
-export default {
+export const XummModule: Module<any, any> = {
   namespaced: true,
   state: state(),
   actions,

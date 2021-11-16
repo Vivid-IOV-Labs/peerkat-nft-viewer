@@ -1,8 +1,4 @@
-interface NFT {
-  url: string;
-  issuer: string;
-  currency: string;
-}
+import { NFT } from "../../../models/NFT";
 export interface NFTState {
   all: Array<NFT>;
 }
