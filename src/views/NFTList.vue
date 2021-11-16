@@ -130,6 +130,19 @@ interface Choice {
   value: string;
 }
 
+// 1 second ago
+// Error:
+// {"name":"TypeError","message":"Cannot create property 'value' on string 'en'","stack":"TypeError: Cannot create property 'value' on string 'en'\n at setup (https://xapp.peerkat.io/assets/NFTList.903b4929.js:9:13720)"}
+// 1 second ago
+// Error
+// Cannot create property 'value' on string 'en'
+// 1 second ago
+// Error:
+// {"name":"TypeError","message":"Cannot read property 'length' of undefined","stack":"TypeError: Cannot read property 'length' of undefined\n at Proxy. (https://xapp.peerkat.io/assets/NFTList.903b4929.js:9:15117)\n at It (https://xapp.peerkat.io/assets/vendor.e04cbc81.js:1:12705)\n at ce.fn (https://xapp.peerkat.io/assets/vendor.e04cbc81.js:1:34827)\n at ce.run (https://xapp.peerkat.io/assets/vendor.e04cbc81.js:1:3779)\n at M (https://xapp.peerkat.io/assets/vendor.e04cbc81.js:1:35096)\n at https://xapp.peerkat.io/assets/vendor.e04cbc81.js:1:16840"}
+// 1 second ago
+// Error
+// Cannot read property 'length' of undefined
+
 export default defineComponent({
   components: {
     BaseInput,
@@ -197,19 +210,16 @@ export default defineComponent({
       console.log("dispatch");
 
       await store.dispatch("xumm/getOttData");
-      const {
-        value: { locale, nodetype, account },
-      } = computed(() => store.getters["xumm/getOttData"]);
-      console.log("locale, nodetype, account");
-      console.log(locale, nodetype, account);
-      locale.value = locale.split("-")[0];
+      const ottdata = computed(() => store.getters["xumm/getOttData"]);
+
+      locale.value = ottdata.value.locale.split("-")[0];
       const net =
-        nodetype == "TESTNET"
+        ottdata.value.nodetype == "TESTNET"
           ? test_networks.map((n) => n.value)
           : main_networks.map((n) => n.value);
       // NFTMedia.value = await main(ottdata.account, net, handleError);
       await store.dispatch("nft/fetchAll", {
-        walletAddress: account,
+        walletAddress: ottdata.value.account,
         network: net,
         handleError,
       });
