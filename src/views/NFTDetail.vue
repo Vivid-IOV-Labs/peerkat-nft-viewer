@@ -32,8 +32,8 @@
         <base-button size="large" class="mr-2" @click="createTrustline"
           >Inspect</base-button
         >
-        <base-button class="mr-2">View</base-button>
-        <base-button class="mr-2">Share</base-button>
+        <base-button class="mr-2" @click="inspect">View</base-button>
+        <base-button class="mr-2" @click="share">Share</base-button>
       </div>
     </div>
   </div>
