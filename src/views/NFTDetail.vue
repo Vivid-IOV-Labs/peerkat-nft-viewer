@@ -84,8 +84,12 @@ export default defineComponent({
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
       async createTrustline() {
-        const created = await Sdk.payload.create(newPayload);
-        console.log(created);
+        try {
+          const created = await Sdk.payload.create(newPayload);
+          console.log("created", created);
+        } catch (error) {
+          console.log("error", error);
+        }
       },
     };
   },
