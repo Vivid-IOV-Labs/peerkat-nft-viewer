@@ -45,11 +45,9 @@ import BaseButton from "@/components/BaseButton.vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 const xummApiKey = import.meta.env.VITE_XUMM_API_KEY as string;
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-import { XummSdkJwt } from "xumm-sdk";
+import { copyText } from "../utils/copytext";
 import type { XummTypes } from "xumm-sdk";
-const Sdk = new XummSdkJwt(xummApiKey);
+
 export default defineComponent({
   components: { BaseButton },
   async setup() {
@@ -57,22 +55,7 @@ export default defineComponent({
     const store = useStore();
     const trustLinePayload = ref(null);
     console.log(route.params.nftAddress);
-    const {
-      value: { account, user },
-    } = computed(() => store.getters["xumm/getOttData"]);
-    const newPayload: XummTypes.CreatePayload = {
-      user_token: "c5bc4ccc-28fa-4080-b702-0d3aac97b993",
-      txjson: {
-        TransactionType: "TrustSet",
-        Account: account,
-        Flags: 131072,
-        LimitAmount: {
-          currency: "CURRENCY",
-          issuer: user,
-          value: "1000000000000000e-96",
-        },
-      },
-    };
+
     const nft = await store.getters["nft/getByAddress"](
       route.params.nftAddress as string
     );
@@ -84,12 +67,38 @@ export default defineComponent({
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
       async createTrustline() {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const XummSdkJwt = require("xumm-sdk");
+        const Sdk = new XummSdkJwt(xummApiKey);
+        const {
+          value: { account, user },
+        } = computed(() => store.getters["xumm/getOttData"]);
+
+        const newPayload: XummTypes.CreatePayload = {
+          user_token: "c5bc4ccc-28fa-4080-b702-0d3aac97b993",
+          txjson: {
+            TransactionType: "TrustSet",
+            Account: account,
+            Flags: 131072,
+            LimitAmount: {
+              currency: "CURRENCY",
+              issuer: user,
+              value: "1000000000000000e-96",
+            },
+          },
+        };
         try {
           const created = await Sdk.payload.create(newPayload);
           console.log("created", created);
         } catch (error) {
           console.log("error", error);
         }
+      },
+      share() {
+        copyText(window.location.toString());
+      },
+      inspect() {
+        copyText(window.location.toString());
       },
     };
   },

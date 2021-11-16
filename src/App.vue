@@ -1,6 +1,7 @@
 <template>
   <div>
     <VueAnnouncer />
+    <notifications />
     <div v-if="withAuthLayout">
       <auth-layout>
         <RouterView v-slot="{ Component, route }" name="default">
