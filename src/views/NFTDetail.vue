@@ -29,7 +29,9 @@
       </div>
 
       <div class="mt-auto d-flex justify-content-end">
-        <base-button size="large" class="mr-2">Inspect</base-button>
+        <base-button size="large" class="mr-2" @click="createTrustline"
+          >Inspect</base-button
+        >
         <base-button class="mr-2">View</base-button>
         <base-button class="mr-2">Share</base-button>
       </div>
