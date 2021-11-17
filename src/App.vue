@@ -1,7 +1,11 @@
 <template>
   <div>
     <VueAnnouncer />
-    <notifications />
+    <notifications
+      position="bottom center"
+      width="100%"
+      classes="my-notification bg-dark"
+    />
     <div v-if="withAuthLayout">
       <auth-layout>
         <RouterView v-slot="{ Component, route }" name="default">
@@ -62,3 +66,32 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+.my-notification {
+  overflow: hidden;
+  font-size: 0.875rem;
+  text-align: center;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.25rem 0.75rem rgb(0 0 0 / 10%);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  border-radius: 0.25rem;
+}
+.my-notification .notification-title {
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  color: #fff;
+  text-align: center;
+  background-clip: padding-box;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+.my-notification .notification-content {
+  padding: 0.75rem;
+  color: #fff;
+  text-align: center;
+}
+</style>
