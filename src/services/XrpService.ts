@@ -85,6 +85,7 @@ export async function fetchWallet(
         issuer: account,
         issuerTruncated: truncate(account),
         currency,
+        tokenName: domain,
         url: protocol + domain,
       };
     })

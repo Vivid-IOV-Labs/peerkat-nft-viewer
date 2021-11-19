@@ -11,7 +11,7 @@
     <div class="card-body">
       <p class="card-title">
         <strong class="h6 font-weight-bold">Token Name </strong><br />
-        {{ nft.currency }}
+        {{ nft.tokenName }}
       </p>
       <div class="card-text flex">
         <strong class="h7 font-weight-bold">Issuer </strong><br />
