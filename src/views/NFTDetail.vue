@@ -70,9 +70,8 @@ export default defineComponent({
         const {
           value: { account, user },
         } = computed(() => store.getters["xumm/getOttData"]);
-        console.log(nft);
         const newPayload: XummTypes.CreatePayload = {
-          //user_token: "c5bc4ccc-28fa-4080-b702-0d3aac97b993",
+          user_token: user,
           txjson: {
             TransactionType: "TrustSet",
             // Account: account,
