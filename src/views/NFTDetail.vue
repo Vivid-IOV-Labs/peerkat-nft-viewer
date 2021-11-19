@@ -44,7 +44,6 @@ import { defineComponent, computed, ref } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-const xummApiKey = import.meta.env.VITE_XUMM_API_KEY as string;
 import { copyText } from "../utils/copytext";
 import type { XummTypes } from "xumm-sdk";
 
@@ -67,6 +66,8 @@ export default defineComponent({
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
       async createTrustline() {
+        const xummApiKey = import.meta.env.VITE_XUMM_API_KEY as string;
+
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         const XummSdkJwt = require("xumm-sdk");
         const Sdk = new XummSdkJwt(xummApiKey);
