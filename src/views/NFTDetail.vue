@@ -30,7 +30,7 @@
 
       <div class="mt-auto d-flex justify-content-end">
         <base-button size="large" class="mr-2" @click="createTrustline"
-          >Inspect</base-button
+          >Trustline</base-button
         >
         <base-button class="mr-2" @click="inspect">View</base-button>
         <base-button class="mr-2" @click="share">Share</base-button>
@@ -74,16 +74,16 @@ export default defineComponent({
         const {
           value: { account, user },
         } = computed(() => store.getters["xumm/getOttData"]);
-
+        console.log(nft);
         const newPayload: XummTypes.CreatePayload = {
-          user_token: "c5bc4ccc-28fa-4080-b702-0d3aac97b993",
+          //user_token: "c5bc4ccc-28fa-4080-b702-0d3aac97b993",
           txjson: {
             TransactionType: "TrustSet",
-            Account: account,
+            // Account: account,
             Flags: 131072,
             LimitAmount: {
-              currency: "CURRENCY",
-              issuer: user,
+              currency: nft.currency,
+              issuer: nft.issuer,
               value: "1000000000000000e-96",
             },
           },
