@@ -46,7 +46,7 @@ import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { copyText } from "../utils/copytext";
 import type { XummTypes } from "xumm-sdk";
-const xummApiKey = import.meta.env.VITE_XUMM_API_KEY as string;
+import { createPaylod } from "../services/XummService";
 
 export default defineComponent({
   components: { BaseButton },
@@ -59,9 +59,6 @@ export default defineComponent({
     const nft = await store.getters["nft/getByAddress"](
       route.params.nftAddress as string
     );
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const XummSdkJwt = require("xumm-sdk");
-    const Sdk = new XummSdkJwt(xummApiKey);
 
     return {
       nft,
@@ -88,7 +85,7 @@ export default defineComponent({
           },
         };
         try {
-          const created = await Sdk.payload.create(newPayload);
+          const created = await createPaylod(newPayload);
           console.log("created", created);
         } catch (error) {
           console.log("error", error);

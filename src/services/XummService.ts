@@ -1,4 +1,5 @@
 const xummApiKey = import.meta.env.VITE_XUMM_API_KEY as string;
+import type { XummTypes } from "xumm-sdk";
 
 import { xAppOttData } from "xumm-sdk/dist/src/types";
 let Sdk: any = null;
@@ -17,5 +18,18 @@ export async function getOttData(): Promise<xAppOttData> {
     console.log("calling sdk getOttdata");
     const ottdata = await Sdk.getOttData();
     return ottdata;
+  }
+}
+
+export async function createPaylod(newPayload: XummTypes.CreatePayload) {
+  if (Sdk) {
+    const created = await Sdk.payload.create(newPayload);
+
+    return created;
+  } else {
+    initialize();
+    const created = await Sdk.payload.create(newPayload);
+
+    return created;
   }
 }
