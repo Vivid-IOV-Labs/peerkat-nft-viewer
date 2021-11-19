@@ -29,9 +29,14 @@
       </div>
 
       <div class="mt-auto d-flex justify-content-end">
-        <base-button size="large" class="mr-2" @click="createTrustline"
+        <base-button
+          v-if="!signLink"
+          size="large"
+          class="mr-2"
+          @click="createTrustline"
           >Trustline</base-button
         >
+        <a v-if="signLink" class="bnt" :href="signLink">sign nft</a>
         <base-button class="mr-2" @click="inspect">View</base-button>
         <base-button class="mr-2" @click="share">Share</base-button>
       </div>
@@ -54,6 +59,7 @@ export default defineComponent({
     const route = useRoute();
     const store = useStore();
     const trustLinePayload = ref(null);
+    const signLink = ref(null);
     console.log(route.params.nftAddress);
 
     const nft = await store.getters["nft/getByAddress"](
@@ -63,12 +69,13 @@ export default defineComponent({
     return {
       nft,
       trustLinePayload,
+      signLink,
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
       async createTrustline() {
         const {
-          value: { account, user },
+          value: { user },
         } = computed(() => store.getters["xumm/getOttData"]);
         const newPayload: XummTypes.CreatePayload = {
           user_token: user,
@@ -84,8 +91,11 @@ export default defineComponent({
           },
         };
         try {
-          const created = await createPaylod(newPayload);
-          console.log("created", created);
+          const {
+            next: { always },
+          } = await createPaylod(newPayload);
+          console.log("got events ", always);
+          signLink.value = always;
         } catch (error) {
           console.log("error", error);
         }
