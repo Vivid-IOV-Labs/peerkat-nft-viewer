@@ -34,7 +34,7 @@
               :errors="formatVuelidateErrors(v$.walletAddress.$errors)"
             ></base-input>
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <base-select
               id="type_networks"
               v-model="type_network"
@@ -61,7 +61,7 @@
               label-text="Network"
               class="w-full max-w-xl"
             ></base-select>
-          </div>
+          </div> -->
         </form>
       </template>
       <template #footer>

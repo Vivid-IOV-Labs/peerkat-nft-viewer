@@ -21,7 +21,9 @@ export async function getOttData(): Promise<xAppOttData> {
   }
 }
 
-export async function createPaylod(newPayload: XummTypes.CreatePayload) {
+export async function createPaylod(
+  newPayload: XummTypes.CreatePayload
+): Promise<any> {
   if (Sdk) {
     const created = await Sdk.payload.create(newPayload);
 

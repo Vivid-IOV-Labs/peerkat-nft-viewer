@@ -11,9 +11,20 @@ const routes = [
     },
   },
   {
-    path: "/nft/:nftAddress",
-    name: "NFTEdit",
+    path: "/nft/:nftAddress/view",
+    name: "NFTDetail",
     component: () => import("../views/NFTDetail.vue"),
+    meta: {
+      withAuth: true,
+      announcer: {
+        message: "NFT Detail Page",
+      },
+    },
+  },
+  {
+    path: "/nft/:nftAddress/update",
+    name: "NFTUpdate",
+    component: () => import("../views/NFTUpdate.vue"),
     meta: {
       withAuth: true,
       announcer: {

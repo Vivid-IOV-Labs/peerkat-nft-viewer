@@ -30,7 +30,12 @@
     </div>
     <div class="card-footer d-flex justify-content-end">
       <router-link
-        :to="{ path: `/nft/${nft.issuer}` }"
+        :to="{ path: `/nft/${nft.issuer}/update` }"
+        class="mt-4 mr-2 btn btn-link"
+        >Update
+      </router-link>
+      <router-link
+        :to="{ path: `/nft/${nft.issuer}/view` }"
         class="mt-4 btn btn-link"
         >link
       </router-link>
