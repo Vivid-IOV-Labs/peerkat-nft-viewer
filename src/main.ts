@@ -34,7 +34,26 @@ if (process.env.NODE_ENV === "development") {
     .mount("#app");
 }
 
-console.log("window", window);
+console.log(window);
 console.log("isWebView", isWebView());
 console.log("isIosWebView", isIosWebView());
 console.log("isAndroidWebView", isAndroidWebView());
+
+const standalone = window.navigator.standalone,
+  userAgent = window.navigator.userAgent.toLowerCase(),
+  safari = /safari/.test(userAgent),
+  ios = /iphone|ipod|ipad/.test(userAgent);
+
+if (ios) {
+  if (!standalone && safari) {
+    // Safari
+  } else if (!standalone && !safari) {
+    // iOS webview
+  }
+} else {
+  if (userAgent.includes("wv")) {
+    // Android webview
+  } else {
+    // Chrome
+  }
+}

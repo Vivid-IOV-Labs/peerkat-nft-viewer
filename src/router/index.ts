@@ -41,7 +41,7 @@ const router = createRouter({
 
 // router.beforeEach((to, from, next) => {
 //   if (to.matched.some((record) => record.meta.withAuth)) {
-//     if (localStorage.getItem("token") == null) {
+//     if (localStorage.getItem("address") == null) {
 //       next({
 //         path: "/",
 //         params: { nextUrl: to.fullPath },
