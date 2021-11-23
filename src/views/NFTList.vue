@@ -154,8 +154,8 @@ export default defineComponent({
     const isLoggedIn = !!window.localStorage.getItem("address");
     const isDialogWalletConnection = ref(isLoggedIn);
     const isLoading = ref(false);
-
-    const walletAddress = ref("");
+    const adddress = isLoggedIn ? window.localStorage.getItem("address") : "";
+    const walletAddress = ref(adddress);
     const NFTMedia = computed(() => store.getters["nft/getAll"] || []);
     const type_network = ref({ label: "Main", value: "main" });
     const type_networks = [
