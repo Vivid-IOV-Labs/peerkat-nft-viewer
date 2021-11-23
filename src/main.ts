@@ -43,3 +43,15 @@ const is_uiwebview = /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(
   navigator.userAgent
 );
 console.log("is_uiwebview", is_uiwebview);
+
+const hours = 1; // Reset when storage is more than 24hours
+const now = new Date().getTime();
+const setupTime = Number(localStorage.getItem("setupTime"));
+if (setupTime == null) {
+  localStorage.setItem("setupTime", now.toString());
+} else {
+  if (now - setupTime > hours * 60 * 60 * 1000) {
+    localStorage.clear();
+    localStorage.setItem("setupTime", now.toString());
+  }
+}

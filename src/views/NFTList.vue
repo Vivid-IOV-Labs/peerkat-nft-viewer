@@ -2,7 +2,16 @@
   <div class="container">
     <div class="flex flex-col justify-center items-center mb-2">
       <h2>
-        <span>{{ $t("welcome") }}</span>
+        <span>{{ $t("welcome") }} </span><br />
+        <small style="font-size: 1rem; font-weight: bold" class="text-xs">{{
+          walletAddress
+        }}</small>
+        <button
+          class="ml-2 btn btn-primary btn-xs"
+          @click.prevent="isDialogWalletConnection = true"
+        >
+          change
+        </button>
       </h2>
       <hr />
     </div>
@@ -152,7 +161,7 @@ export default defineComponent({
 
     const showError = ref(false);
     const isLoggedIn = !!window.localStorage.getItem("address");
-    const isDialogWalletConnection = ref(isLoggedIn);
+    const isDialogWalletConnection = ref(false);
     const isLoading = ref(false);
     const adddress = isLoggedIn ? window.localStorage.getItem("address") : "";
     const walletAddress = ref(adddress);
@@ -191,6 +200,29 @@ export default defineComponent({
     const v$ = useVuelidate(rules, {
       walletAddress,
     });
+    const populateNFTs = async () => {
+      const network =
+        type_network.value.value == "test"
+          ? test_network.value.value
+          : main_network.value.value;
+      if (network) {
+        isLoading.value = true;
+
+        try {
+          await store.dispatch("nft/fetchAll", {
+            walletAddress: walletAddress.value,
+            network,
+            handleError,
+          });
+          isDialogWalletConnection.value = false;
+          isLoading.value = false;
+        } catch (err) {
+          showError.value = true;
+          isDialogWalletConnection.value = false;
+          isLoading.value = false;
+        }
+      }
+    };
 
     if (xAppToken) {
       // eslint-disable-next-line no-undef
@@ -213,6 +245,8 @@ export default defineComponent({
         network: net,
         handleError,
       });
+    } else if (isLoggedIn) {
+      populateNFTs();
     } else {
       isDialogWalletConnection.value = true;
     }
@@ -230,33 +264,12 @@ export default defineComponent({
       NFTMedia,
       isLoading,
       showError,
+      walletAddress,
+      populateNFTs,
       formatVuelidateErrors(errors: any[]) {
         return errors.map((error) => {
           return { text: error.$message, key: error.$uid };
         });
-      },
-      async populateNFTs() {
-        const network =
-          type_network.value.value == "test"
-            ? test_network.value.value
-            : main_network.value.value;
-        if (network) {
-          isLoading.value = true;
-
-          try {
-            await store.dispatch("nft/fetchAll", {
-              walletAddress: walletAddress.value,
-              network,
-              handleError,
-            });
-            isDialogWalletConnection.value = false;
-            isLoading.value = false;
-          } catch (err) {
-            showError.value = true;
-            isDialogWalletConnection.value = false;
-            isLoading.value = false;
-          }
-        }
       },
     };
   },
