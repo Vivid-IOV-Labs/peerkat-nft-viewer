@@ -7,6 +7,11 @@ import { i18n } from "./i18n";
 import VueAxe, { VueAxePopup } from "vue-axe";
 import VueAnnouncer from "@vue-a11y/announcer";
 import Notifications from "@kyvg/vue3-notification";
+import {
+  isAndroidWebView,
+  isIosWebView,
+  isWebView,
+} from "./utils/isIosWebView";
 
 if (process.env.NODE_ENV === "development") {
   createApp({
@@ -28,3 +33,8 @@ if (process.env.NODE_ENV === "development") {
     .use(Notifications)
     .mount("#app");
 }
+
+console.log("window", window);
+console.log("isWebView", isWebView());
+console.log("isIosWebView", isIosWebView());
+console.log("isAndroidWebView", isAndroidWebView());

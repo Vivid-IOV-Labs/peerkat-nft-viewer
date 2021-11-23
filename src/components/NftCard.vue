@@ -1,51 +1,58 @@
 <template>
-  <div class="card m-4">
-    <figure>
-      <img
-        class="card-img-top"
-        :src="posterUrl"
-        alt="Card image cap"
-        @error="fallbackImg"
-      />
-    </figure>
-    <div class="card-body">
-      <p class="card-title">
-        <strong class="h6 font-weight-bold">Token Name </strong><br />
-        {{ nft.tokenName }}
-      </p>
-      <div class="card-text flex">
-        <strong class="h7 font-weight-bold">Issuer </strong><br />
-        <a
-          class="btn-link d-block"
-          :class="{
-            'text-truncate truncate': !showIssuer,
-            untruncate: showIssuer,
-          }"
-          href="#"
-          aria-expanded="true"
-          @click.prevent="showIssuer = !showIssuer"
-          >{{ nft.issuer }}</a
-        >
+  <base-card class="card m-4">
+    <template #picture>
+      <figure>
+        <img
+          class="card-img-top"
+          :src="posterUrl"
+          alt="Card image cap"
+          @error="fallbackImg"
+        />
+      </figure>
+    </template>
+
+    <template #title>
+      <strong class="h6 font-weight-bold">Token Name </strong><br />
+      {{ nft.tokenName }}
+    </template>
+    <template #text>
+      <strong class="h7 font-weight-bold">Issuer </strong><br />
+      <a
+        class="btn-link d-block"
+        :class="{
+          'text-truncate truncate': !showIssuer,
+          untruncate: showIssuer,
+        }"
+        href="#"
+        aria-expanded="true"
+        @click.prevent="showIssuer = !showIssuer"
+        >{{ nft.issuer }}</a
+      >
+    </template>
+    <template #footer>
+      <div class="d-flex justify-content-end">
+        <router-link
+          :to="{ path: `/nft/${nft.issuer}/update` }"
+          class="mt-4 mr-2 btn btn-link"
+          >Update
+        </router-link>
+        <router-link
+          :to="{ path: `/nft/${nft.issuer}/view` }"
+          class="mt-4 btn btn-link"
+          >link
+        </router-link>
       </div>
-    </div>
-    <div class="card-footer d-flex justify-content-end">
-      <router-link
-        :to="{ path: `/nft/${nft.issuer}/update` }"
-        class="mt-4 mr-2 btn btn-link"
-        >Update
-      </router-link>
-      <router-link
-        :to="{ path: `/nft/${nft.issuer}/view` }"
-        class="mt-4 btn btn-link"
-        >link
-      </router-link>
-    </div>
-  </div>
+    </template>
+  </base-card>
 </template>
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+import BaseCard from "@/components/BaseCard.vue";
 
 export default defineComponent({
+  components: {
+    BaseCard,
+  },
   props: {
     nft: { type: Object, required: true },
   },

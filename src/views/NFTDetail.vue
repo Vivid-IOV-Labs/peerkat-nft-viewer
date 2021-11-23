@@ -12,34 +12,39 @@
         </figure>
       </div>
     </div>
-    <div class="col-sm-6 col-xs-12 d-flex flex-column pb-3">
-      <h1>Details</h1>
-      <div class="pt-4" style="flex: 1">
-        <pre>{{ trustLinePayload }}</pre>
-        <ul class="list-group">
-          <li class="list-group-item">
-            <h5>Token Name</h5>
-            {{ nft.currency }}
-          </li>
-          <li class="list-group-item">
-            <h5>Issuer</h5>
-            {{ nft.issuer }}
-          </li>
-        </ul>
-      </div>
-
-      <div class="mt-auto d-flex justify-content-end">
-        <base-button
-          v-if="!signLink"
-          size="large"
-          class="mr-2"
-          @click="createTrustline"
-          >Trustline</base-button
-        >
-        <a v-if="signLink" class="bnt" :href="signLink">sign nft</a>
-        <base-button class="mr-2" @click="inspect">View</base-button>
-        <base-button class="mr-2" @click="share">Share</base-button>
-      </div>
+    <div class="col-sm-6 col-xs-12 pb-3">
+      <base-card class="d-flex flex-column">
+        <template #title>
+          <h1>Details</h1>
+        </template>
+        <template #text style="flex: 1">
+          <div class="pt-4">
+            <pre>{{ trustLinePayload }}</pre>
+            <ul class="list-group">
+              <li class="list-group-item">
+                <h5>Token Name</h5>
+                {{ nft.currency }}
+              </li>
+              <li class="list-group-item">
+                <h5>Issuer</h5>
+                {{ nft.issuer }}
+              </li>
+            </ul>
+          </div>
+        </template>
+        <template #footer class="mt-auto d-flex justify-content-end">
+          <base-button
+            v-if="!signLink"
+            size="large"
+            class="mr-2"
+            @click="createTrustline"
+            >Trustline</base-button
+          >
+          <a v-if="signLink" class="bnt" :href="signLink">sign nft</a>
+          <base-button class="mr-2" @click="inspect">View</base-button>
+          <base-button class="mr-2" @click="share">Share</base-button>
+        </template>
+      </base-card>
     </div>
   </div>
 </template>
@@ -47,14 +52,15 @@
 <script lang="ts">
 import { defineComponent, computed, ref } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
+import BaseCard from "@/components/BaseCard.vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { copyText } from "../utils/copytext";
 import type { XummTypes } from "xumm-sdk";
 import { createPaylod } from "../services/XummService";
-
+import { fetchOne } from "../services/XrpService";
 export default defineComponent({
-  components: { BaseButton },
+  components: { BaseButton, BaseCard },
   async setup() {
     const route = useRoute();
     const store = useStore();
@@ -62,10 +68,10 @@ export default defineComponent({
     const signLink = ref<string | undefined>(undefined);
     console.log(route.params.nftAddress);
 
-    const nft = await store.getters["nft/getByAddress"](
-      route.params.nftAddress as string
-    );
-
+    // const nft = await store.getters["nft/getByAddress"](
+    //   route.params.nftAddress as string
+    // );
+    const nft = await fetchOne(route.params.nftAddress as string);
     return {
       nft,
       trustLinePayload,

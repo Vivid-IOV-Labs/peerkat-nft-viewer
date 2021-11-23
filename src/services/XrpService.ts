@@ -148,7 +148,7 @@ const test_networks = [
   "wss://s.altnet.rippletest.net:51233",
   "wss://xrpl.linkwss://testnet.xrpl-labs.com",
 ];
-let xrpClientInstance: XrplClient | null = null;
+let xrpClientInstance: typeof XrplClient | null = null;
 
 // export async function init(
 //   network: string | string[],
@@ -167,47 +167,30 @@ let xrpClientInstance: XrplClient | null = null;
 //   return xrpClientInstance;
 // }
 
-export async function init(
-  handleError: (error: Error) => void
-): Promise<XrplClient> {
+export async function init(): Promise<typeof XrplClient> {
+  //handleError: (error: Error) => void
   const X_url = test_networks;
-  debugger;
   xrpClientInstance = new XrplClient(X_url, {
     assumeOfflineAfterSeconds: 15,
     maxConnectionAttempts: 2,
     connectAttemptTimeoutSeconds: 3,
   });
-  xrpClientInstance.on("error", (error) => handleError(error));
   await xrpClientInstance.ready();
   return xrpClientInstance;
 }
 
 export async function fetchWallet(
-  walletAddress: string,
-  network: string | string[],
-  handleError: (error: string) => void
-): Promise<NFT[]> {
+  walletAddress: string //handleError: (error: Error | string) => void
+): Promise<any> {
   // debugger;
-  // const xrpClient: XrplClient = await init(network, handleError);
-  // debugger;
-  const client = new XrplClient(test_networks);
-  const serverInfo = await client.send({ command: "server_info" });
-  client.on("error", (error) => console.log(error));
-  client.on("ledger", (ledger) => {
-    console.log("Ledger", ledger);
-  });
-  console.log({ serverInfo });
-  debugger;
-  console.log("walletAddress", walletAddress);
+  const client: typeof XrplClient = await init();
   try {
     const accountLines = await client.send({
       command: "account_lines",
       account: walletAddress,
     });
-    debugger;
     const { lines } = accountLines;
     const NFTs = lines.filter(isNFT);
-    debugger;
     const NFTMedia: NFT[] = await Promise.all(
       NFTs.map(async (line: line) => {
         const { account, currency } = line;
@@ -215,20 +198,7 @@ export async function fetchWallet(
           command: "account_info",
           account,
         });
-        const { Domain } = account_data;
-
-        const protocol = is_hexadecimal(hexToString(Domain))
-          ? hexToString(hexToString(Domain))
-          : hexToString(Domain);
-        const domain = hexToString(currency.replace("02", ""));
-
-        return {
-          issuer: account,
-          issuerTruncated: truncate(account),
-          currency,
-          tokenName: domain,
-          url: protocol + domain,
-        };
+        return getOne(account_data, account, currency);
       })
     );
     return NFTMedia;
@@ -237,17 +207,31 @@ export async function fetchWallet(
   }
 }
 
-export async function fetchOne(
-  account: string,
-  network: string | string[],
-  handleError: (error: string) => void
-) {
-  const xrpClient: XrplClient = await init(network, handleError);
+export async function fetchOne(account: string) {
+  const client: typeof XrplClient = await init();
 
-  return await xrpClient.send({
+  const { account_data } = await client.send({
     command: "account_info",
     account,
   });
+
+  return getOne(account_data, account);
+}
+function getOne(account_data: any, account: string, currency = "") {
+  const { Domain } = account_data;
+
+  const protocol = is_hexadecimal(hexToString(Domain))
+    ? hexToString(hexToString(Domain))
+    : hexToString(Domain);
+  const domain = hexToString(currency.replace("02", ""));
+
+  return {
+    issuer: account,
+    issuerTruncated: truncate(account),
+    currency,
+    tokenName: domain,
+    url: protocol + domain,
+  };
 }
 
 // const Singleton = (function () {

@@ -6,14 +6,11 @@ import { NFTState } from "./state";
 interface FetchParams {
   walletAddress: string;
   network: string;
-  handleError: (error: string) => void;
+  // handleError: (error: string) => void;
 }
 const actions: ActionTree<NFT, NFTState> = {
-  async fetchAll(
-    { commit },
-    { walletAddress, network, handleError }: FetchParams
-  ): Promise<void> {
-    const all = await fetchWallet(walletAddress, network, handleError);
+  async fetchAll({ commit }, { walletAddress }: FetchParams): Promise<void> {
+    const all = await fetchWallet(walletAddress);
     commit("setAll", all);
   },
 };
