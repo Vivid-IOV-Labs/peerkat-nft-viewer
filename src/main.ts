@@ -39,21 +39,7 @@ console.log("isWebView", isWebView());
 console.log("isIosWebView", isIosWebView());
 console.log("isAndroidWebView", isAndroidWebView());
 
-const standalone = window.navigator.standalone,
-  userAgent = window.navigator.userAgent.toLowerCase(),
-  safari = /safari/.test(userAgent),
-  ios = /iphone|ipod|ipad/.test(userAgent);
-
-if (ios) {
-  if (!standalone && safari) {
-    // Safari
-  } else if (!standalone && !safari) {
-    // iOS webview
-  }
-} else {
-  if (userAgent.includes("wv")) {
-    // Android webview
-  } else {
-    // Chrome
-  }
-}
+const is_uiwebview = /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(
+  navigator.userAgent
+);
+console.log("is_uiwebview", is_uiwebview);

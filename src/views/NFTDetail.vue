@@ -1,10 +1,10 @@
 <template>
   <div class="row flex items-center">
-    <div class="col-sm-4 col-offset-1 col-xs-12 px-4">
+    <div class="col-sm-4 col-offset-2 col-xs-12">
       <div class="">
         <figure>
           <img
-            class="card-img-top"
+            class="card-img"
             :src="nft.url"
             alt="Card image cap"
             @error="fallbackImg"
@@ -12,8 +12,8 @@
         </figure>
       </div>
     </div>
-    <div class="col-sm-6 col-xs-12 pb-3">
-      <base-card class="d-flex flex-column">
+    <div class="col-sm-8 col-xs-12 pb-3">
+      <base-card style="height: 100%; width: 100%" class="d-flex flex-column">
         <template #title>
           <h1>Details</h1>
         </template>
@@ -32,7 +32,7 @@
             </ul>
           </div>
         </template>
-        <template #footer class="mt-auto d-flex justify-content-end">
+        <template #footer>
           <base-button
             v-if="!signLink"
             size="large"
@@ -71,7 +71,10 @@ export default defineComponent({
     // const nft = await store.getters["nft/getByAddress"](
     //   route.params.nftAddress as string
     // );
-    const nft = await fetchOne(route.params.nftAddress as string);
+    const nft = await fetchOne(
+      route.params.nftAddress.toString(),
+      route.params.currency.toString()
+    );
     return {
       nft,
       trustLinePayload,

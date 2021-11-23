@@ -7,7 +7,7 @@
         <slot name="text"></slot>
       </div>
     </div>
-    <div class="card-footer">
+    <div class="card-footer mt-auto d-flex justify-content-end">
       <slot name="footer"></slot>
     </div>
   </div>

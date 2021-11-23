@@ -189,6 +189,8 @@ export async function fetchWallet(
       command: "account_lines",
       account: walletAddress,
     });
+    localStorage.setItem("address", walletAddress);
+
     const { lines } = accountLines;
     const NFTs = lines.filter(isNFT);
     const NFTMedia: NFT[] = await Promise.all(
@@ -207,7 +209,10 @@ export async function fetchWallet(
   }
 }
 
-export async function fetchOne(account: string) {
+export async function fetchOne(
+  account: string,
+  currency: string
+): Promise<NFT> {
   const client: typeof XrplClient = await init();
 
   const { account_data } = await client.send({
@@ -215,7 +220,7 @@ export async function fetchOne(account: string) {
     account,
   });
 
-  return getOne(account_data, account);
+  return getOne(account_data, account, currency);
 }
 function getOne(account_data: any, account: string, currency = "") {
   const { Domain } = account_data;

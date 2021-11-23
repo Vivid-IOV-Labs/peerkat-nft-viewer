@@ -25,12 +25,17 @@
               </template>
               <template #fallback>
                 <div
-                  style="height: 100%; width: 100%"
+                  style="
+                    height: 100%;
+                    width: 100%;
+                    position: fixed;
+                    opacity: 0.8;
+                  "
                   class="d-flex align-items-center justify-content-center"
                 >
                   <div
                     class="spinner-border"
-                    style="width: 4rem; height: 4rem"
+                    style="width: 4rem; height: 4rem; color: #666"
                     role="status"
                   >
                     <span class="sr-only">Loading...</span>
