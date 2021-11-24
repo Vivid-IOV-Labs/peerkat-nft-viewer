@@ -1,10 +1,47 @@
 import * as clipboard from "clipboard-polyfill/text";
 import { notify } from "@kyvg/vue3-notification";
 
+// export async function copyText(text: string): Promise<void> {
+//   await clipboard.writeText(text);
+//   notify({
+//     title: "info",
+//     text: "Copied successfully",
+//   });
+// }
+function copyTextValueOld(copyText: string) {
+  const input = document.createElement("input");
+  input.setAttribute("type", "hidden");
+  input.setAttribute("value", copyText);
+  input.setAttribute("type", "text");
+  document.body.appendChild(input);
+  input.select();
+  input.setSelectionRange(0, 99999); /* For mobile devices */
+
+  try {
+    document.execCommand("copy");
+
+    notify({
+      title: "info",
+      text: "Copied successfully",
+    });
+  } catch (err) {
+    notify({
+      title: "error",
+      text: "Not Copied",
+    });
+  }
+  /* unselect the range */
+  input.setAttribute("type", "hidden");
+  window?.getSelection()?.removeAllRanges();
+}
 export async function copyText(text: string): Promise<void> {
-  await clipboard.writeText(text);
-  notify({
-    title: "info",
-    text: "Copied successfully",
-  });
+  try {
+    await clipboard.writeText(text);
+    notify({
+      title: "info",
+      text: "Copied successfully",
+    });
+  } catch (err) {
+    await copyTextValueOld(text);
+  }
 }
