@@ -3,6 +3,8 @@ function command(command: string, ...args: any) {
     window.ReactNativeWebView &&
     typeof window.ReactNativeWebView !== "undefined"
   ) {
+    console.log(command, ...args);
+
     window.ReactNativeWebView.postMessage(
       JSON.stringify({
         command,
