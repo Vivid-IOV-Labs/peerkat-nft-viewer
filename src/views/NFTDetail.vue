@@ -8,7 +8,52 @@
     :label-hidden="true"
     style="width: 200px"
   ></base-select>
-  <div class="row flex items-center">
+  <base-card-page style="height: 100%; width: 100%" class="d-flex flex-column">
+    <template #title>
+      <h1>Details</h1>
+    </template>
+    <template #picture>
+      <figure>
+        <img
+          class="card-img"
+          :src="nft.url"
+          alt="Card image cap"
+          @error="fallbackImg"
+        />
+      </figure>
+    </template>
+    <template #text style="flex: 1">
+      <div class="pt-4">
+        <pre>{{ trustLinePayload }}</pre>
+        <ul class="list-group">
+          <li class="list-group-item">
+            <h5>Token Name</h5>
+            {{ nft.currency }}
+          </li>
+          <li class="list-group-item">
+            <h5>Issuer</h5>
+            {{ nft.issuer }}
+          </li>
+        </ul>
+      </div>
+    </template>
+    <template #footer>
+      <base-button
+        v-if="!signLink"
+        size="large"
+        class="mr-2"
+        @click="createTrustline"
+        >Trustline</base-button
+      >
+      <a v-if="signLink" class="bnt" :href="signLink">sign nft</a>
+      <external-link
+        :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
+        >External link</external-link
+      >
+      <base-button class="mr-2" @click="share">Share</base-button>
+    </template>
+  </base-card-page>
+  <!-- <div class="row flex items-center">
     <div class="col-sm-4 col-offset-2 col-xs-12">
       <div class="">
         <figure>
@@ -22,9 +67,22 @@
       </div>
     </div>
     <div class="col-sm-8 col-xs-12 pb-3">
-      <base-card style="height: 100%; width: 100%" class="d-flex flex-column">
+      <base-card-page
+        style="height: 100%; width: 100%"
+        class="d-flex flex-column"
+      >
         <template #title>
           <h1>Details</h1>
+        </template>
+        <template #picture>
+          <figure>
+            <img
+              class="card-img"
+              :src="nft.url"
+              alt="Card image cap"
+              @error="fallbackImg"
+            />
+          </figure>
         </template>
         <template #text style="flex: 1">
           <div class="pt-4">
@@ -56,15 +114,15 @@
           >
           <base-button class="mr-2" @click="share">Share</base-button>
         </template>
-      </base-card>
+      </base-card-page>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, ref } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
-import BaseCard from "@/components/BaseCard.vue";
+import BaseCardPage from "@/components/BaseCardPage.vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { copyText } from "../utils/copytext";
@@ -75,7 +133,7 @@ import BaseSelect from "@/components/BaseSelect.vue";
 import ExternalLink from "../components/ExternalLink.vue";
 
 export default defineComponent({
-  components: { BaseButton, BaseCard, BaseSelect, ExternalLink },
+  components: { BaseButton, BaseCardPage, BaseSelect, ExternalLink },
   async setup() {
     const route = useRoute();
     const store = useStore();

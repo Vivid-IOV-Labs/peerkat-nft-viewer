@@ -249,7 +249,7 @@ export default defineComponent({
         handleError,
       });
     } else if (isLoggedIn) {
-      await main();
+      //await main();
       populateNFTs();
     } else {
       isDialogWalletConnection.value = true;
