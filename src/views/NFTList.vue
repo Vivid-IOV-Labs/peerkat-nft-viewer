@@ -132,11 +132,19 @@ import { useStore } from "vuex";
 import { isRippleAddress } from "../utils/validators";
 import { required } from "@vuelidate/validators";
 import { useI18n } from "vue-i18n";
-
+import { inject } from "vue";
+const xummApiKey = import.meta.env.VITE_XUMM_API_KEY as string;
+const xummApiSecret = import.meta.env.VITE_XUMM_API_SECRET as string;
+import { XummSdk, XummTypes } from "xumm-sdk";
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const xAppToken = urlParams.get("xAppToken"); // || "21df3537-65a3-40c1-8a82-8a7439e1c9f8";
+const main = async () => {
+  const Sdk = new XummSdk(xummApiKey, xummApiSecret);
 
+  const appInfo = await Sdk.ping();
+  console.log("appInfo", appInfo);
+};
 interface Choice {
   label: string;
   value: string;
@@ -152,6 +160,7 @@ export default defineComponent({
   async setup() {
     const store = useStore();
     const { locale } = useI18n({ useScope: "global" });
+    const isInXumm = inject("isInXumm");
 
     function handleError(): void {
       isDialogWalletConnection.value = false;
@@ -224,13 +233,7 @@ export default defineComponent({
       }
     };
 
-    if (xAppToken) {
-      // eslint-disable-next-line no-undef
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-
-      // const ottdata: OTTData = await Sdk.getOttData();
-      console.log("dispatch");
-
+    if (isInXumm) {
       await store.dispatch("xumm/getOttData");
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
 
@@ -246,6 +249,7 @@ export default defineComponent({
         handleError,
       });
     } else if (isLoggedIn) {
+      await main();
       populateNFTs();
     } else {
       isDialogWalletConnection.value = true;

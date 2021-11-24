@@ -7,11 +7,7 @@ import { i18n } from "./i18n";
 import VueAxe, { VueAxePopup } from "vue-axe";
 import VueAnnouncer from "@vue-a11y/announcer";
 import Notifications from "@kyvg/vue3-notification";
-import {
-  isAndroidWebView,
-  isIosWebView,
-  isWebView,
-} from "./utils/isIosWebView";
+const isInXumm = /xumm/.test(navigator.userAgent);
 
 if (process.env.NODE_ENV === "development") {
   createApp({
@@ -23,6 +19,7 @@ if (process.env.NODE_ENV === "development") {
     .use(store)
     .use(i18n)
     .use(Notifications)
+    .provide("isInXumm", isInXumm)
     .mount("#app");
 } else {
   createApp(App)
@@ -31,18 +28,9 @@ if (process.env.NODE_ENV === "development") {
     .use(store)
     .use(i18n)
     .use(Notifications)
+    .provide("isInXumm", isInXumm)
     .mount("#app");
 }
-
-console.log("is in xumm", /xumm/.test(navigator.userAgent));
-console.log("isWebView", isWebView());
-console.log("isIosWebView", isIosWebView());
-console.log("isAndroidWebView", isAndroidWebView());
-
-const is_uiwebview = /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(
-  navigator.userAgent
-);
-console.log("is_uiwebview", is_uiwebview);
 
 const hours = 1; // Reset when storage is more than 24hours
 const now = new Date().getTime();

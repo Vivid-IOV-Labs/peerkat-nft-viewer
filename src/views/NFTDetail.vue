@@ -50,7 +50,10 @@
             >Trustline</base-button
           >
           <a v-if="signLink" class="bnt" :href="signLink">sign nft</a>
-          <base-button class="mr-2" @click="inspect">View</base-button>
+          <external-link
+            :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
+            >External link</external-link
+          >
           <base-button class="mr-2" @click="share">Share</base-button>
         </template>
       </base-card>
@@ -69,9 +72,10 @@ import type { XummTypes } from "xumm-sdk";
 import { createPaylod } from "../services/XummService";
 import { fetchOne } from "../services/XrpService";
 import BaseSelect from "@/components/BaseSelect.vue";
+import ExternalLink from "../components/ExternalLink.vue";
 
 export default defineComponent({
-  components: { BaseButton, BaseCard, BaseSelect },
+  components: { BaseButton, BaseCard, BaseSelect, ExternalLink },
   async setup() {
     const route = useRoute();
     const store = useStore();
