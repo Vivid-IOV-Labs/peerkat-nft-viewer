@@ -1,4 +1,13 @@
 <template>
+  <base-select
+    id="lang"
+    v-model="$i18n.locale"
+    :choices="pages"
+    label-text="Select Language"
+    :as-val="true"
+    :label-hidden="true"
+    style="width: 200px"
+  ></base-select>
   <div class="row flex items-center">
     <div class="col-sm-4 col-offset-2 col-xs-12">
       <div class="">
@@ -59,8 +68,10 @@ import { copyText } from "../utils/copytext";
 import type { XummTypes } from "xumm-sdk";
 import { createPaylod } from "../services/XummService";
 import { fetchOne } from "../services/XrpService";
+import BaseSelect from "@/components/BaseSelect.vue";
+
 export default defineComponent({
-  components: { BaseButton, BaseCard },
+  components: { BaseButton, BaseCard, BaseSelect },
   async setup() {
     const route = useRoute();
     const store = useStore();
@@ -115,6 +126,10 @@ export default defineComponent({
       inspect() {
         copyText(window.location.toString());
       },
+      pages: [
+        { label: "VIEW", value: "view" },
+        { label: "LIST", value: "list" },
+      ],
     };
   },
 });

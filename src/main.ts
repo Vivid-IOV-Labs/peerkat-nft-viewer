@@ -34,7 +34,7 @@ if (process.env.NODE_ENV === "development") {
     .mount("#app");
 }
 
-console.log(window);
+console.log("is in xumm", /xumm/.test(navigator.userAgent));
 console.log("isWebView", isWebView());
 console.log("isIosWebView", isIosWebView());
 console.log("isAndroidWebView", isAndroidWebView());

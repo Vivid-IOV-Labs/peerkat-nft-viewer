@@ -40,44 +40,16 @@
           <div class="pt-4 card-text" style="flex: 1">
             <pre>{{ trustLinePayload }}</pre>
             <ul class="list-group">
-              <li class="list-group-item">
-                <h5>Token Name</h5>
-                {{ nft.currency }}
+              <li class="list-group-item flex">
+                <h5>update</h5>
+                <base-button class="mr-2">Return</base-button>
               </li>
-              <li class="list-group-item">
-                <h5>Issuer</h5>
-                {{ nft.issuer }}
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="card-footer mt-auto d-flex justify-content-end">
-          <base-button class="mr-2">Return</base-button>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-12 col-xs-12 d-flex flex-column pb-3">
-      <div class="card">
-        <div class="card-body">
-          <h1 class="card-title">Upgrade</h1>
-          <div class="pt-4 card-text" style="flex: 1">
-            <pre>{{ trustLinePayload }}</pre>
-            <ul class="list-group">
-              <li class="list-group-item">
-                <h5>Token Name</h5>
-                {{ nft.currency }}
-              </li>
-              <li class="list-group-item">
-                <h5>Issuer</h5>
-                {{ nft.issuer }}
+              <li class="list-group-item flex">
+                <h5>return</h5>
+                <base-button class="mr-2">Return</base-button>
               </li>
             </ul>
           </div>
-        </div>
-
-        <div class="card-footer mt-auto d-flex justify-content-end">
-          <base-button class="mr-2">Return</base-button>
         </div>
       </div>
     </div>
