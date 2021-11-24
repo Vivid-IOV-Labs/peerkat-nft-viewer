@@ -1,19 +1,18 @@
-function command(command: string, ...args: any) {
+function command(message: any) {
   if (
     window.ReactNativeWebView &&
     typeof window.ReactNativeWebView !== "undefined"
   ) {
-    console.log(command, ...args);
-
-    window.ReactNativeWebView.postMessage(
-      JSON.stringify({
-        command,
-        ...args,
-      })
-    );
+    window.ReactNativeWebView.postMessage(JSON.stringify(message));
   }
 }
 
 export function openBrowser(url: string): void {
-  command("openBrowser", { url });
+  window.ReactNativeWebView.postMessage(
+    JSON.stringify({
+      command: "openBrowser",
+      url,
+    })
+  );
+  // command("openBrowser", { url });
 }
