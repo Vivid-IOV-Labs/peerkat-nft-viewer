@@ -2,7 +2,7 @@
   <a v-if="isInXumm" href="#" class="btn btn-link" @click="openLink">
     <slot />
   </a>
-  <a :href="url" target="_blank" class="btn btn-link">
+  <a v-else :href="url" target="_blank" class="btn btn-link">
     <slot />
   </a>
 </template>
