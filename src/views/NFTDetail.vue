@@ -38,7 +38,6 @@
     </template>
     <template #text style="flex: 1">
       <div class="pt-4">
-        <pre>{{ trustLinePayload }}</pre>
         <ul class="list-group">
           <li class="list-group-item">
             <h5>Token Name</h5>
@@ -52,13 +51,7 @@
       </div>
     </template>
     <template #footer>
-      <base-button
-        v-if="isInXumm"
-        size="large"
-        class="mr-2"
-        @click="createTrustline"
-        >Trustline</base-button
-      >
+      <base-button class="mr-2" @click="createTrustline">Trustline</base-button>
       <external-link
         :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
         >External link</external-link
