@@ -8,7 +8,7 @@
     :label-hidden="true"
     style="width: 200px"
   ></base-select>
-  <base-card-page style="height: 100%; width: 100%" class="d-flex flex-column">
+  <base-card-page>
     <template #title>
       <h1>Details</h1>
     </template>
@@ -39,7 +39,7 @@
     </template>
     <template #footer>
       <base-button
-        v-if="!signLink"
+        v-if="isInXumm && !signLink"
         size="large"
         class="mr-2"
         @click="createTrustline"
@@ -120,7 +120,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from "vue";
+import { defineComponent, computed, ref, inject } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseCardPage from "@/components/BaseCardPage.vue";
 import { useRoute } from "vue-router";
@@ -152,6 +152,7 @@ export default defineComponent({
       nft,
       trustLinePayload,
       signLink,
+      isInXumm: inject("isInXumm"),
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },

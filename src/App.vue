@@ -2,9 +2,9 @@
   <div>
     <VueAnnouncer />
     <notifications
+      :duration="100000"
       position="bottom center"
-      width="100%"
-      classes="my-notification bg-dark"
+      classes="my-notification bg-light"
     />
     <div v-if="withAuthLayout">
       <auth-layout>
@@ -17,7 +17,7 @@
           >
             <Suspense>
               <template #default>
-                <main class="container">
+                <main class="container pb-4">
                   <LoadTranslations></LoadTranslations>
 
                   <component :is="Component" :key="route.path" />
@@ -71,32 +71,45 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
+<style>
 .my-notification {
-  overflow: hidden;
+  max-width: 350px;
   font-size: 0.875rem;
-  text-align: center;
+  margin: 1rem;
+  background-color: rgba(255, 255, 255, 0.85);
   background-clip: padding-box;
   border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 0.25rem 0.75rem rgb(0 0 0 / 10%);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  opacity: 0;
   border-radius: 0.25rem;
 }
-.my-notification .notification-title {
+body .my-notification .notification-title {
+  display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
   align-items: center;
   padding: 0.25rem 0.75rem;
-  color: #fff;
-  text-align: center;
+  color: #6c757d;
+  background-color: rgba(255, 255, 255, 0.85);
   background-clip: padding-box;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
-.my-notification .notification-content {
+body .my-notification .notification-content {
   padding: 0.75rem;
-  color: #fff;
-  text-align: center;
+}
+.my-notification .success {
+  background: #68cd86;
+  border-left-color: #42a85f;
+}
+
+.my-notification .warn {
+  background: #ffb648;
+  border-left-color: #f48a06;
+}
+
+.my-notification .error {
+  background: #e54d42;
+  border-left-color: #b82e24;
 }
 </style>

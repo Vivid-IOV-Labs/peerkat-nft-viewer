@@ -23,11 +23,13 @@ function copyTextValueOld(copyText: string) {
     notify({
       title: "info",
       text: "Copied successfully",
+      type: "success",
     });
   } catch (err) {
     notify({
       title: "error",
       text: "Not Copied",
+      type: "success",
     });
   }
   /* unselect the range */
@@ -40,6 +42,7 @@ export async function copyText(text: string): Promise<void> {
     notify({
       title: "info",
       text: "Copied successfully",
+      type: "success",
     });
   } catch (err) {
     await copyTextValueOld(text);
