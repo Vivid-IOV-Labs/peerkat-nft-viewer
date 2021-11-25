@@ -1,13 +1,27 @@
 <template>
-  <base-select
-    id="lang"
-    v-model="$i18n.locale"
-    :choices="pages"
-    label-text="Select Language"
-    :as-val="true"
-    :label-hidden="true"
-    style="width: 200px"
-  ></base-select>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Detail page</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div id="navbarNavAltMarkup" class="collapse navbar-collapse">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link" href="#">View</a>
+
+        <a class="nav-item nav-link active" href="#"
+          >View <span class="sr-only">(current)</span></a
+        >
+      </div>
+    </div>
+  </nav>
   <base-card-page>
     <template #title>
       <h1>Details</h1>
@@ -39,13 +53,12 @@
     </template>
     <template #footer>
       <base-button
-        v-if="isInXumm && !signLink"
+        v-if="isInXumm"
         size="large"
         class="mr-2"
         @click="createTrustline"
         >Trustline</base-button
       >
-      <a v-if="signLink" class="bnt" :href="signLink">sign nft</a>
       <external-link
         :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
         >External link</external-link
@@ -53,70 +66,6 @@
       <base-button class="mr-2" @click="share">Share</base-button>
     </template>
   </base-card-page>
-  <!-- <div class="row flex items-center">
-    <div class="col-sm-4 col-offset-2 col-xs-12">
-      <div class="">
-        <figure>
-          <img
-            class="card-img"
-            :src="nft.url"
-            alt="Card image cap"
-            @error="fallbackImg"
-          />
-        </figure>
-      </div>
-    </div>
-    <div class="col-sm-8 col-xs-12 pb-3">
-      <base-card-page
-        style="height: 100%; width: 100%"
-        class="d-flex flex-column"
-      >
-        <template #title>
-          <h1>Details</h1>
-        </template>
-        <template #picture>
-          <figure>
-            <img
-              class="card-img"
-              :src="nft.url"
-              alt="Card image cap"
-              @error="fallbackImg"
-            />
-          </figure>
-        </template>
-        <template #text style="flex: 1">
-          <div class="pt-4">
-            <pre>{{ trustLinePayload }}</pre>
-            <ul class="list-group">
-              <li class="list-group-item">
-                <h5>Token Name</h5>
-                {{ nft.currency }}
-              </li>
-              <li class="list-group-item">
-                <h5>Issuer</h5>
-                {{ nft.issuer }}
-              </li>
-            </ul>
-          </div>
-        </template>
-        <template #footer>
-          <base-button
-            v-if="!signLink"
-            size="large"
-            class="mr-2"
-            @click="createTrustline"
-            >Trustline</base-button
-          >
-          <a v-if="signLink" class="bnt" :href="signLink">sign nft</a>
-          <external-link
-            :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
-            >External link</external-link
-          >
-          <base-button class="mr-2" @click="share">Share</base-button>
-        </template>
-      </base-card-page>
-    </div>
-  </div> -->
 </template>
 
 <script lang="ts">
@@ -131,6 +80,7 @@ import { createPaylod } from "../services/XummService";
 import { fetchOne } from "../services/XrpService";
 import BaseSelect from "@/components/BaseSelect.vue";
 import ExternalLink from "../components/ExternalLink.vue";
+import { openSignRequest } from "../utils/XummActions";
 
 export default defineComponent({
   components: { BaseButton, BaseCardPage, BaseSelect, ExternalLink },
@@ -164,7 +114,6 @@ export default defineComponent({
           user_token: user,
           txjson: {
             TransactionType: "TrustSet",
-            // Account: account,
             Flags: 131072,
             LimitAmount: {
               currency: nft.currency,
@@ -174,11 +123,8 @@ export default defineComponent({
           },
         };
         try {
-          const {
-            next: { always },
-          } = await createPaylod(newPayload);
-          console.log("got events ", always);
-          signLink.value = always as string;
+          const { uuid } = await createPaylod(newPayload);
+          openSignRequest(uuid);
         } catch (error) {
           console.log("error", error);
         }

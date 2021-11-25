@@ -10,3 +10,10 @@ export function openBrowser(url: string): void {
     url,
   });
 }
+
+export function openSignRequest(uuid: string): void {
+  command({
+    command: "openSignRequest",
+    uuid,
+  });
+}

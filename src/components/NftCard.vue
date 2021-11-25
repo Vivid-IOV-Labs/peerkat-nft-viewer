@@ -39,7 +39,7 @@
         <router-link
           :to="{ path: `/nft/${nft.issuer}/${nft.currency}/view` }"
           class="mt-4 btn btn-link"
-          >link
+          >View
         </router-link>
       </div>
     </template>

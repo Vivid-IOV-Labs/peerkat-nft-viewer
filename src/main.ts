@@ -1,3 +1,6 @@
+// if (!isInXumm && process.env.NODE_ENV === "production") {
+//   window.location.replace("https://www.vividiov.com/peerkat");
+// }
 import { createApp, h, Fragment } from "vue";
 import App from "./App.vue";
 import "./index.css";
@@ -42,4 +45,14 @@ if (setupTime == null) {
     localStorage.clear();
     localStorage.setItem("setupTime", now.toString());
   }
+}
+function messageHandler(event: any) {
+  console.log(event.data);
+}
+
+if (typeof window.addEventListener === "function") {
+  window.addEventListener("message", messageHandler);
+}
+if (typeof document.addEventListener === "function") {
+  document.addEventListener("message", messageHandler);
 }

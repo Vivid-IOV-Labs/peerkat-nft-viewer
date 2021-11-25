@@ -78,11 +78,12 @@ export default defineComponent({
   margin: 1rem;
   background-color: rgba(255, 255, 255, 0.85);
   background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 0.25rem 0.75rem rgb(0 0 0 / 10%);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border-radius: 0.25rem;
+  border-left-width: 4px;
 }
 body .my-notification .notification-title {
   display: -ms-flexbox;
@@ -95,20 +96,20 @@ body .my-notification .notification-title {
   background-clip: padding-box;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
-body .my-notification .notification-content {
+.notification-content {
   padding: 0.75rem;
 }
-.my-notification .success {
+.success {
   background: #68cd86;
   border-left-color: #42a85f;
 }
 
-.my-notification .warn {
+.warn {
   background: #ffb648;
   border-left-color: #f48a06;
 }
 
-.my-notification .error {
+.error {
   background: #e54d42;
   border-left-color: #b82e24;
 }
