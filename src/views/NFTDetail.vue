@@ -27,6 +27,14 @@
       <h1>Details</h1>
     </template>
     <template #picture>
+      <video
+        src="https://codingyaar.com/wp-content/uploads/video-in-bootstrap-card.mp4"
+        autoplay
+        loop
+        muted
+        class="w-100 card-img"
+      ></video>
+      <!-- 
       <figure>
         <img
           class="card-img"
@@ -34,7 +42,7 @@
           alt="Card image cap"
           @error="fallbackImg"
         />
-      </figure>
+      </figure> -->
     </template>
     <template #text style="flex: 1">
       <div class="pt-4">
