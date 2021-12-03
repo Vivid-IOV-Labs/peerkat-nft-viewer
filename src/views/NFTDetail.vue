@@ -1,34 +1,11 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Detail page</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarNavAltMarkup"
-      aria-controls="navbarNavAltMarkup"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div id="navbarNavAltMarkup" class="collapse navbar-collapse">
-      <div class="navbar-nav">
-        <a class="nav-item nav-link" href="#">View</a>
-
-        <a class="nav-item nav-link active" href="#"
-          >View <span class="sr-only">(current)</span></a
-        >
-      </div>
-    </div>
-  </nav>
   <base-card-page>
     <template #title>
       <h1>Details</h1>
     </template>
     <template #picture>
       <video
-        src="https://codingyaar.com/wp-content/uploads/video-in-bootstrap-card.mp4"
+        src="https://ipfs.io/ipfs/QmRwgRmzyxDAvrxUDttCJJam92Qq3tP1X9xqxdsV7noKKm"
         autoplay
         loop
         muted
@@ -37,6 +14,8 @@
       <!-- 
       <figure>
         <img
+        src="https://codingyaar.com/wp-content/uploads/video-in-bootstrap-card.mp4"
+
           class="card-img"
           :src="nft.url"
           alt="Card image cap"
@@ -67,6 +46,41 @@
       <base-button class="mr-2" @click="share">Share</base-button>
     </template>
   </base-card-page>
+  <div class="row mt-4">
+    <div class="col-sm-12 col-xs-12 accordion">
+      <div class="card">
+        <div class="card-header">
+          <h1 class="mb-0">
+            <button
+              class="btn btn-link btn-block text-left"
+              type="button"
+              @click.prevent="toggleAction"
+            >
+              Actions
+            </button>
+          </h1>
+        </div>
+        <transition name="smooth">
+          <div :class="{ show: showActions }" class="collapse fade">
+            <div class="card-body">
+              <div class="card-text">
+                <ul class="list-group">
+                  <li class="list-group-item d-flex">
+                    <h5>update</h5>
+                    <base-button class="mr-2">Return</base-button>
+                  </li>
+                  <li class="list-group-item d-flex">
+                    <h5>return</h5>
+                    <base-button class="mr-2">Return</base-button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </transition>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -79,17 +93,15 @@ import { copyText } from "../utils/copytext";
 import type { XummTypes } from "xumm-sdk";
 import { createPaylod } from "../services/XummService";
 import { fetchOne } from "../services/XrpService";
-import BaseSelect from "@/components/BaseSelect.vue";
 import ExternalLink from "../components/ExternalLink.vue";
 import { openSignRequest } from "../utils/XummActions";
 
 export default defineComponent({
-  components: { BaseButton, BaseCardPage, BaseSelect, ExternalLink },
+  components: { BaseButton, BaseCardPage, ExternalLink },
   async setup() {
     const route = useRoute();
     const store = useStore();
-    const trustLinePayload = ref(null);
-    const signLink = ref<string | undefined>(undefined);
+    const showActions = ref(false);
     console.log(route.params.nftAddress);
 
     // const nft = await store.getters["nft/getByAddress"](
@@ -101,8 +113,10 @@ export default defineComponent({
     );
     return {
       nft,
-      trustLinePayload,
-      signLink,
+      showActions,
+      toggleAction() {
+        showActions.value = !showActions.value;
+      },
       isInXumm: inject("isInXumm"),
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
@@ -144,3 +158,14 @@ export default defineComponent({
   },
 });
 </script>
+<style>
+.smooth-enter-active,
+.smooth-leave-active {
+  transition: 0.5s;
+}
+.smooth-enter,
+.smooth-leave-to {
+  height: 0;
+  opacity: 0;
+}
+</style>
