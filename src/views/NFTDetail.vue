@@ -5,6 +5,13 @@
     </template>
     <template #picture>
       <video
+        :src="url"
+        autoplay
+        muted
+        loop
+        playsinlineclass="w-100 card-img"
+      ></video>
+      <video
         src="https://ipfs.io/ipfs/QmRwgRmzyxDAvrxUDttCJJam92Qq3tP1X9xqxdsV7noKKm"
         autoplay
         loop
@@ -111,8 +118,10 @@ export default defineComponent({
       route.params.nftAddress.toString(),
       route.params.currency.toString()
     );
+
     return {
       nft,
+      url: `https://ipfs.io/ipfs/${cid}`,
       showActions,
       toggleAction() {
         showActions.value = !showActions.value;

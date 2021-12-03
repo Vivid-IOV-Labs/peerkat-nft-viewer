@@ -95,7 +95,7 @@ const { XrplClient } = require("xrpl-client");
 // import { XrplClient } from "xrpl-client";
 
 interface NFT {
-  url: string;
+  cid: string;
   issuer: string;
   currency: string;
 }
@@ -183,7 +183,7 @@ export async function fetchWallet(
   walletAddress: string //handleError: (error: Error | string) => void
 ): Promise<any> {
   // debugger;
-  const client: typeof XrplClient = await init();
+  const client: typeof   = await init();
   try {
     const accountLines = await client.send({
       command: "account_lines",
@@ -225,17 +225,18 @@ export async function fetchOne(
 function getOne(account_data: any, account: string, currency = "") {
   const { Domain } = account_data;
 
-  const protocol = is_hexadecimal(hexToString(Domain))
+  const source  = is_hexadecimal(hexToString(Domain))
     ? hexToString(hexToString(Domain))
     : hexToString(Domain);
-  const domain = hexToString(currency.replace("02", ""));
+  const token_domain = hexToString(currency.replace("02", ""));
+  const cid = source.split(":")[1]
 
   return {
     issuer: account,
     issuerTruncated: truncate(account),
     currency,
-    tokenName: domain,
-    url: protocol + domain,
+    tokenName: token_domain,
+    cid: cid ,
   };
 }
 

@@ -1,14 +1,21 @@
 <template>
   <base-card>
     <template #picture>
-      <figure>
+      <video
+        :src="url"
+        autoplay
+        muted
+        loop
+        playsinlineclass="w-100 card-img"
+      ></video>
+      <!-- <figure>
         <img
           class="card-img-top"
           :src="posterUrl"
           alt="Card image cap"
           @error="fallbackImg"
         />
-      </figure>
+      </figure> -->
     </template>
 
     <template #title>
@@ -61,8 +68,8 @@ export default defineComponent({
     };
   },
   computed: {
-    posterUrl(): string {
-      return this.nft.url;
+    url(): string {
+      return `https://ipfs.io/ipfs/` + this.nft.cid;
     },
   },
 });

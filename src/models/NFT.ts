@@ -1,5 +1,5 @@
 export interface NFT {
-  url: string;
+  cid: string;
   issuer: string;
   currency: string;
   tokenName: string;
