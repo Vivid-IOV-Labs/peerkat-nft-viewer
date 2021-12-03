@@ -1,6 +1,6 @@
 <template>
   <HeaderNavigation />
-  <main class="mt-4">
+  <main class="container mt-4">
     <slot></slot>
   </main>
 </template>

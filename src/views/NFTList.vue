@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <div class="flex flex-col justify-center items-center mb-2">
       <h2>
         <span>{{ $t("welcome") }} </span><br />
@@ -15,12 +15,8 @@
       </h2>
       <hr />
     </div>
-    <div v-if="NFTMedia.length" class="row">
-      <div
-        v-for="nft in NFTMedia"
-        :key="nft.issuer"
-        class="col-sm-12 col-lg-4 pb-4"
-      >
+    <div v-if="NFTMedia.length" class="row flex-row flex-nowrap">
+      <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-12">
         <nft-card :nft="nft"></nft-card>
       </div>
     </div>

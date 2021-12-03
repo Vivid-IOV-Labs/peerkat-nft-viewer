@@ -17,11 +17,11 @@
           >
             <Suspense>
               <template #default>
-                <main class="container pb-4">
+                <div>
                   <LoadTranslations></LoadTranslations>
 
                   <component :is="Component" :key="route.path" />
-                </main>
+                </div>
               </template>
               <template #fallback>
                 <div

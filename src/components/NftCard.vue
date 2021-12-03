@@ -10,6 +10,7 @@
         loop
         playsinline
         class="w-100 card-img-top"
+        style="max-height: 400px"
       ></video>
       <figure>
         <img
