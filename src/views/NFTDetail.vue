@@ -4,13 +4,7 @@
       <h1>Details</h1>
     </template>
     <template #picture>
-      <video
-        :src="url"
-        autoplay
-        muted
-        loop
-        playsinlineclass="w-100 card-img"
-      ></video>
+      <video :src="url" autoplay muted loop playsinline></video>
       <!-- 
       <figure>
         <img
