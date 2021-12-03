@@ -15,8 +15,12 @@
       </h2>
       <hr />
     </div>
-    <div v-if="NFTMedia.length" class="row flex-row flex-nowrap">
-      <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-12">
+    <div
+      v-if="NFTMedia.length"
+      style="width: 100%; overflow-y: hidden; overflow-x: scroll"
+      class="row flex-row flex-nowrap"
+    >
+      <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-8">
         <nft-card :nft="nft"></nft-card>
       </div>
     </div>
