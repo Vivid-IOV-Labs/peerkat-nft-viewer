@@ -9,7 +9,7 @@
         muted
         loop
         playsinline
-        class="w-100 card-img"
+        class="w-100 card-img-top"
       ></video>
       <figure>
         <img
