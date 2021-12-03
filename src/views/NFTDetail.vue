@@ -2,9 +2,10 @@
   <base-card-page>
     <template #title>
       <h1>Details</h1>
+      {{ content_type }}
     </template>
     <template #picture>
-      <figure v-if="type?.includes('image')">
+      <figure v-if="content_type?.includes('image')">
         <img
           class="card-img"
           :src="url"
@@ -13,7 +14,7 @@
         />
       </figure>
       <video
-        v-if="type?.includes('video')"
+        v-if="content_type?.includes('video')"
         :src="url"
         autoplay
         muted
@@ -107,7 +108,6 @@ export default defineComponent({
     const route = useRoute();
     const store = useStore();
     const showActions = ref(false);
-    console.log(route.params.nftAddress);
 
     // const nft = await store.getters["nft/getByAddress"](
     //   route.params.nftAddress as string
@@ -117,10 +117,10 @@ export default defineComponent({
       route.params.currency.toString()
     );
     const url = `https://ipfs.io/ipfs/${nft.cid}`;
-    const type = await fetchMedia(url);
+    const content_type = await fetchMedia(url);
     return {
       nft,
-      type,
+      content_type,
       url,
       showActions,
       toggleAction() {

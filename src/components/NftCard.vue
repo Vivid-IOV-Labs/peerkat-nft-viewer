@@ -1,7 +1,9 @@
 <template>
   <base-card>
+    {{ content_type }}
     <template #picture>
       <video
+        v-if="content_type?.includes('video')"
         :src="url"
         autoplay
         muted
@@ -9,14 +11,15 @@
         playsinline
         class="w-100 card-img"
       ></video>
-      <!-- <figure>
+      <figure>
         <img
+          v-if="content_type?.includes('image')"
           class="card-img-top"
-          :src="posterUrl"
+          :src="url"
           alt="Card image cap"
           @error="fallbackImg"
         />
-      </figure> -->
+      </figure>
     </template>
 
     <template #title>
@@ -72,9 +75,9 @@ export default defineComponent({
     const showIssuer = ref(false);
 
     const url = `https://ipfs.io/ipfs/${props.nft.cid}`;
-    const type = await fetchMedia(url);
+    const content_type = await fetchMedia(url);
     return {
-      type,
+      content_type,
       url,
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
