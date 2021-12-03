@@ -1,5 +1,5 @@
 <template>
-  <base-card>
+  <base-card style="height: 80vh; margin-bottom: 20px">
     {{ content_type }}
     <template #picture>
       <video
@@ -9,8 +9,7 @@
         muted
         loop
         playsinline
-        class="w-100 card-img-top"
-        style="max-height: 400px"
+        class="h-50 card-img-top"
       ></video>
       <figure>
         <img
