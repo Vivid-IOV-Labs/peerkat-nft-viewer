@@ -1,5 +1,5 @@
 <template>
-  <base-card style="height: 80vh; margin-bottom: 20px">
+  <base-card>
     {{ content_type }}
     <template #picture>
       <video
@@ -14,7 +14,7 @@
       <figure>
         <img
           v-if="content_type?.includes('image')"
-          class="card-img-top"
+          class="card-img-top h-50"
           :src="url"
           alt="Card image cap"
           @error="fallbackImg"
@@ -27,13 +27,13 @@
       {{ nft.tokenName }}
     </template>
     <template #text>
+      <!-- :class="{
+          'text-truncate truncate': !showIssuer,
+          untruncate: showIssuer,
+        }" -->
       <strong class="h7 font-weight-bold">Issuer </strong><br />
       <a
         class="btn-link d-block"
-        :class="{
-          'text-truncate truncate': !showIssuer,
-          untruncate: showIssuer,
-        }"
         href="#"
         aria-expanded="true"
         @click.prevent="showIssuer = !showIssuer"
