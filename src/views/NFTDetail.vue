@@ -11,13 +11,6 @@
         loop
         playsinlineclass="w-100 card-img"
       ></video>
-      <video
-        src="https://ipfs.io/ipfs/QmRwgRmzyxDAvrxUDttCJJam92Qq3tP1X9xqxdsV7noKKm"
-        autoplay
-        loop
-        muted
-        class="w-100 card-img"
-      ></video>
       <!-- 
       <figure>
         <img
