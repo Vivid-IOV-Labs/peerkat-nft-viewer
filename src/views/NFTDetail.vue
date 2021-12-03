@@ -121,7 +121,7 @@ export default defineComponent({
 
     return {
       nft,
-      url: `https://ipfs.io/ipfs/${cid}`,
+      url: `https://ipfs.io/ipfs/${nft.cid}`,
       showActions,
       toggleAction() {
         showActions.value = !showActions.value;

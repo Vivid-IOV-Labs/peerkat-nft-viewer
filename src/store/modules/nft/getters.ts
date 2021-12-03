@@ -1,6 +1,6 @@
 import { NFTState } from "./state";
 interface NFT {
-  url: string;
+  cid: string;
   issuer: string;
   currency: string;
 }
