@@ -4,18 +4,23 @@
       <h1>Details</h1>
     </template>
     <template #picture>
-      <video :src="url" autoplay muted loop playsinline></video>
-      <!-- 
-      <figure>
+      <figure v-if="type?.includes('image')">
         <img
-        src="https://codingyaar.com/wp-content/uploads/video-in-bootstrap-card.mp4"
-
           class="card-img"
-          :src="nft.url"
+          :src="url"
           alt="Card image cap"
           @error="fallbackImg"
         />
-      </figure> -->
+      </figure>
+      <video
+        v-if="type?.includes('video')"
+        :src="url"
+        autoplay
+        muted
+        loop
+        playsinline
+        class="w-100 card-img"
+      ></video>
     </template>
     <template #text style="flex: 1">
       <div class="pt-4">
@@ -90,6 +95,12 @@ import { fetchOne } from "../services/XrpService";
 import ExternalLink from "../components/ExternalLink.vue";
 import { openSignRequest } from "../utils/XummActions";
 
+async function fetchMedia(url: string) {
+  const res = await fetch(url);
+  const contentType = res.headers.get("Content-Type");
+  return contentType;
+}
+
 export default defineComponent({
   components: { BaseButton, BaseCardPage, ExternalLink },
   async setup() {
@@ -105,10 +116,12 @@ export default defineComponent({
       route.params.nftAddress.toString(),
       route.params.currency.toString()
     );
-
+    const url = `https://ipfs.io/ipfs/${nft.cid}`;
+    const type = await fetchMedia(url);
     return {
       nft,
-      url: `https://ipfs.io/ipfs/${nft.cid}`,
+      type,
+      url,
       showActions,
       toggleAction() {
         showActions.value = !showActions.value;

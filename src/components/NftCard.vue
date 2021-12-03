@@ -6,7 +6,8 @@
         autoplay
         muted
         loop
-        playsinlineclass="w-100 card-img"
+        playsinline
+        class="w-100 card-img"
       ></video>
       <!-- <figure>
         <img
@@ -50,7 +51,14 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import BaseCard from "@/components/BaseCard.vue";
-
+import { useRoute } from "vue-router";
+import { useStore } from "vuex";
+import { copyText } from "../utils/copytext";
+async function fetchMedia(url: string) {
+  const res = await fetch(url);
+  const contentType = res.headers.get("Content-Type");
+  return contentType;
+}
 export default defineComponent({
   components: {
     BaseCard,
@@ -58,19 +66,27 @@ export default defineComponent({
   props: {
     nft: { type: Object, required: true },
   },
-  setup: () => {
+  async setup(props) {
+    const route = useRoute();
+    const store = useStore();
     const showIssuer = ref(false);
+
+    const url = `https://ipfs.io/ipfs/${props.nft.cid}`;
+    const type = await fetchMedia(url);
     return {
-      showIssuer,
+      type,
+      url,
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
+      showIssuer,
+      share() {
+        copyText(window.location.toString());
+      },
+      inspect() {
+        copyText(window.location.toString());
+      },
     };
-  },
-  computed: {
-    url(): string {
-      return `https://ipfs.io/ipfs/` + this.nft.cid;
-    },
   },
 });
 </script>
