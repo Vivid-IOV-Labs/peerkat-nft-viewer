@@ -16,7 +16,7 @@
   <div
     v-if="NFTMedia.length"
     style="overflow-y: hidden; overflow-x: scroll"
-    class="row flex-row flex-nowrap p-4"
+    class="row flex-row flex-nowrap"
   >
     <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-12 col-md-8">
       <nft-card :nft="nft"></nft-card>
