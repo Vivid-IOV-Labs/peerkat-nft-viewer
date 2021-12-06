@@ -1,29 +1,24 @@
 <template>
-  <base-card-page>
-    <template #title>
-      <h1>Details</h1>
-      {{ content_type }}
-    </template>
-    <template #picture>
-      <figure v-if="content_type?.includes('image')">
-        <img
-          class="card-img"
-          :src="url"
-          alt="Card image cap"
-          @error="fallbackImg"
-        />
-      </figure>
-      <video
-        v-if="content_type?.includes('video')"
+  <router-link :to="{ path: `/` }" class="my-4 btn btn-link">Back </router-link>
+  <div class="card p-4">
+    <figure v-if="content_type?.includes('image')">
+      <img
+        class="card-img"
         :src="url"
-        autoplay
-        muted
-        loop
-        playsinline
-        class="w-100 card-img"
-      ></video>
-    </template>
-    <template #text style="flex: 1">
+        alt="Card image cap"
+        @error="fallbackImg"
+      />
+    </figure>
+    <video
+      v-if="content_type?.includes('video')"
+      :src="url"
+      autoplay
+      muted
+      loop
+      playsinline
+      class="w-100 card-img"
+    ></video>
+    <!-- <template #text style="flex: 1">
       <div class="pt-4">
         <ul class="list-group">
           <li class="list-group-item">
@@ -44,9 +39,9 @@
         >External link</external-link
       >
       <base-button class="mr-2" @click="share">Share</base-button>
-    </template>
-  </base-card-page>
-  <div class="row mt-4">
+    </template> -->
+  </div>
+  <!-- <div class="row mt-4">
     <div class="col-sm-12 col-xs-12 accordion">
       <div class="card">
         <div class="card-header">
@@ -80,13 +75,13 @@
         </transition>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, ref, inject } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
-import BaseCardPage from "@/components/BaseCardPage.vue";
+import BaseCard from "@/components/BaseCardPage.vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { copyText } from "../utils/copytext";
@@ -103,7 +98,7 @@ async function fetchMedia(url: string) {
 }
 
 export default defineComponent({
-  components: { BaseButton, BaseCardPage, ExternalLink },
+  components: { BaseButton, BaseCard, ExternalLink },
   async setup() {
     const route = useRoute();
     const store = useStore();

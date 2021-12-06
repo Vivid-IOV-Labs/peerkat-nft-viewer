@@ -1,26 +1,16 @@
 <template>
   <div>
-    <div class="flex flex-col justify-center items-center mb-2">
-      <h2>
-        <span>{{ $t("welcome") }} </span><br />
-        <small style="font-size: 1rem; font-weight: bold" class="text-xs">{{
-          walletAddress
-        }}</small>
-        <button
-          class="ml-2 btn btn-primary btn-xs"
-          @click.prevent="isDialogWalletConnection = true"
-        >
-          change
-        </button>
-      </h2>
-      <hr />
-    </div>
     <div
       v-if="NFTMedia.length"
-      style="width: 100%; overflow-y: hidden; overflow-x: scroll"
-      class="row flex-row flex-nowrap"
+      style="
+        width: 100%;
+        overflow-y: hidden;
+        overflow-x: scroll;
+        margin-bottom: 60px;
+      "
+      class="row flex-row flex-nowrap p-4"
     >
-      <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-12">
+      <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-12 col-md-8">
         <nft-card :nft="nft"></nft-card>
       </div>
     </div>
