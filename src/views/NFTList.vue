@@ -1,8 +1,6 @@
 <template>
-  <div class="d-none d-md-flex justify-center items-center mb-2">
-    <!-- <h2>
-      <span>{{ $t("welcome") }} </span><br />
-    </h2> -->
+  <!-- <div class="d-none d-md-flex justify-center items-center mb-2">
+
     <small style="font-size: 1rem; font-weight: bold" class="text-xs">{{
       walletAddress
     }}</small>
@@ -12,7 +10,7 @@
     >
       change
     </button>
-  </div>
+  </div> -->
   <div
     v-if="NFTMedia.length"
     style="overflow-y: hidden; overflow-x: scroll"

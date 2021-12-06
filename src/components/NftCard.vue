@@ -6,7 +6,10 @@
         <video
           v-if="content_type?.includes('video')"
           :src="url"
+          autoplay
           muted
+          loop
+          playsinline
           class="img-fluid card-img-top"
           style="object-fit: cover; height: 100%"
         ></video>
