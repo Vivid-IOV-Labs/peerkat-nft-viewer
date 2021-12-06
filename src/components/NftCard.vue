@@ -44,19 +44,16 @@
     </template>
     <template #footer>
       <div>
-        <base-button class="mr-2" @click="createTrustline"
+        <!-- <base-button class="mr-2" @click="createTrustline"
           >Trustline</base-button
-        >
+        > -->
         <external-link
+          class="mr-2"
           :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
-          >External link</external-link
+          >Inspect</external-link
         >
         <base-button class="mr-2" @click="share">Share</base-button>
-        <router-link
-          :to="{ path: `/nft/${nft.issuer}/${nft.currency}/view` }"
-          class="mt-4 btn btn-link"
-          >View
-        </router-link>
+        <base-button class="mr-2" @click="view">View</base-button>
       </div>
     </template>
   </base-card>
@@ -65,7 +62,7 @@
 import { computed, defineComponent, ref } from "vue";
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { copyText } from "../utils/copytext";
 import { openSignRequest } from "../utils/XummActions";
@@ -85,7 +82,7 @@ export default defineComponent({
     nft: { type: Object, required: true },
   },
   async setup(props) {
-    const route = useRoute();
+    const router = useRouter();
     const store = useStore();
     const showIssuer = ref(false);
 
@@ -126,6 +123,11 @@ export default defineComponent({
       },
       inspect() {
         copyText(window.location.toString());
+      },
+      view() {
+        router.push({
+          path: `/nft/${props.nft.issuer}/${props.nft.currency}/view`,
+        });
       },
     };
   },

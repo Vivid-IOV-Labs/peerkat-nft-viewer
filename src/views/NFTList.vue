@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isInXumm" class="d-flex justify-center items-center mb-2">
+  <div class="d-none d-md-flex justify-center items-center mb-2">
     <!-- <h2>
       <span>{{ $t("welcome") }} </span><br />
     </h2> -->
