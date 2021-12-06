@@ -1,6 +1,6 @@
 <template>
   <router-link :to="{ path: `/` }" class="my-4 btn btn-link">Back </router-link>
-  <div class="card p-4">
+  <div class="card">
     <figure v-if="content_type?.includes('image')">
       <img
         class="card-img"
