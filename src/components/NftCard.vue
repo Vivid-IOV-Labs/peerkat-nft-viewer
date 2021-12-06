@@ -1,20 +1,22 @@
 <template>
-  <base-card>
+  <base-card style="height: 100%">
     {{ content_type }}
     <template #picture>
-      <video
-        v-if="content_type?.includes('video')"
-        :src="url"
-        autoplay
-        muted
-        loop
-        playsinline
-        class="h-50 card-img-top"
-      ></video>
-      <figure>
+      <figure class="h-50">
+        <video
+          v-if="content_type?.includes('video')"
+          :src="url"
+          autoplay
+          muted
+          loop
+          playsinline
+          class="img-fluid card-img-top"
+          style="object-fit: cover; height: 100%"
+        ></video>
         <img
           v-if="content_type?.includes('image')"
-          class="card-img-top h-50"
+          style="object-fit: cover; height: 100%"
+          class="img-fluid card-img-top"
           :src="url"
           alt="Card image cap"
           @error="fallbackImg"

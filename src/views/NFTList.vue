@@ -1,43 +1,51 @@
 <template>
-  <div>
-    <div
-      v-if="NFTMedia.length"
-      style="
-        width: 100%;
-        overflow-y: hidden;
-        overflow-x: scroll;
-        margin-bottom: 60px;
-      "
-      class="row flex-row flex-nowrap p-4"
+  <div v-if="!isInXumm" class="d-flex justify-center items-center mb-2">
+    <!-- <h2>
+      <span>{{ $t("welcome") }} </span><br />
+    </h2> -->
+    <small style="font-size: 1rem; font-weight: bold" class="text-xs">{{
+      walletAddress
+    }}</small>
+    <button
+      class="ml-2 btn btn-primary btn-xs"
+      @click.prevent="isDialogWalletConnection = true"
     >
-      <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-12 col-md-8">
-        <nft-card :nft="nft"></nft-card>
-      </div>
+      change
+    </button>
+  </div>
+  <div
+    v-if="NFTMedia.length"
+    style="overflow-y: hidden; overflow-x: scroll"
+    class="row flex-row flex-nowrap p-4"
+  >
+    <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-12 col-md-8">
+      <nft-card :nft="nft"></nft-card>
     </div>
-    <div v-else>
-      <h3 class="text-center mt-4">You don't have any NFT's at the moment</h3>
-    </div>
-    <base-dialog
-      :show="isDialogWalletConnection"
-      title="Welcome"
-      @close="isDialogWalletConnection = false"
-    >
-      <template #body>
-        <form>
-          <div class="form-group">
-            <base-input
-              id="walletaddress"
-              v-model="v$.walletAddress.$model"
-              placeholder="Enter your XRP Wallet Address"
-              type="text"
-              label-text="Wallet Address"
-              class="w-full max-w-xl"
-              :is-required="v$.walletAddress.required"
-              :is-invalid="v$.walletAddress.$dirty && v$.walletAddress.$invalid"
-              :errors="formatVuelidateErrors(v$.walletAddress.$errors)"
-            ></base-input>
-          </div>
-          <!-- <div class="form-group">
+  </div>
+  <div v-else>
+    <h3 class="text-center mt-4">You don't have any NFT's at the moment</h3>
+  </div>
+  <base-dialog
+    :show="isDialogWalletConnection"
+    title="Welcome"
+    @close="isDialogWalletConnection = false"
+  >
+    <template #body>
+      <form>
+        <div class="form-group">
+          <base-input
+            id="walletaddress"
+            v-model="v$.walletAddress.$model"
+            placeholder="Enter your XRP Wallet Address"
+            type="text"
+            label-text="Wallet Address"
+            class="w-full max-w-xl"
+            :is-required="v$.walletAddress.required"
+            :is-invalid="v$.walletAddress.$dirty && v$.walletAddress.$invalid"
+            :errors="formatVuelidateErrors(v$.walletAddress.$errors)"
+          ></base-input>
+        </div>
+        <!-- <div class="form-group">
             <base-select
               id="type_networks"
               v-model="type_network"
@@ -65,50 +73,49 @@
               class="w-full max-w-xl"
             ></base-select>
           </div> -->
-        </form>
-      </template>
-      <template #footer>
-        <base-button
-          status="success"
-          class="mt-4"
-          :disabled="v$.$invalid"
-          @click="populateNFTs"
-          >{{ $t("Enter") }}
-          <div
-            v-if="isLoading"
-            class="spinner-grow spinner-grow-sm"
-            role="status"
-          >
-            <span class="sr-only">{{ $t("Loading...") }}</span>
-          </div>
-        </base-button>
-      </template>
-    </base-dialog>
-    <base-dialog
-      :show="showError"
-      title="An Error occurs"
-      @close="
-        showError = false;
-        isDialogWalletConnection = true;
-      "
-    >
-      <template #body>
-        <h3>{{ $t("Unable to connect") }}</h3>
-        <p>{{ $t("Please try another network") }}</p>
-      </template>
-      <template #footer>
-        <base-button
-          class="mt-4"
-          status="warning"
-          @click="
-            showError = false;
-            isDialogWalletConnection = true;
-          "
-          >Ok
-        </base-button>
-      </template>
-    </base-dialog>
-  </div>
+      </form>
+    </template>
+    <template #footer>
+      <base-button
+        status="success"
+        class="mt-4"
+        :disabled="v$.$invalid"
+        @click="populateNFTs"
+        >{{ $t("Enter") }}
+        <div
+          v-if="isLoading"
+          class="spinner-grow spinner-grow-sm"
+          role="status"
+        >
+          <span class="sr-only">{{ $t("Loading...") }}</span>
+        </div>
+      </base-button>
+    </template>
+  </base-dialog>
+  <base-dialog
+    :show="showError"
+    title="An Error occurs"
+    @close="
+      showError = false;
+      isDialogWalletConnection = true;
+    "
+  >
+    <template #body>
+      <h3>{{ $t("Unable to connect") }}</h3>
+      <p>{{ $t("Please try another network") }}</p>
+    </template>
+    <template #footer>
+      <base-button
+        class="mt-4"
+        status="warning"
+        @click="
+          showError = false;
+          isDialogWalletConnection = true;
+        "
+        >Ok
+      </base-button>
+    </template>
+  </base-dialog>
 </template>
 
 <script lang="ts">
@@ -259,6 +266,7 @@ export default defineComponent({
       isLoading,
       showError,
       walletAddress,
+      isInXumm,
       populateNFTs,
       formatVuelidateErrors(errors: any[]) {
         return errors.map((error) => {

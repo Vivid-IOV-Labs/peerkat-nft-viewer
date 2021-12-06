@@ -1,6 +1,6 @@
 <template>
   <HeaderNavigation />
-  <main class="container mt-4">
+  <main style="height: 100%" class="container mt-4">
     <slot></slot>
   </main>
 </template>

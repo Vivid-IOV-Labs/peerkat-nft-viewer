@@ -1,55 +1,48 @@
 <template>
-  <div>
-    <VueAnnouncer />
-    <notifications
-      :duration="100000"
-      position="bottom center"
-      classes="my-notification bg-light"
-    />
-    <div v-if="withAuthLayout">
-      <auth-layout>
-        <RouterView v-slot="{ Component, route }" name="default">
-          <transition
-            :key="route.path"
-            :name="route.meta.transition"
-            mode="out-in"
-            :duration="300"
-          >
-            <Suspense>
-              <template #default>
-                <div>
-                  <LoadTranslations></LoadTranslations>
+  <VueAnnouncer />
+  <notifications
+    :duration="100000"
+    position="bottom center"
+    classes="my-notification bg-light"
+  />
+  <div v-if="withAuthLayout" style="height: 100%">
+    <auth-layout>
+      <RouterView v-slot="{ Component, route }" name="default">
+        <transition
+          :key="route.path"
+          :name="route.meta.transition"
+          mode="out-in"
+          :duration="300"
+        >
+          <Suspense>
+            <template #default>
+              <div style="height: 100%; display: flex; flex-direction: column">
+                <LoadTranslations></LoadTranslations>
 
-                  <component :is="Component" :key="route.path" />
-                </div>
-              </template>
-              <template #fallback>
+                <component :is="Component" :key="route.path" />
+              </div>
+            </template>
+            <template #fallback>
+              <div
+                style="height: 100%; width: 100%; position: fixed; opacity: 0.8"
+                class="d-flex align-items-center justify-content-center"
+              >
                 <div
-                  style="
-                    height: 100%;
-                    width: 100%;
-                    position: fixed;
-                    opacity: 0.8;
-                  "
-                  class="d-flex align-items-center justify-content-center"
+                  class="spinner-border"
+                  style="width: 4rem; height: 4rem; color: #666"
+                  role="status"
                 >
-                  <div
-                    class="spinner-border"
-                    style="width: 4rem; height: 4rem; color: #666"
-                    role="status"
-                  >
-                    <span class="sr-only">Loading...</span>
-                  </div>
+                  <span class="sr-only">Loading...</span>
                 </div>
-              </template>
-            </Suspense>
-          </transition>
-        </RouterView>
-      </auth-layout>
-    </div>
-    <div v-else class="container px-6 pt-4 pb-6 h-screen">
-      <router-view></router-view>
-    </div>
+              </div>
+            </template>
+          </Suspense>
+        </transition>
+      </RouterView>
+    </auth-layout>
+  </div>
+  <div v-else class="container px-6 pt-4 pb-6 h-screen">
+    <router-view></router-view>
   </div>
 </template>
 
