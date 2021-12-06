@@ -62,6 +62,7 @@
 import { computed, defineComponent, ref } from "vue";
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
+import ExternalLink from "@/components/ExternalLink.vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { copyText } from "../utils/copytext";
@@ -77,6 +78,7 @@ export default defineComponent({
   components: {
     BaseCard,
     BaseButton,
+    ExternalLink,
   },
   props: {
     nft: { type: Object, required: true },
