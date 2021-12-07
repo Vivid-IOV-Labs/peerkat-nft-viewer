@@ -5,16 +5,14 @@
       <figure class="h-50">
         <video
           v-if="content_type?.includes('video')"
-          :src="url"
-          autoplay
+          :src="`${url}#t=0.5`"
+          preload="metadata"
           muted
-          loop
-          playsinline
           class="img-fluid card-img-top"
           style="object-fit: cover; height: 100%"
         ></video>
         <img
-          v-if="content_type?.includes('image')"
+          v-else
           style="object-fit: cover; height: 100%"
           class="img-fluid card-img-top"
           :src="url"
