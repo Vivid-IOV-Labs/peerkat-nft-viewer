@@ -1,6 +1,6 @@
 <template>
-  <HeaderNavigation style="height: 12%" />
-  <main style="height: 88%" class="container-fluid">
+  <HeaderNavigation style="height: 20%" />
+  <main style="height: 80%" class="container-fluid">
     <slot></slot>
   </main>
 </template>
