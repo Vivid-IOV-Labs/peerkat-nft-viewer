@@ -211,12 +211,8 @@ export default defineComponent({
         }
       }
     };
-
     const lines = computed(() => store.getters["nft/getLines"]);
 
-    const fetchNext = async () => {
-      await store.dispatch("nft/fetchNext");
-    };
     const { unobserve, isIntersecting } = useIntersectionObserver(sentinel);
     watch(isIntersecting, async () => {
       console.log("is Intersecting");
@@ -231,25 +227,24 @@ export default defineComponent({
         unobserve();
       }
     });
+    // if (isInXumm) {
+    await store.dispatch("xumm/getOttData");
+    const ottdata = computed(() => store.getters["xumm/getOttData"]);
 
-    if (isInXumm) {
-      await store.dispatch("xumm/getOttData");
-      const ottdata = computed(() => store.getters["xumm/getOttData"]);
-
-      locale.value = ottdata.value.locale.split("-")[0];
-      const net = ottdata.value.nodetype == "TESTNET";
-      await store.dispatch("nft/fetchNftLines", {
-        walletAddress: ottdata.value.account,
-        network: net,
-        handleError,
-      });
-      await store.dispatch("nft/fetchNext");
-    } else if (isLoggedIn) {
-      //await main();
-      await populateNFTs();
-    } else {
-      isDialogWalletConnection.value = true;
-    }
+    locale.value = ottdata.value.locale.split("-")[0];
+    const net = ottdata.value.nodetype == "TESTNET";
+    await store.dispatch("nft/fetchNftLines", {
+      walletAddress: ottdata.value.account,
+      network: net,
+      handleError,
+    });
+    await store.dispatch("nft/fetchNext");
+    // } else if (isLoggedIn) {
+    //   //await main();
+    //   await populateNFTs();
+    // } else {
+    //   isDialogWalletConnection.value = true;
+    // }
 
     return {
       urlParams,
