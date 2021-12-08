@@ -4,7 +4,10 @@ import { NFTState } from "./state";
 
 const mutations: MutationTree<NFTState> = {
   setAll(state: NFTState, all: Array<NFT>): void {
-    state.all = all;
+    state.all = [...state.all, ...all];
+  },
+  setLines(state: NFTState, lines: Array<any>): void {
+    state.lines = lines;
   },
 };
 

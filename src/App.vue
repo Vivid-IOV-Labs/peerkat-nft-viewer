@@ -14,29 +14,38 @@
           mode="out-in"
           :duration="300"
         >
-          <Suspense>
-            <template #default>
-              <div style="height: 100%; display: flex; flex-direction: column">
-                <LoadTranslations></LoadTranslations>
-
-                <component :is="Component" :key="route.path" />
-              </div>
-            </template>
-            <template #fallback>
-              <div
-                style="height: 100%; width: 100%; position: fixed; opacity: 0.8"
-                class="d-flex align-items-center justify-content-center"
-              >
+          <keep-alive>
+            <Suspense>
+              <template #default>
                 <div
-                  class="spinner-border"
-                  style="width: 4rem; height: 4rem; color: #666"
-                  role="status"
+                  style="height: 100%; display: flex; flex-direction: column"
                 >
-                  <span class="sr-only">Loading...</span>
+                  <LoadTranslations></LoadTranslations>
+
+                  <component :is="Component" :key="route.path" />
                 </div>
-              </div>
-            </template>
-          </Suspense>
+              </template>
+              <template #fallback>
+                <div
+                  style="
+                    height: 100%;
+                    width: 100%;
+                    position: fixed;
+                    opacity: 0.8;
+                  "
+                  class="d-flex align-items-center justify-content-center"
+                >
+                  <div
+                    class="spinner-border"
+                    style="width: 4rem; height: 4rem; color: #666"
+                    role="status"
+                  >
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
+              </template>
+            </Suspense>
+          </keep-alive>
         </transition>
       </RouterView>
     </auth-layout>

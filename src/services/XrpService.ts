@@ -209,6 +209,25 @@ export async function fetchWallet(
   }
 }
 
+export async function fetchNftLines(
+  walletAddress: string //handleError: (error: Error | string) => void
+): Promise<any> {
+  // debugger;
+  const client = await init();
+  try {
+    const accountLines = await client.send({
+      command: "account_lines",
+      account: walletAddress,
+    });
+    localStorage.setItem("address", walletAddress);
+
+    const { lines } = accountLines;
+    return lines.filter(isNFT);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function fetchOne(
   account: string,
   currency: string

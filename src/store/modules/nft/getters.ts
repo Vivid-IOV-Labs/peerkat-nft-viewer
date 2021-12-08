@@ -6,6 +6,7 @@ interface NFT {
 }
 export default {
   getAll: (state: NFTState): Array<NFT> => state.all,
+  getLines: (state: NFTState): Array<NFT> => state.lines,
   getByAddress:
     (state: NFTState) =>
     (address: string): NFT | undefined => {

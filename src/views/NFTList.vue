@@ -13,15 +13,36 @@
   </div> -->
   <div
     v-if="NFTMedia.length"
-    style="overflow-y: hidden; overflow-x: scroll; padding-bottom: 0.6rem"
+    ref="root"
+    style="overflow-y: hidden; overflow-x: scroll; padding: 0.6rem 0"
     class="row flex-row flex-nowrap"
   >
     <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-12 col-md-6">
       <nft-card :nft="nft"></nft-card>
     </div>
+    <span ref="sentinel" class="sentinel"></span>
   </div>
   <div v-else>
     <h3 class="text-center mt-4">You don't have any NFT's at the moment</h3>
+  </div>
+  <div
+    v-if="isLoading"
+    style="
+      height: 100%;
+      width: 100%;
+      position: fixed;
+      opacity: 0.8;
+      background: #fff;
+    "
+    class="d-flex align-items-center justify-content-center"
+  >
+    <div
+      class="spinner-border"
+      style="width: 4rem; height: 4rem; color: #666"
+      role="status"
+    >
+      <span class="sr-only">Loading...</span>
+    </div>
   </div>
   <base-dialog
     :show="isDialogWalletConnection"
@@ -117,7 +138,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, computed, watch } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseInput from "@/components/BaseInput.vue";
 import BaseDialog from "@/components/BaseDialog.vue";
@@ -128,22 +149,9 @@ import { isRippleAddress } from "../utils/validators";
 import { required } from "@vuelidate/validators";
 import { useI18n } from "vue-i18n";
 import { inject } from "vue";
-const xummApiKey = import.meta.env.VITE_XUMM_API_KEY as string;
-const xummApiSecret = import.meta.env.VITE_XUMM_API_SECRET as string;
-import { XummSdk, XummTypes } from "xumm-sdk";
+import useIntersectionObserver from "../composable/useIntersectionObserver";
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const xAppToken = urlParams.get("xAppToken"); // || "21df3537-65a3-40c1-8a82-8a7439e1c9f8";
-const main = async () => {
-  const Sdk = new XummSdk(xummApiKey, xummApiSecret);
-
-  const appInfo = await Sdk.ping();
-  console.log("appInfo", appInfo);
-};
-interface Choice {
-  label: string;
-  value: string;
-}
 
 export default defineComponent({
   components: {
@@ -154,9 +162,10 @@ export default defineComponent({
   },
   async setup() {
     const store = useStore();
+    const sentinel = ref<HTMLElement | null>(null);
+
     const { locale } = useI18n({ useScope: "global" });
     const isInXumm = inject("isInXumm");
-
     function handleError(): void {
       isDialogWalletConnection.value = false;
       showError.value = true;
@@ -170,29 +179,6 @@ export default defineComponent({
     const adddress = isLoggedIn ? window.localStorage.getItem("address") : "";
     const walletAddress = ref(adddress);
     const NFTMedia = computed(() => store.getters["nft/getAll"] || []);
-    const type_network = ref({ label: "Main", value: "main" });
-    const type_networks = [
-      { label: "Main", value: "main" },
-      { label: "Test", value: "test" },
-    ];
-    const main_networks = [
-      { label: "wss://xrpcluster.com", value: "wss://xrpcluster.com" },
-      { label: "wss://xrpl.link", value: "wss://xrpl.link" },
-      { label: "wss://s2.ripple.com", value: "wss://s2.ripple.com" },
-    ];
-    const test_networks = [
-      {
-        label: "wss://s.altnet.rippletest.net:51233",
-        value: "wss://s.altnet.rippletest.net:51233",
-      },
-      {
-        label: "wss://xrpl.linkwss://testnet.xrpl-labs.com",
-        value: "wss://xrpl.linkwss://testnet.xrpl-labs.com",
-      },
-    ];
-
-    const test_network = ref<Choice>(test_networks[0]);
-    const main_network = ref<Choice>(main_networks[0]);
 
     const rules = computed(() => ({
       walletAddress: {
@@ -205,61 +191,77 @@ export default defineComponent({
       walletAddress,
     });
     const populateNFTs = async () => {
-      const network =
-        type_network.value.value == "test"
-          ? test_network.value.value
-          : main_network.value.value;
+      const network = "test";
       if (network) {
         isLoading.value = true;
-
         try {
-          await store.dispatch("nft/fetchAll", {
+          await store.dispatch("nft/fetchNftLines", {
             walletAddress: walletAddress.value,
             network,
             handleError,
           });
+          await store.dispatch("nft/fetchNext");
           isDialogWalletConnection.value = false;
           isLoading.value = false;
         } catch (err) {
           showError.value = true;
           isDialogWalletConnection.value = false;
           isLoading.value = false;
+          console.log(err);
         }
       }
     };
+
+    const lines = computed(() => store.getters["nft/getLines"]);
+
+    const fetchNext = async () => {
+      await store.dispatch("nft/fetchNext");
+    };
+    const { unobserve, isIntersecting } = useIntersectionObserver(sentinel);
+    watch(isIntersecting, async () => {
+      console.log("is Intersecting");
+      isLoading.value = true;
+      await store.dispatch("nft/fetchNext");
+      isLoading.value = false;
+    });
+    watch(NFTMedia, (newNfts) => {
+      console.log("newNfts", newNfts.length);
+      console.log("lines", lines.value.length);
+      if (lines.value.length == newNfts.length) {
+        unobserve();
+      }
+    });
 
     if (isInXumm) {
       await store.dispatch("xumm/getOttData");
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
 
       locale.value = ottdata.value.locale.split("-")[0];
-      const net =
-        ottdata.value.nodetype == "TESTNET"
-          ? test_networks.map((n) => n.value)
-          : main_networks.map((n) => n.value);
+      const net = ottdata.value.nodetype == "TESTNET";
       // NFTMedia.value = await main(ottdata.account, net, handleError);
       await store.dispatch("nft/fetchAll", {
         walletAddress: ottdata.value.account,
         network: net,
         handleError,
       });
+      await store.dispatch("nft/fetchNftLines", {
+        walletAddress: ottdata.value.account,
+        network: net,
+        handleError,
+      });
+      await store.dispatch("nft/fetchNext");
     } else if (isLoggedIn) {
       //await main();
-      populateNFTs();
+      await populateNFTs();
     } else {
       isDialogWalletConnection.value = true;
     }
 
     return {
       urlParams,
+      sentinel,
       isDialogWalletConnection,
-      main_networks,
-      test_networks,
-      test_network,
-      main_network,
       v$,
-      type_network,
-      type_networks,
       NFTMedia,
       isLoading,
       showError,
