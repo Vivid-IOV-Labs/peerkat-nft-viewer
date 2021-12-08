@@ -115,7 +115,7 @@ export default defineComponent({
           const { uuid } = await createPaylod(newPayload);
           openSignRequest(uuid);
         } catch (error) {
-          console.error("error", error);
+          console.log("error", error);
         }
       },
       share() {

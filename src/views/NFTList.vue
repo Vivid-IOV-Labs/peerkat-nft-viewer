@@ -17,7 +17,7 @@
     style="overflow-y: hidden; overflow-x: scroll; padding: 0.6rem 0 1.2rem"
     class="row flex-row flex-nowrap"
   >
-    <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-10 col-md-6">
+    <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-10 col-md-12">
       <nft-card :nft="nft"></nft-card>
     </div>
     <span ref="sentinel" style="background: red" class="sentinel"></span>
@@ -229,24 +229,23 @@ export default defineComponent({
         unobserve();
       }
     });
-    // if (isInXumm) {
-    await store.dispatch("xumm/getOttData");
-    const ottdata = computed(() => store.getters["xumm/getOttData"]);
+    if (isInXumm) {
+      await store.dispatch("xumm/getOttData");
+      const ottdata = computed(() => store.getters["xumm/getOttData"]);
 
-    locale.value = ottdata.value.locale.split("-")[0];
-    const net = ottdata.value.nodetype == "TESTNET";
-    await store.dispatch("nft/fetchNftLines", {
-      walletAddress: ottdata.value.account,
-      network: net,
-      handleError,
-    });
-    await store.dispatch("nft/fetchNext");
-    // } else if (isLoggedIn) {
-    //   //await main();
-    //   await populateNFTs();
-    // } else {
-    //   isDialogWalletConnection.value = true;
-    // }
+      locale.value = ottdata.value.locale.split("-")[0];
+      const net = ottdata.value.nodetype == "TESTNET";
+      await store.dispatch("nft/fetchNftLines", {
+        walletAddress: ottdata.value.account,
+        network: net,
+        handleError,
+      });
+      await store.dispatch("nft/fetchNext");
+    } else if (isLoggedIn) {
+      await populateNFTs();
+    } else {
+      isDialogWalletConnection.value = true;
+    }
 
     return {
       urlParams,
