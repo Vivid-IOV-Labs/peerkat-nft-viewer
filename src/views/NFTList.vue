@@ -238,12 +238,6 @@ export default defineComponent({
 
       locale.value = ottdata.value.locale.split("-")[0];
       const net = ottdata.value.nodetype == "TESTNET";
-      // NFTMedia.value = await main(ottdata.account, net, handleError);
-      await store.dispatch("nft/fetchAll", {
-        walletAddress: ottdata.value.account,
-        network: net,
-        handleError,
-      });
       await store.dispatch("nft/fetchNftLines", {
         walletAddress: ottdata.value.account,
         network: net,
