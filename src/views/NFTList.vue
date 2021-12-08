@@ -14,7 +14,7 @@
   <div
     v-if="NFTMedia.length"
     ref="root"
-    style="overflow-y: hidden; overflow-x: scroll; padding: 0.6rem 0"
+    style="overflow-y: hidden; overflow-x: scroll; padding: 0.6rem 0 1.2rem"
     class="row flex-row flex-nowrap"
   >
     <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-10 col-md-6">
@@ -23,7 +23,7 @@
     <span
       ref="sentinel"
       style="background: red"
-      class="sentinel col-sm-6"
+      class="sentinel col-sm-2"
     ></span>
   </div>
   <div v-else>
