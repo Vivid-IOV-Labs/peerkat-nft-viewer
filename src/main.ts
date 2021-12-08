@@ -1,7 +1,7 @@
 // if (!isInXumm && process.env.NODE_ENV === "production") {
 //   window.location.replace("https://www.vividiov.com/peerkat");
 // }
-require("intersection-observer");
+import "intersection-observer";
 import { createApp, h, Fragment } from "vue";
 import App from "./App.vue";
 import "./index.css";
