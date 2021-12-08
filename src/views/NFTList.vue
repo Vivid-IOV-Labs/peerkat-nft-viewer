@@ -22,8 +22,8 @@
     </div>
     <span
       ref="sentinel"
-      style="background: red"
-      class="sentinel col-sm-1"
+      style="background: rgb(202, 194, 194)"
+      class="sentinel card col-sm-1"
     ></span>
   </div>
   <div v-else>
