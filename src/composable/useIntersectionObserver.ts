@@ -5,7 +5,7 @@ export default function useIntersectionObserver(
   //cbk: () => Promise<void>,
   options: IntersectionObserverInit = {
     root: null,
-    threshold: 0.5,
+    threshold: 1,
     rootMargin: "0px",
   }
 ): any {
