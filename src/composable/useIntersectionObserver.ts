@@ -6,7 +6,7 @@ export default function useIntersectionObserver(
   options: IntersectionObserverInit = {
     root: null,
     threshold: 0.5,
-    rootMargin: "0px 20px",
+    rootMargin: "0px 100px",
   }
 ): any {
   const intersectionRatio = ref(0);
