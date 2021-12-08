@@ -20,7 +20,11 @@
     <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-10 col-md-6">
       <nft-card :nft="nft"></nft-card>
     </div>
-    <span ref="sentinel" class="col-sm-2"></span>
+    <span
+      ref="sentinel"
+      style="background: red"
+      class="sentinel col-sm-6"
+    ></span>
   </div>
   <div v-else>
     <h3 class="text-center mt-4">You don't have any NFT's at the moment</h3>
