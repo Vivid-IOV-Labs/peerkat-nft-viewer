@@ -17,10 +17,14 @@
     style="overflow-y: hidden; overflow-x: scroll; padding: 0.6rem 0"
     class="row flex-row flex-nowrap"
   >
-    <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-12 col-md-6">
+    <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-10 col-md-6">
       <nft-card :nft="nft"></nft-card>
     </div>
-    <span ref="sentinel" class="sentinel"></span>
+    <span
+      ref="sentinel"
+      style="background: red"
+      class="sentinel col-sm-6"
+    ></span>
   </div>
   <div v-else>
     <h3 class="text-center mt-4">You don't have any NFT's at the moment</h3>
