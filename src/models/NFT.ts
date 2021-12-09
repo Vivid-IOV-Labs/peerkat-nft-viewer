@@ -4,5 +4,5 @@ export interface NFT {
   currency: string;
   tokenName: string;
   url: string;
-  media_type: string;
+  media_type: string | null;
 }
