@@ -224,7 +224,9 @@ export default defineComponent({
       console.log("is Intersecting");
       isLoadingNext.value = true;
       await store.dispatch("nft/fetchNext");
-      isLoadingNext.value = false;
+      setTimeout(() => {
+        isLoadingNext.value = false;
+      }, 500);
     });
     // watch(NFTMedia, (newNfts) => {
     //   console.log("newNfts", newNfts.length);

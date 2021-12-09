@@ -25,7 +25,6 @@ export default function useIntersectionObserver(
       if (entry.intersectionRatio > 0) {
         isIntersecting.value = true;
         isFullyInView.value = entry.intersectionRatio >= 1;
-        //  await cbk();
         return;
       }
 
