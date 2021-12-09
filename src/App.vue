@@ -30,8 +30,10 @@
                   style="
                     height: 100%;
                     width: 100%;
-                    position: fixed;
+                    position: absolute;
                     opacity: 0.8;
+                    top: 0;
+                    left: 0;
                   "
                   class="d-flex align-items-center justify-content-center"
                 >
