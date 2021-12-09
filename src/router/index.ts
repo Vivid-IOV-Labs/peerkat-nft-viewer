@@ -10,14 +10,25 @@ const routes = [
       title: "Home Wallet Page",
     },
   },
+  // {
+  //   path: "/nft/:nftAddress/:currency/view",
+  //   name: "NFTDetail",
+  //   component: () => import("../views/NFTDetail.vue"),
+  //   meta: {
+  //     withAuth: true,
+  //     announcer: {
+  //       message: "NFT Detail Page",
+  //     },
+  //   },
+  // },
   {
-    path: "/nft/:nftAddress/:currency/view",
-    name: "NFTDetail",
-    component: () => import("../views/NFTDetail.vue"),
+    path: "/nft/:nftAddress/view",
+    name: "NFTView",
+    component: () => import("../views/NFTView.vue"),
     meta: {
       withAuth: true,
       announcer: {
-        message: "NFT Detail Page",
+        message: "NFT View Page",
       },
     },
   },

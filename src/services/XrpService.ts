@@ -1,3 +1,5 @@
+import { NFT } from "../models/NFT";
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { XrplClient } = require("xrpl-client");
 
@@ -94,11 +96,6 @@ const { XrplClient } = require("xrpl-client");
 // }
 // import { XrplClient } from "xrpl-client";
 
-interface NFT {
-  cid: string;
-  issuer: string;
-  currency: string;
-}
 type line = {
   balance: string;
   limit: string;
@@ -149,6 +146,12 @@ const test_networks = [
   "wss://xrpl.linkwss://testnet.xrpl-labs.com",
 ];
 let xrpClientInstance: typeof XrplClient | null = null;
+
+async function getMediaType(url: string) {
+  const res = await fetch(url);
+  const contentType = res.headers.get("Content-Type");
+  return contentType;
+}
 
 // export async function init(
 //   network: string | string[],
@@ -241,7 +244,7 @@ export async function fetchOne(
 
   return getOne(account_data, account, currency);
 }
-function getOne(account_data: any, account: string, currency = "") {
+async function getOne(account_data: any, account: string, currency = "") {
   const { Domain } = account_data;
 
   const source = is_hexadecimal(hexToString(Domain))
@@ -250,12 +253,17 @@ function getOne(account_data: any, account: string, currency = "") {
   const token_domain = hexToString(currency.replace("02", ""));
   const cid = source.split(":")[1];
 
+  const url = `https://ipfs.io/ipfs/${cid}`;
+
+  const media_type = await getMediaType(url);
   return {
     issuer: account,
     issuerTruncated: truncate(account),
     currency,
     tokenName: token_domain,
     cid: cid,
+    url,
+    media_type,
   };
 }
 

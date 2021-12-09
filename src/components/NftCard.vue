@@ -3,8 +3,8 @@
     <template #picture>
       <figure class="h-50">
         <video
-          v-if="content_type?.includes('video')"
-          :src="`${url}#t=0.5`"
+          v-if="nft.media_type?.includes('video')"
+          :src="`${nft.url}#t=0.5`"
           preload="metadata"
           muted
           class="img-fluid card-img-top"
@@ -14,7 +14,7 @@
           v-else
           style="object-fit: cover; height: 100%"
           class="img-fluid card-img-top"
-          :src="url"
+          :src="nft.url"
           alt="Card image cap"
           @error="fallbackImg"
         />
@@ -66,11 +66,7 @@ import { copyText } from "../utils/copytext";
 import { openSignRequest } from "../utils/XummActions";
 import { createPaylod } from "../services/XummService";
 import { XummTypes } from "xumm-sdk";
-async function fetchMedia(url: string) {
-  const res = await fetch(url);
-  const contentType = res.headers.get("Content-Type");
-  return contentType;
-}
+
 export default defineComponent({
   components: {
     BaseCard,
@@ -85,11 +81,7 @@ export default defineComponent({
     const store = useStore();
     const showIssuer = ref(false);
 
-    const url = `https://ipfs.io/ipfs/${props.nft.cid}`;
-    const content_type = await fetchMedia(url);
     return {
-      content_type,
-      url,
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
@@ -125,7 +117,7 @@ export default defineComponent({
       },
       view() {
         router.push({
-          path: `/nft/${props.nft.issuer}/${props.nft.currency}/view`,
+          path: `/nft/${props.nft.issuer}/view`,
         });
       },
     };

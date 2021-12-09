@@ -239,7 +239,7 @@ export default defineComponent({
     };
     const lines = computed(() => store.getters["nft/getLines"]);
 
-    const { unobserve, isIntersecting } = useIntersectionObserver(target);
+    const { unobserve, isIntersecting } = useIntersectionObserver(sentinel);
     watch(isIntersecting, async () => {
       console.log("is Intersecting");
       isLoadingNext.value = true;
@@ -270,7 +270,9 @@ export default defineComponent({
       });
       await store.dispatch("nft/fetchNext");
     } else if (isLoggedIn) {
-      await populateNFTs();
+      if (lines.value.length === 0) {
+        await populateNFTs();
+      }
     } else {
       isDialogWalletConnection.value = true;
     }
