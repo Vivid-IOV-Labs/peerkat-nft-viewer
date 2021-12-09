@@ -35,9 +35,9 @@
   <div
     v-if="NFTMedia.length"
     ref="root"
-    class="d-flex flex-row flex-nowrap overflow-auto"
+    class="d-flex flex-row flex-nowrap overflow-auto p-4"
   >
-    <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-xs-10">
+    <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-xs-10 col-sm-10">
       <nft-card class="w-100" :nft="nft"></nft-card>
     </div>
     <div ref="sentinel" style="width: 1px; height: 100%"></div>
@@ -187,7 +187,7 @@ export default defineComponent({
   async setup() {
     const store = useStore();
     const sentinel = ref<HTMLElement | null>(null);
-
+    const root = ref<HTMLElement | null>(null);
     const { locale } = useI18n({ useScope: "global" });
     const isInXumm = inject("isInXumm");
     function handleError(): void {
@@ -239,7 +239,7 @@ export default defineComponent({
     };
     const lines = computed(() => store.getters["nft/getLines"]);
 
-    const { unobserve, isIntersecting } = useIntersectionObserver(sentinel);
+    const { unobserve, isIntersecting } = useIntersectionObserver(target);
     watch(isIntersecting, async () => {
       console.log("is Intersecting");
       isLoadingNext.value = true;
@@ -281,6 +281,7 @@ export default defineComponent({
       endscroll,
       isDialogWalletConnection,
       v$,
+      root,
       NFTMedia,
       isLoading,
       showError,
