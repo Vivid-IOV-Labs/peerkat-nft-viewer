@@ -38,12 +38,7 @@
     class="d-flex flex-row flex-nowrap overflow-auto"
   >
     <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-10">
-      <nft-card
-        v-for="nft in NFTMedia"
-        :key="nft.issuer"
-        class="w-100"
-        :nft="nft"
-      ></nft-card>
+      <nft-card class="w-100" :nft="nft"></nft-card>
     </div>
     <div ref="sentinel" style="width: 1px; height: 100%"></div>
   </div>
