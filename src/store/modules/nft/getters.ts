@@ -10,6 +10,8 @@ export default {
   getByAddress:
     (state: NFTState) =>
     (address: string): NFT | undefined => {
+      console.log(state.all);
+      debugger;
       return state.all.find(({ issuer }) => issuer == address);
     },
 };

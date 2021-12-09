@@ -164,7 +164,6 @@ import { defineComponent, ref, computed, watch } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseInput from "@/components/BaseInput.vue";
 import BaseDialog from "@/components/BaseDialog.vue";
-import BaseCard from "@/components/BaseCard.vue";
 import NftCard from "@/components/NftCard.vue";
 import useVuelidate from "@vuelidate/core";
 import { useStore } from "vuex";
@@ -181,7 +180,6 @@ export default defineComponent({
     BaseInput,
     BaseDialog,
     BaseButton,
-    BaseCard,
     NftCard,
   },
   async setup() {
