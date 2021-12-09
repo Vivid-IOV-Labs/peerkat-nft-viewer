@@ -11,18 +11,43 @@
       change
     </button>
   </div> -->
+
+  <!-- <div ref="slidercontainer" class="horizontal-scroll-container">
+    <div
+      v-if="NFTMedia.length"
+      ref="slider"
+      :style="{
+        gridTemplateColumns: `1px repeat(${NFTMedia.length}, minmax(480px, 660px)) 1px`,
+      }"
+      class="horizontal-scroller"
+    >
+      <div ref="leftsentinel" class="sentinel"></div>
+      <nft-card
+        v-for="nft in NFTMedia"
+        :key="nft.issuer"
+        class="horizontal-scroller__item"
+        :nft="nft"
+      ></nft-card>
+      <div ref="sentinel" class="sentinel"></div>
+    </div>
+  </div> -->
+
   <div
     v-if="NFTMedia.length"
     ref="root"
-    style="overflow-y: hidden; overflow-x: scroll; padding: 0.6rem 0 1.2rem"
-    class="row flex-row flex-nowrap h-100"
+    class="d-flex flex-row flex-nowrap overflow-auto"
   >
     <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-10">
-      <nft-card :nft="nft"></nft-card>
+      <nft-card
+        v-for="nft in NFTMedia"
+        :key="nft.issuer"
+        class="w-100"
+        :nft="nft"
+      ></nft-card>
     </div>
     <div ref="sentinel"></div>
   </div>
-  <div v-else>
+  <div v-if="!NFTMedia.length">
     <h3 class="text-center mt-4">You don't have any NFT's at the moment</h3>
   </div>
   <div
@@ -277,3 +302,38 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+.horizontal-scroll-container {
+  width: 100%;
+  height: 100%;
+
+  position: relative;
+}
+.horizontal-scroll-container__left-scrim:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10%;
+  height: 100%;
+  background: linear-gradient(to right, #111, transparent);
+}
+.horizontal-scroll-container__right-scrim:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 10%;
+  height: 100%;
+  background: linear-gradient(to left, #111, transparent);
+}
+.horizontal-scroll-container .horizontal-scroller {
+  display: grid;
+  grid-gap: 1rem;
+  height: 100%;
+  padding-right: 0;
+  overflow-y: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+</style>
