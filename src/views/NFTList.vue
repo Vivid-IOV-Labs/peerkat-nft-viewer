@@ -45,7 +45,7 @@
         :nft="nft"
       ></nft-card>
     </div>
-    <div ref="sentinel"></div>
+    <div ref="sentinel" style="width: 1px; height: 100%"></div>
   </div>
   <div v-if="!NFTMedia.length">
     <h3 class="text-center mt-4">You don't have any NFT's at the moment</h3>
