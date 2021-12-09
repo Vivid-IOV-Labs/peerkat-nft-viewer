@@ -37,7 +37,7 @@
     ref="root"
     class="d-flex flex-row flex-nowrap overflow-auto"
   >
-    <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-10">
+    <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-xs-10">
       <nft-card class="w-100" :nft="nft"></nft-card>
     </div>
     <div ref="sentinel" style="width: 1px; height: 100%"></div>
@@ -248,14 +248,14 @@ export default defineComponent({
         isLoadingNext.value = false;
       }, 500);
     });
-    // watch(NFTMedia, (newNfts) => {
-    //   console.log("newNfts", newNfts.length);
-    //   console.log("lines", lines.value.length);
-    //   if (lines.value.length == newNfts.length) {
-    //     unobserve();
-    //     endscroll.value = true;
-    //   }
-    // });
+    watch(NFTMedia, (newNfts) => {
+      console.log("newNfts", newNfts.length);
+      console.log("lines", lines.value.length);
+      if (lines.value.length == newNfts.length) {
+        unobserve();
+        endscroll.value = true;
+      }
+    });
 
     if (isInXumm) {
       await store.dispatch("xumm/getOttData");
