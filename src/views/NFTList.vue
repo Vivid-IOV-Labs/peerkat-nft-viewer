@@ -17,20 +17,16 @@
     style="overflow-y: hidden; overflow-x: scroll; padding: 0.6rem 0 1.2rem"
     class="row flex-row flex-nowrap h-100"
   >
-    <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-10 col-md-12">
+    <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-sm-10">
       <nft-card :nft="nft"></nft-card>
     </div>
-    <span
-      ref="sentinel"
-      style="background: rgb(202, 194, 194)"
-      class="sentinel card col-sm-1"
-    ></span>
+    <div ref="sentinel"></div>
   </div>
   <div v-else>
     <h3 class="text-center mt-4">You don't have any NFT's at the moment</h3>
   </div>
   <div
-    v-if="isLoading"
+    v-if="isLoadingNext"
     style="
       height: 100%;
       width: 100%;
@@ -148,6 +144,7 @@ import { defineComponent, ref, computed, watch } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseInput from "@/components/BaseInput.vue";
 import BaseDialog from "@/components/BaseDialog.vue";
+import BaseCard from "@/components/BaseCard.vue";
 import NftCard from "@/components/NftCard.vue";
 import useVuelidate from "@vuelidate/core";
 import { useStore } from "vuex";
@@ -164,6 +161,7 @@ export default defineComponent({
     BaseInput,
     BaseDialog,
     BaseButton,
+    BaseCard,
     NftCard,
   },
   async setup() {
@@ -179,9 +177,11 @@ export default defineComponent({
     }
 
     const showError = ref(false);
+    const endscroll = ref(false);
     const isLoggedIn = !!window.localStorage.getItem("address");
     const isDialogWalletConnection = ref(false);
     const isLoading = ref(false);
+    const isLoadingNext = ref(false);
     const adddress = isLoggedIn ? window.localStorage.getItem("address") : "";
     const walletAddress = ref(adddress);
     const NFTMedia = computed(() => store.getters["nft/getAll"] || []);
@@ -222,17 +222,19 @@ export default defineComponent({
     const { unobserve, isIntersecting } = useIntersectionObserver(sentinel);
     watch(isIntersecting, async () => {
       console.log("is Intersecting");
-      isLoading.value = true;
+      isLoadingNext.value = true;
       await store.dispatch("nft/fetchNext");
-      isLoading.value = false;
+      isLoadingNext.value = false;
     });
-    watch(NFTMedia, (newNfts) => {
-      console.log("newNfts", newNfts.length);
-      console.log("lines", lines.value.length);
-      if (lines.value.length == newNfts.length) {
-        unobserve();
-      }
-    });
+    // watch(NFTMedia, (newNfts) => {
+    //   console.log("newNfts", newNfts.length);
+    //   console.log("lines", lines.value.length);
+    //   if (lines.value.length == newNfts.length) {
+    //     unobserve();
+    //     endscroll.value = true;
+    //   }
+    // });
+
     if (isInXumm) {
       await store.dispatch("xumm/getOttData");
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
@@ -254,6 +256,7 @@ export default defineComponent({
     return {
       urlParams,
       sentinel,
+      endscroll,
       isDialogWalletConnection,
       v$,
       NFTMedia,
@@ -261,6 +264,7 @@ export default defineComponent({
       showError,
       walletAddress,
       isInXumm,
+      isLoadingNext,
       populateNFTs,
       formatVuelidateErrors(errors: any[]) {
         return errors.map((error) => {

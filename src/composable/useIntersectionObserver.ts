@@ -5,8 +5,8 @@ export default function useIntersectionObserver(
   //cbk: () => Promise<void>,
   options: IntersectionObserverInit = {
     root: null,
-    threshold: 0.5,
-    rootMargin: "0px 100px",
+    threshold: 0,
+    rootMargin: "0px",
   }
 ): any {
   const intersectionRatio = ref(0);

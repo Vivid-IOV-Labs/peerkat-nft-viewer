@@ -1,6 +1,5 @@
 <template>
   <base-card style="height: 100%">
-    {{ content_type }}
     <template #picture>
       <figure class="h-50">
         <video
