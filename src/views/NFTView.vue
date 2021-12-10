@@ -1,7 +1,7 @@
 <template>
   <router-link :to="{ path: `/` }" class="my-4 btn btn-link">Back </router-link>
-  <div v-if="nft" class="d-flex h-88 justify-center items-center">
-    <figure>
+  <div v-if="nft" class="w-100 p4">
+    <figure class="w-100 p4">
       <img
         v-if="nft.media_type?.includes('image')"
         class="card-img"
