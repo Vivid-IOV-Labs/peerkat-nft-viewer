@@ -35,12 +35,12 @@
   <div
     v-if="NFTMedia.length"
     ref="root"
-    class="d-flex h-100 flex-row flex-nowrap overflow-auto"
+    class="d-flex h-100 flex-row flex-nowrap overflow-auto p-2"
   >
     <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-xs-10 col-sm-10">
-      <nft-card class="w-100 h-100" :nft="nft"></nft-card>
+      <nft-card class="h-100" :nft="nft"></nft-card>
     </div>
-    <div ref="sentinel" style="width: 1px; height: 100%"></div>
+    <div ref="sentinel" style="width: 2px; height: 100%"></div>
   </div>
   <div v-if="!NFTMedia.length">
     <h3 class="text-center mt-4">You don't have any NFT's at the moment</h3>
