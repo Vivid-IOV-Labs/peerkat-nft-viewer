@@ -22,7 +22,7 @@ const routes = [
   //   },
   // },
   {
-    path: "/nft/view",
+    path: "/nft/:nftAddress/view",
     name: "NFTView",
     component: () => import("../views/NFTView.vue"),
     meta: {
@@ -46,8 +46,8 @@ const routes = [
 ];
 
 const router = createRouter({
-  routes,
   history: createWebHistory(),
+  routes,
 });
 
 // router.beforeEach((to, from, next) => {

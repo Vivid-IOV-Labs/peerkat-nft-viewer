@@ -185,7 +185,6 @@ export async function init(): Promise<typeof XrplClient> {
 export async function fetchWallet(
   walletAddress: string //handleError: (error: Error | string) => void
 ): Promise<any> {
-  // debugger;
   const client = await init();
   try {
     const accountLines = await client.send({
@@ -215,7 +214,6 @@ export async function fetchWallet(
 export async function fetchNftLines(
   walletAddress: string //handleError: (error: Error | string) => void
 ): Promise<any> {
-  // debugger;
   const client = await init();
   try {
     const accountLines = await client.send({
