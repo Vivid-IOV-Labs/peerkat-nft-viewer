@@ -40,7 +40,12 @@
     <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-11">
       <nft-card :nft="nft"></nft-card>
     </div>
-    <div ref="sentinel" class="col-sm-1" style="width: 1px; height: 100%"></div>
+    <div
+      ref="sentinel"
+      :class="{ hidden: endscroll }"
+      class="col-sm-1 card"
+      style="width: 1px; height: 100%"
+    ></div>
   </div>
   <div v-if="!NFTMedia.length">
     <h3 class="text-center mt-4">You don't have any NFT's at the moment</h3>
