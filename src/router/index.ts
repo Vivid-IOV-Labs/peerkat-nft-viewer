@@ -10,28 +10,28 @@ const routes = [
       title: "Home Wallet Page",
     },
   },
-  {
-    path: "/nft/:nftAddress/:currency/view",
-    name: "NFTDetail",
-    component: () => import("../views/NFTDetail.vue"),
-    meta: {
-      withAuth: true,
-      announcer: {
-        message: "NFT Detail Page",
-      },
-    },
-  },
   // {
-  //   path: "/nft/:nftAddress/view",
-  //   name: "NFTView",
-  //   component: () => import("../views/NFTView.vue"),
+  //   path: "/nft/:nftAddress/:currency/view",
+  //   name: "NFTDetail",
+  //   component: () => import("../views/NFTDetail.vue"),
   //   meta: {
   //     withAuth: true,
   //     announcer: {
-  //       message: "NFT View Page",
+  //       message: "NFT Detail Page",
   //     },
   //   },
   // },
+  {
+    path: "/nft/view",
+    name: "NFTView",
+    component: () => import("../views/NFTView.vue"),
+    meta: {
+      withAuth: true,
+      announcer: {
+        message: "NFT View Page",
+      },
+    },
+  },
   {
     path: "/nft/:nftAddress/:currency/update",
     name: "NFTUpdate",
@@ -46,8 +46,8 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
   routes,
+  history: createWebHistory(),
 });
 
 // router.beforeEach((to, from, next) => {

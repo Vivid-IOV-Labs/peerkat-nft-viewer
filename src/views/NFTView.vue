@@ -1,5 +1,7 @@
 <template>
-  <router-link :to="{ path: `/` }" class="my-4 btn btn-link">Back </router-link>
+  <router-link :to="{ path: `/nft` }" class="my-4 btn btn-link"
+    >Back
+  </router-link>
   nft view
   <!-- <div v-if="nft" class="d-flex h-88 justify-center items-center">
     <figure>
@@ -24,27 +26,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, inject } from "vue";
-import { useRoute } from "vue-router";
-import { useStore } from "vuex";
+// import { defineComponent, computed, inject } from "vue";
+// import { useRoute } from "vue-router";
+// import { useStore } from "vuex";
 
-export default defineComponent({
-  setup() {
-    const route = useRoute();
-    const store = useStore();
+// export default defineComponent({
+//   setup() {
+//     const route = useRoute();
+//     const store = useStore();
 
-    // const nft = computed(() => {
-    //   return store.getters["nft/getByAddress"](
-    //     route.params.nftAddress as string
-    //   );
-    // });
-    return {
-      // nft,
-      isInXumm: inject("isInXumm"),
-      fallbackImg(event: Event): void {
-        (event.target as HTMLImageElement).src = "thumbnail.jpg";
-      },
-    };
-  },
-});
+//     // const nft = computed(() => {
+//     //   return store.getters["nft/getByAddress"](
+//     //     route.params.nftAddress as string
+//     //   );
+//     // });
+//     return {
+//       // nft,
+//       isInXumm: inject("isInXumm"),
+//       fallbackImg(event: Event): void {
+//         (event.target as HTMLImageElement).src = "thumbnail.jpg";
+//       },
+//     };
+//   },
+// });
 </script>
