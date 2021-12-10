@@ -43,7 +43,7 @@
     <div
       v-if="NFTMedia.length < lines.length"
       ref="sentinel"
-      class="col-sm-11 card"
+      class="col-11 card"
       style="background: #eee; height: 100%"
     ></div>
   </div>
@@ -255,7 +255,6 @@ export default defineComponent({
       console.log(NFTMedia.value.lenght);
       if (lines.value.length == newNfts.length) {
         unobserve();
-        debugger;
         endscroll.value = true;
       }
     });
