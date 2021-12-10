@@ -7,20 +7,15 @@ function initialize() {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const { XummSdkJwt } = require("xumm-sdk");
   Sdk = new XummSdkJwt(xummApiKey);
-  console.log("Initialize SDK");
   const redirect = Sdk.xApp.get("redirect");
-  console.log("redirect", redirect);
 }
 export async function getOttData(): Promise<xAppOttData> {
   if (Sdk) {
-    console.log("calling sdk getOttdata");
     const ottdata = await Sdk.getOttData();
     return ottdata;
   } else {
     initialize();
     const ottdata = await Sdk.getOttData();
-    console.log("calling sdk getOttdata", ottdata);
-    console.log(ottdata);
     return ottdata;
   }
 }

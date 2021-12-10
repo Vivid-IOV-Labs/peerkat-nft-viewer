@@ -41,10 +41,10 @@
       <nft-card :nft="nft"></nft-card>
     </div>
     <div
+      v-if="NFTMedia.length < lines.length"
       ref="sentinel"
-      :class="{ hidden: endscroll }"
-      class="col-sm-1 card"
-      style="width: 1px; height: 100%"
+      class="col-sm-11 card"
+      style="background: #eee; height: 100%"
     ></div>
   </div>
   <div v-if="!NFTMedia.length">
@@ -207,7 +207,8 @@ export default defineComponent({
     const isLoadingNext = ref(false);
     const adddress = isLoggedIn ? window.localStorage.getItem("address") : "";
     const walletAddress = ref(adddress);
-    const NFTMedia = computed(() => store.getters["nft/getAll"] || []);
+    const NFTMedia = computed(() => store.getters["nft/getAll"]);
+    const lines = computed(() => store.getters["nft/getLines"]);
 
     const rules = computed(() => ({
       walletAddress: {
@@ -239,7 +240,6 @@ export default defineComponent({
         }
       }
     };
-    const lines = computed(() => store.getters["nft/getLines"]);
 
     const { unobserve, isIntersecting } = useIntersectionObserver(sentinel);
     watch(isIntersecting, async () => {
@@ -250,8 +250,12 @@ export default defineComponent({
       }, 500);
     });
     watch(NFTMedia, (newNfts) => {
+      console.log(lines.value.length);
+      console.log(newNfts.lenght);
+      console.log(NFTMedia.value.lenght);
       if (lines.value.length == newNfts.length) {
         unobserve();
+        debugger;
         endscroll.value = true;
       }
     });
@@ -285,6 +289,7 @@ export default defineComponent({
       isDialogWalletConnection,
       v$,
       root,
+      lines,
       NFTMedia,
       isLoading,
       showError,
