@@ -269,6 +269,7 @@ export default defineComponent({
       await store.dispatch("nft/fetchNext");
     } else if (isLoggedIn) {
       if (lines.value.length === 0) {
+        console.log("populate", lines.value.length);
         await populateNFTs();
       }
     } else {

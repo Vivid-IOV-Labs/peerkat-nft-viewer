@@ -18,8 +18,9 @@
             <template #default>
               <div style="height: 100%; display: flex; flex-direction: column">
                 <LoadTranslations></LoadTranslations>
-
-                <component :is="Component" :key="route.path" />
+                <keep-alive>
+                  <component :is="Component" :key="route.path" />
+                </keep-alive>
               </div>
             </template>
             <template #fallback>
