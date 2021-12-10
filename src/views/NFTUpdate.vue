@@ -72,7 +72,6 @@ export default defineComponent({
     const store = useStore();
     const trustLinePayload = ref(null);
     const signLink = ref<string | undefined>(undefined);
-    console.log(route.params.nftAddress);
 
     const nft = await store.getters["nft/getByAddress"](
       route.params.nftAddress as string
@@ -106,7 +105,6 @@ export default defineComponent({
           const {
             next: { always },
           } = await createPaylod(newPayload);
-          console.log("got events ", always);
           signLink.value = always as string;
         } catch (error) {
           console.log("error", error);

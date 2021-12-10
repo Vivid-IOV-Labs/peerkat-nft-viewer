@@ -33,7 +33,6 @@ const actions: ActionTree<NFT, NFTState> = {
   async fetchNext({ commit, getters }): Promise<void> {
     const count = getters.getAll.length;
     const nextLines = getters.getLines.slice(count, count + 4);
-    console.log(getters.getAll, getters.getLines);
     const nextNfts: NFT[] = await Promise.all(
       nextLines.map(async (line: line) => {
         const { account, currency } = line;

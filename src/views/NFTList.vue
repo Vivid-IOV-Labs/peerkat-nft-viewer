@@ -231,7 +231,6 @@ export default defineComponent({
           showError.value = true;
           isDialogWalletConnection.value = false;
           isLoading.value = false;
-          console.log(err);
         }
       }
     };
@@ -239,7 +238,6 @@ export default defineComponent({
 
     const { unobserve, isIntersecting } = useIntersectionObserver(sentinel);
     watch(isIntersecting, async () => {
-      console.log("is Intersecting");
       isLoadingNext.value = true;
       await store.dispatch("nft/fetchNext");
       setTimeout(() => {
@@ -247,8 +245,6 @@ export default defineComponent({
       }, 500);
     });
     watch(NFTMedia, (newNfts) => {
-      console.log("newNfts", newNfts.length);
-      console.log("lines", lines.value.length);
       if (lines.value.length == newNfts.length) {
         unobserve();
         endscroll.value = true;
@@ -256,20 +252,21 @@ export default defineComponent({
     });
 
     if (isInXumm) {
-      await store.dispatch("xumm/getOttData");
-      const ottdata = computed(() => store.getters["xumm/getOttData"]);
+      if (lines.value.length === 0) {
+        await store.dispatch("xumm/getOttData");
+        const ottdata = computed(() => store.getters["xumm/getOttData"]);
 
-      locale.value = ottdata.value.locale.split("-")[0];
-      const net = ottdata.value.nodetype == "TESTNET";
-      await store.dispatch("nft/fetchNftLines", {
-        walletAddress: ottdata.value.account,
-        network: net,
-        handleError,
-      });
-      await store.dispatch("nft/fetchNext");
+        locale.value = ottdata.value.locale.split("-")[0];
+        const net = ottdata.value.nodetype == "TESTNET";
+        await store.dispatch("nft/fetchNftLines", {
+          walletAddress: ottdata.value.account,
+          network: net,
+          handleError,
+        });
+        await store.dispatch("nft/fetchNext");
+      }
     } else if (isLoggedIn) {
       if (lines.value.length === 0) {
-        console.log("populate", lines.value.length);
         await populateNFTs();
       }
     } else {
