@@ -17,7 +17,6 @@
           <Suspense>
             <template #default>
               <div style="height: 100%; display: flex; flex-direction: column">
-                <LoadTranslations></LoadTranslations>
                 <component :is="Component" :key="route.path" />
               </div>
             </template>

@@ -1,122 +1,91 @@
 <template>
-  <router-link :to="{ path: `/` }" class="my-4 btn btn-link">Back </router-link>
-  <div class="d-flex h-88 justify-center items-center">
-    <figure v-if="content_type?.includes('image')">
-      <img
-        class="card-img"
-        :src="url"
-        alt="Card image cap"
-        @error="fallbackImg"
-      />
-    </figure>
-    <video
-      v-if="content_type?.includes('video')"
-      :src="url"
-      autoplay
-      muted
-      loop
-      playsinline
-      class="w-100 card-img"
-    ></video>
-    <!-- <template #text style="flex: 1">
-      <div class="pt-4">
-        <ul class="list-group">
-          <li class="list-group-item">
-            <h5>Token Name</h5>
-            {{ nft.currency }}
-          </li>
-          <li class="list-group-item">
-            <h5>Issuer</h5>
-            {{ nft.issuer }}
-          </li>
-        </ul>
-      </div>
-    </template>
-    <template #footer>
-      <base-button class="mr-2" @click="createTrustline">Trustline</base-button>
-      <external-link
-        :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
-        >External link</external-link
-      >
-      <base-button class="mr-2" @click="share">Share</base-button>
-    </template> -->
-  </div>
-  <!-- <div class="row mt-4">
-    <div class="col-sm-12 col-xs-12 accordion">
-      <div class="card">
-        <div class="card-header">
-          <h1 class="mb-0">
-            <button
-              class="btn btn-link btn-block text-left"
-              type="button"
-              @click.prevent="toggleAction"
-            >
-              Actions
-            </button>
-          </h1>
+  <div class="pb-4">
+    <router-link :to="{ path: `/` }" class="my-4 btn btn-link"
+      >Back
+    </router-link>
+    <base-card-page class="mb-4">
+      <template #picture>
+        <figure class="w-100 p4">
+          <img
+            v-if="nft.media_type?.includes('image')"
+            class="card-img"
+            :src="nft.url"
+            alt="Card image cap"
+            @error="fallbackImg"
+          />
+        </figure>
+        <video
+          v-if="nft.media_type?.includes('video')"
+          :src="nft.url"
+          autoplay
+          muted
+          loop
+          playsinline
+          class="w-100 card-img"
+        ></video>
+      </template>
+
+      <template #text style="flex: 1">
+        <div class="pt-4">
+          <ul class="list-group">
+            <li class="list-group-item">
+              <h5>Token Name</h5>
+              {{ nft.currency }}
+            </li>
+            <li class="list-group-item">
+              <h5>Issuer</h5>
+              {{ nft.issuer }}
+            </li>
+          </ul>
         </div>
-        <transition name="smooth">
-          <div :class="{ show: showActions }" class="collapse fade">
-            <div class="card-body">
-              <div class="card-text">
-                <ul class="list-group">
-                  <li class="list-group-item d-flex">
-                    <h5>update</h5>
-                    <base-button class="mr-2">Return</base-button>
-                  </li>
-                  <li class="list-group-item d-flex">
-                    <h5>return</h5>
-                    <base-button class="mr-2">Return</base-button>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </transition>
-      </div>
-    </div>
-  </div> -->
+      </template>
+      <template #footer>
+        <base-button class="mr-2" @click="createTrustline"
+          >Trustline</base-button
+        >
+        <external-link
+          :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
+          >External link</external-link
+        >
+        <base-button class="mr-2" @click="share">Share</base-button>
+      </template>
+    </base-card-page>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, ref, inject } from "vue";
+import ExternalLink from "@/components/ExternalLink.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import BaseCard from "@/components/BaseCardPage.vue";
+import BaseCardPage from "@/components/BaseCardPage.vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { copyText } from "../utils/copytext";
 import type { XummTypes } from "xumm-sdk";
 import { createPaylod } from "../services/XummService";
 import { fetchOne } from "../services/XrpService";
-import ExternalLink from "../components/ExternalLink.vue";
 import { openSignRequest } from "../utils/XummActions";
 
-async function fetchMedia(url: string) {
-  const res = await fetch(url);
-  const contentType = res.headers.get("Content-Type");
-  return contentType;
-}
-
 export default defineComponent({
-  components: { BaseButton, BaseCard, ExternalLink },
+  components: { BaseButton, BaseCardPage, ExternalLink },
   async setup() {
+    debugger;
     const route = useRoute();
     const store = useStore();
     const showActions = ref(false);
-
+    debugger;
     // const nft = await store.getters["nft/getByAddress"](
     //   route.params.nftAddress as string
     // );
+
+    ///https://xumm.app/detect/xapp:peerkat.sandbox
     const nft = await fetchOne(
       route.params.nftAddress.toString(),
       route.params.currency.toString()
     );
-    const url = `https://ipfs.io/ipfs/${nft.cid}`;
-    const content_type = await fetchMedia(url);
+    debugger;
     return {
       nft,
-      content_type,
-      url,
       showActions,
       toggleAction() {
         showActions.value = !showActions.value;

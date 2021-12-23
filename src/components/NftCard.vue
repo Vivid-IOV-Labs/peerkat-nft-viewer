@@ -110,7 +110,10 @@ export default defineComponent({
         }
       },
       share() {
-        copyText(window.location.toString());
+        router.push({
+          path: `/nft/${props.nft.issuer}/${props.nft.currency}/update`,
+        });
+        //copyText(window.location.toString());
       },
       inspect() {
         copyText(window.location.toString());

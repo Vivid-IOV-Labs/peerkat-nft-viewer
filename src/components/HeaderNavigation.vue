@@ -10,20 +10,18 @@
           class="d-inline-block align-top"
         />
       </span>
-      <h1
-        style="text-transform: uppercase; font-weight: bold; font-size: 1.2rem"
-      >
-        Peerkat
+      <h1 style="font-weight: bold; font-size: 1.2rem">
+        Welcome To your Perkat Wallet
       </h1>
       <div class="locale-changer">
-        <base-select
+        <!-- <base-select
           id="lang"
           v-model="$i18n.locale"
           :choices="languages"
           label-text="Select Language"
           :as-val="true"
           :label-hidden="true"
-        ></base-select>
+        ></base-select> -->
       </div>
     </nav>
   </header>
