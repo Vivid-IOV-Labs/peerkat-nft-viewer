@@ -11,7 +11,7 @@
         />
       </span>
       <h1 style="font-weight: bold; font-size: 1.2rem">
-        Welcome To your Perkat Wallet
+        Welcome
       </h1>
       <div class="locale-changer">
         <!-- <base-select
