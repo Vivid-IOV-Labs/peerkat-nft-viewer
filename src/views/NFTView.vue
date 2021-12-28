@@ -26,9 +26,10 @@
 import { defineComponent, computed, inject } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
+import { saveToStorage } from "../services/XummService";
 
 export default defineComponent({
-  setup() {
+  async setup() {
     const route = useRoute();
     const store = useStore();
 
@@ -37,6 +38,7 @@ export default defineComponent({
         route.params.nftAddress as string
       );
     });
+    await saveToStorage(nft.value);
     return {
       nft,
       isInXumm: inject("isInXumm"),

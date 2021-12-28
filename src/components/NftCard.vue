@@ -65,7 +65,7 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { copyText } from "../utils/copytext";
 import { openSignRequest } from "../utils/XummActions";
-import { createPaylod } from "../services/XummService";
+// import XummService from "../services/XummService";
 import { XummTypes } from "xumm-sdk";
 
 export default defineComponent({
@@ -87,29 +87,29 @@ export default defineComponent({
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
       showIssuer,
-      async createTrustline() {
-        const {
-          value: { user },
-        } = computed(() => store.getters["xumm/getOttData"]);
-        const newPayload: XummTypes.CreatePayload = {
-          user_token: user,
-          txjson: {
-            TransactionType: "TrustSet",
-            Flags: 131072,
-            LimitAmount: {
-              currency: props.nft.currency,
-              issuer: props.nft.issuer,
-              value: "1000000000000000e-96",
-            },
-          },
-        };
-        try {
-          const { uuid } = await createPaylod(newPayload);
-          openSignRequest(uuid);
-        } catch (error) {
-          console.log("error", error);
-        }
-      },
+      // async createTrustline() {
+      //   const {
+      //     value: { user },
+      //   } = computed(() => store.getters["xumm/getOttData"]);
+      //   const newPayload: XummTypes.CreatePayload = {
+      //     user_token: user,
+      //     txjson: {
+      //       TransactionType: "TrustSet",
+      //       Flags: 131072,
+      //       LimitAmount: {
+      //         currency: props.nft.currency,
+      //         issuer: props.nft.issuer,
+      //         value: "1000000000000000e-96",
+      //       },
+      //     },
+      //   };
+      //   try {
+      //     const { uuid } = await XummService.createPaylod(newPayload);
+      //     openSignRequest(uuid);
+      //   } catch (error) {
+      //     console.log("error", error);
+      //   }
+      // },
       share() {
         router.push({
           path: `/nft/${props.nft.issuer}/${props.nft.currency}/update`,
