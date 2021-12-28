@@ -40,9 +40,6 @@
         </div>
       </template>
       <template #footer>
-        <base-button class="mr-2" @click="createTrustline"
-          >Trustline</base-button
-        >
         <external-link
           :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
           >External link</external-link
@@ -62,7 +59,6 @@ import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { copyText } from "../utils/copytext";
 import type { XummTypes } from "xumm-sdk";
-import { createPaylod } from "../services/XummService";
 import { fetchOne } from "../services/XrpService";
 import { openSignRequest } from "../utils/XummActions";
 
@@ -94,29 +90,29 @@ export default defineComponent({
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
-      async createTrustline() {
-        const {
-          value: { user },
-        } = computed(() => store.getters["xumm/getOttData"]);
-        const newPayload: XummTypes.CreatePayload = {
-          user_token: user,
-          txjson: {
-            TransactionType: "TrustSet",
-            Flags: 131072,
-            LimitAmount: {
-              currency: nft.currency,
-              issuer: nft.issuer,
-              value: "1000000000000000e-96",
-            },
-          },
-        };
-        try {
-          const { uuid } = await createPaylod(newPayload);
-          openSignRequest(uuid);
-        } catch (error) {
-          console.log("error", error);
-        }
-      },
+      // async createTrustline() {
+      //   const {
+      //     value: { user },
+      //   } = computed(() => store.getters["xumm/getOttData"]);
+      //   const newPayload: XummTypes.CreatePayload = {
+      //     user_token: user,
+      //     txjson: {
+      //       TransactionType: "TrustSet",
+      //       Flags: 131072,
+      //       LimitAmount: {
+      //         currency: nft.currency,
+      //         issuer: nft.issuer,
+      //         value: "1000000000000000e-96",
+      //       },
+      //     },
+      //   };
+      //   try {
+      //     const { uuid } = await createPaylod(newPayload);
+      //     openSignRequest(uuid);
+      //   } catch (error) {
+      //     console.log("error", error);
+      //   }
+      // },
       share() {
         copyText(window.location.toString());
       },

@@ -8,15 +8,16 @@
     "
   >
     <h3 class="text-center mt-4">Your recently viewed items NFTs</h3>
+    <pre>{{ nft }}</pre>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent, inject } from "vue";
-import { getStorage } from "../services/XummService";
+import XummService from "../services/XummService";
 
 export default defineComponent({
   async setup() {
-    const nft = await getStorage();
+    const nft = await XummService.getStorage();
     return {
       nft,
       isInXumm: inject("isInXumm"),
