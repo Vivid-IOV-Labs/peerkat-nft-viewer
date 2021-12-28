@@ -5,7 +5,7 @@ import { XummState } from "./state";
 const actions: ActionTree<XummState, xAppOttData> = {
   async getOttData({ commit }): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const XummService = require("../../../services/XummService");
+    const XummService = require("../../../services/XummService").default;
     console.log("XummService", XummService);
     const OttData = await XummService.getOttData();
     commit("setOttData", OttData);
