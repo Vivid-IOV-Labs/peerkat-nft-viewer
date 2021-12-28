@@ -46,8 +46,9 @@
         > -->
         <external-link
           class="mr-2"
-          :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
-          >Inspect</external-link
+          :url="`https://test.bithomp.com/explorer/${nft.issuer}`"
+        >
+          Inspect</external-link
         >
         <base-button class="mr-2" @click="share">Share</base-button>
         <base-button class="mr-2" @click="view">View</base-button>

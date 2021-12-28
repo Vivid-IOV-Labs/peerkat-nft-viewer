@@ -1,7 +1,7 @@
 <template>
   <header>
     <nav :class="`navbar-${theme} bg-${theme}`" class="navbar sticky-top">
-      <span class="navbar-brand">
+      <span class="navbar-brand col">
         <img
           src="@/assets/img/logopeerkat.png"
           alt="Peerkat logo"
@@ -10,33 +10,20 @@
           class="d-inline-block align-top"
         />
       </span>
-      <h1 style="font-weight: bold; font-size: 1.2rem">
+      <h1 class="col text-center" style="font-weight: bold; font-size: 1.2rem">
         Welcome
       </h1>
-      <div class="locale-changer">
-        <!-- <base-select
-          id="lang"
-          v-model="$i18n.locale"
-          :choices="languages"
-          label-text="Select Language"
-          :as-val="true"
-          :label-hidden="true"
-        ></base-select> -->
-      </div>
+      <div class="col"></div>
     </nav>
   </header>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import BaseSelect from "@/components/BaseSelect.vue";
 
 var theme = (
   new URLSearchParams(document.location.href).get("xAppStyle") || "light"
 ).toLowerCase();
 export default defineComponent({
-  components: {
-    BaseSelect,
-  },
   setup: () => {
     return {
       theme,

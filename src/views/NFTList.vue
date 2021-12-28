@@ -47,8 +47,16 @@
       style="background: #eee; height: 100%"
     ></div>
   </div>
-  <div v-if="!NFTMedia.length">
-    <h3 class="text-center mt-4">You don't have any NFT's at the moment</h3>
+  <div
+    v-if="!NFTMedia.length"
+    style="
+      display: flex;
+      align-items: center;
+      height: 100%;
+      justify-content: center;
+    "
+  >
+    <h3 class="text-center mt-4">You have no NFTs to view currently</h3>
   </div>
   <div
     v-if="isLoadingNext"
