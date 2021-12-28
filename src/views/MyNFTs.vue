@@ -215,7 +215,7 @@ export default defineComponent({
     const isLoadingNext = ref(false);
     const adddress = isLoggedIn ? window.localStorage.getItem("address") : "";
     const walletAddress = ref(adddress);
-    const NFTMedia = computed(() => store.getters["nft/getAll"]);
+    const NFTMedia = []; //computed(() => store.getters["nft/getAll"]);
     const lines = computed(() => store.getters["nft/getLines"]);
 
     const rules = computed(() => ({
@@ -257,15 +257,15 @@ export default defineComponent({
         isLoadingNext.value = false;
       }, 500);
     });
-    watch(NFTMedia, (newNfts) => {
-      console.log(lines.value.length);
-      console.log(newNfts.lenght);
-      console.log(NFTMedia.value.lenght);
-      if (lines.value.length == newNfts.length) {
-        unobserve();
-        endscroll.value = true;
-      }
-    });
+    // watch(NFTMedia, (newNfts) => {
+    //   console.log(lines.value.length);
+    //   console.log(newNfts.lenght);
+    //   console.log(NFTMedia.value.lenght);
+    //   if (lines.value.length == newNfts.length) {
+    //     unobserve();
+    //     endscroll.value = true;
+    //   }
+    // });
 
     if (isInXumm) {
       if (lines.value.length === 0) {
@@ -283,7 +283,7 @@ export default defineComponent({
       }
     } else if (isLoggedIn) {
       if (lines.value.length === 0) {
-        await populateNFTs();
+        // await populateNFTs();
       }
     } else {
       isDialogWalletConnection.value = true;

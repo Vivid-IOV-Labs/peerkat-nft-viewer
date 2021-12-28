@@ -1,7 +1,10 @@
 <template>
   <header>
-    <nav :class="`navbar-${theme} bg-${theme}`" class="navbar sticky-top">
-      <span class="navbar-brand col">
+    <nav
+      :class="`navbar-${theme} bg-${theme}`"
+      class="navbar navbar-expand-lg sticky-top justify-content-between"
+    >
+      <span class="navbar-brand">
         <img
           src="@/assets/img/logopeerkat.png"
           alt="Peerkat logo"
@@ -10,10 +13,40 @@
           class="d-inline-block align-top"
         />
       </span>
-      <h1 class="col text-center" style="font-weight: bold; font-size: 1.2rem">
+      <h1
+        class="text-center navbar-text"
+        style="font-weight: bold; font-size: 1.2rem"
+      >
         Welcome
       </h1>
-      <div class="col"></div>
+      <ul class="nav nav-pills ml-auto">
+        <li class="nav-item">
+          <router-link
+            v-slot="{ navigate, href, isActive }"
+            to="/wallet"
+            custom
+          >
+            <a
+              class="nav-link"
+              :class="{ active: isActive }"
+              :href="href"
+              @click="navigate"
+              >Wallet</a
+            >
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link v-slot="{ navigate, href, isActive }" to="/view" custom>
+            <a
+              class="nav-link"
+              :class="{ active: isActive }"
+              :href="href"
+              @click="navigate"
+              >View</a
+            >
+          </router-link>
+        </li>
+      </ul>
     </nav>
   </header>
 </template>

@@ -1,10 +1,20 @@
 import { createWebHistory, createRouter } from "vue-router";
 
 const routes = [
+  { path: "/", redirect: "/wallet" },
   {
-    path: "/",
-    name: "NFTList",
-    component: () => import("../views/NFTList.vue"),
+    path: "/wallet",
+    name: "MyNFTs",
+    component: () => import("../views/MyNFTs.vue"),
+    meta: {
+      withAuth: true,
+      title: "Home Wallet Page",
+    },
+  },
+  {
+    path: "/view",
+    name: "ViewedNFTs",
+    component: () => import("../views/ViewedNFTs.vue"),
     meta: {
       withAuth: true,
       title: "Home Wallet Page",
