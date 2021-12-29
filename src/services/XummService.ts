@@ -5,15 +5,22 @@ import type { XummTypes } from "xumm-sdk";
 import { xAppOttData } from "xumm-sdk/dist/src/types";
 
 let Sdk: any = null;
+const isInXumm = /xumm/.test(navigator.userAgent);
 
 class XummService {
   constructor() {
     if (Sdk) {
       throw new Error("You can only create one instance!");
     }
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { XummSdkJwt } = require("xumm-sdk");
-    Sdk = new XummSdkJwt(xummApiKey, xummApiSecret);
+    if (isInXumm) {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { XummSdkJwt } = require("xumm-sdk");
+      Sdk = new XummSdkJwt(xummApiKey);
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { XummSdk } = require("xumm-sdk");
+      Sdk = new XummSdk(xummApiKey, xummApiSecret);
+    }
   }
   async getOttData(): Promise<xAppOttData> {
     const ottdata = await Sdk.getOttData();
