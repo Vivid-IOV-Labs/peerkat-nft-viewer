@@ -38,7 +38,11 @@ export default defineComponent({
         route.params.nftAddress as string
       );
     });
-    await XummService.saveToStorage({ test: "test to store" });
+    const shared: string[] = localStorage.getItem("shared")
+      ? JSON.parse(localStorage.getItem("shared") as string)
+      : [];
+    const updatedShared = new Set([...shared, nft.value.id]);
+    localStorage.setItem("shared", JSON.stringify(updatedShared));
 
     return {
       nft,

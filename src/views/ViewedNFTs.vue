@@ -13,11 +13,12 @@
 </template>
 <script lang="ts">
 import { defineComponent, inject } from "vue";
-import XummService from "../services/XummService";
 
 export default defineComponent({
   async setup() {
-    const nft = await XummService.getStorage();
+    const nft = localStorage.getItem("shared")
+      ? JSON.parse(localStorage.getItem("shared") as string)
+      : [];
 
     return {
       nft,

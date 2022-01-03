@@ -1,5 +1,4 @@
 const xummApiKey = import.meta.env.VITE_XUMM_API_KEY as string;
-const xummApiSecret = import.meta.env.VITE_XUMM_API_SECRET as string;
 import type { XummTypes } from "xumm-sdk";
 
 import { xAppOttData } from "xumm-sdk/dist/src/types";
