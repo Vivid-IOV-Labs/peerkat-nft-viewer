@@ -26,7 +26,6 @@
 import { defineComponent, computed, inject } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-import XummService from "../services/XummService";
 
 export default defineComponent({
   async setup() {
@@ -38,12 +37,6 @@ export default defineComponent({
         route.params.nftAddress as string
       );
     });
-    const shared: Array<string> = localStorage.getItem("shared")
-      ? JSON.parse(localStorage.getItem("shared") as string)
-      : [];
-    const updatedShared = new Set(shared.concat([nft.value.id]));
-    localStorage.setItem("shared", JSON.stringify(updatedShared));
-
     return {
       nft,
       isInXumm: inject("isInXumm"),

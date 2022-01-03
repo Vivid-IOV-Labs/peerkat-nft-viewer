@@ -9,6 +9,9 @@ const mutations: MutationTree<NFTState> = {
   setLines(state: NFTState, lines: Array<any>): void {
     state.lines = lines;
   },
+  addShared(state: NFTState, shared: NFT): void {
+    state.shared = [...state.shared, shared];
+  },
 };
 
 export default mutations;

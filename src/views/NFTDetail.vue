@@ -51,25 +51,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, inject } from "vue";
+import { defineComponent, ref, inject } from "vue";
 import ExternalLink from "@/components/ExternalLink.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseCardPage from "@/components/BaseCardPage.vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { copyText } from "../utils/copytext";
-import type { XummTypes } from "xumm-sdk";
 import { fetchOne } from "../services/XrpService";
 import { openSignRequest } from "../utils/XummActions";
 
 export default defineComponent({
   components: { BaseButton, BaseCardPage, ExternalLink },
   async setup() {
-    debugger;
     const route = useRoute();
     const store = useStore();
     const showActions = ref(false);
-    debugger;
     // const nft = await store.getters["nft/getByAddress"](
     //   route.params.nftAddress as string
     // );
@@ -79,7 +76,7 @@ export default defineComponent({
       route.params.nftAddress.toString(),
       route.params.currency.toString()
     );
-    debugger;
+    store.commit("nft/addShared", nft);
     return {
       nft,
       showActions,
