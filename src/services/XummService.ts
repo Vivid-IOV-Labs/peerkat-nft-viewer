@@ -16,10 +16,6 @@ class XummService {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { XummSdkJwt } = require("xumm-sdk");
       Sdk = new XummSdkJwt(xummApiKey);
-    } else {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { XummSdk } = require("xumm-sdk");
-      Sdk = new XummSdk(xummApiKey, xummApiSecret);
     }
   }
   async getOttData(): Promise<xAppOttData> {

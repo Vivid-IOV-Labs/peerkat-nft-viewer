@@ -17,12 +17,8 @@ import XummService from "../services/XummService";
 
 export default defineComponent({
   async setup() {
-    let nft;
-    try {
-      nft = await XummService.getStorage();
-    } catch (err) {
-      console.log("get store", err);
-    }
+    const nft = await XummService.getStorage();
+
     return {
       nft,
       isInXumm: inject("isInXumm"),
