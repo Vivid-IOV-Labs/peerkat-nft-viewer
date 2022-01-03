@@ -19,7 +19,9 @@ export default defineComponent({
     const nft = localStorage.getItem("shared")
       ? JSON.parse(localStorage.getItem("shared") as string)
       : [];
-    console.log(localStorage.getItem("test"));
+    if (localStorage.getItem("test")) {
+      console.log(localStorage.getItem("test"));
+    }
     return {
       nft,
       isInXumm: inject("isInXumm"),

@@ -38,12 +38,12 @@ export default defineComponent({
         route.params.nftAddress as string
       );
     });
-    const shared: string[] = localStorage.getItem("shared")
-      ? JSON.parse(localStorage.getItem("shared") as string)
-      : [];
-    const updatedShared = new Set([...shared, nft.value.id]);
-    localStorage.setItem("shared", JSON.stringify(updatedShared));
-    localStorage.setItem("test", "test");
+    // const shared: string[] = localStorage.getItem("shared")
+    //   ? JSON.parse(localStorage.getItem("shared") as string)
+    //   : [];
+    // const updatedShared = new Set([...shared, nft.value.id]);
+    // localStorage.setItem("shared", JSON.stringify(updatedShared));
+    localStorage.setItem("test", JSON.stringify(["test"]));
 
     return {
       nft,
