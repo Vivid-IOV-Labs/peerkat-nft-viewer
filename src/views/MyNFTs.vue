@@ -271,6 +271,8 @@ export default defineComponent({
       if (lines.value.length === 0) {
         await store.dispatch("xumm/getOttData");
         const ottdata = computed(() => store.getters["xumm/getOttData"]);
+        console.log("ottdata", ottdata.value);
+        console.log("redirect", ottdata.value.redirect);
 
         locale.value = ottdata.value.locale.split("-")[0];
         const net = ottdata.value.nodetype == "TESTNET";

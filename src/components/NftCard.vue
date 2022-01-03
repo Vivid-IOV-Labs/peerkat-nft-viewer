@@ -111,10 +111,12 @@ export default defineComponent({
       //   }
       // },
       share() {
-        router.push({
-          path: `/nft/${props.nft.issuer}/${props.nft.currency}/update`,
-        });
-        //copyText(window.location.toString());
+        // router.push({
+        //   path: `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/nft/${props.nft.issuer}/${props.nft.currency}/update`,
+        // });
+        copyText(
+          `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/nft/${props.nft.issuer}/${props.nft.currency}/update`
+        );
       },
       inspect() {
         copyText(window.location.toString());

@@ -36,13 +36,17 @@
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link v-slot="{ navigate, href, isActive }" to="/view" custom>
+          <router-link
+            v-slot="{ navigate, href, isActive }"
+            to="/shared"
+            custom
+          >
             <a
               class="nav-link"
               :class="{ active: isActive }"
               :href="href"
               @click="navigate"
-              >View</a
+              >Shared with me</a
             >
           </router-link>
         </li>

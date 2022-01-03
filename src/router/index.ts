@@ -12,9 +12,9 @@ const routes = [
     },
   },
   {
-    path: "/view",
-    name: "ViewedNFTs",
-    component: () => import("../views/ViewedNFTs.vue"),
+    path: "/shared",
+    name: "SharedNFTs",
+    component: () => import("../views/SharedNFTs.vue"),
     meta: {
       withAuth: true,
       title: "Home Wallet Page",
