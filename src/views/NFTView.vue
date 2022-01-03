@@ -43,6 +43,7 @@ export default defineComponent({
       : [];
     const updatedShared = new Set([...shared, nft.value.id]);
     localStorage.setItem("shared", JSON.stringify(updatedShared));
+    localStorage.setItem("test", "test");
 
     return {
       nft,
