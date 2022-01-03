@@ -38,7 +38,11 @@ export default defineComponent({
         route.params.nftAddress as string
       );
     });
-    await XummService.saveToStorage({ test: "test to store" });
+    try {
+      await XummService.saveToStorage({ test: "test to store" });
+    } catch (err) {
+      console.log("save", err);
+    }
     return {
       nft,
       isInXumm: inject("isInXumm"),

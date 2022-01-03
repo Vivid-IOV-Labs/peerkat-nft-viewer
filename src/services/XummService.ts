@@ -33,7 +33,6 @@ class XummService {
   async saveToStorage(toStore: any) {
     await Sdk.storage.set(toStore);
   }
-
   async getStorage() {
     return await Sdk.storage.get();
   }
