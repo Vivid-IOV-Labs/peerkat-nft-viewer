@@ -13,12 +13,12 @@
           class="d-inline-block align-top"
         />
       </span>
-      <h1
+      <!-- <h1
         class="text-center navbar-text"
         style="font-weight: bold; font-size: 1.2rem"
       >
         Hi
-      </h1>
+      </h1> -->
       <ul class="nav nav-pills ml-auto">
         <li class="nav-item">
           <router-link
