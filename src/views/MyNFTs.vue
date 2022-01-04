@@ -185,6 +185,7 @@ import { required } from "@vuelidate/validators";
 import { useI18n } from "vue-i18n";
 import { inject } from "vue";
 import useIntersectionObserver from "../composable/useIntersectionObserver";
+import { useRouter } from "vue-router";
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 
@@ -197,6 +198,7 @@ export default defineComponent({
   },
   async setup() {
     const store = useStore();
+    const router = useRouter();
     const sentinel = ref<HTMLElement | null>(null);
     const root = ref<HTMLElement | null>(null);
     const { locale } = useI18n({ useScope: "global" });
@@ -272,8 +274,8 @@ export default defineComponent({
         await store.dispatch("xumm/getOttData");
         const ottdata = computed(() => store.getters["xumm/getOttData"]);
         console.log("ottdata", ottdata.value);
-        console.log("redirect", ottdata.value.redirect);
-
+        const path = ottdata.value.redirect;
+        router.push({ path });
         locale.value = ottdata.value.locale.split("-")[0];
         const net = ottdata.value.nodetype == "TESTNET";
         await store.dispatch("nft/fetchNftLines", {
