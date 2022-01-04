@@ -277,7 +277,6 @@ export default defineComponent({
         const path = ottdata.value.redirect;
         if (path) {
           router.push({ path });
-          return;
         }
         locale.value = ottdata.value.locale.split("-")[0];
         const net = ottdata.value.nodetype == "TESTNET";
