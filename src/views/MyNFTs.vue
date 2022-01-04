@@ -275,7 +275,10 @@ export default defineComponent({
         const ottdata = computed(() => store.getters["xumm/getOttData"]);
         console.log("ottdata", ottdata.value);
         const path = ottdata.value.redirect;
-        router.push({ path });
+        if (path) {
+          router.push({ path });
+          return;
+        }
         locale.value = ottdata.value.locale.split("-")[0];
         const net = ottdata.value.nodetype == "TESTNET";
         await store.dispatch("nft/fetchNftLines", {
