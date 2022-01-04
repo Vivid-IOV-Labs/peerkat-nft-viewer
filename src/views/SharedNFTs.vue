@@ -5,7 +5,7 @@
     class="d-flex h-100 flex-row flex-nowrap overflow-auto pb-4"
   >
     <div v-for="nft in sharedNFTs" :key="nft.issuer" class="col-11">
-      <nft-card :nft="nft"></nft-card>
+      <nft-shared-card :nft="nft"></nft-shared-card>
     </div>
   </div>
   <div
@@ -25,24 +25,17 @@
 <script lang="ts">
 import { computed, defineComponent, inject } from "vue";
 import { useStore } from "vuex";
-import NftCard from "@/components/NftCard.vue";
+import NftSharedCard from "@/components/NftSharedCard.vue";
 
 export default defineComponent({
   components: {
-    NftCard,
+    NftSharedCard,
   },
   async setup() {
     const store = useStore();
     const sharedNFTs = computed(() => {
       return store.getters["nft/getShared"];
     });
-    // const nft = localStorage.getItem("shared")
-    //   ? JSON.parse(localStorage.getItem("shared") as string)
-    //   : [];
-    // if (localStorage.getItem("shared")) {
-    //   console.log(localStorage.getItem("shared"));
-    // }
-    console.log(sharedNFTs.value);
     return {
       sharedNFTs,
       isInXumm: inject("isInXumm"),

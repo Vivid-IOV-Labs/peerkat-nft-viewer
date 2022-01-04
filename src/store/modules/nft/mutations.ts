@@ -10,7 +10,11 @@ const mutations: MutationTree<NFTState> = {
     state.lines = lines;
   },
   addShared(state: NFTState, shared: NFT): void {
-    state.shared = [...state.shared, shared];
+    const exist =
+      state.shared.filter((n) => n.issuer === shared.issuer).length > 0;
+    if (!exist) {
+      state.shared = [...state.shared, shared];
+    }
   },
 };
 
