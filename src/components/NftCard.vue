@@ -31,13 +31,14 @@
           untruncate: showIssuer,
         }" -->
       <strong class="h7 font-weight-bold">Issuer </strong><br />
-      <a
+      <span>{{ nft.issuer }}</span>
+      <!-- <a
         class="btn-link d-block"
         href="#"
         aria-expanded="true"
         @click.prevent="showIssuer = !showIssuer"
         >{{ nft.issuer }}</a
-      >
+      > -->
     </template>
     <template #footer>
       <div>

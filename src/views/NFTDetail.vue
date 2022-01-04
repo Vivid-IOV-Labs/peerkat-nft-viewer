@@ -1,14 +1,13 @@
 <template>
+  <router-link :to="{ path: `/` }" class="my-4 btn btn-link">Back </router-link>
+
   <div class="pb-4">
-    <router-link :to="{ path: `/` }" class="my-4 btn btn-link"
-      >Back
-    </router-link>
     <base-card-page class="mb-4">
       <template #picture>
-        <figure class="w-100 p4">
+        <figure class="w-100">
           <img
             v-if="nft.media_type?.includes('image')"
-            class="card-img"
+            class="img-fluid card-img-top"
             :src="nft.url"
             alt="Card image cap"
             @error="fallbackImg"
@@ -21,30 +20,29 @@
           muted
           loop
           playsinline
-          class="w-100 card-img"
+          class="w-100 img-fluid card-img-top"
         ></video>
       </template>
-
-      <template #text style="flex: 1">
-        <div class="pt-4">
-          <ul class="list-group">
-            <li class="list-group-item">
-              <h5>Token Name</h5>
-              {{ nft.currency }}
-            </li>
-            <li class="list-group-item">
-              <h5>Issuer</h5>
-              {{ nft.issuer }}
-            </li>
-          </ul>
+      <template #title>
+        <h5>{{ nft.tokenName }}</h5>
+      </template>
+      <template #text>
+        <div class="d-flex flex-column">
+          <div class="p4 my-4 d-flex flex-column">
+            <strong class="h6 font-weight-bold">Token Name </strong>
+            <span>{{ nft.currency }}</span>
+          </div>
+          <div class="p4 d-flex flex-column">
+            <strong class="h6 font-weight-bold">Issuer </strong>
+            <span>{{ nft.issuer }}</span>
+          </div>
         </div>
       </template>
       <template #footer>
         <external-link
           :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
-          >External link</external-link
+          >Inspect</external-link
         >
-        <base-button class="mr-2" @click="share">Share</base-button>
       </template>
     </base-card-page>
   </div>
