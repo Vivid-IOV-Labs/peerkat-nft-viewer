@@ -17,7 +17,7 @@
         class="text-center navbar-text"
         style="font-weight: bold; font-size: 1.2rem"
       >
-        Welcome
+        Hi
       </h1>
       <ul class="nav nav-pills ml-auto">
         <li class="nav-item">
