@@ -115,7 +115,7 @@ export default defineComponent({
         //   path: `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/nft/${props.nft.issuer}/${props.nft.currency}/update`,
         // });
         copyText(
-          `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/nft/${props.nft.issuer}/${props.nft.currency}/update`
+          `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/shared/${props.nft.issuer}/${props.nft.currency}`
         );
       },
       inspect() {
@@ -123,7 +123,7 @@ export default defineComponent({
       },
       view() {
         router.push({
-          path: `/nft/${props.nft.issuer}/view`,
+          path: `/nft/${props.nft.issuer}`,
         });
       },
     };
