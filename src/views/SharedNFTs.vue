@@ -17,7 +17,9 @@
       justify-content: center;
     "
   >
-    <h3 class="text-center mt-4">Your recently viewed items NFTs</h3>
+    <h3 class="text-center mt-4">
+      There are no NFTs shared with you at the moment
+    </h3>
   </div>
 </template>
 <script lang="ts">
