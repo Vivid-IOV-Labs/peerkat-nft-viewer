@@ -38,6 +38,7 @@
           Inspect</external-link
         >
         <base-button class="mr-2" @click="view">View</base-button>
+        <base-button class="mr-2" @click="delete">delete</base-button>
       </div>
     </template>
   </base-card>
@@ -62,6 +63,7 @@ export default defineComponent({
   },
   async setup(props) {
     const router = useRouter();
+    const store = useStore();
 
     return {
       fallbackImg(event: Event): void {
@@ -71,6 +73,9 @@ export default defineComponent({
         router.push({
           path: `/shared/${props.nft.issuer}/${props.nft.currency}`,
         });
+      },
+      delete() {
+        store.dispatch("nft/deleteShared", props.nft.issuer);
       },
     };
   },

@@ -16,6 +16,9 @@ const mutations: MutationTree<NFTState> = {
       state.shared = [...state.shared, shared];
     }
   },
+  deleteShared(state: NFTState, shared: NFT): void {
+    state.shared = state.shared.filter((n) => n.issuer !== shared.issuer);
+  },
 };
 
 export default mutations;
