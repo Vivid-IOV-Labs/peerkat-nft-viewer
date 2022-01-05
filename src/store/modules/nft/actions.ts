@@ -1,9 +1,4 @@
-import {
-  fetchNftLines,
-  fetchOne,
-  fetchWallet,
-  init,
-} from "../../../services/XrpService";
+import XrpService from "../../../services/XrpService";
 import { ActionTree } from "vuex";
 import { NFT } from "../../../models/NFT";
 import { NFTState } from "./state";
@@ -24,24 +19,29 @@ const actions: ActionTree<NFT, NFTState> = {
     await init();
   },
   async fetchAll({ commit }, { walletAddress }: FetchParams): Promise<void> {
-    const all = await fetchWallet(walletAddress);
+    const client = await XrpService;
+    const all = await client.fetchWallet(walletAddress);
     commit("setAll", all);
   },
   async fetchNftLines(
     { commit },
     { walletAddress }: FetchParams
   ): Promise<void> {
-    const linse = await fetchNftLines(walletAddress);
+    const client = await XrpService;
+    debugger;
+    const linse = await client.fetchNftLines(walletAddress);
     commit("setLines", linse);
   },
   async fetchNext({ commit, getters }): Promise<void> {
+    const client = await XrpService;
+
     const count = getters.getAll.length;
     const nextLines = getters.getLines.slice(count, count + 4);
     const nextNfts: NFT[] = await Promise.all(
       nextLines.map(async (line: line) => {
         const { account, currency } = line;
 
-        return fetchOne(account, currency);
+        return client.fetchOne(account, currency);
       })
     );
 

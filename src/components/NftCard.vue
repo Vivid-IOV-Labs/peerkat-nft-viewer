@@ -113,7 +113,7 @@ export default defineComponent({
       // },
       share() {
         copyText(
-          `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/shared/${props.nft.issuer}/${props.nft.currency}`
+          `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/shared/${props.nft.issuer}`
         );
       },
       inspect() {

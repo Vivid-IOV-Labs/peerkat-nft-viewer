@@ -1,5 +1,7 @@
 <template>
-  <router-link :to="{ path: `/` }" class="my-4 btn btn-link">Back </router-link>
+  <router-link :to="{ path: `/shared` }" class="my-4 btn btn-link"
+    >Back
+  </router-link>
 
   <div class="pb-4">
     <base-card class="mb-4">
@@ -23,12 +25,12 @@
         ></video>
       </template>
       <template #title>
-        <h5>{{ nft.tokenName }}</h5>
+        <h3>{{ nft.tokenName }}</h3>
       </template>
       <template #text>
         <div class="d-flex flex-column">
           <div class="p4 my-4 d-flex flex-column">
-            <strong class="h6 font-weight-bold">Token Name </strong>
+            <strong class="h6 font-weight-bold">Currency </strong>
             <span>{{ nft.currency }}</span>
           </div>
           <div class="p4 d-flex flex-column">
@@ -52,7 +54,7 @@ import { defineComponent, ref, inject } from "vue";
 import ExternalLink from "@/components/ExternalLink.vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-import { fetchOne } from "../services/XrpService";
+import XrpService from "../services/XrpService";
 import BaseCard from "../components/BaseCard.vue";
 
 export default defineComponent({
@@ -61,7 +63,9 @@ export default defineComponent({
     const route = useRoute();
     const store = useStore();
     const showActions = ref(false);
-    const nft = await fetchOne(
+    const client = await XrpService;
+
+    const nft = await client.fetchOne(
       route.params.nftAddress.toString(),
       route.params.currency.toString()
     );

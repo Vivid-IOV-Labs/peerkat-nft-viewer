@@ -202,7 +202,6 @@ export default defineComponent({
       if (network) {
         isLoading.value = true;
         try {
-          await store.dispatch("nft/init");
           await store.dispatch("nft/fetchNftLines", {
             walletAddress: walletAddress.value,
             network,
@@ -248,7 +247,6 @@ export default defineComponent({
         }
         locale.value = ottdata.value.locale.split("-")[0];
         const net = ottdata.value.nodetype == "TESTNET";
-        await store.dispatch("nft/init");
         await store.dispatch("nft/fetchNftLines", {
           walletAddress: ottdata.value.account,
           network: net,
