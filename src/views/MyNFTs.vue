@@ -182,7 +182,7 @@ import useVuelidate from "@vuelidate/core";
 import { useStore } from "vuex";
 import { isRippleAddress } from "../utils/validators";
 import { required } from "@vuelidate/validators";
-// import { useI18n } from "vue-i18n";
+import { useI18n } from "vue-i18n";
 import { inject } from "vue";
 import useIntersectionObserver from "../composable/useIntersectionObserver";
 import { useRouter } from "vue-router";
@@ -201,7 +201,7 @@ export default defineComponent({
     const router = useRouter();
     const sentinel = ref<HTMLElement | null>(null);
     const root = ref<HTMLElement | null>(null);
-    // const { locale } = useI18n({ useScope: "global" });
+    const { locale } = useI18n({ useScope: "global" });
     const isInXumm = inject("isInXumm");
     function handleError(): void {
       isDialogWalletConnection.value = false;
@@ -279,7 +279,7 @@ export default defineComponent({
         if (path) {
           router.push({ path });
         }
-        // locale.value = ottdata.value.locale.split("-")[0];
+        locale.value = ottdata.value.locale.split("-")[0];
         const net = ottdata.value.nodetype == "TESTNET";
         await store.dispatch("nft/init");
         await store.dispatch("nft/fetchNftLines", {

@@ -1,10 +1,13 @@
+// if (!isInXumm && process.env.NODE_ENV === "production") {
+//   window.location.replace("https://www.vividiov.com/peerkat");
+// }
 import "intersection-observer";
 import { createApp, h, Fragment } from "vue";
 import App from "./App.vue";
 import "./index.css";
 import router from "./router";
 import store from "./store";
-//import { i18n } from "./i18n";
+import { i18n } from "./i18n";
 import VueAxe, { VueAxePopup } from "vue-axe";
 import VueAnnouncer from "@vue-a11y/announcer";
 import Notifications from "@kyvg/vue3-notification";
@@ -18,7 +21,7 @@ if (process.env.NODE_ENV === "development") {
     .use(VueAnnouncer)
     .use(router)
     .use(store)
-    // .use(i18n)
+    .use(i18n)
     .use(Notifications)
     .provide("isInXumm", isInXumm)
     .mount("#app");
@@ -27,7 +30,7 @@ if (process.env.NODE_ENV === "development") {
     .use(VueAnnouncer)
     .use(router)
     .use(store)
-    // .use(i18n)
+    .use(i18n)
     .use(Notifications)
     .provide("isInXumm", isInXumm)
     .mount("#app");
