@@ -1,100 +1,7 @@
 import { NFT } from "../models/NFT";
-
+//https://dev.to/mindplay/a-successful-ioc-pattern-with-functions-in-typescript-2nac
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { XrplClient } = require("xrpl-client");
-
-// interface NFT {
-//   url: string;
-//   issuer: string;
-//   currency: string;
-// }
-// type line = {
-//   balance: string;
-//   limit: string;
-//   account: string;
-//   currency: string;
-// };
-// function isNFT(l: line): boolean {
-//   return (
-//     l.balance == "1000000000000000e-96" && l.limit == "1000000000000000e-96"
-//   );
-// }
-// function is_hexadecimal(str: string): boolean {
-//   const regexp = /^[0-9a-fA-F]+$/;
-//   if (regexp.test(str)) {
-//     return true;
-//   } else {
-//     return false;
-//   }
-// }
-// function hexToString(hex: string) {
-//   const strhex = hex.toString(); //force conversion
-//   let str = "";
-//   for (let i = 0; i < strhex.length; i += 2)
-//     str += String.fromCharCode(parseInt(strhex.substr(i, 2), 16));
-//   return str.trim();
-// }
-// function truncate(
-//   fullStr: string,
-//   strLen = 8,
-//   separator = " ............. ",
-//   frontChars = 8,
-//   backChars = 4
-// ) {
-//   if (fullStr.length <= strLen) return fullStr;
-//   return (
-//     fullStr.substr(0, frontChars) + separator
-//     //+
-//     ///fullStr.substr(fullStr.length - backChars)
-//   );
-// }
-// export async function fetchWallet(
-//   walletAddress: string,
-//   network: string | string[],
-//   handleError: (error: string) => void
-// ): Promise<NFT[]> {
-//   const X_url = network;
-//   const xrpClient = new XrplClient(X_url, {
-//     assumeOfflineAfterSeconds: 15,
-//     maxConnectionAttempts: 2,
-//     connectAttemptTimeoutSeconds: 3,
-//   });
-//   xrpClient.on("error", (error: string) => {
-//     handleError(error);
-//   });
-//   await xrpClient.ready();
-//   const accountLines = await xrpClient.send({
-//     command: "account_lines",
-//     account: walletAddress,
-//   });
-//   const { lines } = accountLines;
-//   const NFTs = lines.filter(isNFT);
-//   const NFTMedia: NFT[] = await Promise.all(
-//     NFTs.map(async (line: line) => {
-//       const { account, currency } = line;
-//       const { account_data } = await xrpClient.send({
-//         command: "account_info",
-//         account,
-//       });
-//       const { Domain } = account_data;
-
-//       const protocol = is_hexadecimal(hexToString(Domain))
-//         ? hexToString(hexToString(Domain))
-//         : hexToString(Domain);
-//       const domain = hexToString(currency.replace("02", ""));
-
-//       return {
-//         issuer: account,
-//         issuerTruncated: truncate(account),
-//         currency,
-//         tokenName: domain,
-//         url: protocol + domain,
-//       };
-//     })
-//   );
-//   return NFTMedia;
-// }
-// import { XrplClient } from "xrpl-client";
 
 type line = {
   balance: string;
@@ -127,14 +34,9 @@ function truncate(
   strLen = 8,
   separator = " ............. ",
   frontChars = 8
-  // backChars = 4
 ) {
   if (fullStr.length <= strLen) return fullStr;
-  return (
-    fullStr.substr(0, frontChars) + separator
-    //+
-    ///fullStr.substr(fullStr.length - backChars)
-  );
+  return fullStr.substr(0, frontChars) + separator;
 }
 const main_networks = [
   "wss://xrpcluster.com",
@@ -152,23 +54,29 @@ async function getMediaType(url: string) {
   const contentType = res.headers.get("Content-Type");
   return contentType;
 }
+async function getOne(account_data: any, account: string, currency = "") {
+  const { Domain } = account_data;
 
-// export async function init(
-//   network: string | string[],
-//   handleError: (error: string) => void
-// ): Promise<XrplClient> {
-//   const X_url = network;
-//   xrpClientInstance = new XrplClient(X_url, {
-//     assumeOfflineAfterSeconds: 15,
-//     maxConnectionAttempts: 2,
-//     connectAttemptTimeoutSeconds: 3,
-//   });
-//   xrpClientInstance.on("error", (error) =>
-//     handleError(error as unknown as string)
-//   );
-//   await xrpClientInstance.ready();
-//   return xrpClientInstance;
-// }
+  const source = is_hexadecimal(hexToString(Domain))
+    ? hexToString(hexToString(Domain))
+    : hexToString(Domain);
+  const token_domain = hexToString(currency.replace("02", ""));
+  const cid = source.split(":")[1];
+
+  const url = `https://ipfs.io/ipfs/${cid}`;
+
+  const media_type = await getMediaType(url);
+  return {
+    issuer: account,
+    issuerTruncated: truncate(account),
+    currency,
+    tokenName: token_domain,
+    cid: cid,
+    url,
+    media_type,
+  };
+}
+let client: typeof XrplClient | null = null;
 
 export async function init(): Promise<typeof XrplClient> {
   //handleError: (error: Error) => void
@@ -179,13 +87,13 @@ export async function init(): Promise<typeof XrplClient> {
     connectAttemptTimeoutSeconds: 3,
   });
   await xrpClientInstance.ready();
-  return xrpClientInstance;
+  client = xrpClientInstance;
+  return client;
 }
 
 export async function fetchWallet(
   walletAddress: string //handleError: (error: Error | string) => void
 ): Promise<any> {
-  const client = await init();
   try {
     const accountLines = await client.send({
       command: "account_lines",
@@ -214,7 +122,6 @@ export async function fetchWallet(
 export async function fetchNftLines(
   walletAddress: string //handleError: (error: Error | string) => void
 ): Promise<any> {
-  const client = await init();
   try {
     const accountLines = await client.send({
       command: "account_lines",
@@ -224,6 +131,24 @@ export async function fetchNftLines(
 
     const { lines } = accountLines;
     return lines.filter(isNFT);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function fetchIssuerCurrencies(
+  issuer: string //handleError: (error: Error | string) => void
+): Promise<any> {
+  try {
+    const accountLines = await client.send({
+      command: "account_currencies",
+      account: issuer,
+    });
+
+    const {
+      result: { receive_currencies },
+    } = accountLines;
+    return receive_currencies;
   } catch (error) {
     console.log(error);
   }
@@ -242,43 +167,3 @@ export async function fetchOne(
 
   return getOne(account_data, account, currency);
 }
-async function getOne(account_data: any, account: string, currency = "") {
-  const { Domain } = account_data;
-
-  const source = is_hexadecimal(hexToString(Domain))
-    ? hexToString(hexToString(Domain))
-    : hexToString(Domain);
-  const token_domain = hexToString(currency.replace("02", ""));
-  const cid = source.split(":")[1];
-
-  const url = `https://ipfs.io/ipfs/${cid}`;
-
-  const media_type = await getMediaType(url);
-  return {
-    issuer: account,
-    issuerTruncated: truncate(account),
-    currency,
-    tokenName: token_domain,
-    cid: cid,
-    url,
-    media_type,
-  };
-}
-
-// const Singleton = (function () {
-//   var xrpClientInstance;
-
-//   function createInstance() {
-//       var classObj = new Username();
-//       return classObj;
-//   }
-
-//   return {
-//       getInstance: function () {
-//           if (!instance) {
-//               instance = createInstance();
-//           }
-//           return instance;
-//       },
-//   };
-// })();

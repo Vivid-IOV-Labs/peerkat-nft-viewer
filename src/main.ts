@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === "development") {
     .use(VueAnnouncer)
     .use(router)
     .use(store)
-    .use(i18n)
+    // .use(i18n)
     .use(Notifications)
     .provide("isInXumm", isInXumm)
     .mount("#app");
@@ -30,30 +30,8 @@ if (process.env.NODE_ENV === "development") {
     .use(VueAnnouncer)
     .use(router)
     .use(store)
-    .use(i18n)
+    // .use(i18n)
     .use(Notifications)
     .provide("isInXumm", isInXumm)
     .mount("#app");
 }
-
-// const hours = 1; // Reset when storage is more than 24hours
-// const now = new Date().getTime();
-// const setupTime = Number(localStorage.getItem("setupTime"));
-// if (setupTime == null) {
-//   localStorage.setItem("setupTime", now.toString());
-// } else {
-//   if (now - setupTime > hours * 60 * 60 * 1000) {
-//     localStorage.clear();
-//     localStorage.setItem("setupTime", now.toString());
-//   }
-// }
-// function messageHandler(event: any) {
-//   console.log(event.data);
-// }
-
-// if (typeof window.addEventListener === "function") {
-//   window.addEventListener("message", messageHandler);
-// }
-// if (typeof document.addEventListener === "function") {
-//   document.addEventListener("message", messageHandler);
-// }

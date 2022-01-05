@@ -2,6 +2,7 @@ import {
   fetchNftLines,
   fetchOne,
   fetchWallet,
+  init,
 } from "../../../services/XrpService";
 import { ActionTree } from "vuex";
 import { NFT } from "../../../models/NFT";
@@ -19,6 +20,9 @@ interface FetchParams {
 }
 
 const actions: ActionTree<NFT, NFTState> = {
+  async init(): Promise<void> {
+    await init();
+  },
   async fetchAll({ commit }, { walletAddress }: FetchParams): Promise<void> {
     const all = await fetchWallet(walletAddress);
     commit("setAll", all);
