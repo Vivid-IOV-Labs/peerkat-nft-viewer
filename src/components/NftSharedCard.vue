@@ -38,7 +38,7 @@
           Inspect</external-link
         >
         <base-button class="mr-2" @click="view">View</base-button>
-        <base-button class="mr-2" @click="delete">delete</base-button>
+        <base-button class="mr-2" @click="deleteShared">delete</base-button>
       </div>
     </template>
   </base-card>
@@ -74,8 +74,8 @@ export default defineComponent({
           path: `/shared/${props.nft.issuer}/${props.nft.currency}`,
         });
       },
-      delete() {
-        store.dispatch("nft/deleteShared", props.nft.issuer);
+      deleteShared() {
+        store.commit("nft/deleteShared", props.nft.issuer);
       },
     };
   },
