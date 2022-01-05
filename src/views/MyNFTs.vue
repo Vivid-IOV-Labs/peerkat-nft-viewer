@@ -1,37 +1,4 @@
 <template>
-  <!-- <div class="d-none d-md-flex justify-center items-center mb-2">
-
-    <small style="font-size: 1rem; font-weight: bold" class="text-xs">{{
-      walletAddress
-    }}</small>
-    <button
-      class="ml-2 btn btn-primary btn-xs"
-      @click.prevent="isDialogWalletConnection = true"
-    >
-      change
-    </button>
-  </div> -->
-
-  <!-- <div ref="slidercontainer" class="horizontal-scroll-container">
-    <div
-      v-if="NFTMedia.length"
-      ref="slider"
-      :style="{
-        gridTemplateColumns: `1px repeat(${NFTMedia.length}, minmax(480px, 660px)) 1px`,
-      }"
-      class="horizontal-scroller"
-    >
-      <div ref="leftsentinel" class="sentinel"></div>
-      <nft-card
-        v-for="nft in NFTMedia"
-        :key="nft.issuer"
-        class="horizontal-scroller__item"
-        :nft="nft"
-      ></nft-card>
-      <div ref="sentinel" class="sentinel"></div>
-    </div>
-  </div> -->
-
   <div
     v-if="NFTMedia.length"
     ref="root"
