@@ -15,9 +15,6 @@ interface FetchParams {
 }
 
 const actions: ActionTree<NFT, NFTState> = {
-  async init(): Promise<void> {
-    await init();
-  },
   async fetchAll({ commit }, { walletAddress }: FetchParams): Promise<void> {
     const client = await XrpService;
     const all = await client.fetchWallet(walletAddress);
