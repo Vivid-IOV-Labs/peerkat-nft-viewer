@@ -37,7 +37,7 @@
         </div>
       </template>
       <template #footer>
-        <base-button class="mr-2" @click="deleteShared">clear</base-button>
+        <base-button class="mr-2" @click="deleteShared">Clear</base-button>
         <external-link
           :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
           >Inspect</external-link
