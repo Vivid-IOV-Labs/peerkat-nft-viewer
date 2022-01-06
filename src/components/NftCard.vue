@@ -45,13 +45,14 @@
         <!-- <base-button class="mr-2" @click="createTrustline"
           >Trustline</base-button
         > -->
+
+        <base-button class="mr-2" @click="share">Share</base-button>
         <external-link
           class="mr-2"
           :url="`https://test.bithomp.com/explorer/${nft.issuer}`"
         >
           Inspect</external-link
         >
-        <base-button class="mr-2" @click="share">Share</base-button>
         <base-button class="mr-2" @click="view">View</base-button>
       </div>
     </template>
@@ -115,9 +116,6 @@ export default defineComponent({
         copyText(
           `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/shared/${props.nft.issuer}`
         );
-      },
-      inspect() {
-        copyText(window.location.toString());
       },
       view() {
         router.push({

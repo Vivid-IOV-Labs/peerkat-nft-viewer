@@ -1,49 +1,93 @@
 <template>
-  <router-link :to="{ path: `/` }" class="my-4 btn btn-link">Back </router-link>
-  <div v-if="nft" class="w-100 p4">
-    <figure class="w-100 p4">
-      <img
-        v-if="nft.media_type?.includes('image')"
-        class="card-img"
-        :src="nft.url"
-        alt="Card image cap"
-        @error="fallbackImg"
-      />
-    </figure>
-    <video
-      v-if="nft.media_type?.includes('video')"
-      :src="nft.url"
-      autoplay
-      muted
-      loop
-      playsinline
-      class="w-100 card-img"
-    ></video>
+  <router-link :to="{ path: `/` }" class="mb-4 btn btn-link">Back </router-link>
+
+  <div class="pb-4">
+    <base-card class="mb-4">
+      <template #picture>
+        <figure v-if="nft.media_type?.includes('image')" class="w-100">
+          <img
+            class="img-fluid card-img-top"
+            :src="nft.url"
+            alt="Card image cap"
+            @error="fallbackImg"
+          />
+        </figure>
+        <video
+          v-if="nft.media_type?.includes('video')"
+          :src="nft.url"
+          autoplay
+          muted
+          loop
+          playsinline
+          class="w-100 img-fluid card-img-top"
+        ></video>
+      </template>
+      <template #text>
+        <div class="d-flex flex-column">
+          <div class="p4 my-4 d-flex flex-column">
+            <strong class="h6 font-weight-bold">Token Name </strong>
+            <span>{{ nft.tokenName }}</span>
+          </div>
+          <div class="p4 d-flex flex-column">
+            <strong class="h6 font-weight-bold">Issuer </strong>
+            <span>{{ nft.issuer }}</span>
+          </div>
+        </div>
+      </template>
+      <template #footer>
+        <base-button class="mr-2" @click="share">Share</base-button>
+        <external-link
+          :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
+          >Inspect</external-link
+        >
+      </template>
+    </base-card>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, inject } from "vue";
+import { defineComponent, ref, inject } from "vue";
+import ExternalLink from "@/components/ExternalLink.vue";
 import { useRoute } from "vue-router";
-import { useStore } from "vuex";
+import XrpService from "../services/XrpService";
+import BaseCard from "../components/BaseCard.vue";
+import BaseButton from "../components/BaseButton.vue";
+import { copyText } from "../utils/copytext";
 
 export default defineComponent({
+  components: { BaseCard, ExternalLink, BaseButton },
   async setup() {
     const route = useRoute();
-    const store = useStore();
-
-    const nft = computed(() => {
-      return store.getters["nft/getByAddress"](
-        route.params.nftAddress as string
-      );
-    });
+    const showActions = ref(false);
+    const client = await XrpService;
+    const nft = await client.fetchOne(route.params.nftAddress.toString());
     return {
       nft,
+      showActions,
+      toggleAction() {
+        showActions.value = !showActions.value;
+      },
       isInXumm: inject("isInXumm"),
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
+      },
+      share() {
+        copyText(
+          `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/shared/${route.params.nftAddress}`
+        );
       },
     };
   },
 });
 </script>
+<style>
+.smooth-enter-active,
+.smooth-leave-active {
+  transition: 0.5s;
+}
+.smooth-enter,
+.smooth-leave-to {
+  height: 0;
+  opacity: 0;
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{ path: `/shared` }" class="my-4 btn btn-link"
+  <router-link :to="{ path: `/shared` }" class="mb-4 btn btn-link"
     >Back
   </router-link>
 
@@ -24,14 +24,11 @@
           class="w-100 img-fluid card-img-top"
         ></video>
       </template>
-      <template #title>
-        <h3>{{ nft.tokenName }}</h3>
-      </template>
       <template #text>
         <div class="d-flex flex-column">
           <div class="p4 my-4 d-flex flex-column">
-            <strong class="h6 font-weight-bold">Currency </strong>
-            <span>{{ nft.currency }}</span>
+            <strong class="h6 font-weight-bold">Token Name </strong>
+            <span>{{ nft.tokenName }}</span>
           </div>
           <div class="p4 d-flex flex-column">
             <strong class="h6 font-weight-bold">Issuer </strong>
@@ -40,6 +37,7 @@
         </div>
       </template>
       <template #footer>
+        <base-button class="mr-2" @click="deleteShared">clear</base-button>
         <external-link
           :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
           >Inspect</external-link
@@ -79,6 +77,9 @@ export default defineComponent({
       isInXumm: inject("isInXumm"),
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
+      },
+      deleteShared() {
+        store.commit("nft/deleteShared", nft.issuer);
       },
     };
   },

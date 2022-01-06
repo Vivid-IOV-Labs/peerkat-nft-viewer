@@ -245,7 +245,7 @@ export default (async () => {
     }
   }
 
-  async function fetchOne(account: string, currency: string): Promise<NFT> {
+  async function fetchOne(account: string, currency?: string): Promise<NFT> {
     const client: typeof XrplClient = await init();
 
     const { account_data } = await client.send({

@@ -31,6 +31,7 @@
     </template>
     <template #footer>
       <div>
+        <base-button class="mr-2" @click="deleteShared">clear</base-button>
         <external-link
           class="mr-2"
           :url="`https://test.bithomp.com/explorer/${nft.issuer}`"
@@ -38,7 +39,6 @@
           Inspect</external-link
         >
         <base-button class="mr-2" @click="view">View</base-button>
-        <base-button class="mr-2" @click="deleteShared">delete</base-button>
       </div>
     </template>
   </base-card>
@@ -50,7 +50,6 @@ import BaseButton from "@/components/BaseButton.vue";
 import ExternalLink from "@/components/ExternalLink.vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { copyText } from "../utils/copytext";
 
 export default defineComponent({
   components: {
