@@ -38,9 +38,11 @@
       </template>
       <template #footer>
         <external-link
+          class="mr-2"
           :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
           >Inspect</external-link
         >
+        <base-button class="mr-2" @click="view">View</base-button>
       </template>
     </base-card>
   </div>
@@ -49,19 +51,20 @@
 <script lang="ts">
 import { defineComponent, ref, inject } from "vue";
 import ExternalLink from "@/components/ExternalLink.vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import XrpService from "../services/XrpService";
 import BaseCard from "../components/BaseCard.vue";
+import BaseButton from "../components/BaseButton.vue";
 
 export default defineComponent({
-  components: { BaseCard, ExternalLink },
+  components: { BaseCard, ExternalLink, BaseButton },
   async setup() {
     const route = useRoute();
+    const router = useRouter();
     const store = useStore();
     const showActions = ref(false);
     const client = await XrpService;
-
     const nft = await client.fetchOne(
       route.params.nftAddress.toString(),
       route.params.currency.toString()
@@ -76,6 +79,11 @@ export default defineComponent({
       isInXumm: inject("isInXumm"),
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
+      },
+      view() {
+        router.push({
+          path: `/shared/${nft.issuer}/view`,
+        });
       },
     };
   },
