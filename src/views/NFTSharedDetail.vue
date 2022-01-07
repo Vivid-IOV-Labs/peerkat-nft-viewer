@@ -37,7 +37,6 @@
         </div>
       </template>
       <template #footer>
-        <base-button class="mr-2" @click="deleteShared">Clear</base-button>
         <external-link
           :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
           >Inspect</external-link
@@ -54,10 +53,9 @@ import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import XrpService from "../services/XrpService";
 import BaseCard from "../components/BaseCard.vue";
-import BaseButton from "../components/BaseButton.vue";
 
 export default defineComponent({
-  components: { BaseCard, ExternalLink, BaseButton },
+  components: { BaseCard, ExternalLink },
   async setup() {
     const route = useRoute();
     const store = useStore();
@@ -78,9 +76,6 @@ export default defineComponent({
       isInXumm: inject("isInXumm"),
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
-      },
-      deleteShared() {
-        store.commit("nft/deleteShared", nft.issuer);
       },
     };
   },
