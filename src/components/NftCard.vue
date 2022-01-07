@@ -42,10 +42,6 @@
     </template>
     <template #footer>
       <div>
-        <!-- <base-button class="mr-2" @click="createTrustline"
-          >Trustline</base-button
-        > -->
-
         <base-button class="mr-2" @click="share">Share</base-button>
         <external-link
           class="mr-2"
@@ -59,16 +55,12 @@
   </base-card>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import ExternalLink from "@/components/ExternalLink.vue";
 import { useRouter } from "vue-router";
-import { useStore } from "vuex";
 import { copyText } from "../utils/copytext";
-import { openSignRequest } from "../utils/XummActions";
-// import XummService from "../services/XummService";
-import { XummTypes } from "xumm-sdk";
 
 export default defineComponent({
   components: {
@@ -81,7 +73,6 @@ export default defineComponent({
   },
   async setup(props) {
     const router = useRouter();
-    const store = useStore();
     const showIssuer = ref(false);
 
     return {
@@ -119,7 +110,7 @@ export default defineComponent({
       },
       view() {
         router.push({
-          path: `/wallet/${props.nft.issuer}`,
+          path: `/wallet/${props.nft.issuer}/view`,
         });
       },
     };

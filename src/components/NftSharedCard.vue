@@ -70,7 +70,7 @@ export default defineComponent({
       },
       view() {
         router.push({
-          path: `/shared/${props.nft.issuer}/${props.nft.currency}`,
+          path: `/shared/${props.nft.issuer}/view`,
         });
       },
       deleteShared() {

@@ -54,9 +54,10 @@ import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import XrpService from "../services/XrpService";
 import BaseCard from "../components/BaseCard.vue";
+import BaseButton from "../components/BaseButton.vue";
 
 export default defineComponent({
-  components: { BaseCard, ExternalLink },
+  components: { BaseCard, ExternalLink, BaseButton },
   async setup() {
     const route = useRoute();
     const store = useStore();

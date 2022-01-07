@@ -13,4 +13,9 @@ export default {
     (address: string): NFT | undefined => {
       return state.all.find(({ issuer }) => issuer == address);
     },
+  getSharedByAddress:
+    (state: NFTState) =>
+    (address: string): NFT | undefined => {
+      return state.shared.find(({ issuer }) => issuer == address);
+    },
 };
