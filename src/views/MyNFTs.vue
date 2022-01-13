@@ -246,10 +246,10 @@ export default defineComponent({
           router.push({ path });
         }
         locale.value = ottdata.value.locale.split("-")[0];
-        const net = ottdata.value.nodetype == "TESTNET";
+        // const net = ottdata.value.nodetype == "TESTNET";
         await store.dispatch("nft/fetchNftLines", {
           walletAddress: ottdata.value.account,
-          network: net,
+          //network: "TESTNET
           handleError,
         });
         await store.dispatch("nft/fetchNext");
