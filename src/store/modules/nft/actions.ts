@@ -30,7 +30,10 @@ const actions: ActionTree<NFT, NFTState> = {
     commit("setLines", linse);
   },
   async fetchNext({ commit, getters }): Promise<void> {
+    console.log(0, getters);
+
     const client = await XrpService;
+
     console.log(1, getters);
     const count = getters.getAll.length;
     console.log(2, getters);

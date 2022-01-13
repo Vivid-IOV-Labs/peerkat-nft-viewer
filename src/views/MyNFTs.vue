@@ -250,7 +250,7 @@ export default defineComponent({
           network: ottdata.value.nodetype,
           handleError,
         });
-        // await store.dispatch("nft/fetchNext");
+        await store.dispatch("nft/fetchNext");
       }
     } else if (isLoggedIn) {
       if (lines.value.length === 0) {
