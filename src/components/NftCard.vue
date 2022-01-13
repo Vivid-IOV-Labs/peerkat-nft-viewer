@@ -47,7 +47,7 @@
         <base-button class="mr-2" @click="share">Share</base-button>
         <external-link
           class="mr-2"
-          :url="`https://${}.bithomp.com/explorer/${nft.issuer}`"
+          :url="`https://${nodetype}.bithomp.com/explorer/${nft.issuer}`"
         >
           Inspect</external-link
         >
