@@ -4,7 +4,7 @@
   </router-link>
 
   <div class="pb-4">
-    <base-card class="mb-4">
+    <base-card v-if="nft" class="mb-4">
       <template #picture>
         <figure v-if="nft.media_type?.includes('image')" class="w-100">
           <img
@@ -45,6 +45,7 @@
         <base-button class="mr-2" @click="view">View</base-button>
       </template>
     </base-card>
+    <h3 v-else>No NFT found in this Network</h3>
   </div>
 </template>
 
@@ -56,6 +57,8 @@ import { useStore } from "vuex";
 import XrpService from "../services/XrpService";
 import BaseCard from "../components/BaseCard.vue";
 import BaseButton from "../components/BaseButton.vue";
+import { getNetworkTypeFromCode } from "../utils/getNetworkTypeFromCode";
+import { NFT } from "../models/NFT";
 
 export default defineComponent({
   components: { BaseCard, ExternalLink, BaseButton },
@@ -65,11 +68,24 @@ export default defineComponent({
     const store = useStore();
     const showActions = ref(false);
     const client = await XrpService;
-    const nft = await client.fetchOne(
-      route.params.nftAddress.toString(),
-      route.params.currency.toString()
-    );
-    store.commit("nft/addShared", nft);
+    const nft = ref<NFT | null>(null);
+    try {
+      nft.value = await client.fetchOne(
+        route.params.nftAddress.toString(),
+        route.params.currency.toString()
+      );
+      store.commit("nft/addShared", {
+        shared: nft,
+        nodetype: getNetworkTypeFromCode(
+          parseInt(route.params.nodetype as string)
+        ),
+      });
+    } catch (error) {
+      console.error(error);
+    }
+
+    // const ottData = computed(() => store.getters("xumm/getOttData"));
+
     return {
       nft,
       showActions,
@@ -81,9 +97,10 @@ export default defineComponent({
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
       view() {
-        router.push({
-          path: `/shared/${nft.issuer}/view`,
-        });
+        nft.value &&
+          router.push({
+            path: `/shared/${nft.value.issuer}/view`,
+          });
       },
     };
   },

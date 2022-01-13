@@ -1,7 +1,14 @@
 import { MutationTree } from "vuex";
 import { NFT } from "../../../models/NFT";
-import { NFTState } from "./state";
-
+import { NFTState, SharedNFTs } from "./state";
+interface addSharedParams {
+  shared: NFT;
+  nodetype: keyof SharedNFTs;
+}
+interface deleteSharedParams {
+  issuer: string;
+  nodetype: keyof SharedNFTs;
+}
 const mutations: MutationTree<NFTState> = {
   setAll(state: NFTState, all: Array<NFT>): void {
     state.all = [...state.all, ...all];
@@ -9,15 +16,22 @@ const mutations: MutationTree<NFTState> = {
   setLines(state: NFTState, lines: Array<any>): void {
     state.lines = lines;
   },
-  addShared(state: NFTState, shared: NFT): void {
+  addShared(state: NFTState, { shared, nodetype }: addSharedParams): void {
     const exist =
-      state.shared.filter((n) => n.issuer === shared.issuer).length > 0;
+      state.shared[nodetype].filter(
+        (n: { issuer: string }) => n.issuer === shared.issuer
+      ).length > 0;
     if (!exist) {
-      state.shared = [...state.shared, shared];
+      state.shared[nodetype] = [...state.shared[nodetype], shared];
     }
   },
-  deleteShared(state: NFTState, issuer: string): void {
-    state.shared = state.shared.filter((n) => n.issuer !== issuer);
+  deleteShared(
+    state: NFTState,
+    { issuer, nodetype }: deleteSharedParams
+  ): void {
+    state.shared[nodetype] = state.shared[nodetype].filter(
+      (n) => n.issuer !== issuer
+    );
   },
 };
 

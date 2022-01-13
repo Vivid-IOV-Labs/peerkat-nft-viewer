@@ -33,8 +33,11 @@ export default defineComponent({
   },
   async setup() {
     const store = useStore();
+    const ottData = computed(() => store.getters("xumm/getOttData"));
     const sharedNFTs = computed(() => {
-      return store.getters["nft/getShared"];
+      return store.getters["nft/getShared"](
+        ottData.value.nodetype.toLowerCase()
+      );
     });
     return {
       sharedNFTs,

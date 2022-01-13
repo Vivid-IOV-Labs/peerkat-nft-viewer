@@ -1,4 +1,4 @@
-import { NFTState } from "./state";
+import { NFTState, SharedNFTs } from "./state";
 interface NFT {
   cid: string;
   issuer: string;
@@ -6,7 +6,10 @@ interface NFT {
 }
 export default {
   getAll: (state: NFTState): Array<NFT> => state.all,
-  getShared: (state: NFTState): Array<NFT> => state.shared,
+  getShared:
+    (state: NFTState) =>
+    (nodetype: keyof SharedNFTs): Array<NFT> =>
+      state.shared[nodetype],
   getLines: (state: NFTState): Array<NFT> => state.lines,
   getByAddress:
     (state: NFTState) =>
@@ -15,7 +18,7 @@ export default {
     },
   getSharedByAddress:
     (state: NFTState) =>
-    (address: string): NFT | undefined => {
-      return state.shared.find(({ issuer }) => issuer == address);
+    (address: string, nodetype: keyof SharedNFTs): NFT | undefined => {
+      return state.shared[nodetype].find(({ issuer }) => issuer == address);
     },
 };

@@ -47,7 +47,7 @@
         <base-button class="mr-2" @click="share">Share</base-button>
         <external-link
           class="mr-2"
-          :url="`https://test.bithomp.com/explorer/${nft.issuer}`"
+          :url="`https://${}.bithomp.com/explorer/${nft.issuer}`"
         >
           Inspect</external-link
         >
@@ -56,12 +56,14 @@
   </base-card>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import ExternalLink from "@/components/ExternalLink.vue";
 import { useRouter } from "vue-router";
 import { copyText } from "../utils/copytext";
+import { useStore } from "vuex";
+import { getNetworkCodeFromType } from "../utils/getNetworkTypeFromCode";
 
 export default defineComponent({
   components: {
@@ -74,13 +76,18 @@ export default defineComponent({
   },
   async setup(props) {
     const router = useRouter();
+    const store = useStore();
+    const ottData = computed(() => store.getters("xumm/getOttData"));
     const showIssuer = ref(false);
-
+    const nodetype = computed(() =>
+      ottData.value.nodetype == "TESTNET" ? "test" : "main"
+    );
     return {
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
       showIssuer,
+      nodetype,
       // async createTrustline() {
       //   const {
       //     value: { user },
@@ -105,8 +112,9 @@ export default defineComponent({
       //   }
       // },
       share() {
+        const nodetypecode = getNetworkCodeFromType(ottData.value.nodetype);
         copyText(
-          `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/shared/${props.nft.issuer}`
+          `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/shared/${props.nft.issuer}/${nodetypecode}`
         );
       },
       view() {

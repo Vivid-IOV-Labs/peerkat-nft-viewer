@@ -1,13 +1,18 @@
 import { NFT } from "../../../models/NFT";
+
+export interface SharedNFTs {
+  testent: Array<NFT>;
+  mainnet: Array<NFT>;
+}
 export interface NFTState {
   all: Array<NFT>;
-  shared: Array<NFT>;
+  shared: SharedNFTs;
   lines: Array<NFT>;
 }
 
 const state = (): NFTState => ({
   all: [],
-  shared: [],
+  shared: { testent: [], mainnet: [] },
   lines: [],
 });
 

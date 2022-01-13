@@ -27,13 +27,15 @@
 import { defineComponent, computed, inject } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
+import { getNetworkTypeFromCode } from "../utils/getNetworkTypeFromCode";
 export default defineComponent({
   async setup() {
     const route = useRoute();
     const store = useStore();
     const nft = computed(() => {
       return store.getters["nft/getSharedByAddress"](
-        route.params.nftAddress as string
+        route.params.nftAddress as string,
+        getNetworkTypeFromCode(parseInt(route.params.nodetype as string))
       );
     });
     return {

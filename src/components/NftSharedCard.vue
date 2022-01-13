@@ -36,7 +36,7 @@
         <base-button class="mr-2" @click="deleteShared">Clear</base-button>
         <external-link
           class="mr-2"
-          :url="`https://test.bithomp.com/explorer/${nft.issuer}`"
+          :url="`https://${nodetype}.bithomp.com/explorer/${nft.issuer}`"
         >
           Inspect</external-link
         >
@@ -45,7 +45,7 @@
   </base-card>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import ExternalLink from "@/components/ExternalLink.vue";
@@ -64,8 +64,10 @@ export default defineComponent({
   async setup(props) {
     const router = useRouter();
     const store = useStore();
-
+    const ottData = computed(() => store.getters("xumm/getOttData"));
+    const nodetype = ottData.value.nodetype == "TESTNET" ? "test" : "main";
     return {
+      nodetype,
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
@@ -75,7 +77,10 @@ export default defineComponent({
         });
       },
       deleteShared() {
-        store.commit("nft/deleteShared", props.nft.issuer);
+        store.commit("nft/deleteShared", {
+          issuer: props.nft.issuer,
+          nodetype: ottData.value.nodetype,
+        });
       },
     };
   },
