@@ -54,7 +54,7 @@ import { defineComponent, ref, inject } from "vue";
 import ExternalLink from "@/components/ExternalLink.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import XrpService from "../services/XrpService";
+import { init } from "../services/XrpService";
 import BaseCard from "../components/BaseCard.vue";
 import BaseButton from "../components/BaseButton.vue";
 import { getNetworkTypeFromCode } from "../utils/getNetworkTypeFromCode";
@@ -70,7 +70,7 @@ export default defineComponent({
     const nodetype = getNetworkTypeFromCode(
       parseInt(route.params.nodetype as string)
     );
-    const client = await XrpService(nodetype);
+    const client = await init(nodetype);
     const nft = ref<NFT | null>(null);
     try {
       nft.value = await client.fetchOne(

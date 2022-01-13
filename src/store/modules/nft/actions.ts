@@ -1,4 +1,4 @@
-import XrpService from "../../../services/XrpService";
+import { init } from "../../../services/XrpService";
 import { ActionTree } from "vuex";
 import { NFT } from "../../../models/NFT";
 import { NFTState } from "./state";
@@ -20,7 +20,7 @@ const actions: ActionTree<NFT, NFTState> = {
     { walletAddress }: FetchParams
   ): Promise<void> {
     const nodetype = rootGetters["xumm/getOttData"].nodetype;
-    const client = await XrpService(nodetype);
+    const client = await init(nodetype);
     const all = await client.fetchWallet(walletAddress);
     commit("setAll", all);
   },
@@ -29,13 +29,13 @@ const actions: ActionTree<NFT, NFTState> = {
     { walletAddress }: FetchParams
   ): Promise<void> {
     const nodetype = rootGetters["xumm/getOttData"].nodetype;
-    const client = await XrpService(nodetype);
+    const client = await init(nodetype);
     const linse = await client.fetchNftLines(walletAddress);
     commit("setLines", linse);
   },
   async fetchNext({ commit, getters, rootGetters }): Promise<void> {
     const nodetype = rootGetters["xumm/getOttData"].nodetype;
-    const client = await XrpService(nodetype);
+    const client = await init(nodetype);
 
     console.log(1, getters);
     const count = getters.getAll.length;

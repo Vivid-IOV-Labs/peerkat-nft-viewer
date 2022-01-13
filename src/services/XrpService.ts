@@ -77,94 +77,104 @@ async function getOne(account_data: any, account: string, currency = "") {
   };
 }
 
-// export async function init(): Promise<typeof XrplClient> {
-//   //handleError: (error: Error) => void
-//   const X_url = test_networks;
-//   xrpClientInstance = new XrplClient(X_url, {
-//     assumeOfflineAfterSeconds: 15,
-//     maxConnectionAttempts: 2,
-//     connectAttemptTimeoutSeconds: 3,
-//   });
-//   await xrpClientInstance.ready();
-//   client = xrpClientInstance;
-//   return client;
-// }
+let client: typeof XrplClient | null = null;
+async function fetchWallet(
+  walletAddress: string //handleError: (error: Error | string) => void
+): Promise<any> {
+  try {
+    const accountLines = await client.send({
+      command: "account_lines",
+      account: walletAddress,
+    });
+    localStorage.setItem("address", walletAddress);
 
-// export async function fetchWallet(
-//   walletAddress: string //handleError: (error: Error | string) => void
-// ): Promise<any> {
-//   try {
-//     const accountLines = await client.send({
-//       command: "account_lines",
-//       account: walletAddress,
-//     });
-//     localStorage.setItem("address", walletAddress);
+    const { lines } = accountLines;
+    const NFTs = lines.filter(isNFT);
+    const NFTMedia: NFT[] = await Promise.all(
+      NFTs.map(async (line: line) => {
+        const { account, currency } = line;
+        const { account_data } = await client.send({
+          command: "account_info",
+          account,
+        });
+        return getOne(account_data, account, currency);
+      })
+    );
+    return NFTMedia;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-//     const { lines } = accountLines;
-//     const NFTs = lines.filter(isNFT);
-//     const NFTMedia: NFT[] = await Promise.all(
-//       NFTs.map(async (line: line) => {
-//         const { account, currency } = line;
-//         const { account_data } = await client.send({
-//           command: "account_info",
-//           account,
-//         });
-//         return getOne(account_data, account, currency);
-//       })
-//     );
-//     return NFTMedia;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+async function fetchNftLines(
+  walletAddress: string //handleError: (error: Error | string) => void
+): Promise<any> {
+  try {
+    const accountLines = await client.send({
+      command: "account_lines",
+      account: walletAddress,
+    });
+    localStorage.setItem("address", walletAddress);
 
-// export async function fetchNftLines(
-//   walletAddress: string //handleError: (error: Error | string) => void
-// ): Promise<any> {
-//   try {
-//     const accountLines = await client.send({
-//       command: "account_lines",
-//       account: walletAddress,
-//     });
-//     localStorage.setItem("address", walletAddress);
+    const { lines } = accountLines;
+    return lines.filter(isNFT);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-//     const { lines } = accountLines;
-//     return lines.filter(isNFT);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+async function fetchIssuerCurrencies(
+  issuer: string //handleError: (error: Error | string) => void
+): Promise<any> {
+  try {
+    const accountLines = await client.send({
+      command: "account_currencies",
+      account: issuer,
+    });
 
-// export async function fetchIssuerCurrencies(
-//   issuer: string //handleError: (error: Error | string) => void
-// ): Promise<any> {
-//   try {
-//     const accountLines = await client.send({
-//       command: "account_currencies",
-//       account: issuer,
-//     });
+    const { receive_currencies } = accountLines;
+    return receive_currencies[0];
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-//     const { result } = accountLines;
-//     debugger;
-//     return result;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+async function fetchOne(account: string, currency?: string): Promise<NFT> {
+  // const client: typeof XrplClient = await init(nodetype);
 
-// export async function fetchOne(
-//   account: string,
-//   currency: string
-// ): Promise<NFT> {
-//   const client: typeof XrplClient = await init();
+  const { account_data } = await client.send({
+    command: "account_info",
+    account,
+  });
+  if (currency) {
+    debugger;
+    return getOne(account_data, account, currency);
+  } else {
+    debugger;
+    const issuerCurrency = await fetchIssuerCurrencies(account);
+    return getOne(account_data, account, issuerCurrency);
+  }
+}
+export async function init(nodetype: string): Promise<typeof XrplClient> {
+  //handleError: (error: Error) => void
+  if (!client) {
+    const X_url = nodetype == "testnet" ? test_networks : main_networks;
+    xrpClientInstance = new XrplClient(X_url, {
+      assumeOfflineAfterSeconds: 15,
+      maxConnectionAttempts: 2,
+      connectAttemptTimeoutSeconds: 3,
+    });
+    await xrpClientInstance.ready();
+    client = xrpClientInstance;
+  }
 
-//   const { account_data } = await client.send({
-//     command: "account_info",
-//     account,
-//   });
-
-//   return getOne(account_data, account, currency);
-// }
+  return {
+    fetchWallet,
+    fetchNftLines,
+    fetchIssuerCurrencies,
+    fetchOne,
+  };
+}
 
 export default async (nodetype: string): Promise<any> => {
   let client: typeof XrplClient | null = null;
@@ -262,9 +272,41 @@ export default async (nodetype: string): Promise<any> => {
   }
   await init(nodetype);
   return {
+    getInstance: async function (nodetype) {
+      if (!client) {
+        client = await init(nodetype);
+      }
+      return client;
+    },
     fetchWallet,
     fetchNftLines,
     fetchIssuerCurrencies,
     fetchOne,
   };
 };
+
+// class AsyncComp {
+//   constructor(x, y) {
+//       this.x = x;
+//       this.y = y;
+//   }
+
+//   // A factory method for creating the async instance
+//   static async createAsyncInstance() {
+//       try {
+//           const info = await someAsyncFunction();
+//           return new AsyncComp(info.x, info.y);
+//       }
+//       catch (err) {
+//           asyncCompInstance = null;
+//           throw err;
+//       }
+//   }
+
+//   // The singleton method
+//   static getAsyncCompInstance() {
+//       if (asyncCompInstance) return asyncCompInstance;
+//       asyncCompInstance = AsyncComp.createAsyncInstance();
+//       return asyncCompInstance;
+//   }
+// }
