@@ -186,7 +186,8 @@ export default defineComponent({
     const walletAddress = ref(adddress);
     const NFTMedia = computed(() => store.getters["nft/getAll"]);
     const lines = computed(() => store.getters["nft/getLines"]);
-
+    console.log("lines", lines.value);
+    console.log("NFTMedia", NFTMedia.value);
     const rules = computed(() => ({
       walletAddress: {
         required,
@@ -227,9 +228,6 @@ export default defineComponent({
       }, 500);
     });
     watch(NFTMedia, (newNfts) => {
-      console.log(lines.value.length);
-      console.log(newNfts.lenght);
-      console.log(NFTMedia.value.lenght);
       if (lines.value.length == newNfts.length) {
         unobserve();
         endscroll.value = true;

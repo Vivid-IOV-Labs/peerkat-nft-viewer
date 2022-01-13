@@ -178,7 +178,6 @@ export default (async () => {
         connectAttemptTimeoutSeconds: 3,
       });
       await xrpClientInstance.ready();
-      console.log("initializing");
       client = xrpClientInstance;
     }
 
