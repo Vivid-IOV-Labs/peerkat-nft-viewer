@@ -237,8 +237,8 @@ export default defineComponent({
     if (isInXumm) {
       if (lines.value.length === 0) {
         await store.dispatch("xumm/getOttData");
-        // const ottdata = computed(() => store.getters["xumm/getOttData"]);
-        // console.log("ottdata", ottdata.value);
+        const ottdata = computed(() => store.getters["xumm/getOttData"]);
+        console.log("ottdata", ottdata.value);
         // const path = ottdata.value.redirect;
         // if (path) {
         //   router.push({ path });
