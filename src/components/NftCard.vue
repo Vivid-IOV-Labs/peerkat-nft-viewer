@@ -77,7 +77,7 @@ export default defineComponent({
   async setup(props) {
     const router = useRouter();
     const store = useStore();
-    const ottData = computed(() => store.getters("xumm/getOttData"));
+    const ottData = computed(() => store.getters["xumm/getOttData"]);
     const showIssuer = ref(false);
     const nodetype = computed(() =>
       ottData.value.nodetype == "TESTNET" ? "test" : "main"
