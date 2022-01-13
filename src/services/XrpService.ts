@@ -272,12 +272,6 @@ export default async (nodetype: string): Promise<any> => {
   }
   await init(nodetype);
   return {
-    getInstance: async function (nodetype) {
-      if (!client) {
-        client = await init(nodetype);
-      }
-      return client;
-    },
     fetchWallet,
     fetchNftLines,
     fetchIssuerCurrencies,
