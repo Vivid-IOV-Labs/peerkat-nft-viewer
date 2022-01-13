@@ -234,31 +234,31 @@ export default defineComponent({
       }
     });
 
-    // if (isInXumm) {
-    //   if (lines.value.length === 0) {
-    //     await store.dispatch("xumm/getOttData");
-    //     const ottdata = computed(() => store.getters["xumm/getOttData"]);
-    //     console.log("ottdata", ottdata.value);
-    //     const path = ottdata.value.redirect;
-    //     if (path) {
-    //       router.push({ path });
-    //     }
-    //     locale.value = ottdata.value.locale.split("-")[0];
-    //     // const net = ottdata.value.nodetype == "TESTNET";
-    //     await store.dispatch("nft/fetchNftLines", {
-    //       walletAddress: ottdata.value.account,
-    //       //network: "TESTNET
-    //       handleError,
-    //     });
-    //     await store.dispatch("nft/fetchNext");
-    //   }
-    // } else if (isLoggedIn) {
-    //   if (lines.value.length === 0) {
-    //     await populateNFTs();
-    //   }
-    // } else {
-    //   isDialogWalletConnection.value = true;
-    // }
+    if (isInXumm) {
+      if (lines.value.length === 0) {
+        await store.dispatch("xumm/getOttData");
+        const ottdata = computed(() => store.getters["xumm/getOttData"]);
+        console.log("ottdata", ottdata.value);
+        const path = ottdata.value.redirect;
+        if (path) {
+          router.push({ path });
+        }
+        locale.value = ottdata.value.locale.split("-")[0];
+        // const net = ottdata.value.nodetype == "TESTNET";
+        await store.dispatch("nft/fetchNftLines", {
+          walletAddress: ottdata.value.account,
+          network: ottdata.value.nodetype,
+          handleError,
+        });
+        await store.dispatch("nft/fetchNext");
+      }
+    } else if (isLoggedIn) {
+      if (lines.value.length === 0) {
+        await populateNFTs();
+      }
+    } else {
+      isDialogWalletConnection.value = true;
+    }
 
     return {
       urlParams,
