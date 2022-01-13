@@ -246,8 +246,8 @@ export default defineComponent({
         // locale.value = ottdata.value.locale.split("-")[0];
         // const net = ottdata.value.nodetype == "TESTNET";
         await store.dispatch("nft/fetchNftLines", {
-          walletAddress: "", //ottdata.value.account,
-          network: "", // ottdata.value.nodetype,
+          walletAddress: ottdata.value.account,
+          network: ottdata.value.nodetype,
           handleError,
         });
         await store.dispatch("nft/fetchNext");
