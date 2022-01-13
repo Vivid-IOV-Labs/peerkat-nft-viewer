@@ -15,24 +15,27 @@ interface FetchParams {
 }
 
 const actions: ActionTree<NFT, NFTState> = {
-  async fetchAll({ commit }, { walletAddress }: FetchParams): Promise<void> {
-    const client = await XrpService;
+  async fetchAll(
+    { commit, rootGetters },
+    { walletAddress }: FetchParams
+  ): Promise<void> {
+    const nodetype = rootGetters["xumm/getOttData"].nodetype;
+    const client = await XrpService(nodetype);
     const all = await client.fetchWallet(walletAddress);
     commit("setAll", all);
   },
   async fetchNftLines(
-    { commit },
+    { commit, rootGetters },
     { walletAddress }: FetchParams
   ): Promise<void> {
-    const client = await XrpService;
-    debugger;
+    const nodetype = rootGetters["xumm/getOttData"].nodetype;
+    const client = await XrpService(nodetype);
     const linse = await client.fetchNftLines(walletAddress);
     commit("setLines", linse);
   },
-  async fetchNext({ commit, getters }): Promise<void> {
-    console.log(0, getters);
-
-    const client = await XrpService;
+  async fetchNext({ commit, getters, rootGetters }): Promise<void> {
+    const nodetype = rootGetters["xumm/getOttData"].nodetype;
+    const client = await XrpService(nodetype);
 
     console.log(1, getters);
     const count = getters.getAll.length;

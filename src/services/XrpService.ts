@@ -166,12 +166,12 @@ async function getOne(account_data: any, account: string, currency = "") {
 //   return getOne(account_data, account, currency);
 // }
 
-export default (async () => {
+export default async (nodetype: string): Promise<any> => {
   let client: typeof XrplClient | null = null;
-  async function init(): Promise<typeof XrplClient> {
+  async function init(nodetype: string): Promise<typeof XrplClient> {
     //handleError: (error: Error) => void
     if (!client) {
-      const X_url = test_networks;
+      const X_url = nodetype == "testnet" ? test_networks : main_networks;
       xrpClientInstance = new XrplClient(X_url, {
         assumeOfflineAfterSeconds: 15,
         maxConnectionAttempts: 2,
@@ -245,7 +245,7 @@ export default (async () => {
   }
 
   async function fetchOne(account: string, currency?: string): Promise<NFT> {
-    const client: typeof XrplClient = await init();
+    const client: typeof XrplClient = await init(nodetype);
 
     const { account_data } = await client.send({
       command: "account_info",
@@ -260,11 +260,11 @@ export default (async () => {
       return getOne(account_data, account, issuerCurrency);
     }
   }
-  await init();
+  await init(nodetype);
   return {
     fetchWallet,
     fetchNftLines,
     fetchIssuerCurrencies,
     fetchOne,
   };
-})();
+};

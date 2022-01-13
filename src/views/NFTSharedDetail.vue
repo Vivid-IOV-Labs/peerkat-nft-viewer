@@ -67,7 +67,10 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
     const showActions = ref(false);
-    const client = await XrpService;
+    const nodetype = getNetworkTypeFromCode(
+      parseInt(route.params.nodetype as string)
+    );
+    const client = await XrpService(nodetype);
     const nft = ref<NFT | null>(null);
     try {
       nft.value = await client.fetchOne(
@@ -76,9 +79,7 @@ export default defineComponent({
       );
       store.commit("nft/addShared", {
         shared: nft,
-        nodetype: getNetworkTypeFromCode(
-          parseInt(route.params.nodetype as string)
-        ),
+        nodetype,
       });
     } catch (error) {
       console.error(error);
