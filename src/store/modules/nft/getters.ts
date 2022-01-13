@@ -10,7 +10,7 @@ export default {
   //   (state: NFTState) =>
   //   (nodetype: keyof SharedNFTs): Array<NFT> =>
   //     state.shared[nodetype],
-  // getLines: (state: NFTState): Array<NFT> => state.lines,
+  getLines: (state: NFTState): Array<NFT> => state.lines,
   getByAddress:
     (state: NFTState) =>
     (address: string): NFT | undefined => {
