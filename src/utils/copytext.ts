@@ -21,15 +21,13 @@ function copyTextValueOld(copyText: string) {
     document.execCommand("copy");
 
     notify({
-      title: "info",
-      text: "Copied successfully",
+      title: "Copied successfully",
       type: "success",
     });
   } catch (err) {
     notify({
-      title: "error",
-      text: "Not Copied",
-      type: "success",
+      title: "Not Copied",
+      type: "error",
     });
   }
   /* unselect the range */
@@ -40,8 +38,7 @@ export async function copyText(text: string): Promise<void> {
   try {
     await clipboard.writeText(text);
     notify({
-      title: "info",
-      text: "Copied successfully",
+      title: "Copied successfully",
       type: "success",
     });
   } catch (err) {

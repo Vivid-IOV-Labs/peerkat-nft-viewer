@@ -1,10 +1,6 @@
 <template>
   <VueAnnouncer />
-  <notifications
-    :duration="100000"
-    position="bottom center"
-    classes="my-notification bg-light"
-  />
+  <notifications :duration="1000" position="bottom center" />
   <div style="height: 100%">
     <auth-layout>
       <RouterView v-slot="{ Component, route }" name="default">
@@ -62,9 +58,9 @@ export default defineComponent({
 });
 </script>
 <style>
-.my-notification {
+/* .my-notification {
   max-width: 350px;
-  font-size: 0.875rem;
+  font-size: 1rem;
   margin: 1rem;
   background-color: rgba(255, 255, 255, 0.85);
   background-clip: padding-box;
@@ -81,17 +77,17 @@ body .my-notification .notification-title {
   -ms-flex-align: center;
   align-items: center;
   padding: 0.25rem 0.75rem;
-  color: #6c757d;
-  background-color: rgba(255, 255, 255, 0.85);
+  color: #fff;
+  background-color: transparent;
   background-clip: padding-box;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-.notification-content {
+} */
+/* .notification-content {
   padding: 0.75rem;
-}
+} */
 .success {
-  background: #68cd86;
-  border-left-color: #42a85f;
+  background: #16dbdb !important;
+  border-left-color: #16dbdb !important;
 }
 
 .warn {
