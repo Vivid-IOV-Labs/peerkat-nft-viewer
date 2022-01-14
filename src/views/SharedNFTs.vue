@@ -33,14 +33,26 @@ export default defineComponent({
   },
   async setup() {
     const store = useStore();
-    const ottData = computed(() => store.getters["xumm/getOttData"]);
-    console.log(ottData.value.nodetype.toLowerCase());
-    const sharedNFTs = computed(() => {
-      return store.getters["nft/getShared"](
-        ottData.value.nodetype.toLowerCase()
+    const isInXumm = inject("isInXumm");
+    let nodetype;
+    let sharedNFTs;
+    if (isInXumm) {
+      const ottData = computed(() => store.getters["xumm/getOttData"]);
+
+      nodetype = computed(() =>
+        ottData.value.nodetype == "TESTNET" ? "test" : "main"
       );
-    });
-    console.log("sharedNFTs", sharedNFTs.value);
+      sharedNFTs = computed(() => {
+        return store.getters["nft/getShared"](
+          ottData.value.nodetype.toLowerCase()
+        );
+      });
+    } else {
+      sharedNFTs = computed(() => {
+        return store.getters["nft/getShared"]("testnet");
+      });
+    }
+
     return {
       sharedNFTs,
       isInXumm: inject("isInXumm"),

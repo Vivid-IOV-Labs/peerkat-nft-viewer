@@ -158,7 +158,7 @@ async function fetchOne(account: string, currency?: string): Promise<NFT> {
 export async function init(nodetype: string): Promise<typeof XrplClient> {
   //handleError: (error: Error) => void
   if (!client) {
-    const X_url = nodetype == "testnet" ? test_networks : main_networks;
+    const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
     xrpClientInstance = new XrplClient(X_url, {
       assumeOfflineAfterSeconds: 15,
       maxConnectionAttempts: 2,

@@ -10,36 +10,31 @@ type line = {
 };
 interface FetchParams {
   walletAddress: string;
-  network: string;
+  nodetype: string;
   // handleError: (error: string) => void;
 }
 
 const actions: ActionTree<NFT, NFTState> = {
   async fetchAll(
-    { commit, rootGetters },
-    { walletAddress }: FetchParams
+    { commit },
+    { walletAddress, nodetype }: FetchParams
   ): Promise<void> {
-    const nodetype = rootGetters["xumm/getOttData"].nodetype;
     const client = await init(nodetype);
     const all = await client.fetchWallet(walletAddress);
     commit("setAll", all);
   },
   async fetchNftLines(
-    { commit, rootGetters },
-    { walletAddress }: FetchParams
+    { commit },
+    { walletAddress, nodetype }: FetchParams
   ): Promise<void> {
-    const nodetype = rootGetters["xumm/getOttData"].nodetype;
     const client = await init(nodetype);
     const linse = await client.fetchNftLines(walletAddress);
     commit("setLines", linse);
   },
-  async fetchNext({ commit, getters, rootGetters }): Promise<void> {
-    const nodetype = rootGetters["xumm/getOttData"].nodetype;
+  async fetchNext({ commit, getters }, nodetype: string): Promise<void> {
     const client = await init(nodetype);
 
-    console.log(1, getters);
     const count = getters.getAll.length;
-    console.log(2, getters);
 
     const nextLines = getters.getLines.slice(count, count + 4);
     const nextNfts: NFT[] = await Promise.all(

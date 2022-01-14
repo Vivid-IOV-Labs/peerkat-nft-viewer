@@ -45,7 +45,7 @@
   </base-card>
 </template>
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, inject } from "vue";
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import ExternalLink from "@/components/ExternalLink.vue";
@@ -64,8 +64,15 @@ export default defineComponent({
   async setup(props) {
     const router = useRouter();
     const store = useStore();
-    const ottData = computed(() => store.getters["xumm/getOttData"]);
-    const nodetype = ottData.value.nodetype == "TESTNET" ? "test" : "main";
+    const isInXumm = inject("isInXumm");
+    let nodetype;
+    if (isInXumm) {
+      const ottData = computed(() => store.getters["xumm/getOttData"]);
+
+      nodetype = computed(() =>
+        ottData.value.nodetype == "TESTNET" ? "test" : "main"
+      );
+    }
     return {
       nodetype,
       fallbackImg(event: Event): void {

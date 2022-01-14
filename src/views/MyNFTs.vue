@@ -199,30 +199,27 @@ export default defineComponent({
       walletAddress,
     });
     const populateNFTs = async () => {
-      const network = "test";
-      if (network) {
-        isLoading.value = true;
-        try {
-          await store.dispatch("nft/fetchNftLines", {
-            walletAddress: walletAddress.value,
-            network,
-            handleError,
-          });
-          await store.dispatch("nft/fetchNext");
-          isDialogWalletConnection.value = false;
-          isLoading.value = false;
-        } catch (err) {
-          showError.value = true;
-          isDialogWalletConnection.value = false;
-          isLoading.value = false;
-        }
+      isLoading.value = true;
+      try {
+        await store.dispatch("nft/fetchNftLines", {
+          walletAddress: walletAddress.value,
+          nodetype: "TESTNET",
+          handleError,
+        });
+        await store.dispatch("nft/fetchNext", "TESTNET");
+        isDialogWalletConnection.value = false;
+        isLoading.value = false;
+      } catch (err) {
+        showError.value = true;
+        isDialogWalletConnection.value = false;
+        isLoading.value = false;
       }
     };
 
     const { unobserve, isIntersecting } = useIntersectionObserver(sentinel);
     watch(isIntersecting, async () => {
       isLoadingNext.value = true;
-      await store.dispatch("nft/fetchNext");
+      await store.dispatch("nft/fetchNext", "TESTNET");
       setTimeout(() => {
         isLoadingNext.value = false;
       }, 500);
@@ -238,7 +235,6 @@ export default defineComponent({
       if (lines.value.length === 0) {
         await store.dispatch("xumm/getOttData");
         const ottdata = computed(() => store.getters["xumm/getOttData"]);
-        console.log("ottdata", ottdata.value);
         const path = ottdata.value.redirect;
         if (path) {
           router.push({ path });
@@ -247,10 +243,10 @@ export default defineComponent({
         // const net = ottdata.value.nodetype == "TESTNET";
         await store.dispatch("nft/fetchNftLines", {
           walletAddress: ottdata.value.account,
-          network: ottdata.value.nodetype,
+          nodetype: ottdata.value.nodetype,
           handleError,
         });
-        await store.dispatch("nft/fetchNext");
+        await store.dispatch("nft/fetchNext", "ottdata.value.nodetype,");
       }
     } else if (isLoggedIn) {
       if (lines.value.length === 0) {
