@@ -135,7 +135,9 @@ export default defineComponent({
         });
       },
       async runAsyncFunction() {
+        isLoading.value = true;
         await props.asyncFun();
+        isLoading.value = false;
       },
     };
   },

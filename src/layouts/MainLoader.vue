@@ -79,9 +79,8 @@ export default defineComponent({
       } else if (lines.value.length === 0) {
         await populateNFTs();
       }
-    } else {
+    } else if (!walletAddress.value) {
       isDialogWalletConnection.value = true;
-      return { isDialogWalletConnection, showError, populateNFTs };
     }
 
     return { isDialogWalletConnection, showError, populateNFTs };
