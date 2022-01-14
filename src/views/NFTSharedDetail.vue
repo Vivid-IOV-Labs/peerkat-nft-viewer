@@ -45,12 +45,16 @@
         <base-button class="mr-2" @click="view">View</base-button>
       </template>
     </base-card>
-    <h3 v-else>No NFT found in this Network</h3>
+    <h3 v-else>
+      Looks like this link to an NFT, that has been shared with you is on the
+      {{ nodetype }}. Please switch your Xumm App network to
+      {{ othernodetype }}, to view this NFT
+    </h3>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, inject } from "vue";
+import { defineComponent, ref } from "vue";
 import ExternalLink from "@/components/ExternalLink.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -66,10 +70,10 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
-    const showActions = ref(false);
     const nodetype = getNetworkTypeFromCode(
       parseInt(route.params.nodetype as string)
     );
+    const othernodetype = nodetype == "TESTNET" ? "MAINNET" : "TESTNET";
     const client = await init(nodetype);
     const nft = ref<NFT | null>(null);
     try {
@@ -85,15 +89,10 @@ export default defineComponent({
       console.error(error);
     }
 
-    // const ottData = computed(() => store.getters("xumm/getOttData"));
-
     return {
       nft,
-      showActions,
-      toggleAction() {
-        showActions.value = !showActions.value;
-      },
-      isInXumm: inject("isInXumm"),
+      othernodetype,
+      nodetype,
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },

@@ -8,8 +8,11 @@ export default {
   getAll: (state: NFTState): Array<NFT> => state.all,
   getShared:
     (state: NFTState) =>
-    (nodetype: keyof SharedNFTs): Array<NFT> =>
-      state.shared[nodetype],
+    (nodetype: keyof SharedNFTs): Array<NFT> => {
+      console.log(state.shared, nodetype);
+      console.log(state.shared[nodetype]);
+      return state.shared[nodetype];
+    },
   getLines: (state: NFTState): Array<NFT> => state.lines,
   getByAddress:
     (state: NFTState) =>

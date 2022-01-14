@@ -15,25 +15,24 @@
       align-items: center;
       height: 100%;
       justify-content: center;
+      flex-direction: column;
     "
   >
     <h3 class="text-center mt-4">
       Peerkat is not able to find any NFTs shared with this wallet
     </h3>
-    <ul class="text-center mt-4">
-      <li>
+    <ul class="mt-2 p-4">
+      <li class="pb-2">
         To view another user’s XRPL-issued NFT please ensure that you have
         followed the correct deep link shared by the user
       </li>
-      <li>
+      <li class="pb-2">
         You can view the NFT in fullscreen mode and inspect the transaction
         history of an NFT via the Bithomp explorer
       </li>
-      <li>
+      <li class="pb-2">
         Please follow us on Twitter @Peerkatofficial and at
-        <external-link class="mr-2" :url="`https://peerkat.io`"
-          >peerkat.io</external-link
-        >
+        <external-link :url="`https://peerkat.io`">peerkat.io</external-link>
         for updates and new product releases (XLS-20 minting platform coming
         soon)
       </li>
@@ -54,28 +53,13 @@ export default defineComponent({
   async setup() {
     const store = useStore();
     const isInXumm = inject("isInXumm");
-    let nodetype;
-    let sharedNFTs;
-    if (isInXumm) {
-      const ottData = computed(() => store.getters["xumm/getOttData"]);
-
-      nodetype = computed(() =>
-        ottData.value.nodetype == "TESTNET" ? "test" : "main"
-      );
-      sharedNFTs = computed(() => {
-        return store.getters["nft/getShared"](
-          ottData.value.nodetype.toLowerCase()
-        );
-      });
-    } else {
-      sharedNFTs = computed(() => {
-        return store.getters["nft/getShared"]("testnet");
-      });
-    }
-
+    const nodetype = computed(() => store.getters["user/getNodeType"]);
+    const sharedNFTs = computed(() => {
+      return store.getters["nft/getShared"](nodetype.value);
+    });
     return {
       sharedNFTs,
-      isInXumm: inject("isInXumm"),
+      isInXumm,
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },

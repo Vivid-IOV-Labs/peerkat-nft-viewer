@@ -34,12 +34,7 @@
     <template #footer>
       <div>
         <base-button class="mr-2" @click="deleteShared">Delete</base-button>
-        <external-link
-          class="mr-2"
-          :url="`https://${nodetype}.bithomp.com/explorer/${nft.issuer}`"
-        >
-          Inspect</external-link
-        >
+        <external-link class="mr-2" :url="bihompUrl"> Inspect</external-link>
       </div>
     </template>
   </base-card>
@@ -64,17 +59,14 @@ export default defineComponent({
   async setup(props) {
     const router = useRouter();
     const store = useStore();
-    const isInXumm = inject("isInXumm");
-    let nodetype;
-    if (isInXumm) {
-      const ottData = computed(() => store.getters["xumm/getOttData"]);
-
-      nodetype = computed(() =>
-        ottData.value.nodetype == "TESTNET" ? "test" : "main"
-      );
-    }
+    const nodetype = computed(() => store.getters["user/getNodeType"]);
+    const bihompUrl = computed(() =>
+      nodetype.value == "TESTNET"
+        ? `https://test.bithomp.com/explorer/${props.nft.issuer}`
+        : `https://bithomp.com/explorer/${props.nft.issuer}`
+    );
     return {
-      nodetype,
+      bihompUrl,
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },

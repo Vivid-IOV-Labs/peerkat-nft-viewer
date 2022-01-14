@@ -28,35 +28,19 @@
       {{ nft.tokenName }}
     </template>
     <template #text>
-      <!-- :class="{
-          'text-truncate truncate': !showIssuer,
-          untruncate: showIssuer,
-        }" -->
       <strong class="h7 font-weight-bold">Issuer </strong><br />
       <span>{{ nft.issuer }}</span>
-      <!-- <a
-        class="btn-link d-block"
-        href="#"
-        aria-expanded="true"
-        @click.prevent="showIssuer = !showIssuer"
-        >{{ nft.issuer }}</a
-      > -->
     </template>
     <template #footer>
       <div>
         <base-button class="mr-2" @click="share">Share</base-button>
-        <external-link
-          class="mr-2"
-          :url="`https://${nodetype}.bithomp.com/explorer/${nft.issuer}`"
-        >
-          Inspect</external-link
-        >
+        <external-link class="mr-2" :url="bihompUrl"> Inspect</external-link>
       </div>
     </template>
   </base-card>
 </template>
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, inject, ref } from "vue";
+import { computed, defineComponent } from "vue";
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import ExternalLink from "@/components/ExternalLink.vue";
@@ -77,30 +61,22 @@ export default defineComponent({
   async setup(props) {
     const router = useRouter();
     const store = useStore();
-    const isInXumm = inject("isInXumm");
-    let nodetype: undefined | string | ComputedRef<"test" | "main">;
-    const showIssuer = ref(false);
-    if (isInXumm) {
-      const ottData = computed(() => store.getters["xumm/getOttData"]);
-
-      nodetype = computed(() =>
-        ottData.value.nodetype == "TESTNET" ? "test" : "main"
-      );
-    }
-
+    const nodetype = computed(() => store.getters["user/getNodeType"]);
+    const bihompUrl = computed(() =>
+      nodetype.value == "TESTNET"
+        ? `https://test.bithomp.com/explorer/${props.nft.issuer}`
+        : `https://bithomp.com/explorer/${props.nft.issuer}`
+    );
     return {
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
-      showIssuer,
-      nodetype,
+      bihompUrl,
       share() {
-        if (nodetype) {
-          const nodetypecode = getNetworkCodeFromType("TESTNET");
-          copyText(
-            `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/shared/${props.nft.issuer}/${nodetypecode}`
-          );
-        }
+        const nodetypecode = getNetworkCodeFromType(nodetype.value);
+        copyText(
+          `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/shared/${props.nft.issuer}/${nodetypecode}`
+        );
       },
       view() {
         router.push({
