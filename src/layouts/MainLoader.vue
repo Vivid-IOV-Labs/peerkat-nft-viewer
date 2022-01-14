@@ -44,31 +44,16 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
     const isInXumm = inject("isInXumm");
-    const walletAddress = computed({
-      get(): string {
-        return store.getters["user/getAddress"];
-      },
-      set(val: string): void {
-        store.commit("user/setAddress", val);
-      },
-    });
-    const nodetype = computed({
-      get(): string {
-        return store.getters["user/getNodeType"];
-      },
-      set(val: string): void {
-        store.commit("user/setNodeType", val);
-      },
-    });
-    // const walletAddress = computed(() => store.getters["user/getAddress"]);
-    // const nodetype = computed(() => store.getters["user/getNodeType"]);
+    const walletAddress = computed(() => store.getters["user/getAddress"]);
+    const nodetype = computed(() => store.getters["user/getNodeType"]);
     const showError = ref(false);
     const isDialogWalletConnection = ref(false);
+    const lines = computed(() => store.getters["nft/getLines"]);
+
     function handleError(): void {
       isDialogWalletConnection.value = false;
       showError.value = true;
     }
-    const lines = computed(() => store.getters["nft/getLines"]);
     const populateNFTs = async () => {
       try {
         await store.dispatch("nft/fetchNftLines", {
@@ -91,17 +76,12 @@ export default defineComponent({
       const path = ottdata.value.redirect;
       if (path) {
         router.push({ path });
-        return;
-      }
-      if (lines.value.length === 0) {
+      } else if (lines.value.length === 0) {
         await populateNFTs();
       }
     } else {
-      //rMfVCZ6QcVsnkzdbTQhFr2idpcakgxeqEM MAINNET
-      //reWmfYP8FbRyWWEEkhpKzCpEnksg4sAwx TESTNET
-      // store.commit("user/setAddress", "reWmfYP8FbRyWWEEkhpKzCpEnksg4sAwx");
-      // store.commit("user/setNodeType", "TESTNET");
       isDialogWalletConnection.value = true;
+      return { isDialogWalletConnection, showError, populateNFTs };
     }
 
     return { isDialogWalletConnection, showError, populateNFTs };
