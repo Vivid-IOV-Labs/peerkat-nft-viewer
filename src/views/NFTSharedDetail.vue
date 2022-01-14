@@ -82,7 +82,7 @@ export default defineComponent({
         route.params.currency.toString()
       );
       store.commit("nft/addShared", {
-        shared: nft,
+        shared: nft.value,
         nodetype,
       });
     } catch (error) {
