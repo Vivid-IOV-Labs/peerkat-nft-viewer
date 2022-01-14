@@ -17,29 +17,11 @@
         </div>
         <div class="form-group">
           <base-select
-            id="type_networks"
-            v-model="type_network"
-            :choices="type_networks"
-            type="type_networks"
+            id="nodetypes"
+            v-model="nodetype"
+            :choices="nodetypes"
+            type="nodetypes"
             label-text="Type Networks"
-            class="w-full max-w-xl"
-          ></base-select>
-        </div>
-        <div v-if="type_network.value == 'test'" class="form-group">
-          <base-select
-            id="test_network"
-            v-model="test_network"
-            :choices="test_networks"
-            label-text="Network"
-            class="w-full max-w-xl"
-          ></base-select>
-        </div>
-        <div v-else class="form-group">
-          <base-select
-            id="main_network"
-            v-model="main_network"
-            :choices="main_networks"
-            label-text="Network"
             class="w-full max-w-xl"
           ></base-select>
         </div>
@@ -98,30 +80,28 @@ export default defineComponent({
   },
   async setup(props, { emit }) {
     const walletAddress = ref("");
-    const isLoading = ref(false);
-    const type_network = ref({ label: "Main", value: "main" });
-    const type_networks = [
-      { label: "Main", value: "main" },
-      { label: "Test", value: "test" },
-    ];
-    const main_networks = [
-      { label: "wss://xrpcluster.com", value: "wss://xrpcluster.com" },
-      { label: "wss://xrpl.link", value: "wss://xrpl.link" },
-      { label: "wss://s2.ripple.com", value: "wss://s2.ripple.com" },
-    ];
-    const test_networks = [
-      {
-        label: "wss://s.altnet.rippletest.net:51233",
-        value: "wss://s.altnet.rippletest.net:51233",
-      },
-      {
-        label: "wss://xrpl.linkwss://testnet.xrpl-labs.com",
-        value: "wss://xrpl.linkwss://testnet.xrpl-labs.com",
-      },
-    ];
+    const nodetype = ref("");
 
-    const test_network = ref<Choice>(test_networks[0]);
-    const main_network = ref<Choice>(main_networks[0]);
+    const isLoading = ref(false);
+    const nodetypes = [
+      { label: "Main", value: "MAINNET" },
+      { label: "Test", value: "TESTNET" },
+    ];
+    // const main_networks = [
+    //   { label: "wss://xrpcluster.com", value: "wss://xrpcluster.com" },
+    //   { label: "wss://xrpl.link", value: "wss://xrpl.link" },
+    //   { label: "wss://s2.ripple.com", value: "wss://s2.ripple.com" },
+    // ];
+    // const test_networks = [
+    //   {
+    //     label: "wss://s.altnet.rippletest.net:51233",
+    //     value: "wss://s.altnet.rippletest.net:51233",
+    //   },
+    //   {
+    //     label: "wss://xrpl.linkwss://testnet.xrpl-labs.com",
+    //     value: "wss://xrpl.linkwss://testnet.xrpl-labs.com",
+    //   },
+    // ];
 
     const rules = computed(() => ({
       walletAddress: {
@@ -135,13 +115,9 @@ export default defineComponent({
     });
 
     return {
-      main_networks,
-      test_networks,
-      test_network,
-      main_network,
       v$,
-      type_network,
-      type_networks,
+      nodetypes,
+      nodetype,
       isLoading,
       formatVuelidateErrors(errors: any[]) {
         return errors.map((error) => {

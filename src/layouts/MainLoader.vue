@@ -2,20 +2,22 @@
   <div style="height: 100%; display: flex; flex-direction: column">
     <slot></slot>
   </div>
+  <welcome :is-open="openWelcomeDialog"></welcome>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject } from "vue";
+import { computed, defineComponent, inject, ref } from "vue";
 import { useStore } from "vuex";
-import Welcome from "@/dialogs/HeaderNavigation.vue";
+import Welcome from "@/dialogs/Welcome.vue";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
-  components: {},
+  components: { Welcome },
   async setup() {
     const store = useStore();
     const router = useRouter();
     const isInXumm = inject("isInXumm");
+    const openWelcomeDialog = ref(false);
     if (isInXumm) {
       await store.dispatch("xumm/getOttData");
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
@@ -28,9 +30,10 @@ export default defineComponent({
     } else {
       store.commit("user/setAddress", "reWmfYP8FbRyWWEEkhpKzCpEnksg4sAwx");
       store.commit("user/setNodeType", "TESTNET");
+      //openWelcomeDialog.value = true;
     }
 
-    return {};
+    return { openWelcomeDialog };
   },
 });
 </script>
