@@ -23,7 +23,28 @@
       justify-content: center;
     "
   >
-    <h3 class="text-center mt-4">You have no NFTs to view currently</h3>
+    <h3 class="text-center mt-4">
+      Peerkat is not able to find any NFTs in this wallet
+    </h3>
+    <ul class="text-center mt-4">
+      <li>
+        To receive an XRPL-issued NFT please ensure that you have correctly
+        signed the corresponding trustline transaction
+      </li>
+      <li>
+        You can view an NFT in fullscreen mode, inspect the transaction history
+        of an NFT via the Bithomp explorer and share your own NFTs with another
+        user to enable them to view the NFTs too
+      </li>
+      <li>
+        Please follow us on Twitter @Peerkatofficial and at
+        <external-link class="mr-2" :url="`https://peerkat.io`"
+          >peerkat.io</external-link
+        >
+        for updates and new product releases (XLS-20 minting platform coming
+        soon)
+      </li>
+    </ul>
   </div>
   <div
     v-if="isLoadingNext"
@@ -143,6 +164,7 @@
 import { defineComponent, ref, computed, watch } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseInput from "@/components/BaseInput.vue";
+import ExternalLink from "@/components/ExternalLink.vue";
 import BaseDialog from "@/components/BaseDialog.vue";
 import NftCard from "@/components/NftCard.vue";
 import useVuelidate from "@vuelidate/core";
@@ -162,6 +184,7 @@ export default defineComponent({
     BaseDialog,
     BaseButton,
     NftCard,
+    ExternalLink,
   },
   async setup() {
     const store = useStore();

@@ -5,7 +5,7 @@
     position="bottom center"
     classes="my-notification bg-light"
   />
-  <div v-if="withAuthLayout" style="height: 100%">
+  <div style="height: 100%">
     <auth-layout>
       <RouterView v-slot="{ Component, route }" name="default">
         <transition
@@ -46,24 +46,18 @@
       </RouterView>
     </auth-layout>
   </div>
-  <div v-else class="container px-6 pt-4 pb-6 h-screen">
-    <router-view></router-view>
-  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import AuthLayout from "@/layouts/AuthLayout.vue";
+import MainLoader from "@/layouts/MainLoader.vue";
 
 export default defineComponent({
   name: "App",
   components: {
     AuthLayout,
-  },
-  computed: {
-    withAuthLayout() {
-      return this.$route.meta.withAuth;
-    },
+    MainLoader,
   },
 });
 </script>

@@ -18,18 +18,38 @@
     "
   >
     <h3 class="text-center mt-4">
-      There are no NFTs shared with you at the moment
+      Peerkat is not able to find any NFTs shared with this wallet
     </h3>
+    <ul class="text-center mt-4">
+      <li>
+        To view another user’s XRPL-issued NFT please ensure that you have
+        followed the correct deep link shared by the user
+      </li>
+      <li>
+        You can view the NFT in fullscreen mode and inspect the transaction
+        history of an NFT via the Bithomp explorer
+      </li>
+      <li>
+        Please follow us on Twitter @Peerkatofficial and at
+        <external-link class="mr-2" :url="`https://peerkat.io`"
+          >peerkat.io</external-link
+        >
+        for updates and new product releases (XLS-20 minting platform coming
+        soon)
+      </li>
+    </ul>
   </div>
 </template>
 <script lang="ts">
 import { computed, defineComponent, inject } from "vue";
 import { useStore } from "vuex";
 import NftSharedCard from "@/components/NftSharedCard.vue";
+import ExternalLink from "@/components/ExternalLink.vue";
 
 export default defineComponent({
   components: {
     NftSharedCard,
+    ExternalLink,
   },
   async setup() {
     const store = useStore();
