@@ -56,7 +56,7 @@
   </base-card>
 </template>
 <script lang="ts">
-import { computed, defineComponent, inject, ref } from "vue";
+import { computed, ComputedRef, defineComponent, inject, ref } from "vue";
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import ExternalLink from "@/components/ExternalLink.vue";
@@ -78,7 +78,7 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
     const isInXumm = inject("isInXumm");
-    let nodetype;
+    let nodetype: undefined | string | ComputedRef<"test" | "main">;
     const showIssuer = ref(false);
     if (isInXumm) {
       const ottData = computed(() => store.getters["xumm/getOttData"]);
@@ -94,34 +94,13 @@ export default defineComponent({
       },
       showIssuer,
       nodetype,
-      // async createTrustline() {
-      //   const {
-      //     value: { user },
-      //   } = computed(() => store.getters["xumm/getOttData"]);
-      //   const newPayload: XummTypes.CreatePayload = {
-      //     user_token: user,
-      //     txjson: {
-      //       TransactionType: "TrustSet",
-      //       Flags: 131072,
-      //       LimitAmount: {
-      //         currency: props.nft.currency,
-      //         issuer: props.nft.issuer,
-      //         value: "1000000000000000e-96",
-      //       },
-      //     },
-      //   };
-      //   try {
-      //     const { uuid } = await XummService.createPaylod(newPayload);
-      //     openSignRequest(uuid);
-      //   } catch (error) {
-      //     console.log("error", error);
-      //   }
-      // },
       share() {
-        const nodetypecode = getNetworkCodeFromType(ottData.value.nodetype);
-        copyText(
-          `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/shared/${props.nft.issuer}/${nodetypecode}`
-        );
+        if (nodetype) {
+          const nodetypecode = getNetworkCodeFromType("TESTNET");
+          copyText(
+            `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/shared/${props.nft.issuer}/${nodetypecode}`
+          );
+        }
       },
       view() {
         router.push({

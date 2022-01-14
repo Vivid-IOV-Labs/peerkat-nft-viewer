@@ -45,7 +45,7 @@
   </base-card>
 </template>
 <script lang="ts">
-import { computed, defineComponent, inject } from "vue";
+import { computed, defineComponent, inject, Ref } from "vue";
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import ExternalLink from "@/components/ExternalLink.vue";
@@ -86,7 +86,7 @@ export default defineComponent({
       deleteShared() {
         store.commit("nft/deleteShared", {
           issuer: props.nft.issuer,
-          nodetype: ottData.value.nodetype,
+          nodetype: "TESTNET",
         });
       },
     };
