@@ -16,9 +16,9 @@
         >
           <Suspense>
             <template #default>
-              <div style="height: 100%; display: flex; flex-direction: column">
+              <main-loader>
                 <component :is="Component" :key="route.path" />
-              </div>
+              </main-loader>
             </template>
             <template #fallback>
               <div

@@ -6,15 +6,16 @@ import createPersistedState from "vuex-persistedstate";
 
 const store = createStore({
   modules: {
+    user: UserModule,
+
     xumm: XummModule,
     nft: NftModule,
-    user: UserModule,
   },
   strict: true,
   plugins: [
     createLogger(),
     createPersistedState({
-      paths: ["nft.shared", "user"],
+      paths: ["nft.shared"],
     }),
   ],
 });

@@ -68,73 +68,6 @@
     </div>
   </div>
   <base-dialog
-    :show="isDialogWalletConnection"
-    title="Welcome"
-    @close="isDialogWalletConnection = false"
-  >
-    <template #body>
-      <form>
-        <div class="form-group">
-          <base-input
-            id="walletaddress"
-            v-model="v$.walletAddress.$model"
-            placeholder="Enter your XRP Wallet Address"
-            type="text"
-            label-text="Wallet Address"
-            class="w-full max-w-xl"
-            :is-required="v$.walletAddress.required"
-            :is-invalid="v$.walletAddress.$dirty && v$.walletAddress.$invalid"
-            :errors="formatVuelidateErrors(v$.walletAddress.$errors)"
-          ></base-input>
-        </div>
-        <!-- <div class="form-group">
-            <base-select
-              id="type_networks"
-              v-model="type_network"
-              :choices="type_networks"
-              type="type_networks"
-              label-text="Network Type"
-              class="w-full max-w-xl"
-            ></base-select>
-          </div>
-          <div v-if="type_network.value == 'test'" class="form-group">
-            <base-select
-              id="test_network"
-              v-model="test_network"
-              :choices="test_networks"
-              label-text="Network"
-              class="w-full max-w-xl"
-            ></base-select>
-          </div>
-          <div v-else class="form-group">
-            <base-select
-              id="main_network"
-              v-model="main_network"
-              :choices="main_networks"
-              label-text="Network"
-              class="w-full max-w-xl"
-            ></base-select>
-          </div> -->
-      </form>
-    </template>
-    <template #footer>
-      <base-button
-        status="success"
-        class="mt-4"
-        :disabled="v$.$invalid"
-        @click="populateNFTs"
-        >{{ $t("Enter") }}
-        <div
-          v-if="isLoading"
-          class="spinner-grow spinner-grow-sm"
-          role="status"
-        >
-          <span class="sr-only">{{ $t("Loading...") }}</span>
-        </div>
-      </base-button>
-    </template>
-  </base-dialog>
-  <base-dialog
     :show="showError"
     title="An Error occurs"
     @close="
@@ -188,10 +121,8 @@ export default defineComponent({
   },
   async setup() {
     const store = useStore();
-    const router = useRouter();
     const sentinel = ref<HTMLElement | null>(null);
     const root = ref<HTMLElement | null>(null);
-    const { locale } = useI18n({ useScope: "global" });
     const isInXumm = inject("isInXumm");
     function handleError(): void {
       isDialogWalletConnection.value = false;
@@ -201,16 +132,14 @@ export default defineComponent({
 
     const showError = ref(false);
     const endscroll = ref(false);
-    const isLoggedIn = !!window.localStorage.getItem("address");
     const isDialogWalletConnection = ref(false);
     const isLoading = ref(false);
     const isLoadingNext = ref(false);
-    const adddress = isLoggedIn ? window.localStorage.getItem("address") : "";
-    const walletAddress = ref(adddress);
+    const walletAddress = computed(() => store.getters["user/getAddress"]);
+    const nodetype = computed(() => store.getters["user/getNodeType"]);
     const NFTMedia = computed(() => store.getters["nft/getAll"]);
     const lines = computed(() => store.getters["nft/getLines"]);
-    console.log("lines", lines.value);
-    console.log("NFTMedia", NFTMedia.value);
+
     const rules = computed(() => ({
       walletAddress: {
         required,
@@ -226,10 +155,10 @@ export default defineComponent({
       try {
         await store.dispatch("nft/fetchNftLines", {
           walletAddress: walletAddress.value,
-          nodetype: "TESTNET",
+          nodetype: nodetype.value,
           handleError,
         });
-        await store.dispatch("nft/fetchNext", "TESTNET");
+        await store.dispatch("nft/fetchNext", nodetype.value);
         isDialogWalletConnection.value = false;
         isLoading.value = false;
       } catch (err) {
@@ -242,7 +171,7 @@ export default defineComponent({
     const { unobserve, isIntersecting } = useIntersectionObserver(sentinel);
     watch(isIntersecting, async () => {
       isLoadingNext.value = true;
-      await store.dispatch("nft/fetchNext", "TESTNET");
+      await store.dispatch("nft/fetchNext", nodetype.value);
       setTimeout(() => {
         isLoadingNext.value = false;
       }, 500);
@@ -253,30 +182,8 @@ export default defineComponent({
         endscroll.value = true;
       }
     });
-
-    if (isInXumm) {
-      if (lines.value.length === 0) {
-        await store.dispatch("xumm/getOttData");
-        const ottdata = computed(() => store.getters["xumm/getOttData"]);
-        const path = ottdata.value.redirect;
-        if (path) {
-          router.push({ path });
-        }
-        locale.value = ottdata.value.locale.split("-")[0];
-        // const net = ottdata.value.nodetype == "TESTNET";
-        await store.dispatch("nft/fetchNftLines", {
-          walletAddress: ottdata.value.account,
-          nodetype: ottdata.value.nodetype,
-          handleError,
-        });
-        await store.dispatch("nft/fetchNext", "ottdata.value.nodetype,");
-      }
-    } else if (isLoggedIn) {
-      if (lines.value.length === 0) {
-        await populateNFTs();
-      }
-    } else {
-      isDialogWalletConnection.value = true;
+    if (lines.value.length === 0) {
+      await populateNFTs();
     }
 
     return {

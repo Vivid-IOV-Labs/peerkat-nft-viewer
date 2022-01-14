@@ -147,10 +147,8 @@ async function fetchOne(account: string, currency?: string): Promise<NFT> {
     account,
   });
   if (currency) {
-    debugger;
     return getOne(account_data, account, currency);
   } else {
-    debugger;
     const issuerCurrency = await fetchIssuerCurrencies(account);
     return getOne(account_data, account, issuerCurrency);
   }
@@ -262,10 +260,8 @@ export default async (nodetype: string): Promise<any> => {
       account,
     });
     if (currency) {
-      debugger;
       return getOne(account_data, account, currency);
     } else {
-      debugger;
       const issuerCurrency = await fetchIssuerCurrencies(account);
       return getOne(account_data, account, issuerCurrency);
     }
