@@ -21,6 +21,7 @@
             v-model="nodetype"
             :choices="nodetypes"
             type="nodetypes"
+            :as-val="true"
             label-text="Type Networks"
             class="w-full max-w-xl"
           ></base-select>
@@ -55,11 +56,7 @@ import BaseDialog from "@/components/BaseDialog.vue";
 import useVuelidate from "@vuelidate/core";
 import { isRippleAddress } from "../utils/validators";
 import { required } from "@vuelidate/validators";
-
-interface Choice {
-  label: string;
-  value: string;
-}
+import { useStore } from "vuex";
 
 export default defineComponent({
   components: {
@@ -79,9 +76,7 @@ export default defineComponent({
     },
   },
   async setup(props, { emit }) {
-    const walletAddress = ref("");
-    const nodetype = ref("");
-
+    const store = useStore();
     const isLoading = ref(false);
     const nodetypes = [
       { label: "Main", value: "MAINNET" },
@@ -102,7 +97,22 @@ export default defineComponent({
     //     value: "wss://xrpl.linkwss://testnet.xrpl-labs.com",
     //   },
     // ];
-
+    const walletAddress = computed({
+      get(): string {
+        return store.getters["user/getAddress"];
+      },
+      set(val: string): void {
+        store.commit("user/setAddress", val);
+      },
+    });
+    const nodetype = computed({
+      get(): string {
+        return store.getters["user/getNodeType"];
+      },
+      set(val: string): void {
+        store.commit("user/setNodeType", val);
+      },
+    });
     const rules = computed(() => ({
       walletAddress: {
         required,

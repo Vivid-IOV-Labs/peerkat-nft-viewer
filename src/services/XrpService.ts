@@ -199,9 +199,9 @@ export default async (nodetype: string): Promise<any> => {
         command: "account_lines",
         account: walletAddress,
       });
-      localStorage.setItem("address", walletAddress);
-
+      debugger;
       const { lines } = accountLines;
+      debugger;
       const NFTs = lines.filter(isNFT);
       const NFTMedia: NFT[] = await Promise.all(
         NFTs.map(async (line: line) => {
