@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{ path: `/shared` }" class="my-4 btn btn-link"
+  <router-link :to="{ path: `/shared` }" class="mb-2 btn btn-link"
     >Back
   </router-link>
   <div v-if="nft" class="w-100 p4">
@@ -11,16 +11,16 @@
         alt="Card image cap"
         @error="fallbackImg"
       />
+      <video
+        v-if="nft.media_type?.includes('video')"
+        :src="nft.url"
+        autoplay
+        muted
+        loop
+        playsinline
+        class="card-img"
+      ></video>
     </figure>
-    <video
-      v-if="nft.media_type?.includes('video')"
-      :src="nft.url"
-      autoplay
-      muted
-      loop
-      playsinline
-      class="w-100 card-img"
-    ></video>
   </div>
 </template>
 <script lang="ts">

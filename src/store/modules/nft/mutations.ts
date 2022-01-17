@@ -13,7 +13,6 @@ interface deleteSharedParams {
 const mutations: MutationTree<NFTState> = {
   setXrpClient(state: NFTState, xrpClient: typeof XrplClient): void {
     state.xrpClient = xrpClient;
-    debugger;
   },
   setAll(state: NFTState, all: Array<NFT>): void {
     state.all = [...state.all, ...all];
