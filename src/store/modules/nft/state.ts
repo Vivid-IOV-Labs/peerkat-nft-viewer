@@ -1,3 +1,4 @@
+import { XrplClient } from "xrpl-client";
 import { NFT } from "../../../models/NFT";
 
 export interface SharedNFTs {
@@ -8,7 +9,7 @@ export interface NFTState {
   all: Array<NFT>;
   shared: SharedNFTs;
   lines: Array<NFT>;
-  xrpClient: null;
+  xrpClient: typeof XrplClient | null;
 }
 
 const state = (): NFTState => ({

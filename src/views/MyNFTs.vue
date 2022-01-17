@@ -72,9 +72,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from "vue";
-import BaseButton from "@/components/BaseButton.vue";
 import ExternalLink from "@/components/ExternalLink.vue";
-import BaseDialog from "@/components/BaseDialog.vue";
 import NftCard from "@/components/NftCard.vue";
 import { useStore } from "vuex";
 import { inject } from "vue";
@@ -82,8 +80,6 @@ import useIntersectionObserver from "../composable/useIntersectionObserver";
 
 export default defineComponent({
   components: {
-    BaseDialog,
-    BaseButton,
     NftCard,
     ExternalLink,
   },
@@ -95,7 +91,6 @@ export default defineComponent({
 
     const endscroll = ref(false);
     const isLoadingNext = ref(false);
-    const walletAddress = computed(() => store.getters["user/getAddress"]);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const NFTMedia = computed(() => store.getters["nft/getAll"]);
     const lines = computed(() => store.getters["nft/getLines"]);

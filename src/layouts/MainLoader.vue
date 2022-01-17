@@ -56,6 +56,8 @@ export default defineComponent({
     }
     const populateNFTs = async () => {
       try {
+        console.log(nodetype.value);
+        await store.dispatch("nft/initXrpClient", nodetype.value);
         await store.dispatch("nft/fetchNftLines", {
           walletAddress: walletAddress.value,
           nodetype: nodetype.value,

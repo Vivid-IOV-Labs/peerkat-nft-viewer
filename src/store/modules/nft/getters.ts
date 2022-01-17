@@ -1,3 +1,4 @@
+import { XrplClient } from "xrpl-client";
 import { NFTState, SharedNFTs } from "./state";
 interface NFT {
   issuer: string;
@@ -5,6 +6,7 @@ interface NFT {
 }
 export default {
   getAll: (state: NFTState): Array<NFT> => state.all,
+  getXrpClient: (state: NFTState): typeof XrplClient | null => state.xrpClient,
   getShared:
     (state: NFTState) =>
     (nodetype: keyof SharedNFTs): Array<NFT> => {
