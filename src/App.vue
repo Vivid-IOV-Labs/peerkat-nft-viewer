@@ -87,7 +87,6 @@ body .my-notification .notification-title {
 } */
 .success {
   background: #3052ff !important;
-  background: #f3f5ff !important;
   border-left-color: #3052ff !important;
 }
 
