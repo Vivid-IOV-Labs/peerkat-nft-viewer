@@ -31,7 +31,7 @@
               :class="{ active: isActive }"
               :href="href"
               @click="navigate"
-              >Wallet</a
+              >My Wallet</a
             >
           </router-link>
         </li>

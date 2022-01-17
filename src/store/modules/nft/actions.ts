@@ -28,8 +28,8 @@ const actions: ActionTree<NFT, NFTState> = {
     { walletAddress, nodetype }: FetchParams
   ): Promise<void> {
     const client = await init(nodetype);
-    const linse = await client.fetchNftLines(walletAddress);
-    commit("setLines", linse);
+    const lines = await client.fetchNftLines(walletAddress);
+    commit("setLines", lines);
   },
   async fetchNext({ commit, getters }, nodetype: string): Promise<void> {
     const client = await init(nodetype);

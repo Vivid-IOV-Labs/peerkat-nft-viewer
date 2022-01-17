@@ -21,12 +21,15 @@ function copyTextValueOld(copyText: string) {
     document.execCommand("copy");
 
     notify({
-      title: "Copied successfully",
+      title: "Share NFT link",
+      text: "Copied to clipboard",
+
       type: "success",
     });
   } catch (err) {
     notify({
-      title: "Not Copied",
+      text: "Not Copied",
+      title: "Share NFT link",
       type: "error",
     });
   }
@@ -38,7 +41,8 @@ export async function copyText(text: string): Promise<void> {
   try {
     await clipboard.writeText(text);
     notify({
-      title: "Copied successfully",
+      title: "Share NFT link",
+      text: "Copied to clipboard",
       type: "success",
     });
   } catch (err) {

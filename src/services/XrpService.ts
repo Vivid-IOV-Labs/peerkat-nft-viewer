@@ -54,24 +54,51 @@ async function getMediaType(url: string) {
   const contentType = res.headers.get("Content-Type");
   return contentType;
 }
+function getXLSProtocol(source: string): string {
+  console.log("source", source);
+
+  if (/(http|https|ipfs)?:\/\//.test(source)) {
+    return "xls-14";
+  } else if (/(hash)?:/.test(source)) {
+    return "xls-14";
+  } else {
+    return "";
+  }
+}
+
+function getMediaByXLSProtocol(source: string, tokenName: string): string {
+  const xlsProtocol = getXLSProtocol(source);
+  console.log("xlsProtocol", xlsProtocol);
+  if (xlsProtocol == "xls-14") {
+    const protocol = source.split("//")[0];
+    console.log("protocol", protocol);
+
+    return protocol + "//" + tokenName;
+  } else if (xlsProtocol == "xls-16") {
+    const cid = source.split(":")[1];
+    return "https://ipfs.io/ipfs/" + cid;
+  } else {
+    return "";
+  }
+}
+
 async function getOne(account_data: any, account: string, currency = "") {
   const { Domain } = account_data;
 
   const source = is_hexadecimal(hexToString(Domain))
     ? hexToString(hexToString(Domain))
     : hexToString(Domain);
-  const token_domain = hexToString(currency.replace("02", ""));
-  const cid = source.split(":")[1];
 
-  const url = `https://ipfs.io/ipfs/${cid}`;
+  const tokenName = hexToString(currency.replace("02", ""));
+
+  const url = getMediaByXLSProtocol(source, tokenName);
 
   const media_type = await getMediaType(url);
   return {
     issuer: account,
     issuerTruncated: truncate(account),
     currency,
-    tokenName: token_domain,
-    cid: cid,
+    tokenName,
     url,
     media_type,
   };
@@ -159,7 +186,7 @@ export async function init(nodetype: string): Promise<typeof XrplClient> {
     const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
     xrpClientInstance = new XrplClient(X_url, {
       assumeOfflineAfterSeconds: 15,
-      maxConnectionAttempts: 2,
+      maxConnectionAttempts: 6,
       connectAttemptTimeoutSeconds: 3,
     });
     await xrpClientInstance.ready();

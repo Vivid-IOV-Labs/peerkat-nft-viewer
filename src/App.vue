@@ -86,8 +86,9 @@ body .my-notification .notification-title {
   padding: 0.75rem;
 } */
 .success {
-  background: #16dbdb !important;
-  border-left-color: #16dbdb !important;
+  background: #3052ff !important;
+  background: #f3f5ff !important;
+  border-left-color: #3052ff !important;
 }
 
 .warn {

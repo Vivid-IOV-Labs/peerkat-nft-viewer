@@ -1,6 +1,5 @@
 import { NFTState, SharedNFTs } from "./state";
 interface NFT {
-  cid: string;
   issuer: string;
   currency: string;
 }
