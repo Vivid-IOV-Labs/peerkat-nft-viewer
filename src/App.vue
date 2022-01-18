@@ -2,45 +2,70 @@
   <VueAnnouncer />
   <notifications :duration="1000" position="bottom center" />
   <div style="height: 100%">
-    <auth-layout>
-      <RouterView v-slot="{ Component, route }" name="default">
-        <transition
-          :key="route.path"
-          :name="route.meta.transition"
-          mode="out-in"
-          :duration="300"
+    <Suspense>
+      <template #default>
+        <auth-layout>
+          <RouterView v-slot="{ Component, route }" name="default">
+            <transition
+              :key="route.path"
+              :name="route.meta.transition"
+              mode="out-in"
+              :duration="300"
+            >
+              <Suspense>
+                <template #default>
+                  <main-loader>
+                    <component :is="Component" :key="route.path" />
+                  </main-loader>
+                </template>
+                <template #fallback>
+                  <div
+                    style="
+                      height: 100%;
+                      width: 100%;
+                      position: absolute;
+                      opacity: 0.8;
+                      top: 0;
+                      left: 0;
+                    "
+                    class="d-flex align-items-center justify-content-center"
+                  >
+                    <div
+                      class="spinner-border"
+                      style="width: 4rem; height: 4rem; color: #666"
+                      role="status"
+                    >
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </div>
+                </template>
+              </Suspense>
+            </transition>
+          </RouterView>
+        </auth-layout>
+      </template>
+      <template #fallback>
+        <div
+          style="
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            opacity: 0.8;
+            top: 0;
+            left: 0;
+          "
+          class="d-flex align-items-center justify-content-center"
         >
-          <Suspense>
-            <template #default>
-              <main-loader>
-                <component :is="Component" :key="route.path" />
-              </main-loader>
-            </template>
-            <template #fallback>
-              <div
-                style="
-                  height: 100%;
-                  width: 100%;
-                  position: absolute;
-                  opacity: 0.8;
-                  top: 0;
-                  left: 0;
-                "
-                class="d-flex align-items-center justify-content-center"
-              >
-                <div
-                  class="spinner-border"
-                  style="width: 4rem; height: 4rem; color: #666"
-                  role="status"
-                >
-                  <span class="sr-only">Loading...</span>
-                </div>
-              </div>
-            </template>
-          </Suspense>
-        </transition>
-      </RouterView>
-    </auth-layout>
+          <div
+            class="spinner-border"
+            style="width: 4rem; height: 4rem; color: #666"
+            role="status"
+          >
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+      </template>
+    </Suspense>
   </div>
 </template>
 
