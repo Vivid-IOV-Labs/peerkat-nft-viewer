@@ -15,7 +15,7 @@ const store = createStore({
   plugins: [
     //createLogger(),
     createPersistedState({
-      paths: ["nft.shared", "user"],
+      paths: ["nft.sharedwithme", "user"],
     }),
   ],
 });
