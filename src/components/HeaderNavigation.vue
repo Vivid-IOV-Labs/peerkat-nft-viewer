@@ -21,11 +21,7 @@
       </h1> -->
       <ul class="nav nav-pills ml-auto">
         <li class="nav-item">
-          <router-link
-            v-slot="{ navigate, href, isActive }"
-            to="/wallet"
-            custom
-          >
+          <router-link v-slot="{ navigate, href, isActive }" to="/" custom>
             <a
               class="nav-link"
               :class="{ active: isActive }"
