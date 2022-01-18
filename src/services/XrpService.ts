@@ -59,8 +59,6 @@ async function getMediaType(url: string) {
   }
 }
 function getXLSProtocol(source: string): string {
-  console.log("source", source);
-
   if (/(http|https|ipfs)?:\/\//.test(source)) {
     return "xls-14";
   } else if (/(hash)?:/.test(source)) {
