@@ -33,12 +33,12 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, ref } from "vue";
-import { useStore } from "vuex";
-import Welcome from "@/dialogs/Welcome.vue";
-import { useRouter } from "vue-router";
+// import { computed, defineComponent, inject, ref } from "vue";
+// import { useStore } from "vuex";
+// import Welcome from "@/dialogs/Welcome.vue";
+// import { useRouter } from "vue-router";
 
-export default defineComponent({
+// export default defineComponent({
 //   components: { Welcome },
 //   async setup() {
 //     const store = useStore();
