@@ -13,7 +13,7 @@
       />
       <video
         v-if="nft.media_type?.includes('video')"
-        :src="nft.url"
+        :src="`${nft.url}#t=0.5`"
         autoplay
         muted
         loop
