@@ -12,7 +12,7 @@
         @error="fallbackImg"
       />
       <video
-        v-if="nft.media_type?.includes('video')"
+        v-else-if="nft.media_type?.includes('video')"
         :src="nft.url"
         autoplay
         muted
