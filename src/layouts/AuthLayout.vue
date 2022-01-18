@@ -81,9 +81,9 @@ export default defineComponent({
       const path = ottdata.value.redirect;
       if (lines.value.length === 0) {
         await populateNFTs();
-      }
-      if (path) {
-        router.push({ path });
+        if (path) {
+          router.push({ path });
+        }
       }
     } else {
       if (!walletAddress.value) {
