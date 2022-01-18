@@ -87,7 +87,7 @@ export default defineComponent({
 
         if (path) {
           console.log("path", path);
-          router.push({ path: "/" + path });
+          router.push({ path });
         }
       }
     } else {
