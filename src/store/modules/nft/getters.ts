@@ -23,6 +23,8 @@ export default {
   getSharedByAddress:
     (state: NFTState) =>
     (address: string, nodetype: keyof SharedNFTs): NFT | undefined => {
-      return state.shared[nodetype].find(({ issuer }) => issuer == address);
+      return state.sharedwithme[nodetype].find(
+        ({ issuer }) => issuer == address
+      );
     },
 };
