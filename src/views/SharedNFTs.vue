@@ -57,6 +57,7 @@ export default defineComponent({
     const sharedNFTs = computed(() => {
       return store.getters["nft/getShared"](nodetype.value);
     });
+
     console.log("sharedNFTs", sharedNFTs.value);
     return {
       sharedNFTs,
