@@ -60,9 +60,7 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
     const nodetype = computed(() => store.getters["user/getNodeType"]);
-    const nodetypecode = computed(() =>
-      getNetworkCodeFromType(store.getters["user/getNodeType"])
-    );
+    const nodetypecode = computed(() => getNetworkCodeFromType(nodetype.value));
     const bihompUrl = computed(() =>
       nodetype.value == "TESTNET"
         ? `https://test.bithomp.com/explorer/${props.nft.issuer}`
