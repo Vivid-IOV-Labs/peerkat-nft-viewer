@@ -116,7 +116,7 @@ export default defineComponent({
     const rules = computed(() => ({
       walletAddress: {
         required,
-        isRippleAddress,
+        // isRippleAddress,
       },
     }));
 
