@@ -79,9 +79,14 @@ export default defineComponent({
       store.commit("user/setAddress", ottdata.value.account);
       store.commit("user/setNodeType", ottdata.value.nodetype);
       const path = ottdata.value.redirect;
+      console.log("path", path);
+
       if (lines.value.length === 0) {
         await populateNFTs();
+        console.log("populateNFTs", populateNFTs);
+
         if (path) {
+          console.log("path", path);
           router.push({ path: "/" + path });
         }
       }
