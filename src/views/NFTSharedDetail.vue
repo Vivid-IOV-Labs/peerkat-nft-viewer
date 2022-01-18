@@ -77,19 +77,21 @@ export default defineComponent({
       parseInt(route.params.nodetype as string)
     );
     const othernodetype = nodetype == "TESTNET" ? "MAINNET" : "TESTNET";
-    const client = await init(nodetype);
-    const nft = ref<NFT | null>(null);
-    try {
-      nft.value = await client.fetchOne(route.params.nftAddress.toString());
-      console.log("NFTSHAREDDETAIL", nft.value);
 
-      // store.commit("nft/addShared", {
-      //   shared: nft.value,
-      //   nodetype,
-      // });
-    } catch (error) {
-      console.log("NFTSHAREDDETAIL", error);
-    }
+    const client = store.getters["nft/getXrpClient"];
+    const nft = await client.fetchOne(route.params.nftAddress.toString());
+    // const nft = ref<NFT | null>(null);
+    // // try {
+    // //   nft.value = await client.fetchOne(route.params.nftAddress.toString());
+    // //   console.log("NFTSHAREDDETAIL", nft.value);
+
+    // //   store.commit("nft/addShared", {
+    // //     shared: nft.value,
+    // //     nodetype,
+    // //   });
+    // // } catch (error) {
+    // //   console.log("NFTSHAREDDETAIL", error);
+    // // }
 
     return {
       nft,
