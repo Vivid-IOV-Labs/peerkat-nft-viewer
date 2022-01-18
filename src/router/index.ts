@@ -1,9 +1,8 @@
 import { createWebHistory, createRouter } from "vue-router";
 
 const routes = [
-  { path: "/", redirect: "/wallet" },
   {
-    path: "/wallet",
+    path: "/",
     name: "Wallet",
     component: () => import("../views/Wallet.vue"),
     meta: {
