@@ -81,13 +81,12 @@ export default defineComponent({
       const path = ottdata.value.redirect;
       console.log("path", path);
 
-      await populateNFTs();
-      console.log("populateNFTs", populateNFTs);
-
       if (path) {
         console.log("path", path);
         router.push({ path });
       }
+      await populateNFTs();
+      console.log("populateNFTs", populateNFTs);
     } else {
       if (!walletAddress.value) {
         isDialogWalletConnection.value = true;
