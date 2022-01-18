@@ -84,6 +84,7 @@ export default defineComponent({
         route.params.nftAddress.toString(),
         route.params.currency.toString()
       );
+      console.log("nft/addShared", nodetype);
       store.commit("nft/addShared", {
         shared: nft.value,
         nodetype,

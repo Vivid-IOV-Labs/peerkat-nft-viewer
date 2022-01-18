@@ -89,6 +89,11 @@ export default defineComponent({
           console.log("path", path);
           router.push({ path });
         }
+      } else {
+        if (path) {
+          console.log("path", path);
+          router.push({ path });
+        }
       }
     } else {
       if (!walletAddress.value) {
