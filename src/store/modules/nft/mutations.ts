@@ -25,6 +25,8 @@ const mutations: MutationTree<NFTState> = {
       state.shared[nodetype].filter(
         (n: { issuer: string }) => n.issuer === shared.issuer
       ).length > 0;
+    console.log("shared", shared);
+    console.log("nodetype", nodetype);
     if (!exist) {
       state.shared[nodetype] = [...state.shared[nodetype], shared];
     }

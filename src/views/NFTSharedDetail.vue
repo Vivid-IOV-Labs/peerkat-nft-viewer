@@ -61,12 +61,11 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { init } from "../services/XrpService";
 import BaseCard from "../components/BaseCard.vue";
-import BaseButton from "../components/BaseButton.vue";
 import { getNetworkTypeFromCode } from "../utils/getNetworkTypeFromCode";
 import { NFT } from "../models/NFT";
 
 export default defineComponent({
-  components: { BaseCard, ExternalLink, BaseButton },
+  components: { BaseCard, ExternalLink },
   async setup() {
     const route = useRoute();
     const router = useRouter();
@@ -82,6 +81,7 @@ export default defineComponent({
         route.params.nftAddress.toString(),
         route.params.currency.toString()
       );
+      console.log(nodetype);
       store.commit("nft/addShared", {
         shared: nft.value,
         nodetype,
