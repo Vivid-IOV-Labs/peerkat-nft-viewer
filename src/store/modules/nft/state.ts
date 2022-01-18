@@ -7,14 +7,14 @@ export interface SharedNFTs {
 }
 export interface NFTState {
   all: Array<NFT>;
-  shared: SharedNFTs;
+  sharedwithme: SharedNFTs;
   lines: Array<NFT>;
   xrpClient: typeof XrplClient | null;
 }
 
 const state = (): NFTState => ({
   all: [],
-  shared: { TESTNET: [], MAINNET: [] },
+  sharedwithme: { TESTNET: [], MAINNET: [] },
   lines: [],
   xrpClient: null,
 });

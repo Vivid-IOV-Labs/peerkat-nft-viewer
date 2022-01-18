@@ -22,23 +22,23 @@ const mutations: MutationTree<NFTState> = {
   },
   addShared(state: NFTState, { shared, nodetype }: addSharedParams): void {
     console.log("shared", shared);
-    console.log("state.shared", state.shared);
+    console.log("state.shared", state.sharedwithme);
     console.log("nodetype", nodetype);
-    console.log("state.shared[nodetype]", state.shared[nodetype]);
+    console.log("state.shared[nodetype]", state.sharedwithme[nodetype]);
     const exist =
-      state.shared[nodetype].filter(
+      state.sharedwithme[nodetype].filter(
         (n: { issuer: string }) => n.issuer === shared.issuer
       ).length > 0;
 
     if (!exist) {
-      state.shared[nodetype] = [...state.shared[nodetype], shared];
+      state.sharedwithme[nodetype] = [...state.sharedwithme[nodetype], shared];
     }
   },
   deleteShared(
     state: NFTState,
     { issuer, nodetype }: deleteSharedParams
   ): void {
-    state.shared[nodetype] = state.shared[nodetype].filter(
+    state.sharedwithme[nodetype] = state.sharedwithme[nodetype].filter(
       (n) => n.issuer !== issuer
     );
   },
