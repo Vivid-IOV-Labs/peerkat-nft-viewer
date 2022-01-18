@@ -78,7 +78,7 @@ export default defineComponent({
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
       store.commit("user/setAddress", ottdata.value.account);
       store.commit("user/setNodeType", ottdata.value.nodetype);
-      const path = ottdata.value.redirect;
+      const path = "/" + ottdata.value.redirect;
       if (lines.value.length === 0) {
         await populateNFTs();
         if (path) {
