@@ -39,7 +39,7 @@
   </base-card>
 </template>
 <script lang="ts">
-import { computed, defineComponent, inject, Ref } from "vue";
+import { computed, defineComponent } from "vue";
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import ExternalLink from "@/components/ExternalLink.vue";

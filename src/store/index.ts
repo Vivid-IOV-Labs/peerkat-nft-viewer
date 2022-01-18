@@ -13,7 +13,7 @@ const store = createStore({
   },
   strict: true,
   plugins: [
-    createLogger(),
+    //createLogger(),
     createPersistedState({
       paths: ["nft.shared", "user"],
     }),
