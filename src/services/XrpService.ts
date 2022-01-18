@@ -70,11 +70,8 @@ function getXLSProtocol(source: string): string {
 
 function getMediaByXLSProtocol(source: string, tokenName: string): string {
   const xlsProtocol = getXLSProtocol(source);
-  // console.log("xlsProtocol", xlsProtocol);
   if (xlsProtocol == "xls-14") {
     const protocol = source.split("//")[0];
-    //console.log("protocol", protocol);
-
     return protocol + "//" + tokenName;
   } else if (xlsProtocol == "xls-16") {
     const cid = source.split(":")[1];
