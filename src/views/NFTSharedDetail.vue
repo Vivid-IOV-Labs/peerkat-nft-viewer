@@ -61,7 +61,10 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { init } from "../services/XrpService";
 import BaseCard from "../components/BaseCard.vue";
-import { getNetworkTypeFromCode } from "../utils/getNetworkTypeFromCode";
+import {
+  getNetworkCodeFromType,
+  getNetworkTypeFromCode,
+} from "../utils/getNetworkTypeFromCode";
 import { NFT } from "../models/NFT";
 
 export default defineComponent({
@@ -99,7 +102,9 @@ export default defineComponent({
       view() {
         nft.value &&
           router.push({
-            path: `/shared/${nft.value.issuer}/view`,
+            path: `/shared/${nft.value.issuer}/${getNetworkCodeFromType(
+              nodetype
+            )}/view`,
           });
       },
     };
