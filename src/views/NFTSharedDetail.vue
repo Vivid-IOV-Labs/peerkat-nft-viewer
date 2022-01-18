@@ -7,22 +7,24 @@
     <base-card v-if="nft" class="mb-4">
       <template #picture>
         <figure v-if="nft.media_type?.includes('image')" class="w-100">
-          <img
-            class="img-fluid card-img-top"
-            :src="nft.url"
-            alt="Card image cap"
-            @error="fallbackImg"
-          />
+          <a href="#" @click.prevent="view">
+            <img
+              class="img-fluid card-img-top"
+              :src="nft.url"
+              alt="Card image cap"
+              @error="fallbackImg"
+            />
+            <video
+              v-if="nft.media_type?.includes('video')"
+              :src="`${nft.url}#t=0.5`"
+              autoplay
+              muted
+              loop
+              playsinline
+              class="w-100 img-fluid card-img-top"
+            ></video>
+          </a>
         </figure>
-        <video
-          v-if="nft.media_type?.includes('video')"
-          :src="nft.url"
-          autoplay
-          muted
-          loop
-          playsinline
-          class="w-100 img-fluid card-img-top"
-        ></video>
       </template>
       <template #text>
         <div class="d-flex flex-column">
@@ -42,7 +44,6 @@
           :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
           >Inspect</external-link
         >
-        <base-button class="mr-2" @click="view">View</base-button>
       </template>
     </base-card>
     <h3 v-else>
