@@ -6,9 +6,10 @@
   <div class="pb-4">
     <base-card v-if="nft" class="mb-4">
       <template #picture>
-        <figure v-if="nft.media_type?.includes('image')" class="w-100">
+        <figure class="w-100">
           <a href="#" @click.prevent="view">
             <img
+              v-if="nft.media_type?.includes('image')"
               class="img-fluid card-img-top"
               :src="nft.url"
               alt="Card image cap"
@@ -55,11 +56,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import ExternalLink from "@/components/ExternalLink.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { init } from "../services/XrpService";
 import BaseCard from "../components/BaseCard.vue";
 import {
   getNetworkCodeFromType,
@@ -77,10 +77,12 @@ export default defineComponent({
       parseInt(route.params.nodetype as string)
     );
     const othernodetype = nodetype == "TESTNET" ? "MAINNET" : "TESTNET";
-    const client = await init(nodetype);
+    const client = computed(() => store.getters["nft/getXrpClient"]);
     const nft = ref<NFT | null>(null);
     try {
-      nft.value = await client.fetchOne(route.params.nftAddress.toString());
+      nft.value = await client.value.fetchOne(
+        route.params.nftAddress.toString()
+      );
       console.log("nft/addShared", nodetype);
       store.commit("nft/addShared", {
         shared: nft.value,
