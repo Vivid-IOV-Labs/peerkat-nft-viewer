@@ -5,7 +5,7 @@
   </main>
   <welcome
     :is-open="isDialogWalletConnection"
-    :async-fun="populateNFTs"
+    :async-fun="connectXrpClient"
   ></welcome>
   <base-dialog
     :show="showError"
@@ -38,11 +38,15 @@ import { computed, defineComponent, inject, ref } from "vue";
 import { useStore } from "vuex";
 import Welcome from "@/dialogs/Welcome.vue";
 import HeaderNavigation from "@/components/HeaderNavigation.vue";
+import BaseButton from "@/components/BaseButton.vue";
+import BaseDialog from "@/components/BaseButton.vue";
 import { useRouter } from "vue-router";
 export default defineComponent({
   components: {
     HeaderNavigation,
     Welcome,
+    BaseDialog,
+    BaseButton,
   },
   async setup() {
     const store = useStore();
@@ -52,21 +56,17 @@ export default defineComponent({
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const showError = ref(false);
     const isDialogWalletConnection = ref(false);
-    const lines = computed(() => store.getters["nft/getLines"]);
 
     function handleError(): void {
       isDialogWalletConnection.value = false;
       showError.value = true;
     }
-    const populateNFTs = async () => {
+    const connectXrpClient = async () => {
       try {
-        await store.dispatch("nft/initXrpClient", nodetype.value);
-        await store.dispatch("nft/fetchNftLines", {
-          walletAddress: walletAddress.value,
+        await store.dispatch("nft/initXrpClient", {
           nodetype: nodetype.value,
           handleError,
         });
-        await store.dispatch("nft/fetchNext", nodetype.value);
         isDialogWalletConnection.value = false;
       } catch (err) {
         showError.value = true;
@@ -79,23 +79,19 @@ export default defineComponent({
       store.commit("user/setAddress", ottdata.value.account);
       store.commit("user/setNodeType", ottdata.value.nodetype);
       const path = ottdata.value.redirect;
-      console.log("path", path);
-
       if (path) {
-        console.log("path", path);
         router.push({ path });
       }
-      await populateNFTs();
-      console.log("populateNFTs", populateNFTs);
+      await connectXrpClient();
     } else {
       if (!walletAddress.value) {
         isDialogWalletConnection.value = true;
       } else {
-        await populateNFTs();
+        await connectXrpClient();
       }
     }
 
-    return { isDialogWalletConnection, showError, populateNFTs };
+    return { isDialogWalletConnection, showError, connectXrpClient };
   },
 });
 </script>

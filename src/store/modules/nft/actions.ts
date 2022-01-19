@@ -11,12 +11,20 @@ type line = {
 interface FetchParams {
   walletAddress: string;
   nodetype: string;
-  // handleError: (error: string) => void;
+}
+
+interface InitParams {
+  walletAddress: string;
+  nodetype: string;
+  handleError: (error: unknown | null | Error) => void;
 }
 
 const actions: ActionTree<NFT, NFTState> = {
-  async initXrpClient({ commit }, nodetype: string): Promise<void> {
-    const client = await init(nodetype);
+  async initXrpClient(
+    { commit },
+    { nodetype, handleError }: InitParams
+  ): Promise<void> {
+    const client = await init(nodetype, handleError);
     commit("setXrpClient", client);
   },
   async fetchNftLines(
@@ -24,6 +32,7 @@ const actions: ActionTree<NFT, NFTState> = {
     { walletAddress }: FetchParams
   ): Promise<void> {
     const client = getters.getXrpClient;
+    debugger;
     const lines = await client.fetchNftLines(walletAddress);
     commit("setLines", lines);
   },

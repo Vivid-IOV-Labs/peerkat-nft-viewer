@@ -94,6 +94,15 @@ export default defineComponent({
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const NFTMedia = computed(() => store.getters["nft/getAll"]);
     const lines = computed(() => store.getters["nft/getLines"]);
+    const walletAddress = computed(() => store.getters["user/getAddress"]);
+
+    const populateNFTs = async () => {
+      await store.dispatch("nft/fetchNftLines", {
+        walletAddress: walletAddress.value,
+        nodetype: nodetype.value,
+      });
+      await store.dispatch("nft/fetchNext", nodetype.value);
+    };
 
     const { unobserve, isIntersecting } = useIntersectionObserver(sentinel);
     watch(isIntersecting, async () => {
@@ -109,6 +118,7 @@ export default defineComponent({
         endscroll.value = true;
       }
     });
+    await populateNFTs();
 
     return {
       sentinel,
