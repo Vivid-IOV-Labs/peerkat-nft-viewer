@@ -160,7 +160,7 @@ export async function init(
       });
       console.log({ serverInfo });
 
-      xrpClientInstance.on("error", (error) => {
+      xrpClientInstance.on("error", (error: any) => {
         console.log("error", error);
       });
       client = xrpClientInstance;
