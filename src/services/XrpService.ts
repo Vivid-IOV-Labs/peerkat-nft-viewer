@@ -143,12 +143,26 @@ export async function init(
   try {
     if (!client) {
       const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
-      xrpClientInstance = new XrplClient(X_url, {
-        assumeOfflineAfterSeconds: 15,
-        maxConnectionAttempts: 6,
-        connectAttemptTimeoutSeconds: 3,
-      });
+      xrpClientInstance = new XrplClient(
+        X_url
+        //   , {
+        //   assumeOfflineAfterSeconds: 15,
+        //   maxConnectionAttempts: 6,
+        //   connectAttemptTimeoutSeconds: 3,
+        // }
+      );
       await xrpClientInstance.ready();
+
+      // await client.ready();
+
+      const serverInfo = await xrpClientInstance.send({
+        command: "server_info",
+      });
+      console.log({ serverInfo });
+
+      xrpClientInstance.on("error", (error) => {
+        console.log("error", error);
+      });
       client = xrpClientInstance;
     }
     return {

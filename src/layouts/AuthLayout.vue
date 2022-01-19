@@ -60,6 +60,7 @@ export default defineComponent({
     function handleError(): void {
       isDialogWalletConnection.value = false;
       showError.value = true;
+      debugger;
     }
     const connectXrpClient = async () => {
       try {
