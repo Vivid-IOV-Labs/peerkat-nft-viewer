@@ -21,19 +21,8 @@ if (process.env.NODE_ENV === "development") {
     .use(i18n)
     .use(Notifications)
     .use(VueLazyLoad, {
-      loading: "",
-      error: "",
-      lifecycle: {
-        loading: (el: Event) => {
-          console.log("loading", el);
-        },
-        error: (el: Event) => {
-          console.log("error", el);
-        },
-        loaded: (el: Event) => {
-          console.log("loaded", el);
-        },
-      },
+      loading: "thumbnail.jpg",
+      error: "thumbnail.jpg",
     })
     .provide("isInXumm", isInXumm)
     .mount("#app");
@@ -45,19 +34,8 @@ if (process.env.NODE_ENV === "development") {
     .use(i18n)
     .use(Notifications)
     .use(VueLazyLoad, {
-      loading: "",
-      error: "",
-      lifecycle: {
-        loading: (el: Event) => {
-          console.log("loading", el);
-        },
-        error: (el: Event) => {
-          console.log("error", el);
-        },
-        loaded: (el: Event) => {
-          console.log("loaded", el);
-        },
-      },
+      loading: "thumbnail.jpg",
+      error: "thumbnail.jpg",
     })
     .provide("isInXumm", isInXumm)
     .mount("#app");

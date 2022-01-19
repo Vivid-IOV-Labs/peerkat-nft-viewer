@@ -7,18 +7,14 @@
       <video
         v-if="nft.media_type?.includes('video')"
         :src="`${nft.url}#t=1`"
-        poster="thumbnail.jpg"
+        poster="/thumbnail.jpg"
         muted
         class="img-fluid card-img-top"
         style="object-fit: cover; height: 100%; object-position: center top"
       ></video>
       <img
         v-else-if="nft.media_type?.includes('image')"
-        v-lazy="{
-          src: nft.url,
-          loading: 'thumbnail.jpg',
-          error: 'thumbnail.jpg',
-        }"
+        v-lazy="nft.url"
         style="object-fit: cover; height: 100%; object-position: center top"
         class="img-fluid card-img-top"
         alt="Card
