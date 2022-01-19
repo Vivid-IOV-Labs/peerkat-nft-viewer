@@ -1,7 +1,7 @@
 export function getNetworkTypeFromCode(code: number): string {
-  return code == 1 ? "MAINNET" : "TESTNET";
+  return code == 0 ? "MAINNET" : "TESTNET";
 }
 
 export function getNetworkCodeFromType(type: string): number {
-  return type == "TESTNET" ? 0 : 1;
+  return type == "TESTNET" ? 1 : 0;
 }
