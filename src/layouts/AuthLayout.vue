@@ -39,7 +39,7 @@ import { useStore } from "vuex";
 import Welcome from "@/dialogs/Welcome.vue";
 import HeaderNavigation from "@/components/HeaderNavigation.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import BaseDialog from "@/components/BaseButton.vue";
+import BaseDialog from "@/components/BaseDialog.vue";
 import { useRouter } from "vue-router";
 export default defineComponent({
   components: {

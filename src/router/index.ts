@@ -3,6 +3,18 @@ import { createWebHistory, createRouter } from "vue-router";
 const routes = [
   { path: "/", redirect: "/wallet" },
   {
+    path: "/welcome",
+    redirect: "/welcome",
+    component: () => import("../views/Welcome.vue"),
+    meta: {
+      withAuth: true,
+      title: "Welcome Page",
+      announcer: {
+        message: "Welcome Page",
+      },
+    },
+  },
+  {
     path: "/wallet",
     name: "Wallet",
     component: () => import("../views/Wallet.vue"),
