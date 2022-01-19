@@ -8,22 +8,42 @@
       <template #picture>
         <figure class="w-100">
           <a href="#" @click.prevent="view">
-            <img
-              v-if="nft.media_type?.includes('image')"
-              class="img-fluid card-img-top"
-              :src="nft.url"
-              alt="Card image cap"
-              @error="fallbackImg"
-            />
             <video
               v-if="nft.media_type?.includes('video')"
-              :src="`${nft.url}#t=0.5`"
-              autoplay
+              :src="`${nft.url}#t=1`"
+              poster="/thumbnail.jpg"
               muted
-              loop
-              playsinline
-              class="w-100 img-fluid card-img-top"
+              class="img-fluid card-img-top"
+              style="
+                object-fit: cover;
+                height: 100%;
+                object-position: center top;
+              "
             ></video>
+            <img
+              v-else-if="nft.media_type?.includes('image')"
+              v-lazy="nft.url"
+              style="
+                object-fit: cover;
+                height: 100%;
+                object-position: center top;
+              "
+              class="img-fluid card-img-top"
+              alt="Card
+          image cap"
+            />
+            <img
+              v-else
+              :src="'/thumbnail.jpg'"
+              style="
+                object-fit: cover;
+                height: 100%;
+                object-position: center top;
+              "
+              class="img-fluid card-img-top"
+              alt="Card
+          image cap"
+            />
           </a>
         </figure>
       </template>
