@@ -2,7 +2,7 @@
   <base-card style="height: 100%">
     <template #picture>
       <figure class="h-50">
-        <a href="#" @click.prevent="view">
+        <a class="h-100 d-block" href="#" @click.prevent="view">
           <video
             v-if="nft.media_type?.includes('video')"
             :src="`${nft.url}#t=1`"

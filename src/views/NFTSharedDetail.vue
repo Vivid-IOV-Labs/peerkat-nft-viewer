@@ -7,7 +7,7 @@
     <base-card v-if="nft" class="mb-4">
       <template #picture>
         <figure class="w-100">
-          <a href="#" @click.prevent="view">
+          <a class="h-100 d-block" href="#" @click.prevent="view">
             <video
               v-if="nft.media_type?.includes('video')"
               :src="`${nft.url}#t=1`"
