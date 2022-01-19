@@ -124,4 +124,9 @@ body .my-notification .notification-title {
   background: #e54d42;
   border-left-color: #b82e24;
 }
+video[poster] {
+  object-fit: cover;
+  height: 100%;
+  object-position: center top;
+}
 </style>
