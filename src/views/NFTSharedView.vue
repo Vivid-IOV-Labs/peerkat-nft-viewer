@@ -9,6 +9,7 @@
         :src="`${nft.url}#t=1`"
         poster="/thumbnail.jpg"
         muted
+        autoplay
         class="img-fluid card-img-top"
         style="object-fit: cover; height: 100%; object-position: center top"
       ></video>
