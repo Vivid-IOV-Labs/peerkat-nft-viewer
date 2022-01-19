@@ -32,7 +32,6 @@ const actions: ActionTree<NFT, NFTState> = {
     { walletAddress }: FetchParams
   ): Promise<void> {
     const client = getters.getXrpClient;
-    debugger;
     const lines = await client.fetchNftLines(walletAddress);
     commit("setLines", lines);
   },

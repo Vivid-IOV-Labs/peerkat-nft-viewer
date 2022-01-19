@@ -8,6 +8,7 @@ import VueAxe, { VueAxePopup } from "vue-axe";
 import VueAnnouncer from "@vue-a11y/announcer";
 import Notifications from "@kyvg/vue3-notification";
 const isInXumm = /xumm/.test(navigator.userAgent);
+import VueLazyLoad from "vue3-lazyload";
 
 if (process.env.NODE_ENV === "development") {
   createApp({
@@ -19,6 +20,21 @@ if (process.env.NODE_ENV === "development") {
     .use(store)
     .use(i18n)
     .use(Notifications)
+    .use(VueLazyLoad, {
+      loading: "",
+      error: "",
+      lifecycle: {
+        loading: (el: Event) => {
+          console.log("loading", el);
+        },
+        error: (el: Event) => {
+          console.log("error", el);
+        },
+        loaded: (el: Event) => {
+          console.log("loaded", el);
+        },
+      },
+    })
     .provide("isInXumm", isInXumm)
     .mount("#app");
 } else {
@@ -28,6 +44,21 @@ if (process.env.NODE_ENV === "development") {
     .use(store)
     .use(i18n)
     .use(Notifications)
+    .use(VueLazyLoad, {
+      loading: "",
+      error: "",
+      lifecycle: {
+        loading: (el: Event) => {
+          console.log("loading", el);
+        },
+        error: (el: Event) => {
+          console.log("error", el);
+        },
+        loaded: (el: Event) => {
+          console.log("loaded", el);
+        },
+      },
+    })
     .provide("isInXumm", isInXumm)
     .mount("#app");
 }

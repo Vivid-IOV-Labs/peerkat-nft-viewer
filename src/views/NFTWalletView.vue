@@ -4,22 +4,34 @@
   </router-link>
   <div v-if="nft" class="w-100 p4">
     <figure class="w-100 p4">
-      <img
-        v-if="nft.media_type?.includes('image')"
-        class="card-img"
-        :src="nft.url"
-        alt="Card image cap"
-        @error="fallbackImg"
-      />
       <video
-        v-else-if="nft.media_type?.includes('video')"
-        :src="`${nft.url}#t=0.5`"
-        autoplay
+        v-if="nft.media_type?.includes('video')"
+        :src="`${nft.url}#t=1`"
+        poster="thumbnail.jpg"
         muted
-        loop
-        playsinline
-        class="card-img"
+        class="img-fluid card-img-top"
+        style="object-fit: cover; height: 100%; object-position: center top"
       ></video>
+      <img
+        v-else-if="nft.media_type?.includes('image')"
+        v-lazy="{
+          src: nft.url,
+          loading: 'thumbnail.jpg',
+          error: 'thumbnail.jpg',
+        }"
+        style="object-fit: cover; height: 100%; object-position: center top"
+        class="img-fluid card-img-top"
+        alt="Card
+          image cap"
+      />
+      <img
+        v-else
+        :src="'/thumbnail.jpg'"
+        style="object-fit: cover; height: 100%; object-position: center top"
+        class="img-fluid card-img-top"
+        alt="Card
+          image cap"
+      />
     </figure>
   </div>
 </template>
