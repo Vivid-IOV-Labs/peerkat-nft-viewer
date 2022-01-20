@@ -3,6 +3,7 @@
     v-if="NFTMedia.length"
     ref="root"
     class="d-flex h-100 flex-row flex-nowrap overflow-auto pb-4"
+    style="padding-bottom: 2rem"
   >
     <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-11">
       <nft-card :nft="nft"></nft-card>
@@ -27,17 +28,17 @@
     <h5 class="text-center mt-2">
       Peerkat is not able to find any NFTs in this wallet
     </h5>
-    <ul class="mt-4">
-      <li>
+    <ul class="mt-4 p-4">
+      <li class="pb-2">
         To receive an XRPL-issued NFT please ensure that you have correctly
         signed the corresponding trustline transaction
       </li>
-      <li>
+      <li class="pb-2">
         You can view an NFT in fullscreen mode, inspect the transaction history
         of an NFT via the Bithomp explorer and share your own NFTs with another
         user to enable them to view the NFTs too
       </li>
-      <li>
+      <li class="pb-2">
         Please follow us on Twitter
         <external-link class="mr-2" :url="`https://twitter.com/PeerkatOfficial`"
           >@Peerkatofficial</external-link
