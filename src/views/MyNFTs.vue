@@ -55,7 +55,8 @@
       position: fixed;
       left: 0;
       top: 0;
-      background: rgba(0, 0, 0, 0.2);
+      opacity: 0.6;
+      background: rgba(0, 0, 0, 0.3);
       transition: all 1s ease;
     "
     class="d-flex align-items-center justify-content-center"
