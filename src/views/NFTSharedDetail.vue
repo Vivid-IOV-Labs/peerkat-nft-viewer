@@ -74,15 +74,15 @@
       <ul class="mt-2 p-4">
         <li class="pb-2">
           You can switch to the
-          {{ othernodetype }} in the Xumm app by clicking “Quit xApp”
+          {{ nodetype }} in the Xumm app by clicking “Quit xApp”
         </li>
         <li class="pb-2">
           In the Xumm app: click “Settings”, then “Advanced”, then “Node” and
-          select a Node listed in the “{{ othernodetype }}” section
+          select a Node listed in the “{{ nodetype }}” section
         </li>
         <li class="pb-2">
           Return to Xumm home, open the Peerkat xApp to view the NFT in
-          {{ othernodetype }}
+          {{ nodetype }}
         </li>
       </ul>
     </div>
