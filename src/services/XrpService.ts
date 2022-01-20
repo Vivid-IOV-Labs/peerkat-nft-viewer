@@ -118,12 +118,10 @@ async function fetchIssuerCurrencies(issuer: string): Promise<any> {
       command: "account_currencies",
       account: issuer,
     });
-    debugger;
     const { receive_currencies } = accountLines;
     return receive_currencies[0];
   } catch (error) {
     console.log(error);
-    debugger;
   }
 }
 async function fetchOne(account: string, currency?: string): Promise<NFT> {
@@ -154,23 +152,23 @@ export async function init(
         //   connectAttemptTimeoutSeconds: 3,
         // }
       );
-      console.log(
-        xrpClientInstance.eventBus.on("__WsClient_close", () => {
-          console.log("__WsClient_close");
-        })
-      );
-      xrpClientInstance.on("state", (state) => {
-        console.log("state", state);
-      });
+      // console.log(
+      //   xrpClientInstance.eventBus.on("__WsClient_close", () => {
+      //     console.log("__WsClient_close");
+      //   })
+      // );
+      // xrpClientInstance.on("state", (state) => {
+      //   console.log("state", state);
+      // });
       // xrpClientInstance.on("message", (message) => {
       //   console.log("message", message);
       // });
       // xrpClientInstance.on("ledger", (ledger) => {
       //   console.log("Ledger", ledger);
       // });
-      xrpClientInstance.on("close", (close) => {
-        console.log("close", close);
-      });
+      // xrpClientInstance.on("close", (close) => {
+      //   console.log("close", close);
+      // });
       xrpClientInstance.on("error", console.log);
       const connectionState = xrpClientInstance.getState();
       console.log("connectionState", connectionState);

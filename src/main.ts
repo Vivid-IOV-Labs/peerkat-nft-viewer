@@ -9,7 +9,6 @@ import VueAnnouncer from "@vue-a11y/announcer";
 import Notifications from "@kyvg/vue3-notification";
 const isInXumm = /xumm/.test(navigator.userAgent);
 import VueLazyLoad from "vue3-lazyload";
-
 if (process.env.NODE_ENV === "development") {
   createApp({
     render: () => h(Fragment, [h(App), h(VueAxePopup)]),

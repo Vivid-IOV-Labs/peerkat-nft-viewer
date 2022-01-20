@@ -41,6 +41,7 @@ import HeaderNavigation from "@/components/HeaderNavigation.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseDialog from "@/components/BaseDialog.vue";
 import { useRouter } from "vue-router";
+import { trackInit } from "../utils/analytics";
 export default defineComponent({
   components: {
     HeaderNavigation,
@@ -56,7 +57,7 @@ export default defineComponent({
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const showError = ref(false);
     const isDialogWalletConnection = ref(false);
-
+    trackInit();
     function handleError(): void {
       debugger;
       isDialogWalletConnection.value = false;

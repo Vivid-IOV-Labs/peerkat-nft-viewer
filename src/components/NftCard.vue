@@ -85,7 +85,6 @@ export default defineComponent({
         const params = {
           title: "Share NFT link",
           text: "Copied to clipboard",
-          type: "success",
         };
         copyText(
           `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/shared/${props.nft.issuer}/${nodetypecode}`,
