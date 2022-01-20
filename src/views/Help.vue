@@ -6,10 +6,11 @@
       height: 100%;
       justify-content: center;
       flex-direction: column;
+      padding: 0.6rem;
     "
   >
-    <h5 class="text-center mt-4">For any queries or help please email us at</h5>
-    <h4 class="mt-4">
+    <h5 class="text-center mt-2">For any queries or help please email us at</h5>
+    <h4 class="mt-2">
       <base-button @click="copyEmail"
         >support@peerkat.io
         <svg
