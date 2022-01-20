@@ -28,6 +28,7 @@
           >
             <a
               class="nav-link"
+              style="padding: 0.4rem 0.6rem"
               :class="{ active: isActive }"
               :href="href"
               @click="navigate"
@@ -43,6 +44,7 @@
           >
             <a
               class="nav-link"
+              style="padding: 0.4rem 0.6rem"
               :class="{ active: isActive }"
               :href="href"
               @click="navigate"
@@ -54,6 +56,7 @@
           <router-link v-slot="{ navigate, href, isActive }" to="/help" custom>
             <a
               class="nav-link"
+              style="padding: 0.4rem 0.8rem"
               :class="{ active: isActive }"
               :href="href"
               @click="navigate"

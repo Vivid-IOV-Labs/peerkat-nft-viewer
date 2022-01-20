@@ -13,11 +13,9 @@
       please contact us on the email below
     </h5>
     <h4 class="mt-4">
-      <external-link class="mr-2" :url="`mailto:team@peerkat.io`"
-        >team@peerkat.io</external-link
-      >
       <base-button @click="copyEmail"
-        ><svg
+        >team@peerkat.io
+        <svg
           xmlns="http://www.w3.org/2000/svg"
           style="width: 18px; height: 18px"
           class="h-6 w-6"

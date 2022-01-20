@@ -10,8 +10,8 @@
     <div
       v-if="NFTMedia.length < lines.length"
       ref="sentinel"
-      class="col-11 card"
-      style="background: #eee; height: 100%"
+      class="col-1"
+      style="height: 100%; width: 1px"
     ></div>
   </div>
   <div
@@ -53,10 +53,10 @@
       height: 100%;
       width: 100%;
       position: fixed;
-      opacity: 0.8;
       left: 0;
       top: 0;
-      background: #fff;
+      background: rgba(0, 0, 0, 0.2);
+      transition: all 1s ease;
     "
     class="d-flex align-items-center justify-content-center"
   >
