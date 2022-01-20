@@ -3,6 +3,7 @@
     v-if="sharedNFTs.length"
     ref="root"
     class="d-flex h-100 flex-row flex-nowrap overflow-auto pb-4"
+    style="padding-bottom: 2rem"
   >
     <div v-for="nft in sharedNFTs" :key="nft.issuer" class="col-11">
       <nft-shared-card :nft="nft"></nft-shared-card>
@@ -18,9 +19,9 @@
       flex-direction: column;
     "
   >
-    <h3 class="text-center mt-4">
+    <h5 class="text-center mt-2">
       Peerkat is not able to find any NFTs shared with this wallet
-    </h3>
+    </h5>
     <ul class="mt-2 p-4">
       <li class="pb-2">
         To view another user’s XRPL-issued NFT please ensure that you have
@@ -31,10 +32,13 @@
         history of an NFT via the Bithomp explorer
       </li>
       <li class="pb-2">
-        Please follow us on Twitter @Peerkatofficial and at
+        Please follow us on Twitter
+        <external-link class="mr-2" :url="`https://twitter.com/PeerkatOfficial`"
+          >@Peerkatofficial</external-link
+        >
+        and at
         <external-link :url="`https://peerkat.io`">peerkat.io</external-link>
-        for updates and new product releases (XLS-20 minting platform coming
-        soon)
+        for updates and new product releases (XLS20d)
       </li>
     </ul>
   </div>
@@ -58,7 +62,6 @@ export default defineComponent({
       return store.getters["nft/getShared"](nodetype.value);
     });
 
-    console.log("sharedNFTs", sharedNFTs.value);
     return {
       sharedNFTs,
       isInXumm,

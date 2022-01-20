@@ -8,13 +8,10 @@
       flex-direction: column;
     "
   >
-    <h5 class="text-center mt-4">
-      Hi, if you are having any problems using the Peerkat NFT viewer xApp,
-      please contact us on the email below
-    </h5>
+    <h5 class="text-center mt-4">For any queries or help please email us at</h5>
     <h4 class="mt-4">
       <base-button @click="copyEmail"
-        >team@peerkat.io
+        >support@peerkat.io
         <svg
           xmlns="http://www.w3.org/2000/svg"
           style="width: 18px; height: 18px"
@@ -48,7 +45,7 @@ export default defineComponent({
   async setup() {
     return {
       copyEmail() {
-        copyText("team@peerkat.io", {
+        copyText("support@peerkat.io", {
           title: "Email Info",
           text: "Copied to clipboard",
         });

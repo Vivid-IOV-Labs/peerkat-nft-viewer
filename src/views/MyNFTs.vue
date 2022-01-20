@@ -24,9 +24,9 @@
       flex-direction: column;
     "
   >
-    <h3 class="text-center mt-4">
+    <h5 class="text-center mt-2">
       Peerkat is not able to find any NFTs in this wallet
-    </h3>
+    </h5>
     <ul class="mt-4">
       <li>
         To receive an XRPL-issued NFT please ensure that you have correctly
@@ -38,12 +38,15 @@
         user to enable them to view the NFTs too
       </li>
       <li>
-        Please follow us on Twitter @Peerkatofficial and at
+        Please follow us on Twitter
+        <external-link class="mr-2" :url="`https://twitter.com/PeerkatOfficial`"
+          >@Peerkatofficial</external-link
+        >
+        and at
         <external-link class="mr-2" :url="`https://peerkat.io`"
           >peerkat.io</external-link
         >
-        for updates and new product releases (XLS-20 minting platform coming
-        soon)
+        for updates and new product releases (XLS20d)
       </li>
     </ul>
   </div>
