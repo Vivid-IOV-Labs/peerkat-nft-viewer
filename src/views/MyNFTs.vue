@@ -58,7 +58,7 @@
       position: fixed;
       left: 0;
       top: 0;
-      opacity: 0.6;
+      opacity: 0.8;
       background: rgba(0, 0, 0, 0.6);
       transition: all 1s ease;
     "
