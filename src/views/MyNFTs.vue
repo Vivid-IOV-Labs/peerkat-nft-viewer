@@ -17,6 +17,7 @@
   </div>
   <div
     v-if="!NFTMedia.length"
+    class="p-4"
     style="
       display: flex;
       align-items: center;

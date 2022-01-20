@@ -11,6 +11,7 @@
   </div>
   <div
     v-else
+    class="p-4"
     style="
       display: flex;
       align-items: center;
