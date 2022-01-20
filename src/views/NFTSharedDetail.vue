@@ -66,12 +66,12 @@
         >
       </template>
     </base-card>
-    <div v-else class="p-4">
+    <div v-else class="p-2">
       <h5 class="text-center mt-2">
         It appears that this link to an NFT is for the {{ nodetype }}. Please
         switch to the {{ nodetype }} in your Xumm app.
       </h5>
-      <ul class="mt-2 p-4">
+      <ul class="mt-2 p-2">
         <li class="pb-2">
           You can switch to the
           {{ nodetype }} in the Xumm app by clicking “Quit xApp”

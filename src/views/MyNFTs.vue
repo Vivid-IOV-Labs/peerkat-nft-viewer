@@ -17,7 +17,7 @@
   </div>
   <div
     v-if="!NFTMedia.length"
-    class="p-4"
+    class="p-2"
     style="
       display: flex;
       align-items: center;
@@ -29,7 +29,7 @@
     <h5 class="text-center mt-2">
       Peerkat is not able to find any NFTs in this wallet
     </h5>
-    <ul class="mt-2 p-4">
+    <ul class="mt-2 p-2">
       <li class="pb-2">
         To receive an XRPL-issued NFT please ensure that you have correctly
         signed the corresponding trustline transaction

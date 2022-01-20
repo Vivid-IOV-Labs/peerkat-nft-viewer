@@ -11,7 +11,7 @@
   </div>
   <div
     v-else
-    class="p-4"
+    class="p-2"
     style="
       display: flex;
       align-items: center;
@@ -23,7 +23,7 @@
     <h5 class="text-center mt-2">
       Peerkat is not able to find any NFTs shared with this wallet
     </h5>
-    <ul class="mt-2 p-4">
+    <ul class="mt-2 p-2">
       <li class="pb-2">
         To view another user’s XRPL-issued NFT please ensure that you have
         followed the correct deep link shared by the user
