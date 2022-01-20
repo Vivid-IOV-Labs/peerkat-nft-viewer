@@ -97,11 +97,15 @@ export default defineComponent({
     const walletAddress = computed(() => store.getters["user/getAddress"]);
 
     const populateNFTs = async () => {
-      await store.dispatch("nft/fetchNftLines", {
-        walletAddress: walletAddress.value,
-        nodetype: nodetype.value,
-      });
-      await store.dispatch("nft/fetchNext", nodetype.value);
+      try {
+        await store.dispatch("nft/fetchNftLines", {
+          walletAddress: walletAddress.value,
+          nodetype: nodetype.value,
+        });
+        await store.dispatch("nft/fetchNext", nodetype.value);
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     const { unobserve, isIntersecting } = useIntersectionObserver(sentinel);

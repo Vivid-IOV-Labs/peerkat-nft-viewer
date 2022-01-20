@@ -4,13 +4,25 @@ const routes = [
   { path: "/", redirect: "/wallet" },
   {
     path: "/welcome",
-    redirect: "/welcome",
+    name: "welcome",
     component: () => import("../views/Welcome.vue"),
     meta: {
       withAuth: true,
       title: "Welcome Page",
       announcer: {
         message: "Welcome Page",
+      },
+    },
+  },
+  {
+    path: "/help",
+    name: "help",
+    component: () => import("../views/Help.vue"),
+    meta: {
+      withAuth: true,
+      title: "Help Page",
+      announcer: {
+        message: "Help Page",
       },
     },
   },

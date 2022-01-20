@@ -82,8 +82,14 @@ export default defineComponent({
       bihompUrl,
       share() {
         const nodetypecode = getNetworkCodeFromType(nodetype.value);
+        const params = {
+          title: "Share NFT link",
+          text: "Copied to clipboard",
+          type: "success",
+        };
         copyText(
-          `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/shared/${props.nft.issuer}/${nodetypecode}`
+          `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/shared/${props.nft.issuer}/${nodetypecode}`,
+          params
         );
       },
       view() {

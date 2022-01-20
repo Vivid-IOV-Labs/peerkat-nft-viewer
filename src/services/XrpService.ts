@@ -101,15 +101,15 @@ async function getOne(account_data: any, account: string, currency = "") {
 let client: typeof XrplClient | null = null;
 
 async function fetchNftLines(walletAddress: string): Promise<any> {
-  try {
-    const accountLines = await client.send({
-      command: "account_lines",
-      account: walletAddress,
-    });
-    const { lines } = accountLines;
+  const accountLines = await client.send({
+    command: "account_lines",
+    account: walletAddress,
+  });
+  const { lines, error } = accountLines;
+  if (error) {
+    throw new Error(error);
+  } else {
     return lines.filter(isNFT);
-  } catch (error) {
-    console.log(error);
   }
 }
 async function fetchIssuerCurrencies(issuer: string): Promise<any> {
@@ -118,10 +118,12 @@ async function fetchIssuerCurrencies(issuer: string): Promise<any> {
       command: "account_currencies",
       account: issuer,
     });
+    debugger;
     const { receive_currencies } = accountLines;
     return receive_currencies[0];
   } catch (error) {
     console.log(error);
+    debugger;
   }
 }
 async function fetchOne(account: string, currency?: string): Promise<NFT> {
@@ -143,6 +145,7 @@ export async function init(
   try {
     if (!client) {
       const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
+      console.log(X_url);
       xrpClientInstance = new XrplClient(
         X_url
         //   , {
@@ -151,18 +154,34 @@ export async function init(
         //   connectAttemptTimeoutSeconds: 3,
         // }
       );
-      await xrpClientInstance.ready();
+      console.log(
+        xrpClientInstance.eventBus.on("__WsClient_close", () => {
+          console.log("__WsClient_close");
+        })
+      );
+      xrpClientInstance.on("state", (state) => {
+        console.log("state", state);
+      });
+      // xrpClientInstance.on("message", (message) => {
+      //   console.log("message", message);
+      // });
+      // xrpClientInstance.on("ledger", (ledger) => {
+      //   console.log("Ledger", ledger);
+      // });
+      xrpClientInstance.on("close", (close) => {
+        console.log("close", close);
+      });
+      xrpClientInstance.on("error", console.log);
+      const connectionState = xrpClientInstance.getState();
+      console.log("connectionState", connectionState);
 
-      // await client.ready();
+      await xrpClientInstance.ready();
 
       const serverInfo = await xrpClientInstance.send({
         command: "server_info",
       });
       console.log({ serverInfo });
 
-      xrpClientInstance.on("error", (error: any) => {
-        console.log("error", error);
-      });
       client = xrpClientInstance;
     }
     return {
@@ -171,6 +190,7 @@ export async function init(
       fetchOne,
     };
   } catch (error: unknown) {
-    handleError(error);
+    debugger;
+    //handleError(error);
   }
 }

@@ -11,7 +11,6 @@
             <video
               v-if="nft.media_type?.includes('video')"
               :src="`${nft.url}#t=1`"
-              poster="/thumbnail.jpg"
               muted
               class="img-fluid card-img-top"
               style="
@@ -67,11 +66,11 @@
         >
       </template>
     </base-card>
-    <h3 v-else>
+    <h5 v-else>
       Looks like this link to an NFT, that has been shared with you is on the
-      {{ nodetype }}. Please switch your Xumm App network to
-      {{ othernodetype }}, to view this NFT
-    </h3>
+      {{ nodetype }}. Please switch your Xumm App network to {{ nodetype }}, to
+      view this NFT
+    </h5>
   </div>
 </template>
 

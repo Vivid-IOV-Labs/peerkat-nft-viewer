@@ -8,7 +8,10 @@ import { notify } from "@kyvg/vue3-notification";
 //     text: "Copied successfully",
 //   });
 // }
-function copyTextValueOld(copyText: string) {
+function copyTextValueOld(
+  copyText: string,
+  { title, text }: Record<string, string>
+) {
   const input = document.createElement("input");
   input.setAttribute("type", "hidden");
   input.setAttribute("value", copyText);
@@ -21,9 +24,8 @@ function copyTextValueOld(copyText: string) {
     document.execCommand("copy");
 
     notify({
-      title: "Share NFT link",
-      text: "Copied to clipboard",
-
+      title,
+      text,
       type: "success",
     });
   } catch (err) {
@@ -37,15 +39,18 @@ function copyTextValueOld(copyText: string) {
   input.setAttribute("type", "hidden");
   window?.getSelection()?.removeAllRanges();
 }
-export async function copyText(text: string): Promise<void> {
+export async function copyText(
+  copy: string,
+  { title, text }: Record<string, string>
+): Promise<void> {
   try {
-    await clipboard.writeText(text);
+    await clipboard.writeText(copy);
     notify({
-      title: "Share NFT link",
-      text: "Copied to clipboard",
+      title,
+      text,
       type: "success",
     });
   } catch (err) {
-    await copyTextValueOld(text);
+    await copyTextValueOld(copy, { title, text });
   }
 }
