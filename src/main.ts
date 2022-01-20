@@ -20,7 +20,7 @@ if (process.env.NODE_ENV === "development") {
     .use(i18n)
     .use(Notifications)
     .use(VueLazyLoad, {
-      loading: "thumbnail.jpg",
+      loading: "loading.gif",
       error: "thumbnail.jpg",
     })
     .provide("isInXumm", isInXumm)
@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === "development") {
     .use(i18n)
     .use(Notifications)
     .use(VueLazyLoad, {
-      loading: "thumbnail.jpg",
+      loading: "loading.gif",
       error: "thumbnail.jpg",
     })
     .provide("isInXumm", isInXumm)
