@@ -66,21 +66,21 @@
         >
       </template>
     </base-card>
-    <div v-else>
+    <div v-else class="p-4">
       <h5 class="text-center mt-2">
         It appears that this link to an NFT is for the {{ nodetype }}. Please
         switch to the {{ nodetype }} in your Xumm app.
       </h5>
-      <ul class="mt-4">
-        <li>
+      <ul class="mt-2 p-4">
+        <li class="pb-2">
           You can switch to the
           {{ othernodetype }} in the Xumm app by clicking “Quit xApp”
         </li>
-        <li>
+        <li class="pb-2">
           In the Xumm app: click “Settings”, then “Advanced”, then “Node” and
           select a Node listed in the “{{ othernodetype }}” section
         </li>
-        <li>
+        <li class="pb-2">
           Return to Xumm home, open the Peerkat xApp to view the NFT in
           {{ othernodetype }}
         </li>

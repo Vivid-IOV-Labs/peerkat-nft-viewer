@@ -29,7 +29,7 @@
     <h5 class="text-center mt-2">
       Peerkat is not able to find any NFTs in this wallet
     </h5>
-    <ul class="mt-4 p-4">
+    <ul class="mt-2 p-4">
       <li class="pb-2">
         To receive an XRPL-issued NFT please ensure that you have correctly
         signed the corresponding trustline transaction
