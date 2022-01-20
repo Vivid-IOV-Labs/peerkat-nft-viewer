@@ -2,7 +2,7 @@
 const mixpanel_id = import.meta.env.VITE_LOCIZE_API_KEY;
 const google_analytics_id = import.meta.env.VITE_LOCIZE_PROJECT_ID;
 import mixpanel from "mixpanel-browser";
-let ga: any;
+const ga = (window as any).ga;
 interface trackEventParams {
   category: string;
   action: string;
