@@ -41,7 +41,7 @@ import HeaderNavigation from "@/components/HeaderNavigation.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseDialog from "@/components/BaseDialog.vue";
 import { useRouter } from "vue-router";
-import { trackInit } from "../utils/analytics";
+import { trackEvent, trackInit, trackUser } from "../utils/analytics";
 export default defineComponent({
   components: {
     HeaderNavigation,
@@ -79,6 +79,13 @@ export default defineComponent({
     if (isInXumm) {
       await store.dispatch("xumm/getOttData");
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
+      trackUser(ottdata.value.account);
+      console.log(ottdata.value);
+      trackEvent({
+        category: "Root View",
+        action: "xrpl-connected",
+        label: ottdata.value.nodetype,
+      });
       store.commit("user/setAddress", ottdata.value.account);
       store.commit("user/setNodeType", ottdata.value.nodetype);
       const path = ottdata.value.redirect;
