@@ -84,8 +84,9 @@ async function getOne(account_data: any, account: string, currency = "") {
   const source = is_hexadecimal(hexToString(Domain))
     ? hexToString(hexToString(Domain))
     : hexToString(Domain);
-
+  console.log("test", hexToString("52000B03B6296F507572706C65206D6F6F6E00"));
   const tokenName = hexToString(currency.replace("02", ""));
+  // check first 7 if all number then is xls-16
   const url = getMediaByXLSProtocol(source, tokenName);
   const media_type = await getMediaType(url);
   return {
