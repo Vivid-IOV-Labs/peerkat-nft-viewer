@@ -1,4 +1,5 @@
 import { createWebHistory, createRouter } from "vue-router";
+import { trackPage } from "../utils/analytics";
 
 const routes = [
   { path: "/", redirect: "/wallet" },
@@ -99,5 +100,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
-
+router.beforeEach(({ path }) => {
+  trackPage(path);
+});
 export default router;
