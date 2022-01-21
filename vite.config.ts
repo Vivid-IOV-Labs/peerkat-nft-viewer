@@ -9,6 +9,27 @@ export default defineConfig({
   optimizeDeps: {
     include: ["axe-core"],
   },
+  build: {
+    rollupOptions: {
+      // https://rollupjs.org/guide/en/#outputmanualchunks
+      output: {
+        manualChunks: {
+          wallet: [
+            "./src/views/MyNFTs.vue",
+            "./src/views/NFTWalletView.vue",
+            "./src/views/Wallet.vue",
+          ],
+          shared: [
+            "./src/views/Shared.vue",
+            "./src/views/SharedNFTs.vue",
+            "./src/views/NFTSharedDetail.vue",
+            "./src/views/NFTSharedView.vue",
+          ],
+          help: ["./src/views/Help.vue"],
+        },
+      },
+    },
+  },
   server: {
     proxy: {
       __getcookie: {

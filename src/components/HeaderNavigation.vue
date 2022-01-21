@@ -6,7 +6,7 @@
     >
       <span class="navbar-brand">
         <img
-          src="@/assets/img/logopeerkat.png"
+          src="@/assets/img/logopeerkat.jpg"
           alt="Peerkat logo"
           width="40"
           height="40"
@@ -61,9 +61,12 @@
               :href="href"
               @click="navigate"
             >
+              <span class="visually-hidden">Support</span>
               <svg
+                aria-hidden="true"
+                role="img"
                 xmlns="http://www.w3.org/2000/svg"
-                style="width: 18px; height: 18px"
+                style="width: 20px; height: 20px"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -101,3 +104,21 @@ export default defineComponent({
   },
 });
 </script>
+<style>
+.visible-hidden {
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.visible-hidden:focus {
+  clip: auto;
+  height: auto;
+  overflow: auto;
+  position: absolute;
+  width: auto;
+}
+</style>
