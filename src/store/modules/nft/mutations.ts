@@ -21,10 +21,6 @@ const mutations: MutationTree<NFTState> = {
     state.lines = lines;
   },
   addShared(state: NFTState, { shared, nodetype }: addSharedParams): void {
-    console.log("shared", shared);
-    console.log("state.shared", state.sharedwithme);
-    console.log("nodetype", nodetype);
-    console.log("state.shared[nodetype]", state.sharedwithme[nodetype]);
     const exist =
       state.sharedwithme[nodetype].filter(
         (n: { issuer: string }) => n.issuer === shared.issuer

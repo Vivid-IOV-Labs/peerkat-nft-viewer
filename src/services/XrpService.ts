@@ -143,7 +143,6 @@ export async function init(
   try {
     if (!client) {
       const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
-      console.log(X_url);
       xrpClientInstance = new XrplClient(
         X_url
         //   , {
@@ -169,16 +168,10 @@ export async function init(
       // xrpClientInstance.on("close", (close) => {
       //   console.log("close", close);
       // });
-      xrpClientInstance.on("error", console.log);
-      const connectionState = xrpClientInstance.getState();
-      console.log("connectionState", connectionState);
+      // xrpClientInstance.on("error", console.log);
+      // const connectionState = xrpClientInstance.getState();
 
       await xrpClientInstance.ready();
-
-      const serverInfo = await xrpClientInstance.send({
-        command: "server_info",
-      });
-      console.log({ serverInfo });
 
       client = xrpClientInstance;
     }

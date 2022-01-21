@@ -117,7 +117,6 @@ export default defineComponent({
       nft.value = await client.value.fetchOne(
         route.params.nftAddress.toString()
       );
-      console.log("nft/addShared", nodetype);
       store.commit("nft/addShared", {
         shared: nft.value,
         nodetype,
