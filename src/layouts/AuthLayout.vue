@@ -80,12 +80,7 @@ export default defineComponent({
       await store.dispatch("xumm/getOttData");
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
       trackUser(ottdata.value.account);
-      console.log(ottdata.value);
-      trackEvent({
-        category: "Root View",
-        action: "xrpl-connected",
-        label: ottdata.value.nodetype,
-      });
+
       store.commit("user/setAddress", ottdata.value.account);
       store.commit("user/setNodeType", ottdata.value.nodetype);
       const path = ottdata.value.redirect;

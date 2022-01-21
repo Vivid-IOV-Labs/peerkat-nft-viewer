@@ -176,6 +176,7 @@ export async function init(
       client = xrpClientInstance;
     }
     return {
+      xrpClientInstance,
       fetchNftLines,
       fetchIssuerCurrencies,
       fetchOne,

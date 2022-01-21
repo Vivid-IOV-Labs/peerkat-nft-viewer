@@ -42,7 +42,9 @@
     <template #footer>
       <div>
         <base-button class="mr-2" @click="deleteShared">Delete</base-button>
-        <external-link class="mr-2" :url="bihompUrl"> Inspect</external-link>
+        <external-link class="mr-2" :url="bihompUrl" @click="trackInspect">
+          Inspect</external-link
+        >
       </div>
     </template>
   </base-card>
@@ -55,6 +57,7 @@ import ExternalLink from "@/components/ExternalLink.vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { getNetworkCodeFromType } from "../utils/getNetworkTypeFromCode";
+import { trackEvent } from "../utils/analytics";
 
 export default defineComponent({
   components: {
@@ -84,11 +87,28 @@ export default defineComponent({
         router.push({
           path: `/shared/${props.nft.issuer}/${nodetypecode.value}/view`,
         });
+        trackEvent({
+          category: "Share with me View",
+          action: "view-nft",
+          label: props.nft.issuer,
+        });
       },
       deleteShared() {
         store.commit("nft/deleteShared", {
           issuer: props.nft.issuer,
-          nodetype: "TESTNET",
+          nodetype: nodetype.value,
+        });
+        trackEvent({
+          category: " Share with me View",
+          action: "click-delete",
+          label: props.nft.issuer,
+        });
+      },
+      trackInspect() {
+        trackEvent({
+          category: " Share with me View",
+          action: "click-inspect",
+          label: props.nft.issuer,
         });
       },
     };

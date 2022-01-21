@@ -2,6 +2,7 @@ import { init } from "../../../services/XrpService";
 import { ActionTree } from "vuex";
 import { NFT } from "../../../models/NFT";
 import { NFTState } from "./state";
+import { trackEvent } from "../../../utils/analytics";
 type line = {
   balance: string;
   limit: string;
@@ -25,6 +26,11 @@ const actions: ActionTree<NFT, NFTState> = {
     { nodetype, handleError }: InitParams
   ): Promise<void> {
     const client = await init(nodetype, handleError);
+    trackEvent({
+      category: "Root View",
+      action: "xrpl-connected",
+      label: client.xrpClientInstance.endpoint,
+    });
     commit("setXrpClient", client);
   },
   async fetchNftLines(
