@@ -69,6 +69,7 @@ function getXLSProtocol(source: string): string {
 }
 function getMediaByXLSProtocol(source: string, tokenName: string): string {
   const xlsProtocol = getXLSProtocol(source);
+  console.log("xlsProtocol", xlsProtocol);
   if (xlsProtocol == "xls-14") {
     const protocol = source.split("//")[0];
     return protocol + "//" + tokenName;
@@ -96,9 +97,15 @@ async function getOne(account_data: any, account: string, currency = "") {
     ? hexToString(hexToString(Domain))
     : hexToString(Domain);
 
+  console.log("Domain", Domain);
+  console.log("source", source);
   const tokenName = getTokenName(currency);
 
+  console.log("currency", currency);
+  console.log("tokenName", tokenName);
   const url = getMediaByXLSProtocol(source, tokenName);
+  console.log("url", url);
+
   const media_type = await getMediaType(url);
   return {
     issuer: account,
