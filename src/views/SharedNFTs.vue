@@ -26,7 +26,7 @@
     <ul class="mt-2 p-2">
       <li class="pb-2">
         To view another user’s XRPL-issued NFT please ensure that you have
-        followed the correct deep link shared by the user
+        followed the correct link shared by the NFT owner
       </li>
       <li class="pb-2">
         You can view the NFT in fullscreen mode and inspect the transaction
@@ -39,7 +39,8 @@
         >
         and at
         <external-link :url="`https://peerkat.io`">peerkat.io</external-link>
-        for updates and new product releases (XLS20d)
+        for updates, airdrop news and product releases (XLS20d NFT minting
+        platform coming soon)
       </li>
     </ul>
   </div>

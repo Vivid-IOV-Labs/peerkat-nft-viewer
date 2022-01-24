@@ -105,7 +105,7 @@ export default defineComponent({
 });
 </script>
 <style>
-.visible-hidden {
+.visually-hidden {
   clip: rect(1px, 1px, 1px, 1px);
   height: 1px;
   overflow: hidden;
@@ -114,7 +114,7 @@ export default defineComponent({
   width: 1px;
 }
 
-.visible-hidden:focus {
+.visually-hidden:focus {
   clip: auto;
   height: auto;
   overflow: auto;

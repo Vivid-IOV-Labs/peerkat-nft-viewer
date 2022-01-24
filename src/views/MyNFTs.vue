@@ -36,8 +36,8 @@
       </li>
       <li class="pb-2">
         You can view an NFT in fullscreen mode, inspect the transaction history
-        of an NFT via the Bithomp explorer and share your own NFTs with another
-        user to enable them to view the NFTs too
+        of an NFT via the Bithomp explorer and share your NFTs with another user
+        to enable them to view the NFTs too
       </li>
       <li class="pb-2">
         Please follow us on Twitter
@@ -48,7 +48,8 @@
         <external-link class="mr-2" :url="`https://peerkat.io`"
           >peerkat.io</external-link
         >
-        for updates and new product releases (XLS20d)
+        for updates, airdrop news and product releases (XLS20d NFT minting
+        platform coming soon)
       </li>
     </ul>
   </div>
