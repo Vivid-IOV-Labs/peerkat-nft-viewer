@@ -6,7 +6,7 @@
     <figure class="w-100 p4">
       <video
         v-if="nft.media_type?.includes('video')"
-        :src="`${nft.url}#t=1`"
+        :src="`${nft.url}`"
         muted
         autoplay
         class="img-fluid card-img-top"

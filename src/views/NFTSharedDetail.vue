@@ -10,7 +10,7 @@
           <a class="h-100 d-block" href="#" @click.prevent="view">
             <video
               v-if="nft.media_type?.includes('video')"
-              :src="`${nft.url}#t=1`"
+              :src="`${nft.url}`"
               muted
               class="img-fluid card-img-top"
               style="

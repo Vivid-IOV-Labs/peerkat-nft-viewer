@@ -216,7 +216,6 @@ export async function init(
       fetchOne,
     };
   } catch (error: unknown) {
-    debugger;
     //handleError(error);
   }
 }
