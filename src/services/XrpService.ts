@@ -68,9 +68,11 @@ function getXLSProtocol(source: string): string {
     return "";
   }
 }
-function getMediaByXLSProtocol(source: string, tokenName: string): string {
-  const xlsProtocol = getXLSProtocol(source);
-  console.log("xlsProtocol", xlsProtocol);
+function getMediaByXLSProtocol(
+  source: string,
+  xlsProtocol: string,
+  tokenName?: string
+): string {
   if (xlsProtocol == "xls-14") {
     const protocol = source.split("//")[0];
     return protocol + "//" + tokenName;
@@ -104,14 +106,21 @@ async function getOne(account_data: any, account: string, currency = "") {
 
   console.log("currency", currency);
   console.log("tokenName", tokenName);
-  const url = getMediaByXLSProtocol(source, tokenName);
+  const xlsProtocol = getXLSProtocol(source);
+  console.log("xlsProtocol", xlsProtocol);
+  let url = getMediaByXLSProtocol(source, xlsProtocol, tokenName);
   console.log("url", url);
 
-  const media_type = await getMediaType(url);
+  let media_type = await getMediaType(url);
 
   if (media_type == "application/json") {
-    const json = await fetch(url).then((res) => res.json());
-    console.log(json);
+    const { image } = await fetch(url).then((res) => res.json());
+    if (image) {
+      url = getMediaByXLSProtocol(image, "xls-16");
+      media_type = await getMediaType(url);
+      console.log("newurl", url);
+      console.log("newmedia_type", media_type);
+    }
   }
 
   return {
