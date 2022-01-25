@@ -159,10 +159,12 @@ async function fetchIssuerCurrencies(issuer: string): Promise<any> {
   }
 }
 async function fetchOne(account: string, currency?: string): Promise<NFT> {
-  const { account_data } = await client.send({
+  const res = await client.send({
     command: "account_info",
     account,
   });
+  const { account_data } = res;
+  debugger;
   if (currency) {
     return getOne(account_data, account, currency);
   } else {

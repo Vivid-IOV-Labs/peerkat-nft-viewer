@@ -51,14 +51,12 @@
           >Privacy notice</external-link
         >
       </div>
-      <p><strong>© Peerkat 2022</strong></p>
-      <p>
-        <strong>Peerkat</strong> is a <strong>Vivid IoV Labs</strong> company”
-      </p>
+      <p>© Peerkat 2022</p>
+      <p>Peerkat is a Vivid IoV Labs company</p>
       <p>
         Vivid IoV Labs, Innovation Labs, England, IP14 1RD.<br />
         Vivid IoV Labs Ltd is a company registered in England and Wales with
-        company number 12452820
+        company number 12452820.
       </p>
     </div>
   </div>
