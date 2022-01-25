@@ -52,9 +52,7 @@ let xrpClientInstance: typeof XrplClient | null = null;
 async function getMediaType(url: string) {
   try {
     const res = await fetch(url);
-    console.log(res, "res");
     const contentType = res.headers.get("Content-Type");
-    console.log(contentType, "contentType");
 
     return contentType;
   } catch (err) {
@@ -110,6 +108,12 @@ async function getOne(account_data: any, account: string, currency = "") {
   console.log("url", url);
 
   const media_type = await getMediaType(url);
+
+  if (media_type == "application/json") {
+    const json = await fetch(url).then((res) => res.json());
+    console.log(json);
+  }
+
   return {
     issuer: account,
     issuerTruncated: truncate(account),
