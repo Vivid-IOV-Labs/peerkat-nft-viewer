@@ -100,16 +100,10 @@ async function getOne(account_data: any, account: string, currency = "") {
     ? hexToString(hexToString(Domain))
     : hexToString(Domain);
 
-  console.log("Domain", Domain);
-  console.log("source", source);
   const tokenName = getTokenName(currency);
 
-  console.log("currency", currency);
-  console.log("tokenName", tokenName);
   const xlsProtocol = getXLSProtocol(source);
-  console.log("xlsProtocol", xlsProtocol);
   let url = getMediaByXLSProtocol(source, xlsProtocol, tokenName);
-  console.log("url", url);
 
   let media_type = await getMediaType(url);
 
@@ -118,11 +112,16 @@ async function getOne(account_data: any, account: string, currency = "") {
     if (image) {
       url = getMediaByXLSProtocol(image, "xls-16");
       media_type = await getMediaType(url);
-      console.log("newurl", url);
-      console.log("newmedia_type", media_type);
     }
   }
-
+  console.log({
+    issuer: account,
+    issuerTruncated: truncate(account),
+    currency,
+    tokenName,
+    url,
+    media_type,
+  });
   return {
     issuer: account,
     issuerTruncated: truncate(account),
