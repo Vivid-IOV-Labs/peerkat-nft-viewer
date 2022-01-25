@@ -52,7 +52,10 @@ let xrpClientInstance: typeof XrplClient | null = null;
 async function getMediaType(url: string) {
   try {
     const res = await fetch(url);
+    console.log(res, "res");
     const contentType = res.headers.get("Content-Type");
+    console.log(contentType, "contentType");
+
     return contentType;
   } catch (err) {
     return "";
