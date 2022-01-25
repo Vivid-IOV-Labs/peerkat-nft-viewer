@@ -46,7 +46,7 @@
     </div>
 
     <div style="font-size: 0.8rem">
-      <div class="d-flex mt-2">
+      <div class="d-flex justify-content-center my-2">
         <external-link :url="`https://www.vividiov.com/privacy/`" class="mr-2"
           >Privacy notice</external-link
         >
