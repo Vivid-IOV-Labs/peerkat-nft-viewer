@@ -6,6 +6,8 @@ import { trackEvent } from "../../../utils/analytics";
 type line = {
   balance: string;
   limit: string;
+  balanceFormatted: string;
+  limitFormatted: string;
   account: string;
   currency: string;
 };
@@ -47,8 +49,13 @@ const actions: ActionTree<NFT, NFTState> = {
     const nextLines = getters.getLines.slice(count, count + 4);
     const nextNfts: NFT[] = await Promise.all(
       nextLines.map(async (line: line) => {
-        const { account, currency } = line;
-        return client.fetchOne(account, currency);
+        const { account, currency, balanceFormatted, limitFormatted } = line;
+        return client.fetchOne(
+          account,
+          currency,
+          balanceFormatted,
+          limitFormatted
+        );
       })
     );
     commit("setAll", nextNfts);

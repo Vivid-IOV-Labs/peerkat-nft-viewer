@@ -103,7 +103,13 @@ function getTokenName(currency: string): string {
     return hexToString(removeFirst02);
   }
 }
-async function getOne(account_data: any, account: string, currency = "") {
+async function getOne(
+  account_data: any,
+  account: string,
+  currency = "",
+  balanceFormatted?: string,
+  limitFormatted?: string
+) {
   const { Domain } = account_data;
   const source = is_hexadecimal(hexToString(Domain))
     ? hexToString(hexToString(Domain))
@@ -130,6 +136,8 @@ async function getOne(account_data: any, account: string, currency = "") {
     tokenName,
     url,
     media_type,
+    balanceFormatted,
+    limitFormatted,
   };
 }
 
@@ -144,7 +152,13 @@ async function fetchNftLines(walletAddress: string): Promise<any> {
   if (error) {
     throw new Error(error);
   } else {
-    return lines.filter(isNFT);
+    return lines.filter(isNFT).map(function (line: line) {
+      return {
+        ...line,
+        balanceFormatted: formatXrpCurrency(line.balance),
+        limitFormatted: formatXrpCurrency(line.limit),
+      };
+    });
   }
 }
 async function fetchIssuerCurrencies(issuer: string): Promise<any> {
@@ -159,17 +173,34 @@ async function fetchIssuerCurrencies(issuer: string): Promise<any> {
     console.log(error);
   }
 }
-async function fetchOne(account: string, currency?: string): Promise<NFT> {
+async function fetchOne(
+  account: string,
+  currency?: string,
+  balanceFormatted?: string,
+  limitFormatted?: string
+): Promise<NFT> {
   const res = await client.send({
     command: "account_info",
     account,
   });
   const { account_data } = res;
   if (currency) {
-    return getOne(account_data, account, currency);
+    return getOne(
+      account_data,
+      account,
+      currency,
+      balanceFormatted,
+      limitFormatted
+    );
   } else {
     const issuerCurrency = await fetchIssuerCurrencies(account);
-    return getOne(account_data, account, issuerCurrency);
+    return getOne(
+      account_data,
+      account,
+      issuerCurrency,
+      balanceFormatted,
+      limitFormatted
+    );
   }
 }
 export async function init(
