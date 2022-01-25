@@ -164,7 +164,7 @@ async function fetchOne(account: string, currency?: string): Promise<NFT> {
     account,
   });
   const { account_data } = res;
-  debugger;
+  console.log("res", res);
   if (currency) {
     return getOne(account_data, account, currency);
   } else {
