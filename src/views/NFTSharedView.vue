@@ -46,6 +46,7 @@ export default defineComponent({
         getNetworkTypeFromCode(parseInt(route.params.nodetype as string))
       );
     });
+    console.log("nft", nft.value);
     return {
       nft,
       isInXumm: inject("isInXumm"),
