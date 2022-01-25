@@ -8,11 +8,19 @@ type line = {
   account: string;
   currency: string;
 };
-function isNFT(l: line): boolean {
-  return (
-    l.balance == "1000000000000000e-96" && l.limit == "1000000000000000e-96"
-  );
+function isNFT({ balance, limit }: line): boolean {
+  console.log(balance, formatXrpCurrency(balance));
+  console.log(limit, formatXrpCurrency(limit));
+  const isNFTRegex = /^(\d{16})(e-)(85|86|87|89|90|91|92|93|94|95|96)$/;
+  return isNFTRegex.test(balance) && isNFTRegex.test(limit);
 }
+function formatXrpCurrency(xrpcurrency: string): string {
+  const last2 = Number(xrpcurrency.slice(-2));
+  const index = 96 - last2 + 1;
+  const ret = xrpcurrency.slice(0, index);
+  return ret;
+}
+
 function is_hexadecimal(str: string): boolean {
   const regexp = /^[0-9a-fA-F]+$/;
   if (regexp.test(str)) {
@@ -21,6 +29,7 @@ function is_hexadecimal(str: string): boolean {
     return false;
   }
 }
+
 function hexToString(hex: string) {
   const strhex = hex.toString(); //force conversion
   let str = "";
@@ -114,14 +123,6 @@ async function getOne(account_data: any, account: string, currency = "") {
       media_type = await getMediaType(url);
     }
   }
-  console.log({
-    issuer: account,
-    issuerTruncated: truncate(account),
-    currency,
-    tokenName,
-    url,
-    media_type,
-  });
   return {
     issuer: account,
     issuerTruncated: truncate(account),
@@ -164,7 +165,6 @@ async function fetchOne(account: string, currency?: string): Promise<NFT> {
     account,
   });
   const { account_data } = res;
-  console.log("res", res);
   if (currency) {
     return getOne(account_data, account, currency);
   } else {

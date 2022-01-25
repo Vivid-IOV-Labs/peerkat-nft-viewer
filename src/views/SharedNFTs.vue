@@ -34,7 +34,7 @@
       </li>
       <li class="pb-2">
         Please follow us on Twitter
-        <external-link class="mr-2" :url="`https://twitter.com/PeerkatOfficial`"
+        <external-link :url="`https://twitter.com/PeerkatOfficial`"
           >@Peerkatofficial</external-link
         >
         and at

@@ -41,13 +41,11 @@
       </li>
       <li class="pb-2">
         Please follow us on Twitter
-        <external-link class="mr-2" :url="`https://twitter.com/PeerkatOfficial`"
+        <external-link :url="`https://twitter.com/PeerkatOfficial`"
           >@Peerkatofficial</external-link
         >
         and at
-        <external-link class="mr-2" :url="`https://peerkat.io`"
-          >peerkat.io</external-link
-        >
+        <external-link :url="`https://peerkat.io`">peerkat.io</external-link>
         for updates, airdrop news and product releases (XLS20d NFT minting
         platform coming soon)
       </li>
