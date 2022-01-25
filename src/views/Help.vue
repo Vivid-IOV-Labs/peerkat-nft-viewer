@@ -43,13 +43,14 @@
             /></svg
         ></base-button>
       </h4>
-      <div class="d-flex mt-2">
-        <external-link class="mr-2">Privacy notice</external-link>
-        <external-link>User Terms</external-link>
-      </div>
     </div>
 
-    <div>
+    <div style="font-size: 0.8rem">
+      <div class="d-flex mt-2">
+        <external-link :url="`https://www.vividiov.com/privacy/`" class="mr-2"
+          >Privacy notice</external-link
+        >
+      </div>
       <p><strong>© Peerkat 2022</strong></p>
       <p>
         <strong>Peerkat</strong> is a <strong>Vivid IoV Labs</strong> company”
