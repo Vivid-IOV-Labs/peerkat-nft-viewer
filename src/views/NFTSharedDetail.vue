@@ -4,7 +4,7 @@
   </router-link>
 
   <div class="pb-4">
-    <base-card v-if="nodetypefromlink === nodetype.value && nft" class="mb-4">
+    <base-card v-if="nft" class="mb-4">
       <template #picture>
         <figure class="w-100">
           <a class="h-100 d-block" href="#" @click.prevent="view">
@@ -116,6 +116,8 @@ export default defineComponent({
     const client = computed(() => store.getters["nft/getXrpClient"]);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const nft = ref<NFT | null>(null);
+    console.log("nodetypefromlink", nodetypefromlink);
+    console.log("nodetype", nodetype.value);
     if (nodetypefromlink === nodetype.value) {
       try {
         nft.value = await client.value.fetchOne(
