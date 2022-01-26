@@ -150,7 +150,7 @@ export default defineComponent({
         if (nft.value) {
           router.push({
             path: `/shared/${nft.value.issuer}/${getNetworkCodeFromType(
-              nodetype
+              nodetype.value
             )}/view`,
           });
           trackEvent({
