@@ -9,8 +9,6 @@ type line = {
   currency: string;
 };
 function isNFT({ balance, limit }: line): boolean {
-  console.log(balance, formatXrpCurrency(balance));
-  console.log(limit, formatXrpCurrency(limit));
   const isNFTRegex = /^(\d{16})(e-)(85|86|87|89|90|91|92|93|94|95|96)$/;
   return isNFTRegex.test(balance) && isNFTRegex.test(limit);
 }
@@ -184,7 +182,6 @@ async function fetchOne(
     account,
   });
   const { account_data } = res;
-  debugger;
   if (currency) {
     return getOne(
       account_data,

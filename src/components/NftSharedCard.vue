@@ -5,7 +5,7 @@
         <a class="h-100 d-block" href="#" @click.prevent="view">
           <video
             v-if="nft.media_type?.includes('video')"
-            :src="`${nft.url}`"
+            :src="`${nft.url}#t=0.5`"
             poster="/thumbnail.jpg"
             muted
             class="img-fluid card-img-top"

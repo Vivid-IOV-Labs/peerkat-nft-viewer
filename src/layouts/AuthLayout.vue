@@ -59,7 +59,6 @@ export default defineComponent({
     const isDialogWalletConnection = ref(false);
     trackInit();
     function handleError(): void {
-      debugger;
       isDialogWalletConnection.value = false;
       showError.value = true;
     }
