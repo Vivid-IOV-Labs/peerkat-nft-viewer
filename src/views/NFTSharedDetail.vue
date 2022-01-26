@@ -116,8 +116,6 @@ export default defineComponent({
     const client = computed(() => store.getters["nft/getXrpClient"]);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const nft = ref<NFT | null>(null);
-    console.log("nodetypefromlink", nodetypefromlink);
-    console.log("nodetype", nodetype.value);
     if (nodetypefromlink == nodetype.value) {
       try {
         nft.value = await client.value.fetchOne(
@@ -125,7 +123,7 @@ export default defineComponent({
         );
         store.commit("nft/addShared", {
           shared: nft.value,
-          nodetype,
+          nodetype: nodetype.value,
         });
       } catch (error) {
         console.error(error);
