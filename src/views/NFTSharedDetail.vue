@@ -4,7 +4,7 @@
   </router-link>
 
   <div class="pb-4">
-    <base-card v-if="nft" class="mb-4">
+    <base-card v-if="nodetypefromlink === nodetype.value && nft" class="mb-4">
       <template #picture>
         <figure class="w-100">
           <a class="h-100 d-block" href="#" @click.prevent="view">
@@ -69,21 +69,21 @@
     </base-card>
     <div v-else class="p-2">
       <h5 class="text-center mt-2">
-        It appears that this link to an NFT is for the {{ nodetype }}. Please
-        switch to the {{ nodetype }} in your Xumm app.
+        It appears that this link to an NFT is for the {{ nodetypefromlink }}.
+        Please switch to the {{ nodetypefromlink }} in your Xumm app.
       </h5>
       <ul class="mt-2 p-2">
         <li class="pb-2">
           You can switch to the
-          {{ nodetype }} in the Xumm app by clicking “Quit xApp”
+          {{ nodetypefromlink }} in the Xumm app by clicking “Quit xApp”
         </li>
         <li class="pb-2">
           In the Xumm app: click “Settings”, then “Advanced”, then “Node” and
-          select a Node listed in the “{{ nodetype }}” section
+          select a Node listed in the “{{ nodetypefromlink }}” section
         </li>
         <li class="pb-2">
           Return to Xumm home, open the Peerkat xApp to view the NFT in
-          {{ nodetype }}
+          {{ nodetypefromlink }}
         </li>
       </ul>
     </div>
@@ -109,28 +109,32 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
-    const nodetype = getNetworkTypeFromCode(
+    const nodetypefromlink = getNetworkTypeFromCode(
       parseInt(route.params.nodetype as string)
     );
-    const othernodetype = nodetype == "TESTNET" ? "MAINNET" : "TESTNET";
+    const othernodetype = nodetypefromlink == "TESTNET" ? "MAINNET" : "TESTNET";
     const client = computed(() => store.getters["nft/getXrpClient"]);
+    const nodetype = computed(() => store.getters["user/getNodeType"]);
     const nft = ref<NFT | null>(null);
-    try {
-      nft.value = await client.value.fetchOne(
-        route.params.nftAddress.toString()
-      );
-      store.commit("nft/addShared", {
-        shared: nft.value,
-        nodetype,
-      });
-    } catch (error) {
-      console.error(error);
+    if (nodetypefromlink === nodetype.value) {
+      try {
+        nft.value = await client.value.fetchOne(
+          route.params.nftAddress.toString()
+        );
+        store.commit("nft/addShared", {
+          shared: nft.value,
+          nodetype,
+        });
+      } catch (error) {
+        console.error(error);
+      }
     }
 
     return {
       nft,
       othernodetype,
       nodetype,
+      nodetypefromlink,
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },

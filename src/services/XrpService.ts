@@ -184,6 +184,7 @@ async function fetchOne(
     account,
   });
   const { account_data } = res;
+  debugger;
   if (currency) {
     return getOne(
       account_data,
