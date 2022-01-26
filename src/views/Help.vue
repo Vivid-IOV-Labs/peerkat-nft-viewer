@@ -29,7 +29,7 @@
           >support@peerkat.io
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            style="width: 18px; height: 18px"
+            style="width: 18px; height: 18px; vertical-align: middle"
             class="h-6 w-6"
             fill="none"
             viewBox="0 0 24 24"
@@ -47,7 +47,7 @@
 
     <div style="font-size: 0.8rem">
       <div class="d-flex justify-content-center my-2">
-        <external-link :url="`https://www.vividiov.com/privacy/`" class="mr-2"
+        <external-link :url="`https://www.vividiov.com/privacy/`"
           >Privacy notice</external-link
         >
       </div>
