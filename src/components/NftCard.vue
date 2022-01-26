@@ -42,7 +42,7 @@
       <hr />
       <strong class="h7 font-weight-bold mt-2">Balance </strong>
       <span class="mr-3">{{ nft.balanceFormatted }} </span>
-      <strong class="h7 font-weight-bold">Limit </strong>
+      <strong class="h7 font-weight-bold">Total Supply </strong>
       <span>{{ nft.limitFormatted }}</span>
     </template>
     <template #footer>
