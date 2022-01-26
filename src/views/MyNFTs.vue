@@ -82,6 +82,7 @@ import NftCard from "@/components/NftCard.vue";
 import { useStore } from "vuex";
 import { inject } from "vue";
 import useIntersectionObserver from "../composable/useIntersectionObserver";
+import { devlog } from "../utils/devlog";
 
 export default defineComponent({
   components: {
@@ -109,7 +110,7 @@ export default defineComponent({
         });
         await store.dispatch("nft/fetchNext", nodetype.value);
       } catch (error) {
-        console.log(error);
+        devlog(error);
       }
     };
 

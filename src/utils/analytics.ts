@@ -2,6 +2,7 @@
 const mixpanel_id = import.meta.env.VITE_MIXPANEL_ID;
 const google_analytics_id = import.meta.env.VITE_GOOGLE_ANALYTICS_ID;
 import mixpanel from "mixpanel-browser";
+import { devlog } from "./devlog";
 const ga = (window as any).ga;
 interface trackEventParams {
   category: string;
@@ -37,6 +38,6 @@ export const trackEvent = ({
     mixpanel.track(`${category}`, { action, label });
     ga("send", "event", category, action, label);
   } catch (error) {
-    console.log(error);
+    devlog(error);
   }
 };

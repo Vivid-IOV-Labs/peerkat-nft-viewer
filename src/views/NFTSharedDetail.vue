@@ -102,6 +102,7 @@ import {
 } from "../utils/getNetworkTypeFromCode";
 import { NFT } from "../models/NFT";
 import { trackEvent } from "../utils/analytics";
+import { devlog } from "../utils/devlog";
 
 export default defineComponent({
   components: { BaseCard, ExternalLink },
@@ -126,7 +127,7 @@ export default defineComponent({
           nodetype: nodetype.value,
         });
       } catch (error) {
-        console.error(error);
+        devlog(error);
       }
     }
 
