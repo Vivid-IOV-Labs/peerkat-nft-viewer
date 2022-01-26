@@ -55,7 +55,12 @@
         <li class="nav-item">
           <router-link v-slot="{ navigate, href, isActive }" to="/help" custom>
             <a
-              class="nav-link"
+              class="
+                nav-link
+                d-inline-flex
+                justify-content-center
+                align-items-center
+              "
               style="padding: 0.4rem 0.8rem"
               :class="{ active: isActive }"
               :href="href"
