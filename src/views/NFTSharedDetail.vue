@@ -118,7 +118,7 @@ export default defineComponent({
     const nft = ref<NFT | null>(null);
     console.log("nodetypefromlink", nodetypefromlink);
     console.log("nodetype", nodetype.value);
-    if (nodetypefromlink === nodetype.value) {
+    if (nodetypefromlink == nodetype.value) {
       try {
         nft.value = await client.value.fetchOne(
           route.params.nftAddress.toString()
