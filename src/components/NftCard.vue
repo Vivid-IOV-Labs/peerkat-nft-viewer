@@ -96,10 +96,13 @@ export default defineComponent({
           title: "Share NFT link",
           text: "Copied to clipboard",
         };
-        copyText(
-          `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/shared/${props.nft.issuer}/${nodetypecode}`,
-          params
-        );
+
+        const xummSandbox = import.meta.env.VITE_XUMM_SANDOX;
+        const url =
+          xummSandbox === "test"
+            ? `https://xumm.app/detect/xapp:peerkat.sandbox.test?redirect=/shared/${props.nft.issuer}/${nodetypecode}`
+            : `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/shared/${props.nft.issuer}/${nodetypecode}`;
+        copyText(url, params);
         trackEvent({
           category: " Wallet View",
           action: "click-share",
