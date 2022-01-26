@@ -1,11 +1,9 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import path from "path";
-import { VitePWA } from "vite-plugin-pwa";
 import { injectHtml } from "vite-plugin-html";
 
 const xummSandbox = process.env.VITE_XUMM_SANDOX;
-console.log(xummSandbox);
 
 const remoteScript =
   xummSandbox === "test"
@@ -15,7 +13,6 @@ const remoteScript =
 export default defineConfig({
   plugins: [
     vue(),
-    VitePWA({}),
     injectHtml({
       data: {
         title: "Peerkat",
