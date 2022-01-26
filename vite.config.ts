@@ -7,6 +7,10 @@ import { injectHtml } from "vite-plugin-html";
 const xummSandbox = process.env.VITE_XUMM_SANDOX;
 console.log(xummSandbox);
 
+const remoteScript =
+  xummSandbox === "test"
+    ? '<script data-consolejs-channel="0dc99d93-4c6b-6c36-8f48-e404d46bb556" src="https://remotejs.com/agent/agent.js"></script>'
+    : null;
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -15,8 +19,7 @@ export default defineConfig({
     injectHtml({
       data: {
         title: "Peerkat",
-        injectScript:
-          '<script data-consolejs-channel="0dc99d93-4c6b-6c36-8f48-e404d46bb556" src="https://remotejs.com/agent/agent.js"></script>',
+        injectScript: remoteScript,
       },
     }),
   ],
