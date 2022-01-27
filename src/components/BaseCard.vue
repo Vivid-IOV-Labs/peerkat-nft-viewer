@@ -1,7 +1,9 @@
 <template>
-  <div class="card">
-    <slot name="picture"></slot>
-    <div style="overflow: scroll" class="card-body">
+  <div style="height: 100%" class="card">
+    <div style="height: 60%; overflow: hidden">
+      <slot name="picture"></slot>
+    </div>
+    <div style="overflow: scroll; height: 35%" class="card-body">
       <div class="card-title"><slot name="title"></slot></div>
       <div class="card-text">
         <slot name="text"></slot>
