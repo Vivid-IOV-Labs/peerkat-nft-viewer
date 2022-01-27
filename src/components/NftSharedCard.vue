@@ -1,8 +1,13 @@
 <template>
   <base-card style="height: 100%">
     <template #picture>
-      <figure class="h-50">
-        <a class="h-100 d-block" href="#" @click.prevent="view">
+      <figure style="overflow: hidden" class="h-50">
+        <a
+          class="h-100 d-block"
+          style="overflow: hidden"
+          href="#"
+          @click.prevent="view"
+        >
           <video
             v-if="nft.media_type?.includes('video')"
             :src="`${nft.url}#t=0.5`"
