@@ -33,7 +33,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, computed, inject } from "vue";
+import { defineComponent, computed } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 export default defineComponent({
@@ -47,10 +47,6 @@ export default defineComponent({
     });
     return {
       nft,
-      isInXumm: inject("isInXumm"),
-      fallbackImg(event: Event): void {
-        (event.target as HTMLImageElement).src = "thumbnail.jpg";
-      },
     };
   },
 });

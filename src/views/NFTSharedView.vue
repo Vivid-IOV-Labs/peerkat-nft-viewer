@@ -49,10 +49,6 @@ export default defineComponent({
     });
     return {
       nft,
-      isInXumm: inject("isInXumm"),
-      fallbackImg(event: Event): void {
-        (event.target as HTMLImageElement).src = "thumbnail.jpg";
-      },
     };
   },
 });

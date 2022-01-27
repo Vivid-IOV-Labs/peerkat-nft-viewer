@@ -71,7 +71,7 @@
                 aria-hidden="true"
                 role="img"
                 xmlns="http://www.w3.org/2000/svg"
-                style="width: 20px; height: 20px"
+                style="width: 24px; height: 24px"
                 fill="none"
                 viewBox="0 0 40 40"
                 stroke="currentColor"
