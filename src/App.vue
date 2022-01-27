@@ -12,34 +12,36 @@
               mode="out-in"
               :duration="300"
             >
-              <Suspense>
-                <template #default>
-                  <main-loader>
-                    <component :is="Component" :key="route.path" />
-                  </main-loader>
-                </template>
-                <template #fallback>
-                  <div
-                    style="
-                      height: 100%;
-                      width: 100%;
-                      position: absolute;
-                      opacity: 0.8;
-                      top: 0;
-                      left: 0;
-                    "
-                    class="d-flex align-items-center justify-content-center"
-                  >
+              <keep-alive>
+                <Suspense>
+                  <template #default>
+                    <main-loader>
+                      <component :is="Component" :key="route.path" />
+                    </main-loader>
+                  </template>
+                  <template #fallback>
                     <div
-                      class="spinner-border"
-                      style="width: 4rem; height: 4rem; color: #666"
-                      role="status"
+                      style="
+                        height: 100%;
+                        width: 100%;
+                        position: absolute;
+                        opacity: 0.8;
+                        top: 0;
+                        left: 0;
+                      "
+                      class="d-flex align-items-center justify-content-center"
                     >
-                      <span class="sr-only">Loading...</span>
+                      <div
+                        class="spinner-border"
+                        style="width: 4rem; height: 4rem; color: #666"
+                        role="status"
+                      >
+                        <span class="sr-only">Loading...</span>
+                      </div>
                     </div>
-                  </div>
-                </template>
-              </Suspense>
+                  </template>
+                </Suspense>
+              </keep-alive>
             </transition>
           </RouterView>
         </auth-layout>
