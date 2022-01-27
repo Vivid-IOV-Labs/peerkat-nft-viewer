@@ -47,7 +47,7 @@
 
     <div style="font-size: 0.8rem">
       <div class="d-flex justify-content-center my-2">
-        <external-link :url="`https://www.vividiov.com/privacy/`"
+        <external-link :url="`https://peerkat.io/privacy`"
           >Privacy notice</external-link
         >
       </div>
@@ -77,7 +77,7 @@ export default defineComponent({
     return {
       copyEmail() {
         copyText("support@peerkat.io", {
-          title: "Email Info",
+          title: "Email Peerkat",
           text: "Copied to clipboard",
         });
       },
