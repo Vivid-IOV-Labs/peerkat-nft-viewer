@@ -42,7 +42,13 @@
     </template>
     <template #text>
       <strong class="h7 font-weight-bold">Issuer </strong><br />
-      <span>{{ nft.issuer }}</span>
+      <span>{{ nft.issuer }}</span
+      ><br />
+      <hr />
+      <strong class="h7 font-weight-bold mt-2">Balance </strong>
+      <span class="mr-3">{{ nft.balanceFormatted }} </span>
+      <strong class="h7 font-weight-bold">Total Supply </strong>
+      <span>{{ nft.limitFormatted }}</span>
     </template>
     <template #footer>
       <div>
