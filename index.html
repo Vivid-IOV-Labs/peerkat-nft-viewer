@@ -30,6 +30,17 @@
   <script>
     window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) }; ga.l = +new Date;
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/xumm-sdk/dist/browser.min.js"></script>
+  <script>
+    var theme = ((new URLSearchParams(document.location.href))
+                 .get('xAppStyle') || 'light').toLowerCase()
+    var link = document.createElement('link')
+    link.href = 'https://xumm.app/assets/themes/xapp/xumm-'
+      + theme + '/bootstrap.min.css'
+    link.type = 'text/css'
+    link.rel = 'stylesheet'
+    document.getElementsByTagName('head')[0].appendChild(link)
+  </script>
   <script async src='https://www.google-analytics.com/analytics.js'></script>
   <script async src="https://www.googletagmanager.com/gtag/js"></script>
 
@@ -55,17 +66,7 @@
   <div style="height: 100vh;" id="app"></div>
   <script type="module" src="/src/main.ts"></script>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/xumm-sdk/dist/browser.min.js"></script>
-<script>
-  var theme = ((new URLSearchParams(document.location.href))
-               .get('xAppStyle') || 'light').toLowerCase()
-  var link = document.createElement('link')
-  link.href = 'https://xumm.app/assets/themes/xapp/xumm-'
-    + theme + '/bootstrap.min.css'
-  link.type = 'text/css'
-  link.rel = 'stylesheet'
-  document.getElementsByTagName('head')[0].appendChild(link)
-</script>
+
 <%- injectScript %>
 
 </html>

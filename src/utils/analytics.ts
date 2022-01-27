@@ -9,7 +9,6 @@ const dataLayer = (window as any).dataLayer || [];
 function gtag(...args: (string | boolean | Date | undefined)[]) {
   dataLayer.push(args);
 }
-console.log(dataLayer);
 
 const ga = (window as any).ga;
 interface trackEventParams {
