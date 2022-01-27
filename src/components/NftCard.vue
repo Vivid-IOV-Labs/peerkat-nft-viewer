@@ -1,7 +1,7 @@
 <template>
   <base-card style="height: 100%">
     <template #picture>
-      <figure style="overflow: hidden" class="h-50">
+      <figure style="overflow: hidden" class="h-60">
         <a
           class="h-100 d-block"
           style="overflow: hidden"
