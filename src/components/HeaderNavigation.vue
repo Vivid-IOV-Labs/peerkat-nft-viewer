@@ -66,7 +66,12 @@
                 aria-hidden="true"
                 role="img"
                 xmlns="http://www.w3.org/2000/svg"
-                style="width: 24px; height: 24px"
+                style="
+                  width: 24px;
+                  height: 24px;
+                  display: inline-block;
+                  vertical-align: middle;
+                "
                 fill="none"
                 viewBox="0 0 40 40"
                 stroke="currentColor"
