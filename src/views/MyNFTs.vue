@@ -128,7 +128,9 @@ export default defineComponent({
         endscroll.value = true;
       }
     });
-    await populateNFTs();
+    if (lines.value.length === 0) {
+      await populateNFTs();
+    }
 
     return {
       sentinel,
