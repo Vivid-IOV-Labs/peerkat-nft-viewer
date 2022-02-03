@@ -3,7 +3,7 @@
     >Back
   </router-link>
 
-  <div class="pb-4">
+  <div style="padding: 1rem 4rem 4rem">
     <base-card v-if="nft" class="mb-4">
       <template #picture>
         <figure class="w-100">
@@ -46,17 +46,14 @@
           </a>
         </figure>
       </template>
+      <template #title>
+        <strong class="h6 font-weight-bold">Token Name </strong><br />
+        {{ nft.tokenName }}
+      </template>
+
       <template #text>
-        <div class="d-flex flex-column">
-          <div class="p4 my-4 d-flex flex-column">
-            <strong class="h6 font-weight-bold">Token Name </strong>
-            <span>{{ nft.tokenName }}</span>
-          </div>
-          <div class="p4 d-flex flex-column">
-            <strong class="h6 font-weight-bold">Issuer </strong>
-            <span>{{ nft.issuer }}</span>
-          </div>
-        </div>
+        <strong class="h7 font-weight-bold">Issuer </strong><br />
+        <span>{{ nft.issuer }}</span>
       </template>
       <template #footer>
         <external-link

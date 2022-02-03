@@ -46,16 +46,6 @@ export default defineConfig({
       },
     },
   },
-  server: {
-    proxy: {
-      __getcookie: {
-        target: "http://localhost:1337",
-        ws: true,
-        changeOrigin: true,
-        secure: false,
-      },
-    },
-  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "/src"),
