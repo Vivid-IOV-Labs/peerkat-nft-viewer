@@ -44,10 +44,12 @@
       <strong class="h7 font-weight-bold">Issuer </strong><br />
       <span>{{ nft.issuer }}</span
       ><br />
-      <strong class="h7 font-weight-bold mt-2">Balance </strong>
-      <span class="mr-3">{{ nft.balanceFormatted }} </span>
-      <strong class="h7 font-weight-bold">Total Supply </strong>
-      <span>{{ nft.limitFormatted }}</span>
+      <div class="mt-2">
+        <strong class="h7 font-weight-bold">Balance </strong>
+        <span class="mr-3">{{ nft.balanceFormatted }} </span>
+        <strong class="h7 font-weight-bold">Total Supply </strong>
+        <span>{{ nft.limitFormatted }}</span>
+      </div>
     </template>
     <template #footer>
       <div>
