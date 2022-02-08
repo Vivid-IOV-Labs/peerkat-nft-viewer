@@ -123,16 +123,19 @@ const connectXrpClient = async () => {
 router.beforeEach(async (to, from, next) => {
   trackPage(to.fullPath);
   if (isInXumm) {
-    await store.dispatch("xumm/getOttData");
-    const ottdata = computed(() => store.getters["xumm/getOttData"]);
-    trackUser(ottdata.value.account);
-    store.commit("user/setAddress", ottdata.value.account);
-    store.commit("user/setNodeType", ottdata.value.nodetype);
-    const path = ottdata.value.redirect;
-    await connectXrpClient();
-
-    if (path) {
-      next({ path });
+    if (!walletAddress.value) {
+      await store.dispatch("xumm/getOttData");
+      const ottdata = computed(() => store.getters["xumm/getOttData"]);
+      trackUser(ottdata.value.account);
+      store.commit("user/setAddress", ottdata.value.account);
+      store.commit("user/setNodeType", ottdata.value.nodetype);
+      const path = ottdata.value.redirect;
+      await connectXrpClient();
+      if (path) {
+        next({ path });
+      } else {
+        next();
+      }
     } else {
       next();
     }
