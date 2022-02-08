@@ -1,6 +1,6 @@
 import { ActionTree } from "vuex";
 import { User } from "../../../models/User";
-import { UserState } from "./state";
+import { UiState } from "./state";
 
-const actions: ActionTree<User, UserState> = {};
+const actions: ActionTree<User, UiState> = {};
 export default actions;

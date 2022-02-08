@@ -2,6 +2,7 @@ import { computed } from "vue";
 import { createWebHistory, createRouter } from "vue-router";
 import { trackPage, trackUser } from "../utils/analytics";
 import store from "../store";
+
 const routes = [
   { path: "/", redirect: "/wallet" },
   {
@@ -110,6 +111,7 @@ const isConnected = computed(() => store.getters["nft/getIsConnected"]);
 function handleError(err: any): void {
   console.log(err);
 }
+
 const connectXrpClient = async () => {
   store.commit("ui/setIsloading", true);
 
