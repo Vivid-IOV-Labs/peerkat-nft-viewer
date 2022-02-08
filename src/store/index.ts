@@ -4,7 +4,7 @@ import { XummModule } from "./modules/xumm";
 import { UserModule } from "./modules/user";
 import { UiModule } from "./modules/ui";
 import createPersistedState from "vuex-persistedstate";
-const xummSandbox = import.meta.env.VITE_XUMM_SANDOX;
+const xummSandbox = import.meta.env.VITE_XUMM_SANDBOX;
 const store = createStore({
   modules: {
     user: UserModule,
