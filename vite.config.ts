@@ -4,7 +4,7 @@ import path from "path";
 import { VitePWA } from "vite-plugin-pwa";
 import { injectHtml } from "vite-plugin-html";
 
-const xummSandbox = process.env.VITE_XUMM_SANDOX;
+const xummSandbox = process.env.VITE_XUMM_SANDBOX;
 
 const remoteScript =
   xummSandbox === "test"
