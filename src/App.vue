@@ -1,51 +1,73 @@
 <template>
   <VueAnnouncer />
   <notifications :duration="1000" position="bottom center" />
-  <div style="height: 100%">
-    <Suspense>
-      <template #default>
-        <auth-layout>
-          <RouterView v-slot="{ Component, route }" name="default">
-            <transition
-              :key="route.path"
-              :name="route.meta.transition"
-              mode="out-in"
-              :duration="300"
-            >
-              <keep-alive>
-                <Suspense>
-                  <template #default>
-                    <main-loader>
-                      <component :is="Component" :key="route.path" />
-                    </main-loader>
-                  </template>
-                  <template #fallback>
-                    <div
-                      style="
-                        height: 100%;
-                        width: 100%;
-                        position: absolute;
-                        opacity: 0.8;
-                        top: 0;
-                        left: 0;
-                      "
-                      class="d-flex align-items-center justify-content-center"
-                    >
-                      <div
-                        class="spinner-border"
-                        style="width: 4rem; height: 4rem; color: #666"
-                        role="status"
-                      >
-                        <span class="sr-only">Loading...</span>
-                      </div>
-                    </div>
-                  </template>
-                </Suspense>
-              </keep-alive>
-            </transition>
-          </RouterView>
-        </auth-layout>
-      </template>
+  <div
+    v-if="isLoading"
+    style="
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      opacity: 0.8;
+      top: 0;
+      left: 0;
+    "
+    class="d-flex align-items-center justify-content-center"
+  >
+    <div
+      class="spinner-border"
+      style="width: 4rem; height: 4rem; color: #666"
+      role="status"
+    >
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+  <div v-else style="height: 100%">
+    <!-- <Suspense>
+      <template #default> -->
+
+    <auth-layout>
+      <RouterView v-slot="{ Component, route }" name="default">
+        <transition
+          :key="route.path"
+          :name="route.meta.transition"
+          mode="out-in"
+          :duration="300"
+        >
+          <keep-alive>
+            <Suspense>
+              <template #default>
+                <main-loader>
+                  <component :is="Component" :key="route.path" />
+                </main-loader>
+              </template>
+              <template #fallback>
+                <div
+                  style="
+                    height: 100%;
+                    width: 100%;
+                    position: absolute;
+                    opacity: 0.8;
+                    top: 0;
+                    left: 0;
+                  "
+                  class="d-flex align-items-center justify-content-center"
+                >
+                  <div
+                    class="spinner-border"
+                    style="width: 4rem; height: 4rem; color: #666"
+                    role="status"
+                  >
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
+              </template>
+            </Suspense>
+          </keep-alive>
+        </transition>
+      </RouterView>
+    </auth-layout>
+
+    <!-- </template>
       <template #fallback>
         <div
           style="
@@ -67,20 +89,26 @@
           </div>
         </div>
       </template>
-    </Suspense>
+    </Suspense> -->
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 import MainLoader from "@/layouts/MainLoader.vue";
+import { useStore } from "vuex";
 
 export default defineComponent({
   name: "App",
   components: {
     AuthLayout,
     MainLoader,
+  },
+  setup() {
+    const store = useStore();
+    const isLoading = computed(() => store.getters["ui/getIsloading"]);
+    return { isLoading };
   },
 });
 </script>

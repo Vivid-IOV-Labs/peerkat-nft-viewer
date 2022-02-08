@@ -20,6 +20,22 @@
         Hi
       </h1> -->
       <ul class="nav nav-pills ml-auto">
+        <li v-if="!isInXumm" class="nav-item">
+          <router-link
+            v-slot="{ navigate, href, isActive }"
+            to="/welcome"
+            custom
+          >
+            <a
+              class="nav-link"
+              style="padding: 0.4rem 0.6rem"
+              :class="{ active: isActive }"
+              :href="href"
+              @click="navigate"
+              >Sync</a
+            >
+          </router-link>
+        </li>
         <li class="nav-item">
           <router-link
             v-slot="{ navigate, href, isActive }"
@@ -96,21 +112,18 @@
   </header>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, inject } from "vue";
 
 var theme = (
   new URLSearchParams(document.location.href).get("xAppStyle") || "light"
 ).toLowerCase();
 export default defineComponent({
   setup: () => {
+    const isInXumm = inject("isInXumm");
+
     return {
       theme,
-      languages: [
-        { label: "EN", value: "en" },
-        { label: "EL", value: "el" },
-        { label: "DE", value: "de" },
-        { label: "IT", value: "it" },
-      ],
+      isInXumm,
     };
   },
 });

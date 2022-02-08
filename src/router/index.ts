@@ -1,10 +1,11 @@
+import { computed } from "vue";
 import { createWebHistory, createRouter } from "vue-router";
-import { trackPage } from "../utils/analytics";
-
+import { trackPage, trackUser } from "../utils/analytics";
+import store from "../store";
 const routes = [
   { path: "/", redirect: "/wallet" },
   {
-    path: "/welcome",
+    path: "/welcome/:redirect?",
     name: "welcome",
     component: () => import("../views/Welcome.vue"),
     meta: {
@@ -100,7 +101,54 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
-router.beforeEach(({ path }) => {
-  trackPage(path);
+
+const isInXumm = /xumm/.test(navigator.userAgent);
+const walletAddress = computed(() => store.getters["user/getAddress"]);
+const nodetype = computed(() => store.getters["user/getNodeType"]);
+
+function handleError(err: any): void {
+  console.log(err);
+}
+const connectXrpClient = async () => {
+  store.commit("ui/setIsloading", true);
+
+  await store.dispatch("nft/initXrpClient", {
+    nodetype: nodetype.value,
+    handleError,
+  });
+  store.commit("ui/setIsloading", false);
+};
+
+router.beforeEach(async (to, from, next) => {
+  trackPage(to.fullPath);
+  if (isInXumm) {
+    await store.dispatch("xumm/getOttData");
+    const ottdata = computed(() => store.getters["xumm/getOttData"]);
+    trackUser(ottdata.value.account);
+    store.commit("user/setAddress", ottdata.value.account);
+    store.commit("user/setNodeType", ottdata.value.nodetype);
+    const path = ottdata.value.redirect;
+    if (path) {
+      next({ path });
+    } else {
+      await connectXrpClient();
+      next();
+    }
+  } else {
+    if (!walletAddress.value) {
+      if (to.fullPath !== "/welcome") {
+        next({
+          path: "/welcome",
+          params: { nextUrl: to.fullPath },
+        });
+      } else {
+        next();
+      }
+    } else {
+      await connectXrpClient();
+      next();
+    }
+  }
 });
+
 export default router;

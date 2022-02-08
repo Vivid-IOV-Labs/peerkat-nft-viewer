@@ -2,12 +2,13 @@ import { createStore, createLogger } from "vuex";
 import { NftModule } from "./modules/nft";
 import { XummModule } from "./modules/xumm";
 import { UserModule } from "./modules/user";
+import { UiModule } from "./modules/ui";
 import createPersistedState from "vuex-persistedstate";
 const xummSandbox = import.meta.env.VITE_XUMM_SANDOX;
 const store = createStore({
   modules: {
     user: UserModule,
-
+    ui: UiModule,
     xumm: XummModule,
     nft: NftModule,
   },

@@ -3,7 +3,7 @@
   <main style="height: 85%" class="container-fluid">
     <slot></slot>
   </main>
-  <welcome
+  <!-- <welcome
     :is-open="isDialogWalletConnection"
     :async-fun="connectXrpClient"
   ></welcome>
@@ -30,7 +30,7 @@
         >Ok
       </base-button>
     </template>
-  </base-dialog>
+  </base-dialog> -->
 </template>
 
 <script lang="ts">
@@ -41,7 +41,7 @@ import HeaderNavigation from "@/components/HeaderNavigation.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseDialog from "@/components/BaseDialog.vue";
 import { useRouter } from "vue-router";
-import { trackEvent, trackInit, trackUser } from "../utils/analytics";
+import { trackInit, trackUser } from "../utils/analytics";
 export default defineComponent({
   components: {
     HeaderNavigation,
@@ -49,53 +49,54 @@ export default defineComponent({
     BaseDialog,
     BaseButton,
   },
-  async setup() {
-    const store = useStore();
-    const router = useRouter();
-    const isInXumm = inject("isInXumm");
-    const walletAddress = computed(() => store.getters["user/getAddress"]);
-    const nodetype = computed(() => store.getters["user/getNodeType"]);
-    const showError = ref(false);
-    const isDialogWalletConnection = ref(false);
-    trackInit();
-    function handleError(): void {
-      isDialogWalletConnection.value = false;
-      showError.value = true;
-    }
-    const connectXrpClient = async () => {
-      try {
-        await store.dispatch("nft/initXrpClient", {
-          nodetype: nodetype.value,
-          handleError,
-        });
-        isDialogWalletConnection.value = false;
-        showError.value = false;
-      } catch (err) {
-        showError.value = true;
-        isDialogWalletConnection.value = false;
-      }
-    };
-    if (isInXumm) {
-      await store.dispatch("xumm/getOttData");
-      const ottdata = computed(() => store.getters["xumm/getOttData"]);
-      trackUser(ottdata.value.account);
+  // async setup() {
+  //   const store = useStore();
+  //   const router = useRouter();
+  //   const isInXumm = inject("isInXumm");
+  //   const walletAddress = computed(() => store.getters["user/getAddress"]);
+  //   const nodetype = computed(() => store.getters["user/getNodeType"]);
+  //   const showError = ref(false);
+  //   const isDialogWalletConnection = ref(false);
+  //   trackInit();
+  //   function handleError(): void {
+  //     isDialogWalletConnection.value = false;
+  //     showError.value = true;
+  //   }
+  //   const connectXrpClient = async () => {
+  //     try {
+  //       await store.dispatch("nft/initXrpClient", {
+  //         nodetype: nodetype.value,
+  //         handleError,
+  //       });
+  //       isDialogWalletConnection.value = false;
+  //       showError.value = false;
+  //     } catch (err) {
+  //       showError.value = true;
+  //       isDialogWalletConnection.value = false;
+  //     }
+  //   };
+  //   if (isInXumm) {
+  //     await store.dispatch("xumm/getOttData");
+  //     const ottdata = computed(() => store.getters["xumm/getOttData"]);
+  //     trackUser(ottdata.value.account);
 
-      store.commit("user/setAddress", ottdata.value.account);
-      store.commit("user/setNodeType", ottdata.value.nodetype);
-      const path = ottdata.value.redirect;
-      if (path) {
-        router.push({ path });
-      }
-      await connectXrpClient();
-    } else {
-      if (!walletAddress.value) {
-        isDialogWalletConnection.value = true;
-      } else {
-        await connectXrpClient();
-      }
-    }
+  //     store.commit("user/setAddress", ottdata.value.account);
+  //     store.commit("user/setNodeType", ottdata.value.nodetype);
+  //     const path = ottdata.value.redirect;
+  //     if (path) {
+  //       router.push({ path });
+  //     }
+  //     await connectXrpClient();
+  //   } else {
+  //     if (!walletAddress.value) {
+  //       // isDialogWalletConnection.value = true;
+  //       router.push({ path: "/welcome" });
+  //     } else {
+  //       await connectXrpClient();
+  //     }
+  //   }
 
-    return { isDialogWalletConnection, showError, connectXrpClient };
-  },
+  //   return { isDialogWalletConnection, showError, connectXrpClient };
+  // },
 });
 </script>
