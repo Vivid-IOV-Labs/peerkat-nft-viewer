@@ -3,7 +3,7 @@ export interface UiState {
 }
 
 const state = (): UiState => ({
-  isLoading: true,
+  isLoading: false,
 });
 
 export default state;

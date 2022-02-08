@@ -138,7 +138,6 @@ async function getOne(
     limitFormatted,
   };
 }
-
 let client: typeof XrplClient | null = null;
 
 async function fetchNftLines(walletAddress: string): Promise<any> {
@@ -206,40 +205,40 @@ export async function init(
   handleError: (error: unknown | Error | null) => void
 ): Promise<typeof XrplClient> {
   try {
-    if (!client) {
-      const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
-      xrpClientInstance = new XrplClient(
-        X_url
-        //   {
-        //   assumeOfflineAfterSeconds: 6,
-        //   maxConnectionAttempts: 1,
-        //   connectAttemptTimeoutSeconds: 3,
-        // }
-      );
-      // console.log(
-      //   xrpClientInstance.eventBus.on("__WsClient_close", () => {
-      //     console.log("__WsClient_close");
-      //   })
-      // );
-      // xrpClientInstance.on("state", (state) => {
-      //   console.log("state", state);
-      // });
-      // xrpClientInstance.on("message", (message) => {
-      //   console.log("message", message);
-      // });
-      // xrpClientInstance.on("ledger", (ledger) => {
-      //   console.log("Ledger", ledger);
-      // });
-      // xrpClientInstance.on("close", (close) => {
-      //   console.log("close", close);
-      // });
-      xrpClientInstance.on("error", console.log);
-      // const connectionState = xrpClientInstance.getState();
+    //if (!client) {
+    const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
+    xrpClientInstance = new XrplClient(
+      X_url
+      //   {
+      //   assumeOfflineAfterSeconds: 6,
+      //   maxConnectionAttempts: 1,
+      //   connectAttemptTimeoutSeconds: 3,
+      // }
+    );
+    // console.log(
+    //   xrpClientInstance.eventBus.on("__WsClient_close", () => {
+    //     console.log("__WsClient_close");
+    //   })
+    // );
+    // xrpClientInstance.on("state", (state) => {
+    //   console.log("state", state);
+    // });
+    // xrpClientInstance.on("message", (message) => {
+    //   console.log("message", message);
+    // });
+    // xrpClientInstance.on("ledger", (ledger) => {
+    //   console.log("Ledger", ledger);
+    // });
+    // xrpClientInstance.on("close", (close) => {
+    //   console.log("close", close);
+    // });
+    xrpClientInstance.on("error", console.log);
+    // const connectionState = xrpClientInstance.getState();
 
-      await xrpClientInstance.ready();
+    await xrpClientInstance.ready();
 
-      client = xrpClientInstance;
-    }
+    client = xrpClientInstance;
+    // }
     return {
       xrpClientInstance,
       fetchNftLines,

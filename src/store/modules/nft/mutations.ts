@@ -14,6 +14,9 @@ const mutations: MutationTree<NFTState> = {
   setXrpClient(state: NFTState, xrpClient: typeof XrplClient): void {
     state.xrpClient = xrpClient;
   },
+  setIsConnected(state: NFTState, isConnected: boolean): void {
+    state.isConnected = isConnected;
+  },
   setAll(state: NFTState, all: Array<NFT>): void {
     state.all = [...state.all, ...all];
   },

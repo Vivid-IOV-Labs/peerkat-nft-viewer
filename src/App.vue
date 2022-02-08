@@ -21,7 +21,7 @@
       <span class="sr-only">Loading...</span>
     </div>
   </div>
-  <div v-else style="height: 100%">
+  <div style="height: 100%">
     <!-- <Suspense>
       <template #default> -->
 

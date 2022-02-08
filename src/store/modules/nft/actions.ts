@@ -34,6 +34,7 @@ const actions: ActionTree<NFT, NFTState> = {
       label: client.xrpClientInstance.endpoint,
     });
     commit("setXrpClient", client);
+    commit("setIsConnected", true);
   },
   async fetchNftLines(
     { commit, getters },

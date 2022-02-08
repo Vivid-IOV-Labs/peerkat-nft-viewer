@@ -28,7 +28,7 @@
     <base-button
       status="success"
       class="mt-4"
-      :disabled="v$.$invalid"
+      :disabled="v$.$invalid || isLoading"
       @click="runAsyncFunction"
       >Enter
       <div v-if="isLoading" class="spinner-grow spinner-grow-sm" role="status">
@@ -91,9 +91,14 @@ export default defineComponent({
 
     function handleError(): void {
       showError.value = true;
+      debugger;
     }
     const connectXrpClient = async () => {
       try {
+        await store.commit("nft/initXrpClient", {
+          nodetype: nodetype.value,
+          handleError,
+        });
         await store.dispatch("nft/initXrpClient", {
           nodetype: nodetype.value,
           handleError,

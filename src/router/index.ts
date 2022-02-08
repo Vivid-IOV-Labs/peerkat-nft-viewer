@@ -105,6 +105,7 @@ const router = createRouter({
 const isInXumm = /xumm/.test(navigator.userAgent);
 const walletAddress = computed(() => store.getters["user/getAddress"]);
 const nodetype = computed(() => store.getters["user/getNodeType"]);
+const isConnected = computed(() => store.getters["nft/getIsConnected"]);
 
 function handleError(err: any): void {
   console.log(err);
@@ -128,10 +129,11 @@ router.beforeEach(async (to, from, next) => {
     store.commit("user/setAddress", ottdata.value.account);
     store.commit("user/setNodeType", ottdata.value.nodetype);
     const path = ottdata.value.redirect;
+    await connectXrpClient();
+
     if (path) {
       next({ path });
     } else {
-      await connectXrpClient();
       next();
     }
   } else {
@@ -145,8 +147,19 @@ router.beforeEach(async (to, from, next) => {
         next();
       }
     } else {
-      await connectXrpClient();
-      next();
+      if (!isConnected.value) {
+        try {
+          await connectXrpClient();
+          next();
+        } catch (error) {
+          next({
+            path: "/welcome",
+          });
+          console.log(error);
+        }
+      } else {
+        next();
+      }
     }
   }
 });

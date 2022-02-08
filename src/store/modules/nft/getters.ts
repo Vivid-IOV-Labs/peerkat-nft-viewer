@@ -7,6 +7,7 @@ interface NFT {
 export default {
   getAll: (state: NFTState): Array<NFT> => state.all,
   getXrpClient: (state: NFTState): typeof XrplClient | null => state.xrpClient,
+  getIsConnected: (state: NFTState): boolean => state.isConnected,
   getShared:
     (state: NFTState) =>
     (nodetype: keyof SharedNFTs): Array<NFT> => {
