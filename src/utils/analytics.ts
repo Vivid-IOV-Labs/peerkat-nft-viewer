@@ -17,35 +17,41 @@ interface trackEventParams {
   label: string;
 }
 export function trackInit(): void {
-  mixpanel.init(mixpanel_id, {
-    api_host: "https://api-eu.mixpanel.com",
-    batch_requests: true,
-    ignore_dnt: true,
-  });
-  ga("create", google_analytics_id, "auto");
-  ga("send", "pageview");
-  gtag("js", new Date());
+  if (mixpanel_id && google_analytics_id && google_tag_manager_id) {
+    mixpanel.init(mixpanel_id, {
+      api_host: "https://api-eu.mixpanel.com",
+      batch_requests: true,
+      ignore_dnt: true,
+    });
+    ga("create", google_analytics_id, "auto");
+    ga("send", "pageview");
+    gtag("js", new Date());
 
-  gtag("config", google_tag_manager_id);
+    gtag("config", google_tag_manager_id);
+  }
 }
 
 export const trackUser = (walletAddress: string): void => {
-  mixpanel.identify(walletAddress);
-  ga("send", "&uid", walletAddress);
-  dataLayer.push({
-    "&uid": walletAddress,
-  });
+  if (mixpanel_id && google_analytics_id && google_tag_manager_id) {
+    mixpanel.identify(walletAddress);
+    ga("send", "&uid", walletAddress);
+    dataLayer.push({
+      "&uid": walletAddress,
+    });
+  }
 };
 
 export const trackPage = (path: string): void => {
-  mixpanel.track(`Page view: ${path}`);
-  ga("send", "pageview", path);
-  dataLayer.push({
-    event: "pageview",
-    page: {
-      url: path,
-    },
-  });
+  if (mixpanel_id && google_analytics_id && google_tag_manager_id) {
+    mixpanel.track(`Page view: ${path}`);
+    ga("send", "pageview", path);
+    dataLayer.push({
+      event: "pageview",
+      page: {
+        url: path,
+      },
+    });
+  }
 };
 
 export const trackEvent = ({
@@ -53,14 +59,16 @@ export const trackEvent = ({
   action,
   label,
 }: trackEventParams): void => {
-  mixpanel.track(`${category}`, { action, label });
-  ga("send", "event", category, action, label);
-  dataLayer.push({
-    event: "event",
-    eventProps: {
-      category: category,
-      action: action,
-      label: label,
-    },
-  });
+  if (mixpanel_id && google_analytics_id && google_tag_manager_id) {
+    mixpanel.track(`${category}`, { action, label });
+    ga("send", "event", category, action, label);
+    dataLayer.push({
+      event: "event",
+      eventProps: {
+        category: category,
+        action: action,
+        label: label,
+      },
+    });
+  }
 };
