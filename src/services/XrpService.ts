@@ -141,16 +141,11 @@ async function getOne(
 let client: typeof XrplClient | null = null;
 
 async function fetchNftLines(walletAddress: string): Promise<any> {
-  console.log("fetchNftLines service");
-  console.log("fetchNftLines service cleint", client);
-
   const accountLines = await client.send({
     command: "account_lines",
     account: walletAddress,
   });
   const { lines, error } = accountLines;
-  console.log("fetchNftLines service lines", lines);
-  console.log("fetchNftLines service error", error);
 
   if (error) {
     throw new Error(error);
