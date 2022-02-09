@@ -102,13 +102,20 @@ export default defineComponent({
     const lines = computed(() => store.getters["nft/getLines"]);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
 
+    console.log("NFTMedia", walletAddress.value);
+    console.log("lines", walletAddress.value);
+    console.log("walletAddress", walletAddress.value);
+
     const populateNFTs = async () => {
       try {
         await store.dispatch("nft/fetchNftLines", {
           walletAddress: walletAddress.value,
           nodetype: nodetype.value,
         });
+        console.log("nft/fetchNftLines");
+
         await store.dispatch("nft/fetchNext", nodetype.value);
+        console.log("nft/fetchNext");
       } catch (error) {
         devlog(error);
       }
@@ -129,6 +136,7 @@ export default defineComponent({
       }
     });
     if (lines.value.length === 0) {
+      console.log("populate");
       await populateNFTs();
     }
 
