@@ -26,3 +26,8 @@ A [Vue 3](https://v3.vuejs.org/) + [Typescript](https://www.typescriptlang.org/)
 ### Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Vetur](https://marketplace.visualstudio.com/items?itemName=octref.vetur). Make sure to enable `vetur.experimental.templateInterpolationService` in settings!
+
+
+### Feedback
+
+For any feedback/queries please email [support@peerkat.io](mailto:support@peerkat.io)
