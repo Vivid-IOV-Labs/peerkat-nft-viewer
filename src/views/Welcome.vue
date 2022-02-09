@@ -95,10 +95,7 @@ export default defineComponent({
     }
     const connectXrpClient = async () => {
       try {
-        await store.commit("nft/initXrpClient", {
-          nodetype: nodetype.value,
-          handleError,
-        });
+        store.commit("nft/resetAll");
         await store.dispatch("nft/initXrpClient", {
           nodetype: nodetype.value,
           handleError,

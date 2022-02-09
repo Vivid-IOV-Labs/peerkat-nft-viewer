@@ -23,6 +23,10 @@ const mutations: MutationTree<NFTState> = {
   setLines(state: NFTState, lines: Array<any>): void {
     state.lines = lines;
   },
+  resetAll(state: NFTState): void {
+    state.lines = [];
+    state.all = [];
+  },
   addShared(state: NFTState, { shared, nodetype }: addSharedParams): void {
     const exist =
       state.sharedwithme[nodetype].filter(
