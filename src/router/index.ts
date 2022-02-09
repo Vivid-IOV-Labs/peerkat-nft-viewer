@@ -125,7 +125,7 @@ const connectXrpClient = async () => {
 router.beforeEach(async (to, from, next) => {
   trackPage(to.fullPath);
   if (isInXumm) {
-    if (!walletAddress.value) {
+    if (!isConnected.value) {
       await store.dispatch("xumm/getOttData");
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
       trackUser(ottdata.value.account);
