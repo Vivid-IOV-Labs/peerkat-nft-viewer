@@ -102,8 +102,8 @@ export default defineComponent({
     const lines = computed(() => store.getters["nft/getLines"]);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
 
-    console.log("NFTMedia", walletAddress.value);
-    console.log("lines", walletAddress.value);
+    console.log("NFTMedia", lines.value);
+    console.log("lines", NFTMedia.value);
     console.log("walletAddress", walletAddress.value);
 
     const populateNFTs = async () => {
