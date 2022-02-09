@@ -107,6 +107,7 @@ const isInXumm = /xumm/.test(navigator.userAgent);
 const walletAddress = computed(() => store.getters["user/getAddress"]);
 const nodetype = computed(() => store.getters["user/getNodeType"]);
 const isConnected = computed(() => store.getters["nft/getIsConnected"]);
+const shared = computed(() => store.getters["nft/getShared"]);
 
 function handleError(err: any): void {
   console.log(err);
@@ -131,6 +132,10 @@ router.beforeEach(async (to, from, next) => {
       trackUser(ottdata.value.account);
       store.commit("user/setAddress", ottdata.value.account);
       store.commit("user/setNodeType", ottdata.value.nodetype);
+      if (!shared.value) {
+        store.commit("nft/initSharedStore", ottdata.value.account);
+      }
+
       const path = ottdata.value.redirect;
       await connectXrpClient();
       if (path) {

@@ -5,10 +5,12 @@ import { NFTState, SharedNFTs } from "./state";
 interface addSharedParams {
   shared: NFT;
   nodetype: keyof SharedNFTs;
+  walletaddress: string;
 }
 interface deleteSharedParams {
   issuer: string;
   nodetype: keyof SharedNFTs;
+  walletaddress: string;
 }
 const mutations: MutationTree<NFTState> = {
   setXrpClient(state: NFTState, xrpClient: typeof XrplClient): void {
@@ -27,23 +29,32 @@ const mutations: MutationTree<NFTState> = {
     state.lines = [];
     state.all = [];
   },
-  addShared(state: NFTState, { shared, nodetype }: addSharedParams): void {
+  initSharedStore(state: NFTState, walletaddress) {
+    state.sharedwithme[walletaddress] = { TESTNET: [], MAINNET: [] };
+  },
+  addShared(
+    state: NFTState,
+    { shared, nodetype, walletaddress }: addSharedParams
+  ): void {
     const exist =
-      state.sharedwithme[nodetype].filter(
+      state.sharedwithme[walletaddress][nodetype].filter(
         (n: { issuer: string }) => n.issuer === shared.issuer
       ).length > 0;
 
     if (!exist) {
-      state.sharedwithme[nodetype] = [...state.sharedwithme[nodetype], shared];
+      state.sharedwithme[walletaddress][nodetype] = [
+        ...state.sharedwithme[walletaddress][nodetype],
+        shared,
+      ];
     }
   },
   deleteShared(
     state: NFTState,
-    { issuer, nodetype }: deleteSharedParams
+    { issuer, nodetype, walletaddress }: deleteSharedParams
   ): void {
-    state.sharedwithme[nodetype] = state.sharedwithme[nodetype].filter(
-      (n) => n.issuer !== issuer
-    );
+    state.sharedwithme[walletaddress][nodetype] = state.sharedwithme[
+      walletaddress
+    ][nodetype].filter((n) => n.issuer !== issuer);
   },
 };
 

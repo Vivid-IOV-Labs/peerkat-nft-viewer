@@ -88,22 +88,7 @@ export default defineComponent({
     const router = useRouter();
     const isLoading = ref(false);
     const showError = ref(false);
-
-    function handleError(): void {
-      showError.value = true;
-      debugger;
-    }
-    const connectXrpClient = async () => {
-      try {
-        store.commit("nft/resetAll");
-        await store.dispatch("nft/initXrpClient", {
-          nodetype: nodetype.value,
-          handleError,
-        });
-      } catch (err) {
-        showError.value = true;
-      }
-    };
+    const shared = computed(() => store.getters["nft/getShared"]);
     const nodetypes = [
       { label: "Main", value: "MAINNET" },
       { label: "Test", value: "TESTNET" },
@@ -134,6 +119,23 @@ export default defineComponent({
     const v$ = useVuelidate(rules, {
       walletAddress,
     });
+    function handleError(): void {
+      showError.value = true;
+    }
+    const connectXrpClient = async () => {
+      try {
+        if (!shared.value) {
+          store.commit("nft/initSharedStore", walletAddress.value);
+        }
+        store.commit("nft/resetAll");
+        await store.dispatch("nft/initXrpClient", {
+          nodetype: nodetype.value,
+          handleError,
+        });
+      } catch (err) {
+        showError.value = true;
+      }
+    };
 
     return {
       v$,

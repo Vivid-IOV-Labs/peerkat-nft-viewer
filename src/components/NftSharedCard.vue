@@ -77,6 +77,7 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
     const nodetype = computed(() => store.getters["user/getNodeType"]);
+    const walletaddress = computed(() => store.getters["user/getAddress"]);
     const nodetypecode = computed(() => getNetworkCodeFromType(nodetype.value));
     const bihompUrl = computed(() =>
       nodetype.value == "TESTNET"
@@ -102,6 +103,7 @@ export default defineComponent({
         store.commit("nft/deleteShared", {
           issuer: props.nft.issuer,
           nodetype: nodetype.value,
+          walletaddress: walletaddress.value,
         });
         trackEvent({
           category: " Share with me View",

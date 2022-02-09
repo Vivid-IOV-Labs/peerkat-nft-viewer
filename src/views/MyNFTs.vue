@@ -129,7 +129,6 @@ export default defineComponent({
       }
     });
     if (lines.value.length === 0) {
-      console.log("populate");
       await populateNFTs();
     }
 

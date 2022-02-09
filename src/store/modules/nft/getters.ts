@@ -9,9 +9,12 @@ export default {
   getXrpClient: (state: NFTState): typeof XrplClient | null => state.xrpClient,
   getIsConnected: (state: NFTState): boolean => state.isConnected,
   getShared:
-    (state: NFTState) =>
-    (nodetype: keyof SharedNFTs): Array<NFT> => {
-      return state.sharedwithme[nodetype];
+    (state: NFTState, _getters: any, rootState: any) =>
+    (nodetype: keyof SharedNFTs): Array<NFT> | null => {
+      const useraddress = rootState.user.address;
+      return !state.sharedwithme[useraddress]
+        ? null
+        : state.sharedwithme[useraddress][nodetype];
     },
   getLines: (state: NFTState): Array<NFT> => state.lines,
   getByAddress:
@@ -20,9 +23,10 @@ export default {
       return state.all.find(({ issuer }) => issuer == address);
     },
   getSharedByAddress:
-    (state: NFTState) =>
+    (state: NFTState, _getters: any, rootState: any) =>
     (address: string, nodetype: keyof SharedNFTs): NFT | undefined => {
-      return state.sharedwithme[nodetype].find(
+      const useraddress = rootState.user.address;
+      return state.sharedwithme[useraddress][nodetype].find(
         ({ issuer }) => issuer == address
       );
     },

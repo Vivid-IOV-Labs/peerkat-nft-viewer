@@ -118,6 +118,7 @@ export default defineComponent({
     const othernodetype = nodetypefromlink == "TESTNET" ? "MAINNET" : "TESTNET";
     const client = computed(() => store.getters["nft/getXrpClient"]);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
+    const walletaddress = computed(() => store.getters["user/getAddress"]);
     const nft = ref<NFT | null>(null);
     if (nodetypefromlink == nodetype.value) {
       try {
@@ -127,6 +128,7 @@ export default defineComponent({
         store.commit("nft/addShared", {
           shared: nft.value,
           nodetype: nodetype.value,
+          walletaddress: walletaddress.value,
         });
       } catch (error) {
         devlog(error);
