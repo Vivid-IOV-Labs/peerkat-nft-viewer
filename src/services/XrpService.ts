@@ -244,6 +244,7 @@ export async function init(
     await xrpClientInstance.ready();
 
     client = xrpClientInstance;
+
     // }
     return {
       xrpClientInstance,

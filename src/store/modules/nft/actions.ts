@@ -28,11 +28,14 @@ const actions: ActionTree<NFT, NFTState> = {
     { nodetype, handleError }: InitParams
   ): Promise<void> {
     const client = await init(nodetype, handleError);
+    console.log("init", client);
     trackEvent({
       category: "Root View",
       action: "xrpl-connected",
       label: client.xrpClientInstance.endpoint,
     });
+    console.log("init", client);
+
     commit("setXrpClient", client);
     commit("setIsConnected", true);
   },
