@@ -3,11 +3,16 @@
     >Back
   </router-link>
 
-  <div style="padding: 1rem 4rem 4rem">
-    <base-card v-if="nft" class="mb-4">
+  <div>
+    <base-card v-if="nft">
       <template #picture>
-        <figure class="w-100">
-          <a class="h-100 d-block" href="#" @click.prevent="view">
+        <figure style="overflow: hidden; height: 100%">
+          <a
+            class="h-100 d-block"
+            style="overflow: hidden"
+            href="#"
+            @click.prevent="view"
+          >
             <video
               v-if="nft.media_type?.includes('video')"
               :src="`${nft.url}#t=0.5`"
