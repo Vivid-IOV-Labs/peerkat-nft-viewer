@@ -1,7 +1,6 @@
 const isInXumm = /xumm/.test(navigator.userAgent);
 const xummSandbox = import.meta.env.VITE_XUMM_SANBDOX;
 
-localStorage.removeItem("vuex");
 if (!isInXumm && xummSandbox === "main") {
   window.location.replace("https://www.peerkat.io/");
 }
