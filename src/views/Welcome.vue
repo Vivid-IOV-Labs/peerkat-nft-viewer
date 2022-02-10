@@ -3,6 +3,18 @@
     <form>
       <div class="form-group">
         <base-input
+          id="user"
+          v-model="v$.user.$model"
+          placeholder="A user ID"
+          label-text="User"
+          class="w-full max-w-xl"
+          :is-required="v$.user.required"
+          :is-invalid="v$.user.$dirty && v$.user.$invalid"
+          :errors="formatVuelidateErrors(v$.user.$errors)"
+        ></base-input>
+      </div>
+      <div class="form-group">
+        <base-input
           id="walletaddress"
           v-model="v$.walletAddress.$model"
           placeholder="Enter your Ripple Wallet Address"
@@ -108,6 +120,14 @@ export default defineComponent({
         store.commit("user/setNodeType", val);
       },
     });
+    const user = computed({
+      get(): string {
+        return store.getters["user/getUser"];
+      },
+      set(val: string): void {
+        store.commit("user/setUser", val);
+      },
+    });
     const shared = computed(() =>
       store.getters["nft/getShared"](nodetype.value)
     );
@@ -117,10 +137,14 @@ export default defineComponent({
         required,
         // isRippleAddress,
       },
+      user: {
+        required,
+      },
     }));
 
     const v$ = useVuelidate(rules, {
       walletAddress,
+      user,
     });
     function handleError(): void {
       showError.value = true;
@@ -128,7 +152,7 @@ export default defineComponent({
     const connectXrpClient = async () => {
       try {
         if (!shared.value) {
-          store.commit("nft/initSharedStore", walletAddress.value);
+          store.commit("nft/initSharedStore", user.value);
         }
         store.commit("nft/resetAll");
         await store.dispatch("nft/initXrpClient", {

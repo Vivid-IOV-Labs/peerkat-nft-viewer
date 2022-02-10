@@ -8,6 +8,9 @@ const mutations: MutationTree<UserState> = {
   setAddress(state: UserState, address: string): void {
     state.address = address;
   },
+  setUser(state: UserState, user: string): void {
+    state.user = user;
+  },
 };
 
 export default mutations;

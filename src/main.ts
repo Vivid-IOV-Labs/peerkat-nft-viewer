@@ -1,5 +1,5 @@
 const isInXumm = /xumm/.test(navigator.userAgent);
-const xummSandbox = import.meta.env.VITE_XUMM_SANDOX;
+const xummSandbox = import.meta.env.VITE_XUMM_SANBDOX;
 
 if (!isInXumm && xummSandbox === "main") {
   window.location.replace("https://www.peerkat.io/");
