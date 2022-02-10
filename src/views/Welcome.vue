@@ -124,7 +124,7 @@ export default defineComponent({
     }
     const connectXrpClient = async () => {
       try {
-        if (!shared.value) {
+        if (shared.value == null) {
           store.commit("nft/initSharedStore", walletAddress.value);
         }
         store.commit("nft/resetAll");

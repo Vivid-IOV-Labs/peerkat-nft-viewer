@@ -134,7 +134,7 @@ router.beforeEach(async (to, from, next) => {
       store.commit("user/setNodeType", ottdata.value.nodetype);
       console.log("Shared Store is null", shared.value);
 
-      if (!shared.value) {
+      if (shared.value == null) {
         console.log("Shared Store is null");
         store.commit("nft/initSharedStore", ottdata.value.account);
       }
