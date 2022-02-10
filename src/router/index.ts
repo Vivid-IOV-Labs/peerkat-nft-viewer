@@ -107,7 +107,7 @@ const isInXumm = /xumm/.test(navigator.userAgent);
 const walletAddress = computed(() => store.getters["user/getAddress"]);
 const nodetype = computed(() => store.getters["user/getNodeType"]);
 const isConnected = computed(() => store.getters["nft/getIsConnected"]);
-const shared = computed(() => store.getters["nft/getShared"]);
+const shared = computed(() => store.getters["nft/getShared"](nodetype.value));
 
 function handleError(err: any): void {
   console.log(err);
@@ -134,8 +134,7 @@ router.beforeEach(async (to, from, next) => {
       store.commit("user/setNodeType", ottdata.value.nodetype);
       console.log("Shared Store is null", shared.value);
 
-      if (shared.value == null) {
-        console.log("Shared Store is null");
+      if (!shared.value) {
         store.commit("nft/initSharedStore", ottdata.value.account);
       }
 
