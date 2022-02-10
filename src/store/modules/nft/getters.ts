@@ -11,7 +11,7 @@ export default {
   getShared:
     (state: NFTState, _getters: any, rootState: any) =>
     (nodetype: keyof SharedNFTs): Array<NFT> | null => {
-      const useraddress = rootState.user.address;
+      const useraddress = rootState.user.user;
       return !state.sharedwithme[useraddress]
         ? null
         : state.sharedwithme[useraddress][nodetype];
@@ -25,7 +25,7 @@ export default {
   getSharedByAddress:
     (state: NFTState, _getters: any, rootState: any) =>
     (address: string, nodetype: keyof SharedNFTs): NFT | undefined => {
-      const useraddress = rootState.user.address;
+      const useraddress = rootState.user.user;
       return state.sharedwithme[useraddress][nodetype].find(
         ({ issuer }) => issuer == address
       );
