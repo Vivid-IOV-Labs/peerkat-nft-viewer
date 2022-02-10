@@ -2,7 +2,6 @@ import { computed } from "vue";
 import { createWebHistory, createRouter } from "vue-router";
 import { trackPage, trackUser } from "../utils/analytics";
 import store from "../store";
-import { ConfigurationServicePlaceholders } from "aws-sdk/lib/config_service_placeholders";
 
 const routes = [
   { path: "/", redirect: "/wallet" },
