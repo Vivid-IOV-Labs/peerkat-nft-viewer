@@ -129,6 +129,8 @@ router.beforeEach(async (to, from, next) => {
   if (isInXumm) {
     if (!isConnected.value) {
       await store.dispatch("xumm/getOttData");
+      console.log(localStorage);
+
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
       trackUser(ottdata.value.account);
       store.commit("user/setAddress", ottdata.value.account);
