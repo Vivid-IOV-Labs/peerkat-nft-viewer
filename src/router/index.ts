@@ -134,11 +134,10 @@ router.beforeEach(async (to, from, next) => {
       trackUser(ottdata.value.account);
       store.commit("user/setAddress", ottdata.value.account);
       store.commit("user/setNodeType", ottdata.value.nodetype);
-      console.log("Shared Store is null", shared.value);
+      store.commit("user/setUser", ottdata.value.user);
 
       if (!shared.value) {
-        console.log("nft/initSharedStore");
-        store.commit("nft/initSharedStore", ottdata.value.account);
+        store.commit("nft/initSharedStore", ottdata.value.user);
       }
 
       const path = ottdata.value.redirect;
