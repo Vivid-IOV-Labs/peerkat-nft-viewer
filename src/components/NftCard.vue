@@ -103,7 +103,7 @@ export default defineComponent({
           text: "Copied to clipboard",
         };
 
-        const xummSandbox = import.meta.env.VITE_XUMM_SANDOX;
+        const xummSandbox = import.meta.env.VITE_XUMM_SANDBOX;
         const url =
           xummSandbox === "test"
             ? `https://xumm.app/detect/xapp:peerkat.sandbox.test?redirect=/shared/${props.nft.issuer}/${nodetypecode}`
