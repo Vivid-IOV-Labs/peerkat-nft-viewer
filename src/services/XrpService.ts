@@ -1,5 +1,5 @@
 import { NFT } from "../models/NFT";
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+let xrpl: { Client: new (arg0: string) => any };
 type line = {
   balance: string;
   limit: string;
@@ -52,7 +52,7 @@ const test_networks = [
   "wss://xrpl.linkwss://testnet.xrpl-labs.com",
 ];
 
-let xrpClientInstance: typeof xrpl | null = null;
+let xrpClientInstance: any;
 
 async function getMediaType(url: string) {
   try {
@@ -136,7 +136,7 @@ async function getOne(
     limitFormatted,
   };
 }
-let client: typeof xrpl | null = null;
+let client: any;
 
 async function fetchNftLines(walletAddress: string): Promise<any> {
   const { result } = await client.request({
