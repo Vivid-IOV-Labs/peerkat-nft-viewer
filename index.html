@@ -59,7 +59,19 @@
     })(document, window.mixpanel || []);
   </script>
 </head>
+<style>
+html,
+body,
+.main-container {
+  height: 100%;
+  width: 100%;
+}
 
+body {
+  /* ... */
+  overflow: hidden;
+}
+</style>
 <body >
   <div class="main-container" style="height: 100vh;" id="app"></div>
   <script type="module" src="/src/main.ts"></script>
