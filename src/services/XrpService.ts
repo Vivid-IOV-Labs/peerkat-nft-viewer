@@ -209,7 +209,7 @@ export async function init(
     //if (!client) {
     const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
     xrpClientInstance = new XrplClient(X_url, {
-      assumeOfflineAfterSeconds: 0,
+      assumeOfflineAfterSeconds: 1,
       maxConnectionAttempts: 1,
       connectAttemptTimeoutSeconds: 0,
     });
