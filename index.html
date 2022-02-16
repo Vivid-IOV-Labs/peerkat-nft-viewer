@@ -4,8 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" href="/favicon.ico" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">  <title>Peerkat</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <link rel="apple-touch-icon" sizes="57x57" href="icons/apple-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="icons/apple-icon-60x60.png">
   <link rel="apple-touch-icon" sizes="72x72" href="icons/apple-icon-72x72.png">
@@ -60,21 +59,7 @@
     })(document, window.mixpanel || []);
   </script>
 </head>
-<style>
-  html, body {
-    height: 100%;
-    overflow: hidden;
-}
 
-.main-container {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    overflow: auto;
-}
-</style>
 <body >
   <div class="main-container" style="height: 100vh;" id="app"></div>
   <script type="module" src="/src/main.ts"></script>
