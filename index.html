@@ -60,15 +60,6 @@
     })(document, window.mixpanel || []);
   </script>
 </head>
-
-<body >
-  <div class="main-container" style="height: 100vh;" id="app"></div>
-  <script type="module" src="/src/main.ts"></script>
-</body>
-
-<%- injectScript %>
-
-</html>
 <style>
   html, body {
     height: 100%;
@@ -84,3 +75,11 @@
     overflow: auto;
 }
 </style>
+<body >
+  <div class="main-container" style="height: 100vh;" id="app"></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+<%- injectScript %>
+
+</html>
