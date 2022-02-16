@@ -1,7 +1,5 @@
 import { NFT } from "../models/NFT";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { XrplClient } = require("xrpl-client");
-
 type line = {
   balance: string;
   limit: string;
@@ -54,7 +52,7 @@ const test_networks = [
   "wss://xrpl.linkwss://testnet.xrpl-labs.com",
 ];
 
-let xrpClientInstance: typeof XrplClient | null = null;
+let xrpClientInstance: typeof xrpl | null = null;
 
 async function getMediaType(url: string) {
   try {
@@ -138,15 +136,14 @@ async function getOne(
     limitFormatted,
   };
 }
-let client: typeof XrplClient | null = null;
+let client: typeof xrpl | null = null;
 
 async function fetchNftLines(walletAddress: string): Promise<any> {
-  const accountLines = await client.send({
+  const { result } = await client.request({
     command: "account_lines",
     account: walletAddress,
   });
-  const { lines, error } = accountLines;
-
+  const { lines, error } = result;
   if (error) {
     throw new Error(error);
   } else {
@@ -161,7 +158,7 @@ async function fetchNftLines(walletAddress: string): Promise<any> {
 }
 async function fetchIssuerCurrencies(issuer: string): Promise<any> {
   try {
-    const accountLines = await client.send({
+    const accountLines = await client.request({
       command: "account_currencies",
       account: issuer,
     });
@@ -177,11 +174,11 @@ async function fetchOne(
   balanceFormatted?: string,
   limitFormatted?: string
 ): Promise<NFT> {
-  const res = await client.send({
+  const { result } = await client.request({
     command: "account_info",
     account,
   });
-  const { account_data } = res;
+  const { account_data } = result;
   if (currency) {
     return getOne(
       account_data,
@@ -201,50 +198,18 @@ async function fetchOne(
     );
   }
 }
-export async function init(
-  nodetype: string,
-  handleError: (error: unknown | Error | null) => void
-): Promise<typeof XrplClient> {
-  try {
-    //if (!client) {
-    const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
-    xrpClientInstance = new XrplClient(X_url, {
-      assumeOfflineAfterSeconds: 1,
-      maxConnectionAttempts: 3,
-      connectAttemptTimeoutSeconds: 1,
-    });
-    // console.log(
-    //   xrpClientInstance.eventBus.on("__WsClient_close", () => {
-    //     console.log("__WsClient_close");
-    //   })
-    // );
-    // xrpClientInstance.on("state", (state) => {
-    //   console.log("state", state);
-    // });
-    // xrpClientInstance.on("message", (message) => {
-    //   console.log("message", message);
-    // });
-    // xrpClientInstance.on("ledger", (ledger) => {
-    //   console.log("Ledger", ledger);
-    // });
-    // xrpClientInstance.on("close", (close) => {
-    //   console.log("close", close);
-    // });
-    xrpClientInstance.on("error", console.log);
-    // const connectionState = xrpClientInstance.getState();
+export async function init(nodetype: string): Promise<any> {
+  const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
+  xrpClientInstance = new xrpl.Client(X_url[0]);
+  await xrpClientInstance.connect();
 
-    await xrpClientInstance.ready();
+  client = xrpClientInstance;
 
-    client = xrpClientInstance;
-
-    // }
-    return {
-      xrpClientInstance,
-      fetchNftLines,
-      fetchIssuerCurrencies,
-      fetchOne,
-    };
-  } catch (error: unknown) {
-    //handleError(error);
-  }
+  // }
+  return {
+    xrpClientInstance,
+    fetchNftLines,
+    fetchIssuerCurrencies,
+    fetchOne,
+  };
 }

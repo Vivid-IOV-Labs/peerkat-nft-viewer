@@ -32,6 +32,7 @@
     "vue3-lazyload": "^0.2.5-beta",
     "vuex": "^4.0.2",
     "vuex-persistedstate": "^4.1.0",
+    "xrpl": "^2.1.1",
     "xrpl-client": "^1.5.0",
     "xumm-sdk": "^1.0.1"
   },

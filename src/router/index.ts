@@ -134,6 +134,7 @@ router.beforeEach(async (to, from, next) => {
       trackUser(ottdata.value.account);
       store.commit("user/setAddress", ottdata.value.account);
       store.commit("user/setNodeType", ottdata.value.nodetype);
+      store.commit("user/setNetwork", ottdata.value.network);
       store.commit("user/setUser", ottdata.value.user);
 
       if (!shared.value) {
