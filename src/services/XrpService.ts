@@ -208,14 +208,11 @@ export async function init(
   try {
     //if (!client) {
     const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
-    xrpClientInstance = new XrplClient(
-      X_url
-      //   {
-      //   assumeOfflineAfterSeconds: 6,
-      //   maxConnectionAttempts: 1,
-      //   connectAttemptTimeoutSeconds: 3,
-      // }
-    );
+    xrpClientInstance = new XrplClient(X_url, {
+      assumeOfflineAfterSeconds: 2,
+      maxConnectionAttempts: 2,
+      connectAttemptTimeoutSeconds: 2,
+    });
     // console.log(
     //   xrpClientInstance.eventBus.on("__WsClient_close", () => {
     //     console.log("__WsClient_close");
