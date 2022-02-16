@@ -210,8 +210,8 @@ export async function init(
     const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
     xrpClientInstance = new XrplClient(X_url, {
       assumeOfflineAfterSeconds: 1,
-      maxConnectionAttempts: 1,
-      connectAttemptTimeoutSeconds: 0,
+      maxConnectionAttempts: 3,
+      connectAttemptTimeoutSeconds: 1,
     });
     // console.log(
     //   xrpClientInstance.eventBus.on("__WsClient_close", () => {
