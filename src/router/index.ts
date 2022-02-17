@@ -105,7 +105,7 @@ const router = createRouter({
 
 const isInXumm = /xumm/.test(navigator.userAgent);
 const walletAddress = computed(() => store.getters["user/getAddress"]);
-const nodetype = computed(() => store.getters["user/getNodetype"]);
+const nodetype = computed(() => store.getters["user/getNodeType"]);
 const isConnected = computed(() => store.getters["nft/getIsConnected"]);
 const shared = computed(() => store.getters["nft/getShared"](nodetype.value));
 
@@ -128,7 +128,7 @@ router.beforeEach(async (to, from, next) => {
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
       trackUser(ottdata.value.account);
       store.commit("user/setAddress", ottdata.value.account);
-      store.commit("user/setNetwork", ottdata.value.network);
+      store.commit("user/setNodetype", ottdata.value.nodetype);
       store.commit("user/setUser", ottdata.value.user);
 
       if (!shared.value) {
