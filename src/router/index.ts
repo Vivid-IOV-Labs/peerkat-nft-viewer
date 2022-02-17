@@ -123,7 +123,7 @@ router.beforeEach(async (to, from, next) => {
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
       trackUser(ottdata.value.account);
       store.commit("user/setAddress", ottdata.value.account);
-      store.commit("user/setNodetype", ottdata.value.nodetype);
+      store.commit("user/setNodeType", ottdata.value.nodetype);
       store.commit("user/setUser", ottdata.value.user);
       store.dispatch("nft/initXrpClient", {
         nodetype: nodetype.value,
