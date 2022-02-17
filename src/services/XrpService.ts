@@ -161,20 +161,16 @@ async function fetchNftLines(walletAddress: string): Promise<any> {
   }
 }
 async function fetchIssuerCurrencies(issuer: string): Promise<any> {
-  try {
-    await client.connect();
+  await client.connect();
 
-    const accountLines = await client.request({
-      command: "account_currencies",
-      account: issuer,
-    });
-    const { receive_currencies } = accountLines;
-    await client.disconnect();
+  const accountLines = await client.request({
+    command: "account_currencies",
+    account: issuer,
+  });
+  const { receive_currencies } = accountLines;
+  await client.disconnect();
 
-    return receive_currencies[0];
-  } catch (error) {
-    console.log(error);
-  }
+  return receive_currencies[0];
 }
 async function fetchOne(
   account: string,
@@ -212,22 +208,12 @@ async function fetchOne(
 }
 export function init(nodetype: string): any {
   const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
-  try {
-    xrpClientInstance = new xrpl.Client(X_url[0]);
-
-    //  await xrpClientInstance.connect();
-
-    client = xrpClientInstance;
-
-    // }
-    return {
-      xrpClientInstance,
-      fetchNftLines,
-      fetchIssuerCurrencies,
-      fetchOne,
-    };
-  } catch (error) {
-    console.log(error);
-    xrpClientInstance.disconnect();
-  }
+  xrpClientInstance = new xrpl.Client(X_url[0]);
+  client = xrpClientInstance;
+  return {
+    xrpClientInstance,
+    fetchNftLines,
+    fetchIssuerCurrencies,
+    fetchOne,
+  };
 }

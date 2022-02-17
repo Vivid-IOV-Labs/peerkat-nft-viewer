@@ -23,7 +23,6 @@ interface InitParams {
 const actions: ActionTree<NFT, NFTState> = {
   initXrpClient({ commit }, { nodetype }: InitParams): void {
     const client = init(nodetype);
-    console.log("client", client.xrpClientInstance.connection.url);
     trackEvent({
       category: "Root View",
       action: "xrpl-connected",

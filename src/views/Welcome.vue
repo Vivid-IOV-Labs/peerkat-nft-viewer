@@ -192,7 +192,7 @@ export default defineComponent({
           store.commit("nft/initSharedStore", user.value);
         }
         store.commit("nft/resetAll");
-        await store.dispatch("nft/initXrpClient", {
+        store.dispatch("nft/initXrpClient", {
           nodetype: nodetype.value,
         });
       } catch (err) {
@@ -215,7 +215,7 @@ export default defineComponent({
       },
       async runAsyncFunction() {
         isLoading.value = true;
-        await connectXrpClient();
+        connectXrpClient();
         isLoading.value = false;
         const path = route.params.redirect ? `/${route.params.redirect}` : "/";
         router.push({

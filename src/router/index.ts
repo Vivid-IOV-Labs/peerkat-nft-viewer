@@ -109,13 +109,10 @@ const nodetype = computed(() => store.getters["user/getNodeType"]);
 const isConnected = computed(() => store.getters["nft/getIsConnected"]);
 const shared = computed(() => store.getters["nft/getShared"](nodetype.value));
 
-const connectXrpClient = async () => {
-  store.commit("ui/setIsloading", true);
-
-  await store.dispatch("nft/initXrpClient", {
+const connectXrpClient = () => {
+  store.dispatch("nft/initXrpClient", {
     nodetype: nodetype.value,
   });
-  store.commit("ui/setIsloading", false);
 };
 
 router.beforeEach(async (to, from, next) => {
@@ -123,8 +120,6 @@ router.beforeEach(async (to, from, next) => {
   if (isInXumm) {
     if (!isConnected.value) {
       await store.dispatch("xumm/getOttData");
-      console.log(localStorage);
-
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
       trackUser(ottdata.value.account);
       store.commit("user/setAddress", ottdata.value.account);
@@ -136,7 +131,7 @@ router.beforeEach(async (to, from, next) => {
       }
 
       const path = ottdata.value.redirect;
-      await connectXrpClient();
+      connectXrpClient();
       if (path) {
         next({ path });
       } else {
@@ -164,7 +159,6 @@ router.beforeEach(async (to, from, next) => {
           next({
             path: "/welcome",
           });
-          console.log(error);
         }
       } else {
         next();
