@@ -210,7 +210,7 @@ async function fetchOne(
     );
   }
 }
-export async function init(nodetype: string): Promise<any> {
+export function init(nodetype: string): any {
   const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
   try {
     xrpClientInstance = new xrpl.Client(X_url[0]);
