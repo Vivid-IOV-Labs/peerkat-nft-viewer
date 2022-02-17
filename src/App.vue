@@ -45,14 +45,17 @@
                     "
                     class="d-flex align-items-center justify-content-center"
                   >
-                    <div
-                      class="spinner-border"
-                      style="width: 4rem; height: 4rem; color: #666"
-                      role="status"
-                    >
-                      <span class="sr-only">Loading...</span>
+                    <div class="d-flex align-items-center">
+                      <h6 class="mr-2 bold">Loading</h6>
+
+                      <div
+                        class="spinner-border"
+                        style="width: 2rem; height: 2rem; color: #666"
+                        role="status"
+                      >
+                        <span class="sr-only">Loading...</span>
+                      </div>
                     </div>
-                    <h5 class="mt-2">Loading</h5>
                   </div>
                 </template>
               </Suspense>
