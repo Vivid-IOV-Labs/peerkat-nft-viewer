@@ -125,13 +125,14 @@ router.beforeEach(async (to, from, next) => {
       store.commit("user/setAddress", ottdata.value.account);
       store.commit("user/setNodetype", ottdata.value.nodetype);
       store.commit("user/setUser", ottdata.value.user);
-
+      store.dispatch("nft/initXrpClient", {
+        nodetype: nodetype.value,
+      });
       if (!shared.value) {
         store.commit("nft/initSharedStore", ottdata.value.user);
       }
 
       const path = ottdata.value.redirect;
-      connectXrpClient();
       if (path) {
         next({ path });
       } else {
@@ -153,7 +154,7 @@ router.beforeEach(async (to, from, next) => {
     } else {
       if (!isConnected.value) {
         try {
-          await connectXrpClient();
+          connectXrpClient();
           next();
         } catch (error) {
           next({
