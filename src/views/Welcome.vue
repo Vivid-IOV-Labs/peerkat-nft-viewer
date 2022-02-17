@@ -193,7 +193,7 @@ export default defineComponent({
         }
         store.commit("nft/resetAll");
         await store.dispatch("nft/initXrpClient", {
-          network: network.value,
+          nodetype: nodetype.value,
         });
       } catch (err) {
         showError.value = true;

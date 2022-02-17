@@ -17,12 +17,12 @@ interface FetchParams {
 }
 
 interface InitParams {
-  network: string;
+  nodetype: string;
 }
 
 const actions: ActionTree<NFT, NFTState> = {
-  async initXrpClient({ commit }, { network }: InitParams): Promise<void> {
-    const client = await init(network);
+  async initXrpClient({ commit }, { nodetype }: InitParams): Promise<void> {
+    const client = await init(nodetype);
     trackEvent({
       category: "Root View",
       action: "xrpl-connected",
