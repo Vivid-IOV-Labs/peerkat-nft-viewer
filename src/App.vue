@@ -52,7 +52,6 @@
                     >
                       <span class="sr-only">Loading...</span>
                     </div>
-                    <h5 class="mt-2">Loading</h5>
                   </div>
                 </template>
               </Suspense>

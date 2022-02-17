@@ -5,6 +5,8 @@ type line = {
   limit: string;
   account: string;
   currency: string;
+  balanceFormatted: string;
+  limitFormatted: string;
 };
 function isNFT({ balance, limit }: line): boolean {
   const isNFTRegex = /^(\d{16})(e-)(85|86|87|89|90|91|92|93|94|95|96)$/;
@@ -161,14 +163,11 @@ async function fetchNftLines(walletAddress: string): Promise<any> {
   }
 }
 async function fetchIssuerCurrencies(issuer: string): Promise<any> {
-  await client.connect();
-
-  const accountLines = await client.request({
+  const { result } = await client.request({
     command: "account_currencies",
     account: issuer,
   });
-  const { receive_currencies } = accountLines;
-  await client.disconnect();
+  const { receive_currencies } = result;
 
   return receive_currencies[0];
 }
@@ -206,6 +205,24 @@ async function fetchOne(
     );
   }
 }
+async function fetchNext(nextLines: line[]): Promise<NFT[]> {
+  await client.connect();
+  const nextNfts: NFT[] = await Promise.all(
+    nextLines.map(async (line: line) => {
+      const { account, currency, balanceFormatted, limitFormatted } = line;
+      const one = await fetchOne(
+        account,
+        currency,
+        balanceFormatted,
+        limitFormatted
+      );
+      return one;
+    })
+  );
+  await client.disconnect();
+  return nextNfts;
+}
+
 export function init(nodetype: string): any {
   const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
   xrpClientInstance = new xrpl.Client(X_url[0]);
@@ -215,5 +232,6 @@ export function init(nodetype: string): any {
     fetchNftLines,
     fetchIssuerCurrencies,
     fetchOne,
+    fetchNext,
   };
 }
