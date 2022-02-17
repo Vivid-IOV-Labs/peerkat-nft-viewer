@@ -105,7 +105,7 @@ const router = createRouter({
 
 const isInXumm = /xumm/.test(navigator.userAgent);
 const walletAddress = computed(() => store.getters["user/getAddress"]);
-const nodetype = computed(() => store.getters["user/getNodeType"]);
+const network = computed(() => store.getters["user/getNetwork"]);
 const isConnected = computed(() => store.getters["nft/getIsConnected"]);
 const shared = computed(() => store.getters["nft/getShared"](nodetype.value));
 
@@ -117,7 +117,7 @@ const connectXrpClient = async () => {
   store.commit("ui/setIsloading", true);
 
   await store.dispatch("nft/initXrpClient", {
-    nodetype: nodetype.value,
+    network: network.value,
     handleError,
   });
   store.commit("ui/setIsloading", false);

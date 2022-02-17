@@ -186,9 +186,6 @@ export default defineComponent({
       walletAddress,
       user,
     });
-    function handleError(): void {
-      showError.value = true;
-    }
     const connectXrpClient = async () => {
       try {
         if (!shared.value) {
@@ -196,8 +193,7 @@ export default defineComponent({
         }
         store.commit("nft/resetAll");
         await store.dispatch("nft/initXrpClient", {
-          nodetype: nodetype.value,
-          handleError,
+          network: network.value,
         });
       } catch (err) {
         showError.value = true;
