@@ -119,6 +119,8 @@ router.beforeEach(async (to, from, next) => {
   trackPage(to.fullPath);
   if (isInXumm) {
     if (!isConnected.value) {
+      store.commit("ui/setIsloading", true);
+
       await store.dispatch("xumm/getOttData");
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
       trackUser(ottdata.value.account);
@@ -133,6 +135,8 @@ router.beforeEach(async (to, from, next) => {
       }
 
       const path = ottdata.value.redirect;
+      store.commit("ui/setIsloading", false);
+
       if (path) {
         next({ path });
       } else {
