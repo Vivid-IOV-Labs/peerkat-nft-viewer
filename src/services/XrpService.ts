@@ -201,15 +201,20 @@ async function fetchOne(
 export async function init(nodetype: string): Promise<any> {
   const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
   xrpClientInstance = new xrpl.Client(X_url[0]);
-  await xrpClientInstance.connect();
+  try {
+    await xrpClientInstance.connect();
 
-  client = xrpClientInstance;
+    client = xrpClientInstance;
 
-  // }
-  return {
-    xrpClientInstance,
-    fetchNftLines,
-    fetchIssuerCurrencies,
-    fetchOne,
-  };
+    // }
+    return {
+      xrpClientInstance,
+      fetchNftLines,
+      fetchIssuerCurrencies,
+      fetchOne,
+    };
+  } catch (error) {
+    xrpClientInstance.disconnect();
+    debugger;
+  }
 }
