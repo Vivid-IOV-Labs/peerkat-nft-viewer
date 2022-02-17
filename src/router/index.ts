@@ -107,6 +107,7 @@ const isInXumm = /xumm/.test(navigator.userAgent);
 const walletAddress = computed(() => store.getters["user/getAddress"]);
 const network = computed(() => store.getters["user/getNetwork"]);
 const nodetype = computed(() => store.getters["user/getNodetype"]);
+debugger;
 const isConnected = computed(() => store.getters["nft/getIsConnected"]);
 const shared = computed(() => store.getters["nft/getShared"](nodetype.value));
 
@@ -181,3 +182,74 @@ router.beforeEach(async (to, from, next) => {
 });
 
 export default router;
+
+[
+  "%c next state",
+  "color: #4CAF50; font-weight: bold",
+  {
+    user: {
+      address: "rMfVCZ6QcVsnkzdbTQhFr2idpcakgxeqEM",
+      network: undefined,
+      nodetype: "TESTNET",
+      user: "141c4559-9d73-47eb-a99c-4a7b5befff98",
+    },
+    ui: { isLoading: true },
+    xumm: {
+      ottData: {
+        version: "2.1.2",
+        locale: "en",
+        currency: "USD",
+        style: "DARK",
+        nodetype: "TESTNET",
+        account: "rMfVCZ6QcVsnkzdbTQhFr2idpcakgxeqEM",
+        accounttype: "REGULAR",
+        accountaccess: "FULL",
+        user: "141c4559-9d73-47eb-a99c-4a7b5befff98",
+        user_device: { currency: "USD" },
+        account_info: {
+          account: "rMfVCZ6QcVsnkzdbTQhFr2idpcakgxeqEM",
+          name: null,
+          domain: null,
+          blocked: false,
+          source: "",
+          kycApproved: false,
+          proSubscription: false,
+        },
+      },
+    },
+    nft: {
+      all: [],
+      sharedwithme: {
+        TESTNET: [],
+        MAINNET: [
+          {
+            issuer: "r31DdaJchVXYHhyrU5FCkbmmZ85giCHN9b",
+            issuerTruncated: "r31DdaJc ............. ",
+            currency: "",
+            tokenName: "",
+            url: "https://ipfs.io/ipfs/",
+            media_type: "text/plain; charset=utf-8",
+          },
+        ],
+        rMfVCZ6QcVsnkzdbTQhFr2idpcakgxeqEM: {
+          TESTNET: [
+            {
+              issuer: "rBgpByeG8zbjMEmYg1CiesdnVsndFZ6wTm",
+              issuerTruncated: "rBgpByeG ............. ",
+              currency: "6E66742E7669766964696F762E6C697665202020",
+              tokenName: "nft.vividiov.live",
+              url: "https://nft.vividiov.live",
+              media_type: "image/png",
+            },
+          ],
+          MAINNET: [],
+        },
+        r9YVgQ78hRZEyz9in6WpjoUbsuH2pFtKv5: { TESTNET: [], MAINNET: [] },
+        "141c4559-9d73-47eb-a99c-4a7b5befff98": { TESTNET: [], MAINNET: [] },
+      },
+      lines: [],
+      xrpClient: null,
+      isConnected: false,
+    },
+  },
+];

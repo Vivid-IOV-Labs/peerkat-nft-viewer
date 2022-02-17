@@ -42,6 +42,15 @@ function truncate(
   if (fullStr.length <= strLen) return fullStr;
   return fullStr.substr(0, frontChars) + separator;
 }
+const main_networks = [
+  "wss://xrpcluster.com",
+  "wss://xrpl.link",
+  "wss://s2.ripple.com",
+];
+const test_networks = [
+  "wss://s.altnet.rippletest.net:51233",
+  "wss://xrpl.linkwss://testnet.xrpl-labs.com",
+];
 
 let xrpClientInstance: any;
 
@@ -189,11 +198,9 @@ async function fetchOne(
     );
   }
 }
-export async function init(network: string): Promise<any> {
-  if (client) {
-    client.disconnect();
-  }
-  xrpClientInstance = new xrpl.Client(network);
+export async function init(nodetype: string): Promise<any> {
+  const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
+  xrpClientInstance = new xrpl.Client(X_url[0]);
   await xrpClientInstance.connect();
 
   client = xrpClientInstance;
