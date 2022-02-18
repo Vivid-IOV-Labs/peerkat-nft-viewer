@@ -45,10 +45,9 @@ function truncate(
   return fullStr.substr(0, frontChars) + separator;
 }
 const main_networks = [
+  "wss://s2.ripple.com",
   "wss://xrpl.link",
   "wss://xrpcluster.com",
-
-  "wss://s2.ripple.com",
 ];
 const test_networks = [
   "wss://s.altnet.rippletest.net:51233",
