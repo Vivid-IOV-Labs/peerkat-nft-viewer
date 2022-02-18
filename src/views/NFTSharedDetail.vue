@@ -1,10 +1,10 @@
 <template>
   <div class="w-100 p-1" style="overflow: scroll">
-    <router-link :to="{ path: `/shared` }" class="mb-4 btn btn-link"
+    <router-link :to="{ path: `/shared` }" class="mb-4 btn btn-link w-100"
       >Back
     </router-link>
 
-    <div class="w-100 p-4">
+    <div class="w-100 p-2">
       <base-card v-if="nft">
         <template #picture>
           <figure style="overflow: hidden">
