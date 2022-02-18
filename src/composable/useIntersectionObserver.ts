@@ -1,12 +1,13 @@
 import { onMounted, Ref, ref, onUnmounted } from "vue";
 
 export default function useIntersectionObserver(
+  root: Ref<Element | Document | null>,
   target: Ref<HTMLElement | null>,
   //cbk: () => Promise<void>,
   options: IntersectionObserverInit = {
-    root: null,
+    root: root.value,
     threshold: 0,
-    rootMargin: "0px",
+    rootMargin: "0px 0px 0px 600px",
   }
 ): any {
   const intersectionRatio = ref(0);

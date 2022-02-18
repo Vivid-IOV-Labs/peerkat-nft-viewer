@@ -1,7 +1,8 @@
 <template>
   <div
     v-if="NFTMedia.length"
-    ref="root"
+    id="scroller"
+    ref="scroller"
     class="d-flex h-100 flex-row flex-nowrap overflow-auto pb-4"
     style="padding-bottom: 2rem"
   >
@@ -92,7 +93,7 @@ export default defineComponent({
   async setup() {
     const store = useStore();
     const sentinel = ref<HTMLElement | null>(null);
-    const root = ref<HTMLElement | null>(null);
+    const scroller = ref<HTMLElement | null>(null);
     const isInXumm = inject("isInXumm");
 
     const endscroll = ref(false);
@@ -114,7 +115,10 @@ export default defineComponent({
       }
     };
 
-    const { unobserve, isIntersecting } = useIntersectionObserver(sentinel);
+    const { unobserve, isIntersecting } = useIntersectionObserver(
+      scroller,
+      sentinel
+    );
     watch(isIntersecting, async () => {
       isLoadingNext.value = true;
       await store.dispatch("nft/fetchNext", nodetype.value);
@@ -135,7 +139,7 @@ export default defineComponent({
     return {
       sentinel,
       endscroll,
-      root,
+      scroller,
       lines,
       NFTMedia,
       isInXumm,
