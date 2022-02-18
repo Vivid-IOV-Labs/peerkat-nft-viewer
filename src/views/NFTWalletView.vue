@@ -2,7 +2,7 @@
   <router-link :to="{ path: `/wallet` }" class="mb-4 btn btn-link"
     >Back
   </router-link>
-  <div v-if="nft" class="w-100 p4">
+  <div v-if="nft" style="overflow: scroll" class="w-100 p4">
     <figure class="w-100 p4">
       <video
         v-if="nft.media_type?.includes('video')"
