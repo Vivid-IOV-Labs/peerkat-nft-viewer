@@ -3,7 +3,7 @@
     >Back
   </router-link>
 
-  <div style="overflow-y: auto">
+  <div style="overflow: scroll">
     <base-card v-if="nft">
       <template #picture>
         <figure style="overflow: hidden; height: 100%">
