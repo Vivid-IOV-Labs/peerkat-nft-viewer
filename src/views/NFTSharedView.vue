@@ -11,14 +11,14 @@
           muted
           autoplay
           loop
-          class="img-fluid card-img-top"
+          class="img-fluid card-img"
           style="object-fit: cover; height: 100%; object-position: center top"
         ></video>
         <img
           v-else-if="nft.media_type?.includes('image')"
           v-lazy="nft.url"
           style="object-fit: cover; height: 100%; object-position: center top"
-          class="img-fluid card-img-top"
+          class="img-fluid card-img"
           alt="Card
           image cap"
         />
@@ -26,7 +26,7 @@
           v-else
           :src="'/thumbnail.jpg'"
           style="object-fit: cover; height: 100%; object-position: center top"
-          class="img-fluid card-img-top"
+          class="img-fluid card-img"
           alt="Card
           image cap"
         />

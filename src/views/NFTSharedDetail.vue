@@ -18,7 +18,7 @@
                 v-if="nft.media_type?.includes('video')"
                 :src="`${nft.url}#t=0.5`"
                 muted
-                class="img-fluid card-img-top"
+                class="img-fluid card-img"
                 style="
                   object-fit: cover;
                   height: 100%;
@@ -33,7 +33,7 @@
                   height: 100%;
                   object-position: center top;
                 "
-                class="img-fluid card-img-top"
+                class="img-fluid card-img"
                 alt="Card
           image cap"
               />
@@ -45,7 +45,7 @@
                   height: 100%;
                   object-position: center top;
                 "
-                class="img-fluid card-img-top"
+                class="img-fluid card-img"
                 alt="Card
           image cap"
               />
