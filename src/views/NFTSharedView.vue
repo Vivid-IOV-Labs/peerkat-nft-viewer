@@ -1,35 +1,37 @@
 <template>
-  <router-link :to="{ path: `/shared` }" class="mb-2 btn btn-link"
-    >Back
-  </router-link>
-  <div v-if="nft" class="w-100 p4">
-    <figure class="w-100 p4">
-      <video
-        v-if="nft.media_type?.includes('video')"
-        :src="`${nft.url}`"
-        muted
-        autoplay
-        loop
-        class="img-fluid card-img-top"
-        style="object-fit: cover; height: 100%; object-position: center top"
-      ></video>
-      <img
-        v-else-if="nft.media_type?.includes('image')"
-        v-lazy="nft.url"
-        style="object-fit: cover; height: 100%; object-position: center top"
-        class="img-fluid card-img-top"
-        alt="Card
+  <div class="w-100 pt-0 p-1 text-center" style="overflow: scroll">
+    <router-link :to="{ path: `/shared` }" class="mb-2 btn btn-link w-100"
+      >Back
+    </router-link>
+    <div v-if="nft" class="w-100 p-1">
+      <figure class="w-100 p4">
+        <video
+          v-if="nft.media_type?.includes('video')"
+          :src="`${nft.url}`"
+          muted
+          autoplay
+          loop
+          class="img-fluid card-img"
+          style="object-fit: cover; height: 100%; object-position: center top"
+        ></video>
+        <img
+          v-else-if="nft.media_type?.includes('image')"
+          v-lazy="nft.url"
+          style="object-fit: cover; height: 100%; object-position: center top"
+          class="img-fluid card-img"
+          alt="Card
           image cap"
-      />
-      <img
-        v-else
-        :src="'/thumbnail.jpg'"
-        style="object-fit: cover; height: 100%; object-position: center top"
-        class="img-fluid card-img-top"
-        alt="Card
+        />
+        <img
+          v-else
+          :src="'/thumbnail.jpg'"
+          style="object-fit: cover; height: 100%; object-position: center top"
+          class="img-fluid card-img"
+          alt="Card
           image cap"
-      />
-    </figure>
+        />
+      </figure>
+    </div>
   </div>
 </template>
 <script lang="ts">

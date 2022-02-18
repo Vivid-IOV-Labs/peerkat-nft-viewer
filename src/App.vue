@@ -83,33 +83,6 @@ export default defineComponent({
 });
 </script>
 <style>
-/* .my-notification {
-  max-width: 350px;
-  font-size: 1rem;
-  margin: 1rem;
-  background-color: rgba(255, 255, 255, 0.85);
-  background-clip: padding-box;
-  border: 2px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 0.25rem 0.75rem rgb(0 0 0 / 10%);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  border-radius: 0.25rem;
-  border-left-width: 4px;
-}
-body .my-notification .notification-title {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-align: center;
-  align-items: center;
-  padding: 0.25rem 0.75rem;
-  color: #fff;
-  background-color: transparent;
-  background-clip: padding-box;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-} */
-/* .notification-content {
-  padding: 0.75rem;
-} */
 .success {
   background: #3052ff !important;
   border-left-color: #3052ff !important;

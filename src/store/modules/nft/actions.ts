@@ -17,21 +17,16 @@ interface FetchParams {
 }
 
 interface InitParams {
-  walletAddress: string;
   nodetype: string;
-  handleError: (error: unknown | null | Error) => void;
 }
 
 const actions: ActionTree<NFT, NFTState> = {
-  async initXrpClient(
-    { commit },
-    { nodetype, handleError }: InitParams
-  ): Promise<void> {
-    const client = await init(nodetype, handleError);
+  initXrpClient({ commit }, { nodetype }: InitParams): void {
+    const client = init(nodetype);
     trackEvent({
       category: "Root View",
       action: "xrpl-connected",
-      label: client.xrpClientInstance.endpoint,
+      label: client.xrpClientInstance.connection.url,
     });
 
     commit("setXrpClient", client);
@@ -49,18 +44,8 @@ const actions: ActionTree<NFT, NFTState> = {
   async fetchNext({ commit, getters }): Promise<void> {
     const client = getters.getXrpClient;
     const count = getters.getAll.length;
-    const nextLines = getters.getLines.slice(count, count + 4);
-    const nextNfts: NFT[] = await Promise.all(
-      nextLines.map(async (line: line) => {
-        const { account, currency, balanceFormatted, limitFormatted } = line;
-        return client.fetchOne(
-          account,
-          currency,
-          balanceFormatted,
-          limitFormatted
-        );
-      })
-    );
+    const nextLines = getters.getLines.slice(count, count + 3);
+    const nextNfts: NFT[] = await client.fetchNext(nextLines);
     commit("setAll", nextNfts);
   },
 };

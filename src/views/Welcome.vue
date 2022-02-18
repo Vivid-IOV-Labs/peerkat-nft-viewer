@@ -32,7 +32,20 @@
           :choices="nodetypes"
           type="nodetypes"
           :as-val="true"
-          label-text="Type Networks"
+          label-text="Network Type"
+          class="w-full max-w-xl"
+        ></base-select>
+      </div>
+
+      <div class="form-group">
+        {{ network }}
+        <base-select
+          id="network"
+          v-model="network"
+          :choices="networks"
+          type="networks"
+          :as-val="true"
+          label-text="Network Url"
           class="w-full max-w-xl"
         ></base-select>
       </div>
@@ -104,6 +117,25 @@ export default defineComponent({
       { label: "Main", value: "MAINNET" },
       { label: "Test", value: "TESTNET" },
     ];
+    const main_networks = [
+      { label: "wss://xrpcluster.com", value: "wss://xrpcluster.com" },
+      { label: "wss://xrpl.link", value: "wss://xrpl.link" },
+      { label: "wss://s2.ripple.com", value: "wss://s2.ripple.com" },
+    ];
+    const test_networks = [
+      {
+        label: "wss://s.altnet.rippletest.net:51233",
+        value: "wss://s.altnet.rippletest.net:51233",
+      },
+      {
+        label: "wss://xrpl.linkwss://testnet.xrpl-labs.com",
+        value: "wss://xrpl.linkwss://testnet.xrpl-labs.com",
+      },
+    ];
+    const networks = computed(() => {
+      return nodetype.value == "MAINNET" ? main_networks : test_networks;
+    });
+
     const walletAddress = computed({
       get(): string {
         return store.getters["user/getAddress"];
@@ -118,6 +150,14 @@ export default defineComponent({
       },
       set(val: string): void {
         store.commit("user/setNodeType", val);
+      },
+    });
+    const network = computed({
+      get(): string {
+        return store.getters["user/getNetwork"];
+      },
+      set(val: string): void {
+        store.commit("user/setNetwork", val);
       },
     });
     const user = computed({
@@ -146,18 +186,14 @@ export default defineComponent({
       walletAddress,
       user,
     });
-    function handleError(): void {
-      showError.value = true;
-    }
     const connectXrpClient = async () => {
       try {
         if (!shared.value) {
           store.commit("nft/initSharedStore", user.value);
         }
         store.commit("nft/resetAll");
-        await store.dispatch("nft/initXrpClient", {
+        store.dispatch("nft/initXrpClient", {
           nodetype: nodetype.value,
-          handleError,
         });
       } catch (err) {
         showError.value = true;
@@ -170,6 +206,8 @@ export default defineComponent({
       nodetype,
       isLoading,
       showError,
+      network,
+      networks,
       formatVuelidateErrors(errors: any[]) {
         return errors.map((error) => {
           return { text: error.$message, key: error.$uid };
@@ -177,7 +215,7 @@ export default defineComponent({
       },
       async runAsyncFunction() {
         isLoading.value = true;
-        await connectXrpClient();
+        connectXrpClient();
         isLoading.value = false;
         const path = route.params.redirect ? `/${route.params.redirect}` : "/";
         router.push({

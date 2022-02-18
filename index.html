@@ -4,9 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" href="/favicon.ico" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Peerkat</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <link rel="apple-touch-icon" sizes="57x57" href="icons/apple-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="icons/apple-icon-60x60.png">
   <link rel="apple-touch-icon" sizes="72x72" href="icons/apple-icon-72x72.png">
@@ -26,7 +24,7 @@
   <meta name="theme-color" content="#ffffff">
 
   <link rel="stylesheet" href="//use.typekit.net/vtt7ckl.css">
-  <script src="https://cdn.jsdelivr.net/npm/xrpl-client/dist/browser.min.js"></script>
+  <script src="https://unpkg.com/xrpl@2.0.0/build/xrpl-latest-min.js"></script>
   <script>
     window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) }; ga.l = +new Date;
   </script>
@@ -61,9 +59,21 @@
     })(document, window.mixpanel || []);
   </script>
 </head>
+<style>
+html,
+body,
+.main-container {
+  height: 100%;
+  width: 100%;
+}
 
+body {
+  /* ... */
+  overflow: hidden;
+}
+</style>
 <body >
-  <div style="height: 100vh;" id="app"></div>
+  <div class="main-container" id="app"></div>
   <script type="module" src="/src/main.ts"></script>
 </body>
 

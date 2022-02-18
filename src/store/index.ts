@@ -17,7 +17,7 @@ const store = createStore({
     xummSandbox == "main"
       ? [
           createPersistedState({
-            paths: ["nft.sharedwithme", "user"],
+            paths: ["nft.sharedwithme"],
           }),
         ]
       : [

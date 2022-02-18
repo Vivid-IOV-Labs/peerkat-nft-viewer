@@ -1,93 +1,95 @@
 <template>
-  <router-link :to="{ path: `/shared` }" class="mb-4 btn btn-link"
-    >Back
-  </router-link>
+  <div class="w-100 pt-0 p-1" style="overflow: scroll">
+    <router-link :to="{ path: `/shared` }" class="mb-4 btn btn-link w-100"
+      >Back
+    </router-link>
 
-  <div>
-    <base-card v-if="nft">
-      <template #picture>
-        <figure style="overflow: hidden; height: 100%">
-          <a
-            class="h-100 d-block"
-            style="overflow: hidden"
-            href="#"
-            @click.prevent="view"
+    <div class="w-100 p-1">
+      <base-card v-if="nft">
+        <template #picture>
+          <figure style="overflow: hidden">
+            <a
+              class="h-100 d-block"
+              style="overflow: hidden"
+              href="#"
+              @click.prevent="view"
+            >
+              <video
+                v-if="nft.media_type?.includes('video')"
+                :src="`${nft.url}#t=0.5`"
+                muted
+                class="img-fluid card-img"
+                style="
+                  object-fit: cover;
+                  height: 100%;
+                  object-position: center top;
+                "
+              ></video>
+              <img
+                v-else-if="nft.media_type?.includes('image')"
+                v-lazy="nft.url"
+                style="
+                  object-fit: cover;
+                  height: 100%;
+                  object-position: center top;
+                "
+                class="img-fluid card-img"
+                alt="Card
+          image cap"
+              />
+              <img
+                v-else
+                :src="'/thumbnail.jpg'"
+                style="
+                  object-fit: cover;
+                  height: 100%;
+                  object-position: center top;
+                "
+                class="img-fluid card-img"
+                alt="Card
+          image cap"
+              />
+            </a>
+          </figure>
+        </template>
+        <template #title>
+          <strong class="h6 font-weight-bold">Token Name </strong><br />
+          {{ nft.tokenName }}
+        </template>
+
+        <template #text>
+          <strong class="h7 font-weight-bold">Issuer </strong><br />
+          <span>{{ nft.issuer }}</span>
+        </template>
+        <template #footer>
+          <external-link
+            class="mr-2"
+            :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
+            @click="trackInspect"
+            >Inspect</external-link
           >
-            <video
-              v-if="nft.media_type?.includes('video')"
-              :src="`${nft.url}#t=0.5`"
-              muted
-              class="img-fluid card-img-top"
-              style="
-                object-fit: cover;
-                height: 100%;
-                object-position: center top;
-              "
-            ></video>
-            <img
-              v-else-if="nft.media_type?.includes('image')"
-              v-lazy="nft.url"
-              style="
-                object-fit: cover;
-                height: 100%;
-                object-position: center top;
-              "
-              class="img-fluid card-img-top"
-              alt="Card
-          image cap"
-            />
-            <img
-              v-else
-              :src="'/thumbnail.jpg'"
-              style="
-                object-fit: cover;
-                height: 100%;
-                object-position: center top;
-              "
-              class="img-fluid card-img-top"
-              alt="Card
-          image cap"
-            />
-          </a>
-        </figure>
-      </template>
-      <template #title>
-        <strong class="h6 font-weight-bold">Token Name </strong><br />
-        {{ nft.tokenName }}
-      </template>
-
-      <template #text>
-        <strong class="h7 font-weight-bold">Issuer </strong><br />
-        <span>{{ nft.issuer }}</span>
-      </template>
-      <template #footer>
-        <external-link
-          class="mr-2"
-          :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
-          @click="trackInspect"
-          >Inspect</external-link
-        >
-      </template>
-    </base-card>
-    <div v-else class="p-2">
-      <h5 class="text-center mt-2">
-        It appears that this link to an NFT is for the {{ nodetypefromlink }}.
-        Please switch to the {{ nodetypefromlink }} in your Xumm app.
-      </h5>
-      <ul class="mt-2 p-2">
-        <li class="pb-2">
-          You can switch to the
-          {{ nodetypefromlink }} in the Xumm app by clicking “Quit xApp”
-        </li>
-        <li class="pb-2">
-          In the Xumm app: click “Settings”, then “Advanced”, then “Node” and
-          select a Node listed in the “{{ nodetypefromlink }}” section
-        </li>
-        <li class="pb-2">
-          Return to Xumm home, open the Peerkat xApp to view the NFT in
-          {{ nodetypefromlink }}
-        </li>
-      </ul>
+        </template>
+      </base-card>
+      <div v-else class="p-2">
+        <h5 class="text-center mt-2">
+          It appears that this link to an NFT is for the {{ nodetypefromlink }}.
+          Please switch to the {{ nodetypefromlink }} in your Xumm app.
+        </h5>
+        <ul class="mt-2 p-2">
+          <li class="pb-2">
+            You can switch to the
+            {{ nodetypefromlink }} in the Xumm app by clicking “Quit xApp”
+          </li>
+          <li class="pb-2">
+            In the Xumm app: click “Settings”, then “Advanced”, then “Node” and
+            select a Node listed in the “{{ nodetypefromlink }}” section
+          </li>
+          <li class="pb-2">
+            Return to Xumm home, open the Peerkat xApp to view the NFT in
+            {{ nodetypefromlink }}
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
