@@ -39,8 +39,7 @@
         >
         and at
         <external-link :url="`https://peerkat.io`">peerkat.io</external-link>
-        for updates, airdrop news and product releases (XLS20d NFT minting
-        platform coming soon)
+        for updates, airdrop news and product releases
       </li>
     </ul>
   </div>
