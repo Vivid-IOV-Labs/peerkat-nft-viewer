@@ -1,9 +1,9 @@
 <template>
-  <div class="w-100 p-1 text-center" style="overflow: scroll">
+  <div class="w-100 pt-0 p-1 text-center" style="overflow: scroll">
     <router-link :to="{ path: `/shared` }" class="mb-2 btn btn-link w-100"
       >Back
     </router-link>
-    <div v-if="nft" class="w-100 p-2">
+    <div v-if="nft" class="w-100 p-1">
       <figure class="w-100 p4">
         <video
           v-if="nft.media_type?.includes('video')"
