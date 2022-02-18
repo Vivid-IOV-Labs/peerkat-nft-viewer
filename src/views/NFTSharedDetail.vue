@@ -3,10 +3,10 @@
     >Back
   </router-link>
 
-  <div style="overflow: scroll">
+  <div style="overflow: scroll; padding: 1rem 1.2rem 1.4rem">
     <base-card v-if="nft">
       <template #picture>
-        <figure style="overflow: hidden; height: 100%">
+        <figure style="overflow: hidden">
           <a
             class="h-100 d-block"
             style="overflow: hidden"
