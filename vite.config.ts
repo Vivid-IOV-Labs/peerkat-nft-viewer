@@ -1,9 +1,9 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import path from "path";
-import { VitePWA } from "vite-plugin-pwa";
+// import { VitePWA } from "vite-plugin-pwa";
 import { injectHtml } from "vite-plugin-html";
-
+const hash = Math.floor(Math.random() * 90000) + 10000;
 const xummSandbox = process.env.VITE_XUMM_SANDBOX;
 
 const remoteScript =
@@ -14,7 +14,7 @@ const remoteScript =
 export default defineConfig({
   plugins: [
     vue(),
-    VitePWA({}),
+    // VitePWA({}),
     injectHtml({
       data: {
         title: "Peerkat",
@@ -27,9 +27,12 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      // https://rollupjs.org/guide/en/#outputmanualchunks
       output: {
+        entryFileNames: `[name]` + hash + `.js`,
+        chunkFileNames: `[name]` + hash + `.js`,
+        assetFileNames: `[name]` + hash + `.[ext]`,
         manualChunks: {
+          welcome: ["./src/views/Welcome.vue"],
           wallet: [
             "./src/views/MyNFTs.vue",
             "./src/views/NFTWalletView.vue",

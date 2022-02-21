@@ -65,7 +65,6 @@
           <external-link
             class="mr-2"
             :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
-            @click="trackInspect"
             >Inspect</external-link
           >
         </template>
@@ -105,7 +104,6 @@ import {
   getNetworkTypeFromCode,
 } from "../utils/getNetworkTypeFromCode";
 import { NFT } from "../models/NFT";
-import { trackEvent } from "../utils/analytics";
 import { devlog } from "../utils/devlog";
 
 export default defineComponent({
@@ -145,25 +143,12 @@ export default defineComponent({
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
-      trackInspect() {
-        trackEvent({
-          category: "Detail View",
-          action: "click-inspect",
-          label: route.params.nftAddress.toString(),
-        });
-      },
-
       view() {
         if (nft.value) {
           router.push({
             path: `/shared/${nft.value.issuer}/${getNetworkCodeFromType(
               nodetype.value
             )}/view`,
-          });
-          trackEvent({
-            category: "Detail View",
-            action: "view-nft",
-            label: nft.value.issuer,
           });
         }
       },
