@@ -25,6 +25,17 @@
 
   <link rel="stylesheet" href="//use.typekit.net/vtt7ckl.css">
   <script src="https://unpkg.com/xrpl@2.0.0/build/xrpl-latest-min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xumm-sdk/dist/browser.min.js"></script>
+  <script>
+    var theme = ((new URLSearchParams(document.location.href))
+                 .get('xAppStyle') || 'light').toLowerCase()
+    var link = document.createElement('link')
+    link.href = 'https://xumm.app/assets/themes/xapp/xumm-'
+      + theme + '/bootstrap.min.css'
+    link.type = 'text/css'
+    link.rel = 'stylesheet'
+    document.getElementsByTagName('head')[0].appendChild(link)
+  </script>
 </head>
 <style>
 html,
