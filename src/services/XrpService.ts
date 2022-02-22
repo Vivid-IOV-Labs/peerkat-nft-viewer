@@ -142,7 +142,11 @@ let client: any;
 
 async function fetchNftLines(walletAddress: string): Promise<any> {
   await client.connect();
-
+  client.on("ledgerClosed", async (ledger: any) => {
+    throw new Error(
+      `Ledger #${ledger.ledger_index} validated with ${ledger.txn_count} transactions!`
+    );
+  });
   const { result } = await client.request({
     command: "account_lines",
     account: walletAddress,
@@ -207,6 +211,11 @@ async function fetchOne(
 }
 async function fetchNext(nextLines: line[]): Promise<NFT[]> {
   await client.connect();
+  client.on("ledgerClosed", async (ledger: any) => {
+    throw new Error(
+      `Ledger #${ledger.ledger_index} validated with ${ledger.txn_count} transactions!`
+    );
+  });
   const nextNfts: NFT[] = await Promise.all(
     nextLines.map(async (line: line) => {
       const { account, currency, balanceFormatted, limitFormatted } = line;
