@@ -147,6 +147,9 @@ async function fetchNftLines(walletAddress: string): Promise<any> {
       `Ledger #${ledger.ledger_index} validated with ${ledger.txn_count} transactions!`
     );
   });
+  client.on("error", async (error: any) => {
+    throw new Error(error);
+  });
   const { result } = await client.request({
     command: "account_lines",
     account: walletAddress,
@@ -212,6 +215,9 @@ async function fetchNext(nextLines: line[]): Promise<NFT[]> {
     throw new Error(
       `Ledger #${ledger.ledger_index} validated with ${ledger.txn_count} transactions!`
     );
+  });
+  client.on("error", async (error: any) => {
+    throw new Error(error);
   });
   const nextNfts: NFT[] = await Promise.all(
     nextLines.map(async (line: line) => {
