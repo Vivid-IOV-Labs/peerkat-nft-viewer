@@ -181,8 +181,6 @@ async function fetchOne(
   balanceFormatted?: string,
   limitFormatted?: string
 ): Promise<NFT> {
-  await client.connect();
-
   const { result } = await client.request({
     command: "account_info",
     account,
@@ -198,7 +196,6 @@ async function fetchOne(
     );
   } else {
     const issuerCurrency = await fetchIssuerCurrencies(account);
-    await client.disconnect();
 
     return getOne(
       account_data,
