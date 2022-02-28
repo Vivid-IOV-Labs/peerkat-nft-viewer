@@ -23,7 +23,7 @@ const store = createStore({
       : [
           createLogger(),
           createPersistedState({
-            paths: ["nft.sharedwithme"],
+            paths: ["nft.sharedwithme", "user"],
           }),
         ],
 });

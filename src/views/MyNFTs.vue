@@ -10,11 +10,20 @@
       <nft-card :nft="nft"></nft-card>
     </div>
     <div
-      v-if="NFTMedia.length < lines.length"
+      v-if="!endload"
       ref="sentinel"
-      class="col-1"
-      style="height: 100%; width: 1px"
-    ></div>
+      style="height: 100%"
+      class="col-11 card"
+    >
+      <div class="d-flex align-items-center justify-content-center card-body">
+        <div
+          class="spinner-border"
+          style="width: 4rem; height: 4rem; color: #666"
+          role="status"
+        ></div>
+      </div>
+      <span>Loading Next NFT's...</span>
+    </div>
   </div>
   <div
     v-if="!NFTMedia.length"
@@ -51,7 +60,7 @@
       </li>
     </ul>
   </div>
-  <div
+  <!-- <div
     v-if="isLoadingNext"
     style="
       height: 100%;
@@ -72,7 +81,7 @@
     >
       <span class="sr-only">Loading...</span>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script lang="ts">
@@ -95,8 +104,7 @@ export default defineComponent({
     const scroller = ref<HTMLElement | null>(null);
     const isInXumm = inject("isInXumm");
 
-    const endscroll = ref(false);
-    const isLoadingNext = ref(false);
+    const endload = ref(false);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const NFTMedia = computed(() => store.getters["nft/getAll"]);
     const lines = computed(() => store.getters["nft/getLines"]);
@@ -119,16 +127,12 @@ export default defineComponent({
       sentinel
     );
     watch(isIntersecting, async () => {
-      isLoadingNext.value = true;
       await store.dispatch("nft/fetchNext", nodetype.value);
-      setTimeout(() => {
-        isLoadingNext.value = false;
-      }, 500);
     });
     watch(NFTMedia, (newNfts) => {
       if (lines.value.length == newNfts.length) {
         unobserve();
-        endscroll.value = true;
+        endload.value = true;
       }
     });
     if (lines.value.length === 0) {
@@ -137,12 +141,11 @@ export default defineComponent({
 
     return {
       sentinel,
-      endscroll,
+      endload,
       scroller,
       lines,
       NFTMedia,
       isInXumm,
-      isLoadingNext,
     };
   },
 });
