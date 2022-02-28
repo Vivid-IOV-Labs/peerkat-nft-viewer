@@ -37,7 +37,7 @@ const actions: ActionTree<NFT, NFTState> = {
   async fetchNext({ commit, getters }): Promise<void> {
     const client = getters.getXrpClient;
     const count = getters.getAll.length;
-    const nextLines = getters.getLines.slice(count, count + 3);
+    const nextLines = getters.getLines.slice(count, count + 2);
     const nextNfts: NFT[] = await client.fetchNext(nextLines);
     commit("setAll", nextNfts);
   },
