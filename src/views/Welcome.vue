@@ -191,7 +191,7 @@ export default defineComponent({
           store.commit("nft/initSharedStore", user.value);
         }
         store.commit("nft/resetAll");
-        store.dispatch("nft/initXrpClient", {
+        await store.dispatch("nft/initXrpClient", {
           nodetype: nodetype.value,
         });
       } catch (err) {

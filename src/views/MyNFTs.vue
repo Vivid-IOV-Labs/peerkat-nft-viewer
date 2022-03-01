@@ -22,7 +22,7 @@
           role="status"
         ></div>
       </div>
-      <span>Loading Next NFT's...</span>
+      <h4>Loading Next NFT's...</h4>
     </div>
   </div>
   <div
@@ -60,28 +60,6 @@
       </li>
     </ul>
   </div>
-  <!-- <div
-    v-if="isLoadingNext"
-    style="
-      height: 100%;
-      width: 100%;
-      position: fixed;
-      left: 0;
-      top: 0;
-      opacity: 0.8;
-      background: rgba(0, 0, 0, 0.6);
-      transition: all 1s ease;
-    "
-    class="d-flex align-items-center justify-content-center"
-  >
-    <div
-      class="spinner-border"
-      style="width: 4rem; height: 4rem; color: #666"
-      role="status"
-    >
-      <span class="sr-only">Loading...</span>
-    </div>
-  </div> -->
 </template>
 
 <script lang="ts">
@@ -92,18 +70,38 @@ import { useStore } from "vuex";
 import { inject } from "vue";
 import useIntersectionObserver from "../composable/useIntersectionObserver";
 import { devlog } from "../utils/devlog";
+import store from "../store";
 
 export default defineComponent({
   components: {
     NftCard,
     ExternalLink,
   },
+  // async beforeRouteEnter(from, to, next) {
+  //   const isConnected = store.getters["nft/getIsConnected"];
+  //   const allLoaded =
+  //     store.getters["nft/getAll"].length ==
+  //     store.getters["nft/getLines"].length;
+  //   if (!isConnected && !allLoaded) {
+  //     await store.dispatch("nft/connect");
+  //   }
+  //   next();
+  // },
+  // async beforeRouteLeave(from, to, next) {
+  //   const isConnected = store.getters["nft/getIsConnected"];
+  //   if (isConnected) {
+  //     await store.dispatch("nft/disconnect");
+  //     next();
+  //   }
+  //   next();
+  // },
   async setup() {
     const store = useStore();
     const sentinel = ref<HTMLElement | null>(null);
     const scroller = ref<HTMLElement | null>(null);
     const isInXumm = inject("isInXumm");
 
+    const isConnected = computed(() => store.getters["nft/getIsConnected"]);
     const endload = ref(false);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const NFTMedia = computed(() => store.getters["nft/getAll"]);
@@ -129,10 +127,11 @@ export default defineComponent({
     watch(isIntersecting, async () => {
       await store.dispatch("nft/fetchNext", nodetype.value);
     });
-    watch(NFTMedia, (newNfts) => {
+    watch(NFTMedia, async (newNfts) => {
       if (lines.value.length == newNfts.length) {
         unobserve();
         endload.value = true;
+        await store.dispatch("nft/disconnect");
       }
     });
     if (lines.value.length === 0) {
@@ -144,8 +143,15 @@ export default defineComponent({
       endload,
       scroller,
       lines,
+      isConnected,
       NFTMedia,
       isInXumm,
+      async connect() {
+        await store.dispatch("nft/connect", nodetype.value);
+      },
+      async disconnect() {
+        await store.dispatch("nft/disconnect", nodetype.value);
+      },
     };
   },
 });

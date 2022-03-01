@@ -108,8 +108,8 @@ const nodetype = computed(() => store.getters["user/getNodeType"]);
 const isConnected = computed(() => store.getters["nft/getIsConnected"]);
 const shared = computed(() => store.getters["nft/getShared"](nodetype.value));
 
-const connectXrpClient = () => {
-  store.dispatch("nft/initXrpClient", {
+const connectXrpClient = async () => {
+  await store.dispatch("nft/initXrpClient", {
     nodetype: nodetype.value,
   });
 };
@@ -124,7 +124,7 @@ router.beforeEach(async (to, from, next) => {
       store.commit("user/setAddress", ottdata.value.account);
       store.commit("user/setNodeType", ottdata.value.nodetype);
       store.commit("user/setUser", ottdata.value.user);
-      store.dispatch("nft/initXrpClient", {
+      await store.dispatch("nft/initXrpClient", {
         nodetype: nodetype.value,
       });
       if (!shared.value) {
@@ -155,7 +155,7 @@ router.beforeEach(async (to, from, next) => {
     } else {
       if (!isConnected.value) {
         try {
-          connectXrpClient();
+          await connectXrpClient();
           next();
         } catch (error) {
           next({

@@ -139,9 +139,13 @@ async function getOne(
   };
 }
 let client: any;
-
-async function fetchNftLines(walletAddress: string): Promise<any> {
+async function connect() {
   await client.connect();
+}
+async function disconnect() {
+  await client.disconnect();
+}
+async function fetchNftLines(walletAddress: string): Promise<any> {
   client.on("ledgerClosed", async (ledger: any) => {
     throw new Error(
       `Ledger #${ledger.ledger_index} validated with ${ledger.txn_count} transactions!`
@@ -155,7 +159,6 @@ async function fetchNftLines(walletAddress: string): Promise<any> {
     account: walletAddress,
   });
   const { lines, error } = result;
-  await client.disconnect();
 
   if (error) {
     throw new Error(error);
@@ -210,7 +213,6 @@ async function fetchOne(
   }
 }
 async function fetchNext(nextLines: line[]): Promise<NFT[]> {
-  await client.connect();
   client.on("ledgerClosed", async (ledger: any) => {
     throw new Error(
       `Ledger #${ledger.ledger_index} validated with ${ledger.txn_count} transactions!`
@@ -231,15 +233,17 @@ async function fetchNext(nextLines: line[]): Promise<NFT[]> {
       return one;
     })
   );
-  await client.disconnect();
   return nextNfts;
 }
 
-export function init(nodetype: string): any {
+export async function init(nodetype: string): Promise<any> {
   const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
   xrpClientInstance = new xrpl.Client(X_url[0]);
   client = xrpClientInstance;
+  await connect();
   return {
+    connect,
+    disconnect,
     xrpClientInstance,
     fetchNftLines,
     fetchIssuerCurrencies,
