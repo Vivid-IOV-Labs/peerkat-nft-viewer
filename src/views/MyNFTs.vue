@@ -77,24 +77,24 @@ export default defineComponent({
     NftCard,
     ExternalLink,
   },
-  // async beforeRouteEnter(from, to, next) {
-  //   const isConnected = store.getters["nft/getIsConnected"];
-  //   const allLoaded =
-  //     store.getters["nft/getAll"].length ==
-  //     store.getters["nft/getLines"].length;
-  //   if (!isConnected && !allLoaded) {
-  //     await store.dispatch("nft/connect");
-  //   }
-  //   next();
-  // },
-  // async beforeRouteLeave(from, to, next) {
-  //   const isConnected = store.getters["nft/getIsConnected"];
-  //   if (isConnected) {
-  //     await store.dispatch("nft/disconnect");
-  //     next();
-  //   }
-  //   next();
-  // },
+  async beforeRouteEnter(from, to, next) {
+    const isConnected = store.getters["nft/getIsConnected"];
+    const allLoaded =
+      store.getters["nft/getAll"].length ==
+      store.getters["nft/getLines"].length;
+    if (!isConnected && !allLoaded) {
+      await store.dispatch("nft/connect");
+    }
+    next();
+  },
+  async beforeRouteLeave(from, to, next) {
+    const isConnected = store.getters["nft/getIsConnected"];
+    if (isConnected) {
+      await store.dispatch("nft/disconnect");
+      next();
+    }
+    next();
+  },
   async setup() {
     const store = useStore();
     const sentinel = ref<HTMLElement | null>(null);
