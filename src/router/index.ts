@@ -116,17 +116,17 @@ const connectXrpClient = async () => {
 
 router.beforeEach(async (to, from, next) => {
   if (isInXumm) {
-    if (!isConnected.value) {
+    if (!walletAddress.value) {
       store.commit("ui/setIsloading", true);
-
+      await store.dispatch("nft/initXrpClient", {
+        nodetype: nodetype.value,
+      });
       await store.dispatch("xumm/getOttData");
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
       store.commit("user/setAddress", ottdata.value.account);
       store.commit("user/setNodeType", ottdata.value.nodetype);
       store.commit("user/setUser", ottdata.value.user);
-      await store.dispatch("nft/initXrpClient", {
-        nodetype: nodetype.value,
-      });
+
       if (!shared.value) {
         store.commit("nft/initSharedStore", ottdata.value.user);
       }
