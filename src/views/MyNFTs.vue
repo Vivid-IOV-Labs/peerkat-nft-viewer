@@ -87,10 +87,10 @@ export default defineComponent({
     }
     next();
   },
-  async beforeRouteLeave(from, to, next) {
+  beforeRouteLeave(from, to, next) {
     const isConnected = store.getters["nft/getIsConnected"];
     if (isConnected) {
-      await store.dispatch("nft/disconnect");
+      store.dispatch("nft/disconnect");
       next();
     }
     next();

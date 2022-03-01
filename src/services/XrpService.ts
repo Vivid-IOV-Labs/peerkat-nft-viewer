@@ -142,8 +142,8 @@ let client: any;
 async function connect() {
   await client.connect();
 }
-async function disconnect() {
-  await client.disconnect();
+function disconnect() {
+  client.disconnect();
 }
 async function fetchNftLines(walletAddress: string): Promise<any> {
   client.on("ledgerClosed", async (ledger: any) => {
