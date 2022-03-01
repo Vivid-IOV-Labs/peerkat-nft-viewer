@@ -22,7 +22,7 @@
           role="status"
         ></div>
       </div>
-      <h4>Loading Next NFT's...</h4>
+      <h5>Loading Next NFTs...</h5>
     </div>
   </div>
   <div
