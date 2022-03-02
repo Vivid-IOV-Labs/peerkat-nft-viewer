@@ -213,14 +213,10 @@ async function fetchOne(
   }
 }
 async function fetchNext(nextLines: line[]): Promise<NFT[]> {
-  client.on("ledgerClosed", async (ledger: any) => {
-    throw new Error(
-      `Ledger #${ledger.ledger_index} validated with ${ledger.txn_count} transactions!`
-    );
-  });
-  client.on("error", async (error: any) => {
-    throw new Error(error);
-  });
+  if (!client.isConnected()) {
+    await client.connect();
+  }
+
   const nextNfts: NFT[] = await Promise.all(
     nextLines.map(async (line: line) => {
       const { account, currency, balanceFormatted, limitFormatted } = line;
@@ -241,6 +237,16 @@ export async function init(nodetype: string): Promise<any> {
   xrpClientInstance = new xrpl.Client(X_url[0]);
   client = xrpClientInstance;
   await connect();
+  // client.on("ledgerClosed", async (ledger: any) => {
+  //   throw new Error(
+  //     `Ledger #${ledger.ledger_index} validated with ${ledger.txn_count} transactions!`
+  //   );
+  // });
+  client.on("error", async (error: any) => {
+    await connect();
+
+    throw new Error(error);
+  });
   return {
     connect,
     disconnect,
