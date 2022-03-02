@@ -22,7 +22,7 @@
     style="margin-top: 13%"
   >
     <h5 class="text-center mt-2">
-      Peerkat is not able to find any XLS14 NFT in this wallet
+      Peerkat is not able to find any XLS14 NFTs in this wallet
     </h5>
     <ul class="mt-2 p-2">
       <li class="pb-2">
@@ -35,19 +35,10 @@
         to enable them to view the NFTs too
       </li>
       <li class="pb-2">
-        Please follow us on Twitter
-        <external-link :url="`https://twitter.com/PeerkatOfficial`"
-          >@Peerkatofficial</external-link
-        >
-        and at
-        <external-link :url="`https://peerkat.io`">peerkat.io</external-link>
-        for updates, airdrop news and product releases
-      </li>
-      <li class="pb-2">
         <strong
           >Please note that we currently support XLS14 NFTs on XRPL only</strong
         >
-        . We are considering support for XLS14/SOLO and other NFT variations. We
+        - we are considering support for XLS14/SOLO and other NFT variations, we
         will support XLS20 native NFTs on XRPL (currently in devnet)
       </li>
     </ul>
