@@ -229,15 +229,22 @@ export async function init(nodetype: string): Promise<any> {
   xrpClientInstance = new xrpl.Client(X_url[0]);
   client = xrpClientInstance;
   await connect();
-  // client.on("ledgerClosed", async (ledger: any) => {
-  //   throw new Error(
-  //     `Ledger #${ledger.ledger_index} validated with ${ledger.txn_count} transactions!`
-  //   );
-  // });
+  client.on("disconnected", async (msg: any) => {
+    console.log("Disconnected", msg);
+  });
+  client.on("connected", async (msg: any) => {
+    console.log("Connected", msg);
+  });
+  client.on("peerStatusChange", async (msg: any) => {
+    console.log("peerStatusChange", msg);
+  });
+  client.on("ledgerClosed", async (msg: any) => {
+    console.log("ledgerClosed", msg);
+  });
   client.on("error", async (error: any) => {
-    await connect();
-    console.log("Connection ", error);
-    throw new Error(error);
+    console.log("Connection Errors", error);
+    //await connect();
+    // throw new Error(error);
   });
   return {
     connect,
