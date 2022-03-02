@@ -226,10 +226,10 @@ async function fetchNext(nextLines: line[]): Promise<NFT[]> {
 
 export async function init(nodetype: string): Promise<any> {
   const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
-  xrpClientInstance = new xrpl.Client(X_url[0]);
-  client = xrpClientInstance;
+  client = new xrpl.Client(X_url[0]);
   await connect();
   console.log("CLient", client);
+  console.log("xrpClientInstance", client);
   client.on("connected", async () => {
     console.log(`connected`);
   });
