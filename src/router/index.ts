@@ -116,10 +116,7 @@ const connectXrpClient = async () => {
 
 router.beforeEach(async (to, from, next) => {
   if (isInXumm) {
-    console.log("walletAddress", walletAddress.value);
-
     if (!walletAddress.value) {
-      console.log("get ott data and connect");
       store.commit("ui/setIsloading", true);
       await store.dispatch("nft/initXrpClient", {
         nodetype: nodetype.value,
