@@ -9,17 +9,7 @@
       <nft-shared-card :nft="nft"></nft-shared-card>
     </div>
   </div>
-  <div
-    v-else
-    class="p-4 overflow-auto"
-    style="
-      display: flex;
-      align-items: center;
-      height: 100%;
-      justify-content: center;
-      flex-direction: column;
-    "
-  >
+  <div v-else class="p-2 overflow-auto" style="margin-top: 13%">
     <h5 class="text-center mt-2">
       Peerkat is not able to find any XLS14 NFT shared with this wallet
     </h5>

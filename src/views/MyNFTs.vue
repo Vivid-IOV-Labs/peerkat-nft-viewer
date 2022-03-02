@@ -18,14 +18,8 @@
   </div>
   <div
     v-if="!NFTMedia.length"
-    class="p-4 overflow-auto"
-    style="
-      display: flex;
-      align-items: center;
-      height: 100%;
-      justify-content: center;
-      flex-direction: column;
-    "
+    class="p-2 overflow-auto"
+    style="margin-top: 13%"
   >
     <h5 class="text-center mt-2">
       Peerkat is not able to find any XLS14 NFT in this wallet
