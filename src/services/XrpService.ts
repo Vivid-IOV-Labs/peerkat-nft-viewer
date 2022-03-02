@@ -229,6 +229,7 @@ export async function init(nodetype: string): Promise<any> {
   xrpClientInstance = new xrpl.Client(X_url[0]);
   client = xrpClientInstance;
   await connect();
+  console.log(client);
   client.on("disconnected", async (msg: any) => {
     console.log("Disconnected", msg);
   });
