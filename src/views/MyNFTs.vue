@@ -129,7 +129,10 @@ export default defineComponent({
       sentinel
     );
     watch(isIntersecting, async () => {
-      await store.dispatch("nft/fetchNext", nodetype.value);
+      if (!endload.value) {
+        console.log("isIntersecting fetchNext");
+        await store.dispatch("nft/fetchNext", nodetype.value);
+      }
     });
     watch(NFTMedia, async (newNfts) => {
       if (lines.value.length == newNfts.length) {
