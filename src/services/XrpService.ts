@@ -146,14 +146,6 @@ function disconnect() {
   client.disconnect();
 }
 async function fetchNftLines(walletAddress: string): Promise<any> {
-  client.on("ledgerClosed", async (ledger: any) => {
-    throw new Error(
-      `Ledger #${ledger.ledger_index} validated with ${ledger.txn_count} transactions!`
-    );
-  });
-  client.on("error", async (error: any) => {
-    throw new Error(error);
-  });
   const { result } = await client.request({
     command: "account_lines",
     account: walletAddress,
@@ -244,7 +236,7 @@ export async function init(nodetype: string): Promise<any> {
   // });
   client.on("error", async (error: any) => {
     await connect();
-
+    console.log("Connection ", error);
     throw new Error(error);
   });
   return {
