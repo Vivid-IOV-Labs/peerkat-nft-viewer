@@ -113,10 +113,11 @@ const connectXrpClient = async () => {
     nodetype: nodetype.value,
   });
 };
+let loggedIn = false;
 
 router.beforeEach(async (to, from, next) => {
   if (isInXumm) {
-    if (!walletAddress.value) {
+    if (!loggedIn) {
       store.commit("ui/setIsloading", true);
       await store.dispatch("nft/initXrpClient", {
         nodetype: nodetype.value,
@@ -132,6 +133,7 @@ router.beforeEach(async (to, from, next) => {
       }
 
       const path = ottdata.value.redirect;
+      loggedIn = true;
       store.commit("ui/setIsloading", false);
 
       if (path) {
