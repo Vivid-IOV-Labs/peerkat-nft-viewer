@@ -54,8 +54,6 @@ const test_networks = [
   "wss://xrpl.linkwss://testnet.xrpl-labs.com",
 ];
 
-let xrpClientInstance: any;
-
 async function getMediaType(url: string) {
   try {
     const res = await fetch(url);
@@ -139,6 +137,7 @@ async function getOne(
   };
 }
 let client: any;
+
 async function connect() {
   await client.connect();
 }
@@ -227,12 +226,10 @@ async function fetchNext(nextLines: line[]): Promise<NFT[]> {
 export async function init(nodetype: string): Promise<any> {
   const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
   client = new xrpl.Client(X_url[0]);
-  await connect();
+  await client.connect();
+
   console.log("CLient", client);
-  console.log("xrpClientInstance", client);
-  client.on("connected", async () => {
-    console.log(`connected`);
-  });
+
   client.on("disconnected", async (msg: any) => {
     console.log("Disconnected", msg);
   });
@@ -253,7 +250,7 @@ export async function init(nodetype: string): Promise<any> {
   return {
     connect,
     disconnect,
-    xrpClientInstance,
+    client,
     fetchNftLines,
     fetchIssuerCurrencies,
     fetchOne,

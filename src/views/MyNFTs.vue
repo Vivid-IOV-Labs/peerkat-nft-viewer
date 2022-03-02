@@ -83,6 +83,8 @@ export default defineComponent({
       store.getters["nft/getAll"].length ==
       store.getters["nft/getLines"].length;
     if (!isConnected && !allLoaded) {
+      console.log("Enter connect");
+
       await store.dispatch("nft/connect");
     }
     next();
@@ -90,6 +92,8 @@ export default defineComponent({
   beforeRouteLeave(from, to, next) {
     const isConnected = store.getters["nft/getIsConnected"];
     if (isConnected) {
+      console.log("leave disconnect");
+
       store.dispatch("nft/disconnect");
       next();
     }
