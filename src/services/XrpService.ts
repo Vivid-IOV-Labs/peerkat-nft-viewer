@@ -205,6 +205,7 @@ async function fetchOne(
 }
 async function fetchNext(nextLines: line[]): Promise<NFT[]> {
   if (!client.isConnected()) {
+    console.log("IS COnnecting again");
     await client.connect();
   }
 
