@@ -117,6 +117,7 @@ const connectXrpClient = async () => {
 router.beforeEach(async (to, from, next) => {
   if (isInXumm) {
     if (!walletAddress.value) {
+      console.log("walletAddress", walletAddress.value);
       store.commit("ui/setIsloading", true);
       await store.dispatch("nft/initXrpClient", {
         nodetype: nodetype.value,
