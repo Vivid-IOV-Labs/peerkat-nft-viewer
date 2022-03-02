@@ -11,7 +11,7 @@
   </div>
   <div
     v-else
-    class="p-2"
+    class="p-2 overflow-auto"
     style="
       display: flex;
       align-items: center;
