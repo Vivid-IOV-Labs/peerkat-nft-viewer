@@ -1,6 +1,6 @@
 <template>
   <HeaderNavigation style="height: 15%" />
-  <main style="height: 85%" class="container-fluid">
+  <main style="height: 85%" class="container-fluid overflow-auto">
     <slot></slot>
   </main>
   <!-- <welcome

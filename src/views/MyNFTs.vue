@@ -25,19 +25,9 @@
       <h5>Loading Next NFTs...</h5>
     </div>
   </div>
-  <div
-    v-if="!NFTMedia.length"
-    class="p-2"
-    style="
-      display: flex;
-      align-items: center;
-      height: 100%;
-      justify-content: center;
-      flex-direction: column;
-    "
-  >
+  <div v-if="!NFTMedia.length" style="margin-top: 13%">
     <h5 class="text-center mt-2">
-      Peerkat is not able to find any XLS14 NFT in this wallet
+      Peerkat is not able to find any XLS14 NFTs in this wallet
     </h5>
     <ul class="mt-2 p-2">
       <li class="pb-2">
@@ -50,13 +40,10 @@
         to enable them to view the NFTs too
       </li>
       <li class="pb-2">
-        Please follow us on Twitter
-        <external-link :url="`https://twitter.com/PeerkatOfficial`"
-          >@Peerkatofficial</external-link
-        >
-        and at
-        <external-link :url="`https://peerkat.io`">peerkat.io</external-link>
-        for updates, airdrop news and product releases
+        <strong
+          >Please note that we currently support XLS14 NFTs on XRPL only</strong
+        >. We are considering support for XLS14/SOLO and other NFT variations,
+        we will support XLS20 native NFTs on XRPL (currently in devnet)
       </li>
       <li class="pb-2">
         <strong
@@ -71,7 +58,6 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from "vue";
-import ExternalLink from "@/components/ExternalLink.vue";
 import NftCard from "@/components/NftCard.vue";
 import { useStore } from "vuex";
 import { inject } from "vue";
@@ -82,7 +68,6 @@ import store from "../store";
 export default defineComponent({
   components: {
     NftCard,
-    ExternalLink,
   },
   async beforeRouteEnter(from, to, next) {
     const isConnected = store.getters["nft/getIsConnected"];

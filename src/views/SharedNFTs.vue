@@ -9,19 +9,9 @@
       <nft-shared-card :nft="nft"></nft-shared-card>
     </div>
   </div>
-  <div
-    v-else
-    class="p-2"
-    style="
-      display: flex;
-      align-items: center;
-      height: 100%;
-      justify-content: center;
-      flex-direction: column;
-    "
-  >
+  <div v-else style="margin-top: 13%">
     <h5 class="text-center mt-2">
-      Peerkat is not able to find any NFTs shared with this wallet
+      Peerkat is not able to find any XLS14 NFTs shared with this wallet
     </h5>
     <ul class="mt-2 p-2">
       <li class="pb-2">
@@ -33,13 +23,10 @@
         history of an NFT via the Bithomp explorer
       </li>
       <li class="pb-2">
-        Please follow us on Twitter
-        <external-link :url="`https://twitter.com/PeerkatOfficial`"
-          >@Peerkatofficial</external-link
-        >
-        and at
-        <external-link :url="`https://peerkat.io`">peerkat.io</external-link>
-        for updates, airdrop news and product releases
+        <strong
+          >Please note that we currently support XLS14 NFTs on XRPL only</strong
+        >. We are considering support for XLS14/SOLO and other NFT variations,
+        we will support XLS20 native NFTs on XRPL (currently in devnet)
       </li>
     </ul>
   </div>
