@@ -5,7 +5,7 @@
         For any queries, help or to provide feedback please email us at:
       </h5>
       <h4 class="mt-1 mb-4 text-center">
-        <base-button @click="copyEmail"
+        <base-button class="mb-4" @click="copyEmail"
           >support@peerkat.io
           <svg
             xmlns="http://www.w3.org/2000/svg"
