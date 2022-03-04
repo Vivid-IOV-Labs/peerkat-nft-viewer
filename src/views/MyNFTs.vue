@@ -16,11 +16,7 @@
       style="height: 100%; width: 1px"
     ></div>
   </div>
-  <div
-    v-if="!NFTMedia.length"
-    class="p-2 overflow-auto"
-    style="margin-top: 13%"
-  >
+  <div v-if="!NFTMedia.length" style="margin-top: 13%">
     <h5 class="text-center mt-2">
       Peerkat is not able to find any NFTs in this wallet
     </h5>
