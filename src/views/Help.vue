@@ -4,7 +4,7 @@
       <h5 class="mt-2 text-center">
         For any queries, help or to provide feedback please email us at:
       </h5>
-      <h4 class="my-1 text-center">
+      <h4 class="mt-1 mb-4 text-center">
         <base-button @click="copyEmail"
           >support@peerkat.io
           <svg
@@ -43,6 +43,12 @@
           <br />We are currently investigating support for XLS14/SOLO. We may
           also add support for other NFT variations we discover where it is
           feasible to do so.
+        </li>
+        <li class="pb-2">
+          <strong> What features are being added next?</strong>
+          <br />XLS20 support, one click XLS14 > 20 upgrader & NFT Analytics.
+          Please suggest any other features you would like to see by getting in
+          contact with us.
         </li>
       </ul>
     </div>
