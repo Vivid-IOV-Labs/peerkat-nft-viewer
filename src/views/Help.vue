@@ -38,7 +38,8 @@
           the NFT artwork it is likely that the token is using XLS15 or XLS16
           for storing metadata. We are actively working on increasing the
           viewer’s support to this metadata so that your NFT artwork will be
-          visible in the future.
+          visible in the future, however we will not be supporting artwork for
+          IOUs.
         </li>
         <li class="pb-2">
           <strong>
