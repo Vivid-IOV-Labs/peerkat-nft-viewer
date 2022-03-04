@@ -11,7 +11,7 @@
   </div>
   <div v-else style="margin-top: 13%">
     <h5 class="text-center mt-2">
-      Peerkat is not able to find any NFTs shared with this wallet
+      Peerkat is not able to find any XLS14 NFTs shared with this wallet
     </h5>
     <ul class="mt-2 p-2">
       <li class="pb-2">

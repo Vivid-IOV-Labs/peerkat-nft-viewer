@@ -18,7 +18,7 @@
   </div>
   <div v-if="!NFTMedia.length" style="margin-top: 13%">
     <h5 class="text-center mt-2">
-      Peerkat is not able to find any NFTs in this wallet
+      Peerkat is not able to find any XLS14 NFTs in this wallet
     </h5>
     <ul class="mt-2 p-2">
       <li class="pb-2">
