@@ -99,7 +99,7 @@ export default defineComponent({
 }
 video[poster] {
   object-fit: cover;
-  height: 100%;
+  width: 100%;
   object-position: center top;
 }
 </style>

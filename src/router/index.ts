@@ -1,6 +1,5 @@
 import { computed } from "vue";
 import { createWebHistory, createRouter } from "vue-router";
-import { trackPage, trackUser } from "../utils/analytics";
 import store from "../store";
 
 const routes = [
@@ -116,14 +115,12 @@ const connectXrpClient = () => {
 };
 
 router.beforeEach(async (to, from, next) => {
-  trackPage(to.fullPath);
   if (isInXumm) {
     if (!isConnected.value) {
       store.commit("ui/setIsloading", true);
 
       await store.dispatch("xumm/getOttData");
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
-      trackUser(ottdata.value.account);
       store.commit("user/setAddress", ottdata.value.account);
       store.commit("user/setNodeType", ottdata.value.nodetype);
       store.commit("user/setUser", ottdata.value.user);

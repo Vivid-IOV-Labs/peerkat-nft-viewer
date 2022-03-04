@@ -54,9 +54,7 @@
     <template #footer>
       <div>
         <base-button class="mr-2" @click="share">Share</base-button>
-        <external-link class="mr-2" :url="bihompUrl" @click="trackInspect">
-          Inspect</external-link
-        >
+        <external-link class="mr-2" :url="bihompUrl"> Inspect</external-link>
       </div>
     </template>
   </base-card>
@@ -70,7 +68,6 @@ import { useRouter } from "vue-router";
 import { copyText } from "../utils/copytext";
 import { useStore } from "vuex";
 import { getNetworkCodeFromType } from "../utils/getNetworkTypeFromCode";
-import { trackEvent } from "../utils/analytics";
 
 export default defineComponent({
   components: {
@@ -109,27 +106,10 @@ export default defineComponent({
             ? `https://xumm.app/detect/xapp:peerkat.sandbox.test?redirect=/shared/${props.nft.issuer}/${nodetypecode}`
             : `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/shared/${props.nft.issuer}/${nodetypecode}`;
         copyText(url, params);
-        trackEvent({
-          category: " Wallet View",
-          action: "click-share",
-          label: props.nft.issuer,
-        });
       },
       view() {
         router.push({
           path: `/wallet/${props.nft.issuer}/view`,
-        });
-        trackEvent({
-          category: "Wallet View",
-          action: "view-nft",
-          label: props.nft.issuer,
-        });
-      },
-      trackInspect() {
-        trackEvent({
-          category: " Share with me View",
-          action: "click-inspect",
-          label: props.nft.issuer,
         });
       },
     };

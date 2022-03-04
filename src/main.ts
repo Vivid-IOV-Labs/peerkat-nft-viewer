@@ -16,9 +16,7 @@ import VueAnnouncer from "@vue-a11y/announcer";
 import Notifications from "@kyvg/vue3-notification";
 
 import VueLazyLoad from "vue3-lazyload";
-import { trackInit } from "./utils/analytics";
 
-trackInit();
 if (process.env.NODE_ENV === "development") {
   createApp({
     render: () => h(Fragment, [h(App), h(VueAxePopup)]),

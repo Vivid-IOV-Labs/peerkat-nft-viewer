@@ -84,7 +84,6 @@ import BaseButton from "@/components/BaseButton.vue";
 import BaseInput from "@/components/BaseInput.vue";
 import BaseSelect from "@/components/BaseSelect.vue";
 import useVuelidate from "@vuelidate/core";
-import { isRippleAddress } from "../utils/validators";
 import { required } from "@vuelidate/validators";
 import { useStore } from "vuex";
 import BaseDialog from "@/components/BaseDialog.vue";

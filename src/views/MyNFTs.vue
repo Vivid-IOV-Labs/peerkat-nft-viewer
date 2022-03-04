@@ -97,7 +97,7 @@ export default defineComponent({
         });
         await store.dispatch("nft/fetchNext", nodetype.value);
       } catch (error) {
-        devlog(error);
+        devlog("ON POPULATE", error);
       }
     };
 
