@@ -24,7 +24,11 @@
         ></base-button>
       </h4>
       <h5 class="mt-4 text-center bold">
-        FAQs <small><br />last updated 2 March 2022</small>
+        FAQs
+        <small
+          ><br />
+          updated 3 March 2022</small
+        >
       </h5>
       <ul class="mt-2 mb-4 p-2">
         <li class="pb-2">
