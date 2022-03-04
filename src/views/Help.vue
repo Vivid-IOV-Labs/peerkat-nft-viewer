@@ -59,7 +59,7 @@
     <div style="font-size: 0.8rem">
       <nav class="d-flex justify-content-center mb-4">
         <external-link class="mr-2" :url="`https://twitter.com/PeerkatOfficial`"
-          >PeerkatOfficial</external-link
+          >@PeerkatOfficial</external-link
         >
         <external-link class="mr-2" :url="`https://peerkat.io`"
           >Peerkat.io
