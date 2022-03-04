@@ -145,22 +145,25 @@ function disconnect() {
   client.disconnect();
 }
 async function fetchNftLines(walletAddress: string): Promise<any> {
-  const { result } = await client.request({
-    command: "account_lines",
-    account: walletAddress,
-  });
-  const { lines, error } = result;
-
-  if (error) {
-    throw new Error(error);
-  } else {
-    return lines.filter(isNFT).map(function (line: line) {
-      return {
-        ...line,
-        balanceFormatted: formatXrpCurrency(line.balance),
-        limitFormatted: formatXrpCurrency(line.limit),
-      };
+  try {
+    const { result } = await client.request({
+      command: "account_lines",
+      account: walletAddress,
     });
+    const { lines, error } = result;
+    if (error) {
+      throw new Error(error);
+    } else {
+      return lines.filter(isNFT).map(function (line: line) {
+        return {
+          ...line,
+          balanceFormatted: formatXrpCurrency(line.balance),
+          limitFormatted: formatXrpCurrency(line.limit),
+        };
+      });
+    }
+  } catch (error) {
+    console.log("CAth ", error);
   }
 }
 async function fetchIssuerCurrencies(issuer: string): Promise<any> {
