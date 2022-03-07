@@ -17,6 +17,18 @@ const routes = [
     },
   },
   {
+    path: "/network-error",
+    name: "NetowrkError",
+    component: () => import("../views/NetowrkError.vue"),
+    meta: {
+      withAuth: true,
+      title: "NetowrkError Page",
+      announcer: {
+        message: "NetowrkError Page",
+      },
+    },
+  },
+  {
     path: "/help",
     name: "help",
     component: () => import("../views/Help.vue"),
@@ -119,9 +131,16 @@ router.beforeEach(async (to, from, next) => {
   if (isInXumm) {
     if (!loggedIn) {
       store.commit("ui/setIsloading", true);
-      await store.dispatch("nft/initXrpClient", {
-        nodetype: nodetype.value,
-      });
+      try {
+        await store.dispatch("nft/initXrpClient", {
+          nodetype: nodetype.value,
+        });
+      } catch (error) {
+        next({
+          path: "/network-error",
+        });
+      }
+
       await store.dispatch("xumm/getOttData");
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
       store.commit("user/setAddress", ottdata.value.account);
@@ -161,7 +180,7 @@ router.beforeEach(async (to, from, next) => {
           next();
         } catch (error) {
           next({
-            path: "/welcome",
+            path: "/network-error",
           });
         }
       } else {

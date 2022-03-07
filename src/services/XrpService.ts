@@ -211,11 +211,6 @@ async function fetchOne(
   }
 }
 async function fetchNext(nextLines: line[]): Promise<NFT[]> {
-  if (!client.isConnected()) {
-    console.log("IS COnnecting again");
-    await client.connect();
-  }
-
   const nextNfts: NFT[] = await Promise.all(
     nextLines.map(async (line: line) => {
       const { account, currency, balanceFormatted, limitFormatted } = line;
@@ -233,7 +228,7 @@ async function fetchNext(nextLines: line[]): Promise<NFT[]> {
 
 export async function init(nodetype: string): Promise<any> {
   const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
-  client = new xrpl.Client(X_url[0]);
+  client = new xrpl.Client(X_url[0], { connectionTimeout: 2000 });
 
   console.log("CLient", client);
 
@@ -254,6 +249,7 @@ export async function init(nodetype: string): Promise<any> {
     //await connect();
     // throw new Error(error);
   });
+
   await client.connect();
 
   return {
