@@ -127,13 +127,13 @@ export default defineComponent({
       }
     });
     watch(NFTMedia, async (newNfts) => {
-      if (lines.value.length == newNfts.length) {
+      if (lines.value && lines.value.length == newNfts.length) {
         unobserve();
         endload.value = true;
         await store.dispatch("nft/disconnect");
       }
     });
-    if (lines.value.length === 0) {
+    if (lines.value && lines.value.length === 0) {
       await populateNFTs();
     }
 
