@@ -71,9 +71,11 @@ export default defineComponent({
   },
   async beforeRouteEnter(from, to, next) {
     const isConnected = store.getters["nft/getIsConnected"];
-    const allLoaded =
-      store.getters["nft/getAll"].length ==
-      store.getters["nft/getLines"].length;
+    const all = store.getters["nft/getAll"];
+    const lines = store.getters["nft/getAll"];
+    console.log("all", all);
+    console.log("lines", lines);
+    const allLoaded = all.length == lines.length;
     if (!isConnected && !allLoaded) {
       console.log("Enter connect");
 
