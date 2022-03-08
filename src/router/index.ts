@@ -179,8 +179,6 @@ router.beforeEach(async (to, from, next) => {
           await connectXrpClient();
           next();
         } catch (error) {
-          debugger;
-          console.log(error);
           next({
             path: "/network-error",
           });
