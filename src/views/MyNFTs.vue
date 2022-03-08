@@ -125,6 +125,8 @@ export default defineComponent({
       isLoadingNext.value = false;
     }
     watch(isIntersecting, async () => {
+      console.log("trying fetchNext");
+
       if (!endload.value && !isLoadingNext.value) {
         console.log("isIntersecting fetchNext");
         await fetchNext();

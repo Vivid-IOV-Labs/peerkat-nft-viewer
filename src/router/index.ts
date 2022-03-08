@@ -180,6 +180,7 @@ router.beforeEach(async (to, from, next) => {
           next();
         } catch (error) {
           debugger;
+          console.log(error);
           next({
             path: "/network-error",
           });

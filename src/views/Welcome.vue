@@ -214,7 +214,7 @@ export default defineComponent({
       },
       async runAsyncFunction() {
         isLoading.value = true;
-        connectXrpClient();
+        await connectXrpClient();
         isLoading.value = false;
         const path = route.params.redirect ? `/${route.params.redirect}` : "/";
         router.push({
