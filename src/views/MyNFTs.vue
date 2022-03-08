@@ -125,18 +125,12 @@ export default defineComponent({
       isLoadingNext.value = false;
     }
     watch(isIntersecting, async () => {
-      console.log("trying fetchNext");
-
       if (!endload.value && !isLoadingNext.value) {
-        console.log("isIntersecting fetchNext");
         await fetchNext();
       }
     });
     watch(NFTMedia, async (newNfts) => {
       if (lines.value && lines.value.length == newNfts.length) {
-        console.log("End Scroller");
-        console.log("End Scroller lines", lines.value.length);
-        console.log("End Scroller lines", newNfts.length);
         unobserve();
         endload.value = true;
         await store.dispatch("nft/disconnect");

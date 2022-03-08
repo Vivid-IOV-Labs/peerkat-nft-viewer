@@ -1,4 +1,5 @@
 import { NFT } from "../models/NFT";
+import { devlog } from "../utils/devlog";
 const xrpl = (window as any).xrpl;
 type line = {
   balance: string;
@@ -141,8 +142,8 @@ let client: any;
 async function connect() {
   await client.connect();
 }
-function disconnect() {
-  client.disconnect();
+async function disconnect() {
+  await client.disconnect();
 }
 async function fetchNftLines(walletAddress: string): Promise<any> {
   try {
@@ -163,7 +164,7 @@ async function fetchNftLines(walletAddress: string): Promise<any> {
       });
     }
   } catch (error) {
-    console.log("CAth ", error);
+    devlog("fetchNftLines Error ", error);
   }
 }
 async function fetchIssuerCurrencies(issuer: string): Promise<any> {
@@ -187,7 +188,7 @@ async function fetchOne(
   });
   const { result, error, error_code, error_message } = allReps;
   const { account_data } = result;
-  console.log("Error", error);
+  devlog("fetchone Error", error);
   // console.log("error_code", error_code);
   // console.log("error_message", error_message);
   if (currency) {
