@@ -130,6 +130,9 @@ export default defineComponent({
     });
     watch(NFTMedia, async (newNfts) => {
       if (lines.value && lines.value.length == newNfts.length) {
+        console.log("End Scroller");
+        console.log("End Scroller lines", lines.value.length);
+        console.log("End Scroller lines", newNfts.length);
         unobserve();
         endload.value = true;
         await store.dispatch("nft/disconnect");

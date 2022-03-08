@@ -6,7 +6,8 @@ export default function useIntersectionObserver(
   //cbk: () => Promise<void>,
   options: IntersectionObserverInit = {
     root: document.getElementById("scroller"),
-    rootMargin: "200px",
+    rootMargin: "240px",
+    threshold: 0,
   }
 ): any {
   const intersectionRatio = ref(0);
