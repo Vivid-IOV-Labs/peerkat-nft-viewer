@@ -73,12 +73,9 @@ export default defineComponent({
     const isConnected = store.getters["nft/getIsConnected"];
     const all = store.getters["nft/getAll"];
     const lines = store.getters["nft/getAll"];
-    console.log("all", all);
-    console.log("lines", lines);
+
     const allLoaded = all.length == lines.length;
     if (!isConnected && !allLoaded) {
-      console.log("Enter connect");
-
       await store.dispatch("nft/connect");
     }
     next();
@@ -86,8 +83,6 @@ export default defineComponent({
   beforeRouteLeave(from, to, next) {
     const isConnected = store.getters["nft/getIsConnected"];
     if (isConnected) {
-      console.log("leave disconnect");
-
       store.dispatch("nft/disconnect");
       next();
     }
@@ -101,6 +96,7 @@ export default defineComponent({
 
     const isConnected = computed(() => store.getters["nft/getIsConnected"]);
     const endload = ref(false);
+    const isLoadingNext = ref(false);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const NFTMedia = computed(() => store.getters["nft/getAll"]);
     const lines = computed(() => store.getters["nft/getLines"]);
@@ -122,10 +118,16 @@ export default defineComponent({
       scroller,
       sentinel
     );
+    async function fetchNext() {
+      isLoadingNext.value = true;
+
+      await store.dispatch("nft/fetchNext", nodetype.value);
+      isLoadingNext.value = false;
+    }
     watch(isIntersecting, async () => {
-      if (!endload.value) {
+      if (!endload.value && !isLoadingNext.value) {
         console.log("isIntersecting fetchNext");
-        await store.dispatch("nft/fetchNext", nodetype.value);
+        await fetchNext();
       }
     });
     watch(NFTMedia, async (newNfts) => {

@@ -188,8 +188,8 @@ async function fetchOne(
   const { result, error, error_code, error_message } = allReps;
   const { account_data } = result;
   console.log("Error", error);
-  console.log("error_code", error_code);
-  console.log("error_message", error_message);
+  // console.log("error_code", error_code);
+  // console.log("error_message", error_message);
   if (currency) {
     return getOne(
       account_data,
@@ -230,25 +230,25 @@ export async function init(nodetype: string): Promise<any> {
   const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
   client = new xrpl.Client(X_url[0], { connectionTimeout: 2000 });
 
-  console.log("CLient", client);
+  //console.log("CLient", client);
 
-  client.on("disconnected", async (msg: any) => {
-    console.log("Disconnected", msg);
-  });
-  client.on("connected", async (msg: any) => {
-    console.log("Connected", msg);
-  });
-  client.on("peerStatusChange", async (msg: any) => {
-    console.log("peerStatusChange", msg);
-  });
-  client.on("ledgerClosed", async (msg: any) => {
-    console.log("ledgerClosed", msg);
-  });
-  client.on("error", async (error: any) => {
-    console.log("Connection Errors", error);
-    //await connect();
-    // throw new Error(error);
-  });
+  // client.on("disconnected", async (msg: any) => {
+  //   console.log("Disconnected", msg);
+  // });
+  // client.on("connected", async (msg: any) => {
+  //   console.log("Connected", msg);
+  // });
+  // client.on("peerStatusChange", async (msg: any) => {
+  //   console.log("peerStatusChange", msg);
+  // });
+  // client.on("ledgerClosed", async (msg: any) => {
+  //   console.log("ledgerClosed", msg);
+  // });
+  // client.on("error", async (error: any) => {
+  //   console.log("Connection Errors", error);
+  //   //await connect();
+  //   // throw new Error(error);
+  // });
 
   await client.connect();
 
