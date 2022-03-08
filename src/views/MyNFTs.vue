@@ -10,11 +10,20 @@
       <nft-card :nft="nft"></nft-card>
     </div>
     <div
-      v-if="NFTMedia.length < lines.length"
+      v-if="!endload"
       ref="sentinel"
-      class="col-1"
-      style="height: 100%; width: 1px"
-    ></div>
+      style="height: 100%"
+      class="col-11 card"
+    >
+      <div class="d-flex align-items-center justify-content-center card-body">
+        <div
+          class="spinner-border"
+          style="width: 4rem; height: 4rem; color: #666"
+          role="status"
+        ></div>
+      </div>
+      <h5>Loading Next NFTs...</h5>
+    </div>
   </div>
   <div v-if="!NFTMedia.length" style="margin-top: 13%">
     <h5 class="text-center mt-2">
@@ -36,45 +45,48 @@
         >. We are considering support for XLS14/SOLO and other NFT variations,
         we will support XLS20 native NFTs on XRPL (currently in devnet)
       </li>
+      <li class="pb-2">
+        <strong
+          >Please note that we currently support XLS14 NFTs on XRPL only</strong
+        >
+        . We are considering support for XLS14/SOLO and other NFT variations. We
+        will support XLS20 native NFTs on XRPL (currently in devnet)
+      </li>
     </ul>
-  </div>
-  <div
-    v-if="isLoadingNext"
-    style="
-      height: 100%;
-      width: 100%;
-      position: fixed;
-      left: 0;
-      top: 0;
-      opacity: 0.8;
-      background: rgba(0, 0, 0, 0.6);
-      transition: all 1s ease;
-    "
-    class="d-flex align-items-center justify-content-center"
-  >
-    <div
-      class="spinner-border"
-      style="width: 4rem; height: 4rem; color: #666"
-      role="status"
-    >
-      <span class="sr-only">Loading...</span>
-    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from "vue";
-import ExternalLink from "@/components/ExternalLink.vue";
 import NftCard from "@/components/NftCard.vue";
 import { useStore } from "vuex";
 import { inject } from "vue";
 import useIntersectionObserver from "../composable/useIntersectionObserver";
 import { devlog } from "../utils/devlog";
+import store from "../store";
 
 export default defineComponent({
   components: {
     NftCard,
-    ExternalLink,
+  },
+  async beforeRouteEnter(from, to, next) {
+    const isConnected = store.getters["nft/getIsConnected"];
+    const all = store.getters["nft/getAll"];
+    const lines = store.getters["nft/getAll"];
+
+    const allLoaded = all.length == lines.length;
+    if (!isConnected && !allLoaded) {
+      await store.dispatch("nft/connect");
+    }
+    next();
+  },
+  beforeRouteLeave(from, to, next) {
+    const isConnected = store.getters["nft/getIsConnected"];
+    if (isConnected) {
+      store.dispatch("nft/disconnect");
+      next();
+    }
+    next();
   },
   async setup() {
     const store = useStore();
@@ -82,7 +94,8 @@ export default defineComponent({
     const scroller = ref<HTMLElement | null>(null);
     const isInXumm = inject("isInXumm");
 
-    const endscroll = ref(false);
+    const isConnected = computed(() => store.getters["nft/getIsConnected"]);
+    const endload = ref(false);
     const isLoadingNext = ref(false);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const NFTMedia = computed(() => store.getters["nft/getAll"]);
@@ -105,31 +118,42 @@ export default defineComponent({
       scroller,
       sentinel
     );
-    watch(isIntersecting, async () => {
+    async function fetchNext() {
       isLoadingNext.value = true;
+
       await store.dispatch("nft/fetchNext", nodetype.value);
-      setTimeout(() => {
-        isLoadingNext.value = false;
-      }, 500);
-    });
-    watch(NFTMedia, (newNfts) => {
-      if (lines.value.length == newNfts.length) {
-        unobserve();
-        endscroll.value = true;
+      isLoadingNext.value = false;
+    }
+    watch(isIntersecting, async () => {
+      if (!endload.value && !isLoadingNext.value) {
+        await fetchNext();
       }
     });
-    if (lines.value.length === 0) {
+    watch(NFTMedia, async (newNfts) => {
+      if (lines.value && lines.value.length == newNfts.length) {
+        unobserve();
+        endload.value = true;
+        await store.dispatch("nft/disconnect");
+      }
+    });
+    if (lines.value && lines.value.length === 0) {
       await populateNFTs();
     }
 
     return {
       sentinel,
-      endscroll,
+      endload,
       scroller,
       lines,
+      isConnected,
       NFTMedia,
       isInXumm,
-      isLoadingNext,
+      async connect() {
+        await store.dispatch("nft/connect", nodetype.value);
+      },
+      async disconnect() {
+        await store.dispatch("nft/disconnect", nodetype.value);
+      },
     };
   },
 });

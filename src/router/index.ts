@@ -17,6 +17,18 @@ const routes = [
     },
   },
   {
+    path: "/network-error",
+    name: "NetowrkError",
+    component: () => import("../views/NetowrkError.vue"),
+    meta: {
+      withAuth: true,
+      title: "NetowrkError Page",
+      announcer: {
+        message: "NetowrkError Page",
+      },
+    },
+  },
+  {
     path: "/help",
     name: "help",
     component: () => import("../views/Help.vue"),
@@ -108,30 +120,39 @@ const nodetype = computed(() => store.getters["user/getNodeType"]);
 const isConnected = computed(() => store.getters["nft/getIsConnected"]);
 const shared = computed(() => store.getters["nft/getShared"](nodetype.value));
 
-const connectXrpClient = () => {
-  store.dispatch("nft/initXrpClient", {
+const connectXrpClient = async () => {
+  await store.dispatch("nft/initXrpClient", {
     nodetype: nodetype.value,
   });
 };
+let loggedIn = false;
 
 router.beforeEach(async (to, from, next) => {
   if (isInXumm) {
-    if (!isConnected.value) {
+    if (!loggedIn) {
       store.commit("ui/setIsloading", true);
+      try {
+        await store.dispatch("nft/initXrpClient", {
+          nodetype: nodetype.value,
+        });
+      } catch (error) {
+        next({
+          path: "/network-error",
+        });
+      }
 
       await store.dispatch("xumm/getOttData");
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
       store.commit("user/setAddress", ottdata.value.account);
       store.commit("user/setNodeType", ottdata.value.nodetype);
       store.commit("user/setUser", ottdata.value.user);
-      store.dispatch("nft/initXrpClient", {
-        nodetype: nodetype.value,
-      });
+
       if (!shared.value) {
         store.commit("nft/initSharedStore", ottdata.value.user);
       }
 
       const path = ottdata.value.redirect;
+      loggedIn = true;
       store.commit("ui/setIsloading", false);
 
       if (path) {
@@ -155,11 +176,11 @@ router.beforeEach(async (to, from, next) => {
     } else {
       if (!isConnected.value) {
         try {
-          connectXrpClient();
+          await connectXrpClient();
           next();
         } catch (error) {
           next({
-            path: "/welcome",
+            path: "/network-error",
           });
         }
       } else {

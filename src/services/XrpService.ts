@@ -1,4 +1,5 @@
 import { NFT } from "../models/NFT";
+import { devlog } from "../utils/devlog";
 const xrpl = (window as any).xrpl;
 type line = {
   balance: string;
@@ -53,8 +54,6 @@ const test_networks = [
   "wss://s.altnet.rippletest.net:51233",
   "wss://xrpl.linkwss://testnet.xrpl-labs.com",
 ];
-
-let xrpClientInstance: any;
 
 async function getMediaType(url: string) {
   try {
@@ -140,33 +139,32 @@ async function getOne(
 }
 let client: any;
 
-async function fetchNftLines(walletAddress: string): Promise<any> {
+async function connect() {
   await client.connect();
-  client.on("ledgerClosed", async (ledger: any) => {
-    throw new Error(
-      `Ledger #${ledger.ledger_index} validated with ${ledger.txn_count} transactions!`
-    );
-  });
-  client.on("error", async (error: any) => {
-    throw new Error(error);
-  });
-  const { result } = await client.request({
-    command: "account_lines",
-    account: walletAddress,
-  });
-  const { lines, error } = result;
+}
+async function disconnect() {
   await client.disconnect();
-
-  if (error) {
-    throw new Error(error);
-  } else {
-    return lines.filter(isNFT).map(function (line: line) {
-      return {
-        ...line,
-        balanceFormatted: formatXrpCurrency(line.balance),
-        limitFormatted: formatXrpCurrency(line.limit),
-      };
+}
+async function fetchNftLines(walletAddress: string): Promise<any> {
+  try {
+    const { result } = await client.request({
+      command: "account_lines",
+      account: walletAddress,
     });
+    const { lines, error } = result;
+    if (error) {
+      throw new Error(error);
+    } else {
+      return lines.filter(isNFT).map(function (line: line) {
+        return {
+          ...line,
+          balanceFormatted: formatXrpCurrency(line.balance),
+          limitFormatted: formatXrpCurrency(line.limit),
+        };
+      });
+    }
+  } catch (error) {
+    devlog("fetchNftLines Error ", error);
   }
 }
 async function fetchIssuerCurrencies(issuer: string): Promise<any> {
@@ -184,11 +182,15 @@ async function fetchOne(
   balanceFormatted?: string,
   limitFormatted?: string
 ): Promise<NFT> {
-  const { result } = await client.request({
+  const allReps = await client.request({
     command: "account_info",
     account,
   });
+  const { result, error, error_code, error_message } = allReps;
   const { account_data } = result;
+  devlog("fetchone Error", error);
+  // console.log("error_code", error_code);
+  // console.log("error_message", error_message);
   if (currency) {
     return getOne(
       account_data,
@@ -210,15 +212,6 @@ async function fetchOne(
   }
 }
 async function fetchNext(nextLines: line[]): Promise<NFT[]> {
-  await client.connect();
-  client.on("ledgerClosed", async (ledger: any) => {
-    throw new Error(
-      `Ledger #${ledger.ledger_index} validated with ${ledger.txn_count} transactions!`
-    );
-  });
-  client.on("error", async (error: any) => {
-    throw new Error(error);
-  });
   const nextNfts: NFT[] = await Promise.all(
     nextLines.map(async (line: line) => {
       const { account, currency, balanceFormatted, limitFormatted } = line;
@@ -231,16 +224,39 @@ async function fetchNext(nextLines: line[]): Promise<NFT[]> {
       return one;
     })
   );
-  await client.disconnect();
   return nextNfts;
 }
 
-export function init(nodetype: string): any {
+export async function init(nodetype: string): Promise<any> {
   const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
-  xrpClientInstance = new xrpl.Client(X_url[0]);
-  client = xrpClientInstance;
+  client = new xrpl.Client(X_url[0], { connectionTimeout: 2000 });
+
+  //console.log("CLient", client);
+
+  // client.on("disconnected", async (msg: any) => {
+  //   console.log("Disconnected", msg);
+  // });
+  // client.on("connected", async (msg: any) => {
+  //   console.log("Connected", msg);
+  // });
+  // client.on("peerStatusChange", async (msg: any) => {
+  //   console.log("peerStatusChange", msg);
+  // });
+  // client.on("ledgerClosed", async (msg: any) => {
+  //   console.log("ledgerClosed", msg);
+  // });
+  // client.on("error", async (error: any) => {
+  //   console.log("Connection Errors", error);
+  //   //await connect();
+  //   // throw new Error(error);
+  // });
+
+  await client.connect();
+
   return {
-    xrpClientInstance,
+    connect,
+    disconnect,
+    client,
     fetchNftLines,
     fetchIssuerCurrencies,
     fetchOne,

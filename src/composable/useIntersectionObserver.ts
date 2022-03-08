@@ -5,9 +5,9 @@ export default function useIntersectionObserver(
   target: Ref<HTMLElement | null>,
   //cbk: () => Promise<void>,
   options: IntersectionObserverInit = {
-    root: root.value,
+    root: document.getElementById("scroller"),
+    rootMargin: "240px",
     threshold: 0,
-    rootMargin: "0px 0px 0px 600px",
   }
 ): any {
   const intersectionRatio = ref(0);
@@ -21,16 +21,20 @@ export default function useIntersectionObserver(
 
   let observer: IntersectionObserver;
   onMounted(() => {
-    observer = new IntersectionObserver(async ([entry]) => {
-      intersectionRatio.value = entry.intersectionRatio;
-      if (entry.intersectionRatio > 0) {
-        isIntersecting.value = true;
-        isFullyInView.value = entry.intersectionRatio >= 1;
-        return;
-      }
+    observer = new IntersectionObserver(
+      ([entry]) => {
+        intersectionRatio.value = entry.intersectionRatio;
 
-      isIntersecting.value = false;
-    }, options);
+        if (entry.intersectionRatio > 0) {
+          isIntersecting.value = true;
+          isFullyInView.value = entry.intersectionRatio >= 1;
+          return;
+        }
+
+        isIntersecting.value = false;
+      },
+      { root: root.value, rootMargin: "0px 800px" }
+    );
     observe();
   });
 

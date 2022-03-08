@@ -20,10 +20,20 @@ interface InitParams {
 }
 
 const actions: ActionTree<NFT, NFTState> = {
-  initXrpClient({ commit }, { nodetype }: InitParams): void {
-    const client = init(nodetype);
+  async initXrpClient({ commit }, { nodetype }: InitParams): Promise<void> {
+    const client = await init(nodetype);
     commit("setXrpClient", client);
     commit("setIsConnected", true);
+  },
+  async connect({ commit, getters }): Promise<void> {
+    const client = getters.getXrpClient;
+    await client.connect();
+    commit("setIsConnected", true);
+  },
+  async disconnect({ commit, getters }): Promise<void> {
+    const client = getters.getXrpClient;
+    await client.disconnect();
+    commit("setIsConnected", false);
   },
   async fetchNftLines(
     { commit, getters },
@@ -37,7 +47,7 @@ const actions: ActionTree<NFT, NFTState> = {
   async fetchNext({ commit, getters }): Promise<void> {
     const client = getters.getXrpClient;
     const count = getters.getAll.length;
-    const nextLines = getters.getLines.slice(count, count + 3);
+    const nextLines = getters.getLines.slice(count, count + 4);
     const nextNfts: NFT[] = await client.fetchNext(nextLines);
     commit("setAll", nextNfts);
   },
