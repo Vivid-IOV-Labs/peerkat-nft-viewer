@@ -146,9 +146,9 @@ router.beforeEach(async (to, from, next) => {
 
       await store.dispatch("xumm/getOttData");
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
-      store.commit("user/setAddress", ottdata.value.account);
-      store.commit("user/setNodeType", ottdata.value.nodetype);
-      store.commit("user/setUser", ottdata.value.user);
+      await store.commit("user/setAddress", ottdata.value.account);
+      await store.commit("user/setNodeType", ottdata.value.nodetype);
+      await store.commit("user/setUser", ottdata.value.user);
       devlog("On app setNodeType", ottdata.value.nodetype);
       devlog("On app setAddress", ottdata.value.account);
       devlog("On app setUser", ottdata.value.user);
