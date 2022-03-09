@@ -127,7 +127,7 @@ const connectXrpClient = async () => {
   });
 };
 let loggedIn = false;
-console.log(" loggedIn", loggedIn);
+devlog(" loggedIn", loggedIn);
 
 router.beforeEach(async (to, from, next) => {
   if (isInXumm) {
@@ -138,7 +138,7 @@ router.beforeEach(async (to, from, next) => {
           nodetype: nodetype.value,
         });
       } catch (error) {
-        console.log("On app enter connection error", error);
+        devlog("On app enter connection error", error);
         next({
           path: "/network-error",
         });
@@ -149,8 +149,9 @@ router.beforeEach(async (to, from, next) => {
       store.commit("user/setAddress", ottdata.value.account);
       store.commit("user/setNodeType", ottdata.value.nodetype);
       store.commit("user/setUser", ottdata.value.user);
-      console.log("On app setUser");
-      console.log("On app setUser");
+      devlog("On app setNodeType", ottdata.value.nodetype);
+      devlog("On app setAddress", ottdata.value.account);
+      devlog("On app setUser", ottdata.value.user);
 
       if (!shared.value) {
         store.commit("nft/initSharedStore", ottdata.value.user);
@@ -158,8 +159,8 @@ router.beforeEach(async (to, from, next) => {
 
       const path = ottdata.value.redirect;
       loggedIn = true;
-      console.log("On app setUser");
-      console.log(" loggedIn", loggedIn);
+      devlog("On app setUser");
+      devlog(" loggedIn", loggedIn);
       store.commit("ui/setIsloading", false);
 
       if (path) {
@@ -186,7 +187,7 @@ router.beforeEach(async (to, from, next) => {
           await connectXrpClient();
           next();
         } catch (error) {
-          console.log("On app enter connection error", error);
+          devlog("On app enter connection error", error);
 
           next({
             path: "/network-error",

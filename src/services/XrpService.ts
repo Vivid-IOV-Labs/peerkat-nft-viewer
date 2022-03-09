@@ -229,28 +229,28 @@ export async function init(nodetype: string): Promise<any> {
   const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
   client = new xrpl.Client(X_url[0], { connectionTimeout: 2000 });
 
-  //console.log("CLient", client);
+  devlog("CLient", client);
 
-  // client.on("disconnected", async (msg: any) => {
-  //   console.log("Disconnected", msg);
-  // });
-  // client.on("connected", async (msg: any) => {
-  //   console.log("Connected", msg);
-  // });
-  // client.on("peerStatusChange", async (msg: any) => {
-  //   console.log("peerStatusChange", msg);
-  // });
-  // client.on("ledgerClosed", async (msg: any) => {
-  //   console.log("ledgerClosed", msg);
-  // });
-  // client.on("error", async (error: any) => {
-  //   console.log("Connection Errors", error);
-  //   //await connect();
-  //   // throw new Error(error);
-  // });
+  client.on("disconnected", async (msg: any) => {
+    devlog("Disconnected", msg);
+  });
+  client.on("connected", async (msg: any) => {
+    devlog("Connected", msg);
+  });
+  client.on("peerStatusChange", async (msg: any) => {
+    devlog("peerStatusChange", msg);
+  });
+  client.on("ledgerClosed", async (msg: any) => {
+    devlog("ledgerClosed", msg);
+  });
+  client.on("error", async (error: any) => {
+    devlog("Connection Errors", error);
+    //await connect();
+    // throw new Error(error);
+  });
 
   await client.connect();
-
+  devlog("Client", client);
   return {
     connect,
     disconnect,
