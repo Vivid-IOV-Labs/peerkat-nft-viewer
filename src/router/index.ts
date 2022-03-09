@@ -133,6 +133,15 @@ router.beforeEach(async (to, from, next) => {
   if (isInXumm) {
     if (!loggedIn) {
       store.commit("ui/setIsloading", true);
+
+      await store.dispatch("xumm/getOttData");
+      const ottdata = computed(() => store.getters["xumm/getOttData"]);
+      await store.commit("user/setAddress", ottdata.value.account);
+      await store.commit("user/setNodeType", ottdata.value.nodetype);
+      await store.commit("user/setUser", ottdata.value.user);
+      devlog("On app setNodeType", ottdata.value.nodetype);
+      devlog("On app setAddress", ottdata.value.account);
+      devlog("On app setUser", ottdata.value.user);
       try {
         await store.dispatch("nft/initXrpClient", {
           nodetype: nodetype.value,
@@ -143,16 +152,6 @@ router.beforeEach(async (to, from, next) => {
           path: "/network-error",
         });
       }
-
-      await store.dispatch("xumm/getOttData");
-      const ottdata = computed(() => store.getters["xumm/getOttData"]);
-      await store.commit("user/setAddress", ottdata.value.account);
-      await store.commit("user/setNodeType", ottdata.value.nodetype);
-      await store.commit("user/setUser", ottdata.value.user);
-      devlog("On app setNodeType", ottdata.value.nodetype);
-      devlog("On app setAddress", ottdata.value.account);
-      devlog("On app setUser", ottdata.value.user);
-
       if (!shared.value) {
         store.commit("nft/initSharedStore", ottdata.value.user);
       }
