@@ -69,7 +69,7 @@ function getXLSProtocol(source: string): string {
   if (/(http|https|ipfs)?:\/\//.test(source)) {
     return "xls-14";
   } else if (/(hash)?:/.test(source)) {
-    return "xls-16";
+    return "xls-16-peerkat";
   } else {
     return "";
   }
@@ -82,7 +82,7 @@ function getMediaByXLSProtocol(
   if (xlsProtocol == "xls-14") {
     const protocol = source.split("//")[0];
     return protocol + "//" + tokenName;
-  } else if (xlsProtocol == "xls-16") {
+  } else if (xlsProtocol == "xls-16-peerkat") {
     const cid = source.split(":")[1];
     return "https://ipfs.io/ipfs/" + cid;
   } else {
@@ -100,6 +100,47 @@ function getTokenName(currency: string): string {
     return hexToString(removeFirst02);
   }
 }
+function getCtiHex(currency: string): string {
+  const removeFirst02 = currency.replace("02", "");
+  return removeFirst02.substring(0, 14);
+}
+// function cti_is_simple(cti:bigint)
+// {
+//     return (cti >> 56n) == 0;
+// }
+function cti_transaction_index(cti: bigint) {
+  return (cti >> 32n) & 0xffffn;
+}
+function cti_ledger_index(cti: bigint) {
+  return cti & 0xffffffffn;
+}
+function cti_ledger_check(cti: bigint) {
+  return (cti >> 52n) & 0xfn;
+}
+function cti_transaction_check(cti: bigint) {
+  return (cti >> 48n) & 0xfn;
+}
+
+function hexToDec(s: string) {
+  let i,
+    j,
+    // eslint-disable-next-line prefer-const
+    digits: number[] = [0],
+    carry;
+  for (i = 0; i < s.length; i += 1) {
+    carry = parseInt(s.charAt(i), 16);
+    for (j = 0; j < digits.length; j += 1) {
+      digits[j] = digits[j] * 16 + carry;
+      carry = (digits[j] / 10) | 0;
+      digits[j] %= 10;
+    }
+    while (carry > 0) {
+      digits.push(carry % 10);
+      carry = (carry / 10) | 0;
+    }
+  }
+  return digits.reverse().join("");
+}
 async function getOne(
   account_data: any,
   account: string,
@@ -111,21 +152,62 @@ async function getOne(
   const source = is_hexadecimal(hexToString(Domain))
     ? hexToString(hexToString(Domain))
     : hexToString(Domain);
+  const ctiHex = getCtiHex(currency);
+  const ctiDecimal = hexToDec(ctiHex);
+  const ctiDecimalString = ctiDecimal.toString();
+  const ctiBigInt = BigInt(ctiDecimalString);
 
+  const ledgerIndex = cti_ledger_index(ctiBigInt);
+  const ledgerIndexDecimal = Number(ledgerIndex);
+  const transactionIndex = cti_transaction_index(ctiBigInt);
+  const transactionIndexDecimal = Number(transactionIndex);
+
+  const metadata = await getMetadata(
+    ledgerIndexDecimal,
+    transactionIndexDecimal
+  );
+
+  // const metadata = getMetadata();
   const tokenName = getTokenName(currency);
+  let url;
+  let media_type;
+  let desc;
+  let author;
+  if (metadata) {
+    // const metadata = await getMetadata(68075885, 21);
+    console.log(metadata);
+    const uri = metadata.find((m: any) => m.type == "PrimaryUri").data;
+    desc = metadata.find((m: any) => m.type == "Description").data;
+    author = metadata.find((m: any) => m.type == "Author").data;
+    url = "https://ipfs.io/ipfs/" + uri.split("//")[1];
+    media_type = await getMediaType(url);
+  } else {
+    const xlsProtocol = getXLSProtocol(source);
 
-  const xlsProtocol = getXLSProtocol(source);
-  let url = getMediaByXLSProtocol(source, xlsProtocol, tokenName);
+    url = getMediaByXLSProtocol(source, xlsProtocol, tokenName);
 
-  let media_type = await getMediaType(url);
+    media_type = await getMediaType(url);
 
-  if (media_type == "application/json") {
-    const { image } = await fetch(url).then((res) => res.json());
-    if (image) {
-      url = getMediaByXLSProtocol(image, "xls-16");
-      media_type = await getMediaType(url);
+    if (media_type == "application/json") {
+      const { image } = await fetch(url).then((res) => res.json());
+      if (image) {
+        url = getMediaByXLSProtocol(image, "xls-16");
+        media_type = await getMediaType(url);
+      }
     }
   }
+  console.log({
+    issuer: account,
+    issuerTruncated: truncate(account),
+    currency,
+    tokenName,
+    url,
+    media_type,
+    balanceFormatted,
+    limitFormatted,
+    desc,
+    author,
+  });
   return {
     issuer: account,
     issuerTruncated: truncate(account),
@@ -135,6 +217,8 @@ async function getOne(
     media_type,
     balanceFormatted,
     limitFormatted,
+    desc,
+    author,
   };
 }
 let client: any;
@@ -145,6 +229,42 @@ async function connect() {
 async function disconnect() {
   await client.disconnect();
 }
+
+async function getMetadata(ledger_index: number, transactionIndex: number) {
+  try {
+    const { result } = await client.request({
+      command: "ledger",
+      ledger_index: ledger_index,
+      transactions: true,
+      binary: false,
+      expand: true,
+    });
+
+    const { ledger, error } = result;
+    if (error) {
+      throw new Error(error);
+    } else {
+      const getTransaction = ledger.transactions.find((t: any) => {
+        return t.metaData.TransactionIndex == transactionIndex;
+      });
+      const metadata = getTransaction.Memos.map(({ Memo }: any) => {
+        const { MemoData, MemoFormat, MemoType } = Memo;
+        console.log("MemoData", MemoData);
+        console.log("MemoFormat", MemoFormat);
+        console.log("MemoType", MemoType);
+        return {
+          data: hexToString(MemoData),
+          format: hexToString(MemoFormat),
+          type: hexToString(MemoType),
+        };
+      });
+      return metadata;
+    }
+  } catch (error) {
+    return null;
+  }
+}
+
 async function fetchNftLines(walletAddress: string): Promise<any> {
   try {
     const { result } = await client.request({
