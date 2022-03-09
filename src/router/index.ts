@@ -1,7 +1,6 @@
 import { computed } from "vue";
 import { createWebHistory, createRouter } from "vue-router";
 import store from "../store";
-import { devlog } from "../utils/devlog";
 
 const routes = [
   { path: "/", redirect: "/wallet" },
@@ -180,10 +179,9 @@ router.beforeEach(async (to, from, next) => {
           await connectXrpClient();
           next();
         } catch (error) {
-          devlog("Error", error);
-          // next({
-          //   path: "/network-error",
-          // });
+          next({
+            path: "/network-error",
+          });
         }
       } else {
         next();

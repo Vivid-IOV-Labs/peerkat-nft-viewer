@@ -174,8 +174,6 @@ async function getOne(
   let desc;
   let author;
   if (metadata) {
-    // const metadata = await getMetadata(68075885, 21);
-    console.log(metadata);
     const uri = metadata.find((m: any) => m.type == "PrimaryUri").data;
     desc = metadata.find((m: any) => m.type == "Description").data;
     author = metadata.find((m: any) => m.type == "Author").data;
@@ -196,18 +194,6 @@ async function getOne(
       }
     }
   }
-  console.log({
-    issuer: account,
-    issuerTruncated: truncate(account),
-    currency,
-    tokenName,
-    url,
-    media_type,
-    balanceFormatted,
-    limitFormatted,
-    desc,
-    author,
-  });
   return {
     issuer: account,
     issuerTruncated: truncate(account),
@@ -349,8 +335,7 @@ async function fetchNext(nextLines: line[]): Promise<NFT[]> {
 
 export async function init(nodetype: string): Promise<any> {
   const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
-  // client = new xrpl.Client(X_url[0], { connectionTimeout: 2000 });
-  client = new xrpl.Client(X_url[0]);
+  client = new xrpl.Client(X_url[0], { connectionTimeout: 2000 });
 
   //console.log("CLient", client);
 

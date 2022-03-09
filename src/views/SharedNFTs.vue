@@ -35,12 +35,10 @@
 import { computed, defineComponent, inject } from "vue";
 import { useStore } from "vuex";
 import NftSharedCard from "@/components/NftSharedCard.vue";
-import ExternalLink from "@/components/ExternalLink.vue";
 
 export default defineComponent({
   components: {
     NftSharedCard,
-    ExternalLink,
   },
   async setup() {
     const store = useStore();
