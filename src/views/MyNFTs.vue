@@ -101,6 +101,7 @@ export default defineComponent({
     const NFTMedia = computed(() => store.getters["nft/getAll"]);
     const lines = computed(() => store.getters["nft/getLines"]);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
+    devlog("Before fetchNftLines lines", lines.value);
 
     const populateNFTs = async () => {
       try {
@@ -108,7 +109,11 @@ export default defineComponent({
           walletAddress: walletAddress.value,
           nodetype: nodetype.value,
         });
+        devlog("After fetchNftLines lines", lines.value);
+        devlog("Before fetchNext NFTMedia", lines.value);
+
         await store.dispatch("nft/fetchNext", nodetype.value);
+        devlog("After fetchNext NFTMedia", lines.value);
       } catch (error) {
         devlog("ON POPULATE", error);
       }
