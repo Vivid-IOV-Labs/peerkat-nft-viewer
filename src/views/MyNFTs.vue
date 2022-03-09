@@ -113,7 +113,7 @@ export default defineComponent({
         devlog("Before fetchNext NFTMedia", NFTMedia.value);
 
         await store.dispatch("nft/fetchNext", nodetype.value);
-        devlog("After fetchNext NFTMedia", NFTMedia.value);
+        devlog("After fetchNext NFTMedia", NFTMedia.value[0].tokenName);
       } catch (error) {
         devlog("ON POPULATE", error);
       }
