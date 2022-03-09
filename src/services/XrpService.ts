@@ -188,9 +188,7 @@ async function fetchOne(
   });
   const { result, error, error_code, error_message } = allReps;
   const { account_data } = result;
-  devlog("fetchone Error", error);
-  // console.log("error_code", error_code);
-  // console.log("error_message", error_message);
+
   if (currency) {
     return getOne(
       account_data,

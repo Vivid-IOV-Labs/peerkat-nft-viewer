@@ -1,6 +1,7 @@
 import { computed } from "vue";
 import { createWebHistory, createRouter } from "vue-router";
 import store from "../store";
+import { devlog } from "../utils/devlog";
 
 const routes = [
   { path: "/", redirect: "/wallet" },
@@ -126,6 +127,7 @@ const connectXrpClient = async () => {
   });
 };
 let loggedIn = false;
+devlog(" loggedIn", loggedIn);
 
 router.beforeEach(async (to, from, next) => {
   if (isInXumm) {
@@ -136,6 +138,7 @@ router.beforeEach(async (to, from, next) => {
           nodetype: nodetype.value,
         });
       } catch (error) {
+        devlog("On app enter connection error", error);
         next({
           path: "/network-error",
         });
@@ -146,6 +149,8 @@ router.beforeEach(async (to, from, next) => {
       store.commit("user/setAddress", ottdata.value.account);
       store.commit("user/setNodeType", ottdata.value.nodetype);
       store.commit("user/setUser", ottdata.value.user);
+      devlog("On app setUser");
+      devlog("On app setUser");
 
       if (!shared.value) {
         store.commit("nft/initSharedStore", ottdata.value.user);
@@ -153,6 +158,8 @@ router.beforeEach(async (to, from, next) => {
 
       const path = ottdata.value.redirect;
       loggedIn = true;
+      devlog("On app setUser");
+      devlog(" loggedIn", loggedIn);
       store.commit("ui/setIsloading", false);
 
       if (path) {
@@ -179,6 +186,8 @@ router.beforeEach(async (to, from, next) => {
           await connectXrpClient();
           next();
         } catch (error) {
+          devlog("On app enter connection error", error);
+
           next({
             path: "/network-error",
           });
