@@ -247,6 +247,9 @@ export async function init(nodetype: string): Promise<any> {
 
   await client.connect();
   devlog("Client", client);
+  devlog("Client", client.isConnected);
+  devlog("Client", client.connection);
+  devlog("Client", client.url);
   return {
     connect,
     disconnect,
