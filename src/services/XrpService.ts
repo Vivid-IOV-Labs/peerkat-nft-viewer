@@ -229,8 +229,6 @@ export async function init(nodetype: string): Promise<any> {
   const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
   client = new xrpl.Client(X_url[0], { connectionTimeout: 2000 });
 
-  devlog("CLient", client);
-
   client.on("disconnected", async (msg: any) => {
     devlog("Disconnected", msg);
   });
@@ -245,8 +243,6 @@ export async function init(nodetype: string): Promise<any> {
   });
   client.on("error", async (error: any) => {
     devlog("Connection Errors", error);
-    //await connect();
-    // throw new Error(error);
   });
 
   await client.connect();
