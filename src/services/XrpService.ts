@@ -104,10 +104,9 @@ function getCtiHex(currency: string): string {
   const removeFirst02 = currency.replace("02", "");
   return removeFirst02.substring(0, 14);
 }
-// function cti_is_simple(cti:bigint)
-// {
-//     return (cti >> 56n) == 0;
-// }
+function cti_is_simple(cti: bigint) {
+  return cti >> 56n == 0;
+}
 function cti_transaction_index(cti: bigint) {
   return (cti >> 32n) & 0xffffn;
 }
@@ -157,15 +156,15 @@ async function getOne(
   const ctiDecimalString = ctiDecimal.toString();
   const ctiBigInt = BigInt(ctiDecimalString);
 
+  const isValidCti = cti_is_simple(ctiBigInt);
+  const isValidCtiLedger = cti_ledger_check(ctiBigInt);
+  const isValidCtiTransaction = cti_transaction_check(ctiBigInt);
+
   const ledgerIndex = cti_ledger_index(ctiBigInt);
   const ledgerIndexDecimal = Number(ledgerIndex);
+
   const transactionIndex = cti_transaction_index(ctiBigInt);
   const transactionIndexDecimal = Number(transactionIndex);
-
-  const metadata = await getMetadata(
-    ledgerIndexDecimal,
-    transactionIndexDecimal
-  );
 
   // const metadata = getMetadata();
   const tokenName = getTokenName(currency);
@@ -173,7 +172,14 @@ async function getOne(
   let media_type;
   let desc;
   let author;
-  if (metadata) {
+  if (
+    ledgerIndexDecimal.toString().length >= 8 &&
+    ledgerIndexDecimal.toString().length <= 9
+  ) {
+    const metadata = await getMetadata(
+      ledgerIndexDecimal,
+      transactionIndexDecimal
+    );
     const uri = metadata.find((m: any) => m.type == "PrimaryUri").data;
     desc = metadata.find((m: any) => m.type == "Description").data;
     author = metadata.find((m: any) => m.type == "Author").data;
@@ -235,9 +241,9 @@ async function getMetadata(ledger_index: number, transactionIndex: number) {
       });
       const metadata = getTransaction.Memos.map(({ Memo }: any) => {
         const { MemoData, MemoFormat, MemoType } = Memo;
-        console.log("MemoData", MemoData);
-        console.log("MemoFormat", MemoFormat);
-        console.log("MemoType", MemoType);
+        devlog("MemoData", MemoData);
+        devlog("MemoFormat", MemoFormat);
+        devlog("MemoType", MemoType);
         return {
           data: hexToString(MemoData),
           format: hexToString(MemoFormat),

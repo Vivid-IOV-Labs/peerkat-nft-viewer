@@ -127,7 +127,6 @@ const connectXrpClient = async () => {
   });
 };
 let loggedIn = false;
-devlog(" loggedIn", loggedIn);
 
 router.beforeEach(async (to, from, next) => {
   if (isInXumm) {
@@ -139,9 +138,7 @@ router.beforeEach(async (to, from, next) => {
       await store.commit("user/setAddress", ottdata.value.account);
       await store.commit("user/setNodeType", ottdata.value.nodetype);
       await store.commit("user/setUser", ottdata.value.user);
-      devlog("On app setNodeType", ottdata.value.nodetype);
-      devlog("On app setAddress", ottdata.value.account);
-      devlog("On app setUser", ottdata.value.user);
+
       try {
         await store.dispatch("nft/initXrpClient", {
           nodetype: nodetype.value,
@@ -158,8 +155,6 @@ router.beforeEach(async (to, from, next) => {
 
       const path = ottdata.value.redirect;
       loggedIn = true;
-      devlog("On app setUser");
-      devlog(" loggedIn", loggedIn);
       store.commit("ui/setIsloading", false);
 
       if (path) {
