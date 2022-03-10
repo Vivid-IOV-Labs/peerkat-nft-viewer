@@ -45,13 +45,6 @@
         >. We are considering support for XLS14/SOLO and other NFT variations,
         we will support XLS20 native NFTs on XRPL (currently in devnet)
       </li>
-      <li class="pb-2">
-        <strong
-          >Please note that we currently support XLS14 NFTs on XRPL only</strong
-        >
-        . We are considering support for XLS14/SOLO and other NFT variations. We
-        will support XLS20 native NFTs on XRPL (currently in devnet)
-      </li>
     </ul>
   </div>
 </template>
@@ -101,6 +94,7 @@ export default defineComponent({
     const NFTMedia = computed(() => store.getters["nft/getAll"]);
     const lines = computed(() => store.getters["nft/getLines"]);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
+    devlog("Before fetchNftLines lines", lines.value);
 
     const populateNFTs = async () => {
       try {
@@ -108,7 +102,11 @@ export default defineComponent({
           walletAddress: walletAddress.value,
           nodetype: nodetype.value,
         });
+        devlog("After fetchNftLines lines", lines.value);
+        devlog("Before fetchNext NFTMedia", NFTMedia.value);
+
         await store.dispatch("nft/fetchNext", nodetype.value);
+        devlog("After fetchNext NFTMedia", NFTMedia.value[0].tokenName);
       } catch (error) {
         devlog("ON POPULATE", error);
       }
