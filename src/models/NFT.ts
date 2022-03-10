@@ -6,6 +6,6 @@ export interface NFT {
   author?: string;
   currency: string;
   tokenName: string;
-  url: string;
-  media_type: string | null;
+  url?: string;
+  media_type?: string | null;
 }
