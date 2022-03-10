@@ -104,7 +104,7 @@ export default defineComponent({
         const url =
           xummSandbox === "test"
             ? `https://xumm.app/detect/xapp:peerkat.sandbox.test?redirect=/shared/${props.nft.issuer}/${nodetypecode}`
-            : `https://xumm.app/detect/xapp:peerkat.sandbox?redirect=/shared/${props.nft.issuer}/${nodetypecode}`;
+            : `https://xumm.app/detect/xapp:peerkat.viewer?redirect=/shared/${props.nft.issuer}/${nodetypecode}`;
         copyText(url, params);
       },
       view() {
