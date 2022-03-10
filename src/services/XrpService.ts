@@ -193,11 +193,15 @@ async function getOne(
       ledgerIndexDecimal,
       transactionIndexDecimal
     );
-    const uri = metadata.find((m: any) => m.type == "PrimaryUri").data;
-    desc = metadata.find((m: any) => m.type == "Description").data;
-    author = metadata.find((m: any) => m.type == "Author").data;
-    url = "https://ipfs.io/ipfs/" + uri.split("//")[1];
-    media_type = await getMediaType(url);
+    if (metadata) {
+      const uri = metadata.find((m: any) => m.type == "PrimaryUri").data;
+      desc = metadata.find((m: any) => m.type == "Description").data;
+      author = metadata.find((m: any) => m.type == "Author").data;
+      url = "https://ipfs.io/ipfs/" + uri.split("//")[1];
+      media_type = await getMediaType(url);
+    } else {
+      devlog("no metadata");
+    }
   } else {
     devlog("ledgerIndexDecimal not btween 8 and 9 : xls-14");
 
