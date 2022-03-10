@@ -117,8 +117,8 @@ export default defineComponent({
     const user = computed(() => store.getters["user/getUser"]);
     const bihompUrl = computed(() =>
       nodetype.value == "TESTNET"
-        ? `https://test.bithomp.com/explorer/${props.nft.issuer}`
-        : `https://bithomp.com/explorer/${props.nft.issuer}`
+        ? `https://test.bithomp.com/explorer/${route.params.nodetype}`
+        : `https://bithomp.com/explorer/${route.params.nodetype}`
     );
     const nft = ref<NFT | null>(null);
     if (nodetypefromlink == nodetype.value) {
