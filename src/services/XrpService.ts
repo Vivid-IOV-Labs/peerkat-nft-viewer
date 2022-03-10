@@ -171,7 +171,6 @@ async function getOne(
   devlog("ctiDecimal", ctiDecimal);
   devlog("ctiDecimalString", ctiDecimalString);
   devlog("ctiBigInt", ctiBigInt);
-  devlog("isValidCti", isValidCti);
   devlog("isValidCtiLedger", isValidCtiLedger);
   devlog("isValidCtiTransaction", isValidCtiTransaction);
   devlog("ledgerIndex", ledgerIndex);
