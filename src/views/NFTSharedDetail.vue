@@ -70,11 +70,7 @@
           </div>
         </template>
         <template #footer>
-          <external-link
-            class="mr-2"
-            :url="`https://test.bithomp.com/explorer/${$route.params.nftAddress}`"
-            >Inspect</external-link
-          >
+          <external-link class="mr-2" :url="bihompUrl">Inspect</external-link>
         </template>
       </base-card>
       <div v-else class="p-2">
@@ -127,6 +123,11 @@ export default defineComponent({
     const client = computed(() => store.getters["nft/getXrpClient"]);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const user = computed(() => store.getters["user/getUser"]);
+    const bihompUrl = computed(() =>
+      nodetype.value == "TESTNET"
+        ? `https://test.bithomp.com/explorer/${props.nft.issuer}`
+        : `https://bithomp.com/explorer/${props.nft.issuer}`
+    );
     const nft = ref<NFT | null>(null);
     if (nodetypefromlink == nodetype.value) {
       try {
@@ -148,6 +149,7 @@ export default defineComponent({
       othernodetype,
       nodetype,
       nodetypefromlink,
+      bihompUrl,
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
