@@ -45,13 +45,6 @@
         >. We are considering support for XLS14/SOLO and other NFT variations,
         we will support XLS20 native NFTs on XRPL (currently in devnet)
       </li>
-      <li class="pb-2">
-        <strong
-          >Please note that we currently support XLS14 NFTs on XRPL only</strong
-        >
-        . We are considering support for XLS14/SOLO and other NFT variations. We
-        will support XLS20 native NFTs on XRPL (currently in devnet)
-      </li>
     </ul>
   </div>
 </template>
