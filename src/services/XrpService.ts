@@ -104,9 +104,9 @@ function getCtiHex(currency: string): string {
   const removeFirst02 = currency.replace("02", "");
   return removeFirst02.substring(0, 14);
 }
-function cti_is_simple(cti: bigint) {
-  return cti >> 56n == 0;
-}
+// function cti_is_simple(cti: bigint) {
+//   return cti >> 56n == 0;
+// }
 function cti_transaction_index(cti: bigint) {
   return (cti >> 32n) & 0xffffn;
 }
@@ -156,7 +156,7 @@ async function getOne(
   const ctiDecimalString = ctiDecimal.toString();
   const ctiBigInt = BigInt(ctiDecimalString);
 
-  const isValidCti = cti_is_simple(ctiBigInt);
+  //const isValidCti = cti_is_simple(ctiBigInt);
   const isValidCtiLedger = cti_ledger_check(ctiBigInt);
   const isValidCtiTransaction = cti_transaction_check(ctiBigInt);
 
