@@ -165,7 +165,19 @@ async function getOne(
 
   const transactionIndex = cti_transaction_index(ctiBigInt);
   const transactionIndexDecimal = Number(transactionIndex);
-
+  devlog("account", account);
+  devlog("currency", currency);
+  devlog("ctiHex", ctiHex);
+  devlog("ctiDecimal", ctiDecimal);
+  devlog("ctiDecimalString", ctiDecimalString);
+  devlog("ctiBigInt", ctiBigInt);
+  devlog("isValidCti", isValidCti);
+  devlog("isValidCtiLedger", isValidCtiLedger);
+  devlog("isValidCtiTransaction", isValidCtiTransaction);
+  devlog("ledgerIndex", ledgerIndex);
+  devlog("ledgerIndexDecimal", ledgerIndexDecimal);
+  devlog("transactionIndex", transactionIndex);
+  devlog("transactionIndexDecimal", transactionIndexDecimal);
   // const metadata = getMetadata();
   const tokenName = getTokenName(currency);
   let url;
@@ -176,6 +188,8 @@ async function getOne(
     ledgerIndexDecimal.toString().length >= 8 &&
     ledgerIndexDecimal.toString().length <= 9
   ) {
+    devlog("ledgerIndexDecimal btween 8 and 9 : xls-15/16");
+
     const metadata = await getMetadata(
       ledgerIndexDecimal,
       transactionIndexDecimal
@@ -186,6 +200,8 @@ async function getOne(
     url = "https://ipfs.io/ipfs/" + uri.split("//")[1];
     media_type = await getMediaType(url);
   } else {
+    devlog("ledgerIndexDecimal not btween 8 and 9 : xls-14");
+
     const xlsProtocol = getXLSProtocol(source);
 
     url = getMediaByXLSProtocol(source, xlsProtocol, tokenName);
