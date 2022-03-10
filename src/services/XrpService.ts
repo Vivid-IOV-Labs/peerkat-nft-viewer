@@ -203,19 +203,35 @@ async function getOne(
     devlog("ledgerIndexDecimal not btween 8 and 9 : xls-14");
 
     const xlsProtocol = getXLSProtocol(source);
+    devlog("xlsProtocol", xlsProtocol);
 
     url = getMediaByXLSProtocol(source, xlsProtocol, tokenName);
 
     media_type = await getMediaType(url);
 
     if (media_type == "application/json") {
+      devlog("media_type application/json");
+
       const { image } = await fetch(url).then((res) => res.json());
       if (image) {
-        url = getMediaByXLSProtocol(image, "xls-16");
+        url = getMediaByXLSProtocol(image, "xls-16-peerkat");
         media_type = await getMediaType(url);
       }
     }
   }
+  devlog("result", {
+    issuer: account,
+    issuerTruncated: truncate(account),
+    currency,
+    tokenName,
+    url,
+    media_type,
+    balanceFormatted,
+    limitFormatted,
+    desc,
+    author,
+  });
+
   return {
     issuer: account,
     issuerTruncated: truncate(account),
