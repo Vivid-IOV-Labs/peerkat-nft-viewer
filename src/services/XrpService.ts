@@ -204,7 +204,8 @@ async function getOne(
   // const metadata = getMetadata();
   const tokenName = getTokenName(currency);
   if (isXls14Solo(currency)) {
-    const metadataUrl = "https://ipfs.io/ipfs/" + source.split("//")[1];
+    const metadataUrl =
+      "https://peerkat.mypinata.cloud/ipfs/" + source.split("//")[1];
     devlog(metadataUrl);
 
     try {
@@ -212,7 +213,8 @@ async function getOne(
       const { nfts } = collection;
       const nft = nfts.find((n: any) => n.currency == currency);
       const { content_type, metadata } = nft;
-      const metadaNftUrl = "https://ipfs.io/ipfs/" + metadata.split("//")[1];
+      const metadaNftUrl =
+        "https://peerkat.mypinata.cloud/ipfs/" + metadata.split("//")[1];
       // const res = await fetch(metadaNftUrl).then((res) => res.json());
       // console.log("res", res);
       const fil_ext = content_type.split("/")[1];
