@@ -215,8 +215,8 @@ async function getOne(
       const { content_type, metadata } = nft;
       const metadaNftUrl =
         "https://peerkat.mypinata.cloud/ipfs/" + metadata.split("//")[1];
-      // const res = await fetch(metadaNftUrl).then((res) => res.json());
-      // console.log("res", res);
+      const res = await fetch(metadaNftUrl).then((res) => res.json());
+      console.log("res", res);
       const fil_ext = content_type.split("/")[1];
       const mediaUrl = metadaNftUrl.replace("metadata.json", `data.${fil_ext}`);
       const media = await fetch(mediaUrl).then((res) => res.blob());
