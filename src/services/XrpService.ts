@@ -208,17 +208,20 @@ async function getOne(
     devlog(metadataUrl);
 
     try {
-      const { nfts } = await fetch(metadataUrl).then((res) => res.json());
-      const { content_type, metadata } = nfts.find(
-        (n: any) => n.currency == currency
-      );
-      const metdatNftUrl = "https://ipfs.io/ipfs/" + metadata.split("//")[1];
-      const res = await fetch(metadataUrl).then((res) => res.json());
-      const mediaUrl = metdatNftUrl.replace("metadata.json", "data.jpeg");
+      const collection = await fetch(metadataUrl).then((res) => res.json());
+      const { nfts } = collection;
+      const nft = nfts.find((n: any) => n.currency == currency);
+      const { content_type, metadata } = nft;
+      const metadaNftUrl = "https://ipfs.io/ipfs/" + metadata.split("//")[1];
+      // const res = await fetch(metadaNftUrl).then((res) => res.json());
+      // console.log("res", res);
+      const fil_ext = content_type.split("/")[1];
+      const mediaUrl = metadaNftUrl.replace("metadata.json", `data.${fil_ext}`);
       const media = await fetch(mediaUrl).then((res) => res.blob());
       devlog(media);
       media_type = content_type;
       url = URL.createObjectURL(media);
+      debugger;
     } catch (error) {
       devlog(error);
       debugger;
