@@ -140,6 +140,25 @@ function hexToDec(s: string) {
   }
   return digits.reverse().join("");
 }
+function isXls14Solo(currency: string) {
+  currency.includes("023031");
+  const first6 = currency.slice(0, 6);
+  const next10 = currency.slice(6, 16);
+  const last24 = currency.slice(-24);
+  const first6ofLast24 = last24.slice(0, 6);
+  const isNFT = hexToString(first6ofLast24) === "NFT";
+  debugger;
+  return isNFT;
+}
+function get14Solo(currency: string) {
+  currency.includes("023031");
+  const first6 = currency.slice(0, 6);
+  const next10 = currency.slice(6, 16);
+  const last24 = currency.slice(-24);
+  const first6ofLast24 = last24.slice(0, 6);
+  const isNFT = hexToString(first6ofLast24) === "NFT";
+  return isNFT;
+}
 async function getOne(
   account_data: any,
   account: string,
@@ -151,6 +170,11 @@ async function getOne(
   const source = is_hexadecimal(hexToString(Domain))
     ? hexToString(hexToString(Domain))
     : hexToString(Domain);
+  let url;
+  let media_type;
+  let desc;
+  let author;
+
   const ctiHex = getCtiHex(currency);
   const ctiDecimal = hexToDec(ctiHex);
   const ctiDecimalString = ctiDecimal.toString();
@@ -179,11 +203,27 @@ async function getOne(
   devlog("transactionIndexDecimal", transactionIndexDecimal);
   // const metadata = getMetadata();
   const tokenName = getTokenName(currency);
-  let url;
-  let media_type;
-  let desc;
-  let author;
-  if (
+  if (isXls14Solo(currency)) {
+    const metadataUrl = "https://ipfs.io/ipfs/" + source.split("//")[1];
+    console.log(metadataUrl);
+
+    try {
+      const { nfts } = await fetch(metadataUrl).then((res) => res.json());
+      const { content_type, metadata } = nfts.find(
+        (n: any) => n.currency == currency
+      );
+      const metdatNftUrl = "https://ipfs.io/ipfs/" + metadata.split("//")[1];
+      const res = await fetch(metadataUrl).then((res) => res.json());
+      const mediaUrl = metdatNftUrl.replace("metadata.json", "data.jpeg");
+      const media = await fetch(mediaUrl).then((res) => res.blob());
+      console.log(media);
+      media_type = content_type;
+      url = URL.createObjectURL(media);
+    } catch (error) {
+      console.log(error);
+      debugger;
+    }
+  } else if (
     ledgerIndexDecimal.toString().length >= 8 &&
     ledgerIndexDecimal.toString().length <= 9
   ) {
