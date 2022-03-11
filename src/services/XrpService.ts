@@ -140,25 +140,7 @@ function hexToDec(s: string) {
   }
   return digits.reverse().join("");
 }
-function isXls14Solo(currency: string) {
-  currency.includes("023031");
-  const first6 = currency.slice(0, 6);
-  const next10 = currency.slice(6, 16);
-  const last24 = currency.slice(-24);
-  const first6ofLast24 = last24.slice(0, 6);
-  const isNFT = hexToString(first6ofLast24) === "NFT";
-  debugger;
-  return isNFT;
-}
-function get14Solo(currency: string) {
-  currency.includes("023031");
-  const first6 = currency.slice(0, 6);
-  const next10 = currency.slice(6, 16);
-  const last24 = currency.slice(-24);
-  const first6ofLast24 = last24.slice(0, 6);
-  const isNFT = hexToString(first6ofLast24) === "NFT";
-  return isNFT;
-}
+
 async function getOne(
   account_data: any,
   account: string,
@@ -203,32 +185,7 @@ async function getOne(
   devlog("transactionIndexDecimal", transactionIndexDecimal);
   // const metadata = getMetadata();
   const tokenName = getTokenName(currency);
-  if (isXls14Solo(currency)) {
-    const metadataUrl =
-      "https://peerkat.mypinata.cloud/ipfs/" + source.split("//")[1];
-    devlog(metadataUrl);
-
-    try {
-      const collection = await fetch(metadataUrl).then((res) => res.json());
-      const { nfts } = collection;
-      const nft = nfts.find((n: any) => n.currency == currency);
-      const { content_type, metadata } = nft;
-      const metadaNftUrl =
-        "https://peerkat.mypinata.cloud/ipfs/" + metadata.split("//")[1];
-      const res = await fetch(metadaNftUrl).then((res) => res.json());
-      console.log("res", res);
-      const fil_ext = content_type.split("/")[1];
-      const mediaUrl = metadaNftUrl.replace("metadata.json", `data.${fil_ext}`);
-      const media = await fetch(mediaUrl).then((res) => res.blob());
-      devlog(media);
-      media_type = content_type;
-      url = URL.createObjectURL(media);
-      debugger;
-    } catch (error) {
-      devlog(error);
-      debugger;
-    }
-  } else if (
+  if (
     ledgerIndexDecimal.toString().length >= 8 &&
     ledgerIndexDecimal.toString().length <= 9
   ) {
