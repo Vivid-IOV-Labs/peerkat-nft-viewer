@@ -205,7 +205,7 @@ async function getOne(
   const tokenName = getTokenName(currency);
   if (isXls14Solo(currency)) {
     const metadataUrl = "https://ipfs.io/ipfs/" + source.split("//")[1];
-    console.log(metadataUrl);
+    devlog(metadataUrl);
 
     try {
       const { nfts } = await fetch(metadataUrl).then((res) => res.json());
@@ -216,11 +216,11 @@ async function getOne(
       const res = await fetch(metadataUrl).then((res) => res.json());
       const mediaUrl = metdatNftUrl.replace("metadata.json", "data.jpeg");
       const media = await fetch(mediaUrl).then((res) => res.blob());
-      console.log(media);
+      devlog(media);
       media_type = content_type;
       url = URL.createObjectURL(media);
     } catch (error) {
-      console.log(error);
+      devlog(error);
       debugger;
     }
   } else if (
