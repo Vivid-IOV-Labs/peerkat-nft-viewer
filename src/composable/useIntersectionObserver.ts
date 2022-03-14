@@ -15,6 +15,8 @@ export default function useIntersectionObserver(
   const isFullyInView = ref(false);
   function observe() {
     if (target.value) {
+      console.log("OBSERVE");
+
       observer.observe(target.value);
     }
   }
@@ -33,7 +35,7 @@ export default function useIntersectionObserver(
 
         isIntersecting.value = false;
       },
-      { root: root.value, rootMargin: "0px 280px", threshold: 0.1 }
+      { root: null, rootMargin: "0px 240px", threshold: 0 }
     );
     observe();
   });
@@ -42,6 +44,7 @@ export default function useIntersectionObserver(
     if (!observer) return;
 
     if (target.value) {
+      console.log("UNOBSERVE");
       observer.unobserve(target.value);
     }
   }
