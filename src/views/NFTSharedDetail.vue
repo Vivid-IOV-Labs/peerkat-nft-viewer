@@ -135,7 +135,8 @@ export default defineComponent({
     if (nodetypefromlink == nodetype.value) {
       try {
         nft.value = await client.value.fetchOne(
-          route.params.nftAddress.toString()
+          route.params.nftAddress.toString(),
+          route.params.currency.toString()
         );
         store.commit("nft/addShared", {
           shared: nft.value,

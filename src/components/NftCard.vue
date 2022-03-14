@@ -111,8 +111,8 @@ export default defineComponent({
         const xummSandbox = import.meta.env.VITE_XUMM_SANDBOX;
         const url =
           xummSandbox === "test"
-            ? `https://xumm.app/detect/xapp:peerkat.sandbox.test?redirect=/shared/${props.nft.issuer}/${nodetypecode}`
-            : `https://xumm.app/detect/xapp:peerkat.viewer?redirect=/shared/${props.nft.issuer}/${nodetypecode}`;
+            ? `https://xumm.app/detect/xapp:peerkat.sandbox.test?redirect=/shared/${props.nft.issuer}/${nodetypecode}/${props.nft.currency}`
+            : `https://xumm.app/detect/xapp:peerkat.viewer?redirect=/shared/${props.nft.issuer}/${nodetypecode}/${props.nft.currency}`;
         copyText(url, params);
       },
       view() {
