@@ -208,10 +208,10 @@ async function getOne(
       // console.log("res", res);
       const fil_ext = content_type.split("/")[1];
       const mediaUrl = metadaNftUrl.replace("metadata.json", `data.${fil_ext}`);
-      const media = await fetch(mediaUrl).then((res) => res.blob());
-      devlog(media);
+      // const media = await fetch(mediaUrl).then((res) => res.blob());
+      // devlog(media);
       media_type = content_type;
-      url = URL.createObjectURL(media);
+      url = mediaUrl;
     } catch (error) {
       devlog(error);
       debugger;
