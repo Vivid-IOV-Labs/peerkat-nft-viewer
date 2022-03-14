@@ -1,5 +1,7 @@
 import { NFT } from "../models/NFT";
 import { devlog } from "../utils/devlog";
+const ipfsGateway = import.meta.env.VITE_IPFS_GATEWAY;
+
 const xrpl = (window as any).xrpl;
 type line = {
   balance: string;
@@ -84,7 +86,7 @@ function getMediaByXLSProtocol(
     return protocol + "//" + tokenName;
   } else if (xlsProtocol == "xls-16-peerkat") {
     const cid = source.split(":")[1];
-    return "https://ipfs.io/ipfs/" + cid;
+    return ipfsGateway + "/" + cid;
   } else {
     return "";
   }
@@ -199,7 +201,7 @@ async function getOne(
       const uri = metadata.find((m: any) => m.type == "PrimaryUri").data;
       desc = metadata.find((m: any) => m.type == "Description").data;
       author = metadata.find((m: any) => m.type == "Author").data;
-      url = "https://ipfs.io/ipfs/" + uri.split("//")[1];
+      url = ipfsGateway + "/" + uri.split("//")[1];
       media_type = await getMediaType(url);
     } else {
       devlog("no metadata");

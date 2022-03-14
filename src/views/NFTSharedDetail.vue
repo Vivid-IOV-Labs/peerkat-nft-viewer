@@ -4,7 +4,7 @@
       >Back
     </router-link>
 
-    <div class="w-100 p-1">
+    <div v-if="!malformedLink" class="w-100 p-1">
       <base-card v-if="nft">
         <template #picture>
           <figure style="overflow: hidden">
@@ -94,6 +94,9 @@
         </ul>
       </div>
     </div>
+    <div v-if="malformedLink">
+      <h1 class="text-center">Item not found or link malformed</h1>
+    </div>
   </div>
 </template>
 
@@ -119,10 +122,10 @@ export default defineComponent({
     const nodetypefromlink = getNetworkTypeFromCode(
       parseInt(route.params.nodetype as string)
     );
-    const othernodetype = nodetypefromlink == "TESTNET" ? "MAINNET" : "TESTNET";
     const client = computed(() => store.getters["nft/getXrpClient"]);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const user = computed(() => store.getters["user/getUser"]);
+    const malformedLink = ref(false);
     const bihompUrl = computed(() =>
       nodetype.value == "TESTNET"
         ? `https://test.bithomp.com/explorer/${route.params.nftAddress.toString()}`
@@ -140,16 +143,19 @@ export default defineComponent({
           walletaddress: user.value,
         });
       } catch (error) {
+        malformedLink.value = true;
         devlog(error);
       }
+    } else {
+      malformedLink.value = true;
     }
 
     return {
       nft,
-      othernodetype,
       nodetype,
       nodetypefromlink,
       bihompUrl,
+      malformedLink,
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
