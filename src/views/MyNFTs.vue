@@ -123,7 +123,7 @@ export default defineComponent({
       if (!endload.value) {
         unobserve();
         await fetchNext();
-        await delay(200);
+        await delay(100);
         observe();
       }
     });
