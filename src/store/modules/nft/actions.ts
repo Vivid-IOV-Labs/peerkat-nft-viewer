@@ -48,7 +48,10 @@ const actions: ActionTree<NFT, NFTState> = {
     const client = getters.getXrpClient;
     const count = getters.getAll.length;
     const nextLines = getters.getLines.slice(count, count + 2);
+    console.log("LOADING NEXt", nextLines);
     const nextNfts: NFT[] = await client.fetchNext(nextLines);
+    console.log("LOADING NEXt", nextNfts);
+
     commit("setAll", nextNfts);
   },
 };
