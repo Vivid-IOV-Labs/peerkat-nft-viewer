@@ -57,6 +57,7 @@ import { inject } from "vue";
 import useIntersectionObserver from "../composable/useIntersectionObserver";
 import { devlog } from "../utils/devlog";
 import store from "../store";
+import { delay } from "../utils/delay";
 
 export default defineComponent({
   components: {
@@ -89,7 +90,6 @@ export default defineComponent({
 
     const isConnected = computed(() => store.getters["nft/getIsConnected"]);
     const endload = ref(false);
-    const isLoadingNext = ref(false);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const NFTMedia = computed(() => store.getters["nft/getAll"]);
     const lines = computed(() => store.getters["nft/getLines"]);
@@ -112,19 +112,19 @@ export default defineComponent({
       }
     };
 
-    const { unobserve, isIntersecting } = useIntersectionObserver(
+    const { unobserve, observe, isIntersecting } = useIntersectionObserver(
       scroller,
       sentinel
     );
     async function fetchNext() {
-      isLoadingNext.value = true;
-
       await store.dispatch("nft/fetchNext", nodetype.value);
-      isLoadingNext.value = false;
     }
     watch(isIntersecting, async () => {
-      if (!endload.value && !isLoadingNext.value) {
+      if (!endload.value) {
+        unobserve();
         await fetchNext();
+        await delay(200);
+        observe();
       }
     });
     watch(NFTMedia, async (newNfts) => {
