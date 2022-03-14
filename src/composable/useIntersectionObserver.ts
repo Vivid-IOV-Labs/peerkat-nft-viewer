@@ -2,13 +2,7 @@ import { onMounted, Ref, ref, onUnmounted } from "vue";
 
 export default function useIntersectionObserver(
   root: Ref<Element | Document | null>,
-  target: Ref<HTMLElement | null>,
-  //cbk: () => Promise<void>,
-  options: IntersectionObserverInit = {
-    root: document.getElementById("scroller"),
-    rootMargin: "180px",
-    threshold: 0,
-  }
+  target: Ref<HTMLElement | null>
 ): any {
   const intersectionRatio = ref(0);
   const isIntersecting = ref(false);
@@ -33,7 +27,7 @@ export default function useIntersectionObserver(
 
         isIntersecting.value = false;
       },
-      { root: root.value, rootMargin: "0px 280px" }
+      { root: null, rootMargin: "0px 200px", threshold: 0 }
     );
     observe();
   });
