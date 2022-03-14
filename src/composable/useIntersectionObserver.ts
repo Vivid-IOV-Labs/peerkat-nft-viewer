@@ -33,7 +33,7 @@ export default function useIntersectionObserver(
 
         isIntersecting.value = false;
       },
-      { root: root.value, rootMargin: "0px 500px" }
+      { root: root.value, rootMargin: "0px 200px" }
     );
     observe();
   });
