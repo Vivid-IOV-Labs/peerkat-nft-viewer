@@ -27,7 +27,7 @@ export default function useIntersectionObserver(
 
         isIntersecting.value = false;
       },
-      { root: null, rootMargin: "0px 200px", threshold: 0 }
+      { root: root.value, rootMargin: "0px 200px", threshold: 0 }
     );
     observe();
   });
