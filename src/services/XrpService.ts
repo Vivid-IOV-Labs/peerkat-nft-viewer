@@ -144,7 +144,7 @@ function hexToDec(s: string) {
 }
 function isXls14Solo(currency: string) {
   const first6 = currency.slice(0, 6);
-  const next10 = currency.slice(6, 16);
+  //const next10 = currency.slice(6, 16);
   const last24 = currency.slice(-24);
   const first6ofLast24 = last24.slice(0, 6);
   const isNFT = first6 === "023031" && hexToString(first6ofLast24) === "NFT";
@@ -172,8 +172,8 @@ async function getOne(
   const ctiBigInt = BigInt(ctiDecimalString);
 
   //const isValidCti = cti_is_simple(ctiBigInt);
-  const isValidCtiLedger = cti_ledger_check(ctiBigInt);
-  const isValidCtiTransaction = cti_transaction_check(ctiBigInt);
+  // const isValidCtiLedger = cti_ledger_check(ctiBigInt);
+  // const isValidCtiTransaction = cti_transaction_check(ctiBigInt);
 
   const ledgerIndex = cti_ledger_index(ctiBigInt);
   const ledgerIndexDecimal = Number(ledgerIndex);
@@ -191,7 +191,6 @@ async function getOne(
       const { content_type, metadata } = nft;
       const metadaNftUrl = ipfsGateway + "/" + metadata.split("//")[1];
       const res = await fetch(metadaNftUrl).then((res) => res.json());
-      console.log("res", res);
       desc = res.description;
       tokenName = res.name;
       const fil_ext = content_type.split("/")[1];
