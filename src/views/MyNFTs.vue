@@ -57,7 +57,6 @@ import { inject } from "vue";
 import useIntersectionObserver from "../composable/useIntersectionObserver";
 import { devlog } from "../utils/devlog";
 import store from "../store";
-import { delay } from "../utils/delay";
 
 export default defineComponent({
   components: {
@@ -94,7 +93,6 @@ export default defineComponent({
     const NFTMedia = computed(() => store.getters["nft/getAll"]);
     const lines = computed(() => store.getters["nft/getLines"]);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
-    devlog("Before fetchNftLines lines", lines.value);
 
     const populateNFTs = async () => {
       try {
@@ -102,11 +100,7 @@ export default defineComponent({
           walletAddress: walletAddress.value,
           nodetype: nodetype.value,
         });
-        devlog("After fetchNftLines lines", lines.value);
-        devlog("Before fetchNext NFTMedia", NFTMedia.value);
-
         await store.dispatch("nft/fetchNext", nodetype.value);
-        devlog("After fetchNext NFTMedia", NFTMedia.value[0].tokenName);
       } catch (error) {
         devlog("ON POPULATE", error);
       }

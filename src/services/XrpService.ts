@@ -180,24 +180,10 @@ async function getOne(
 
   const transactionIndex = cti_transaction_index(ctiBigInt);
   const transactionIndexDecimal = Number(transactionIndex);
-  devlog("account", account);
-  devlog("currency", currency);
-  devlog("ctiHex", ctiHex);
-  devlog("ctiDecimal", ctiDecimal);
-  devlog("ctiDecimalString", ctiDecimalString);
-  devlog("ctiBigInt", ctiBigInt);
-  devlog("isValidCtiLedger", isValidCtiLedger);
-  devlog("isValidCtiTransaction", isValidCtiTransaction);
-  devlog("ledgerIndex", ledgerIndex);
-  devlog("ledgerIndexDecimal", ledgerIndexDecimal);
-  devlog("transactionIndex", transactionIndex);
-  devlog("transactionIndexDecimal", transactionIndexDecimal);
-  // const metadata = getMetadata();
+
   tokenName = getTokenName(currency);
   if (isXls14Solo(currency)) {
     const metadataUrl = ipfsGateway + "/" + source.split("//")[1];
-    devlog(metadataUrl);
-
     try {
       const collection = await fetch(metadataUrl).then((res) => res.json());
       const { nfts } = collection;
@@ -214,14 +200,11 @@ async function getOne(
       url = mediaUrl;
     } catch (error) {
       devlog(error);
-      debugger;
     }
   } else if (
     ledgerIndexDecimal.toString().length >= 8 &&
     ledgerIndexDecimal.toString().length <= 9
   ) {
-    devlog("ledgerIndexDecimal btween 8 and 9 : xls-15/16");
-
     const metadata = await getMetadata(
       ledgerIndexDecimal,
       transactionIndexDecimal
@@ -239,18 +222,10 @@ async function getOne(
       devlog("no metadata");
     }
   } else {
-    devlog("ledgerIndexDecimal not btween 8 and 9 : xls-14");
-
     const xlsProtocol = getXLSProtocol(source);
-    devlog("xlsProtocol", xlsProtocol);
-
     url = getMediaByXLSProtocol(source, xlsProtocol, tokenName);
-
     media_type = await getMediaType(url);
-
     if (media_type == "application/json") {
-      devlog("media_type application/json");
-
       const { image } = await fetch(url).then((res) => res.json());
       if (image) {
         url = getMediaByXLSProtocol(image, "xls-16-peerkat");
@@ -258,18 +233,6 @@ async function getOne(
       }
     }
   }
-  devlog("result", {
-    issuer: account,
-    issuerTruncated: truncate(account),
-    currency,
-    tokenName,
-    url,
-    media_type,
-    balanceFormatted,
-    limitFormatted,
-    desc,
-    author,
-  });
 
   return {
     issuer: account,
@@ -312,9 +275,6 @@ async function getMetadata(ledger_index: number, transactionIndex: number) {
       });
       const metadata = getTransaction.Memos.map(({ Memo }: any) => {
         const { MemoData, MemoFormat, MemoType } = Memo;
-        devlog("MemoData", MemoData);
-        devlog("MemoFormat", MemoFormat);
-        devlog("MemoType", MemoType);
         return {
           data: hexToString(MemoData),
           format: hexToString(MemoFormat),
@@ -412,27 +372,24 @@ export async function init(nodetype: string): Promise<any> {
   const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
   client = new xrpl.Client(X_url[0], { connectionTimeout: 2000 });
 
-  client.on("disconnected", async (msg: any) => {
-    devlog("Disconnected", msg);
-  });
-  client.on("connected", async (msg: any) => {
-    devlog("Connected", msg);
-  });
-  client.on("peerStatusChange", async (msg: any) => {
-    devlog("peerStatusChange", msg);
-  });
-  client.on("ledgerClosed", async (msg: any) => {
-    devlog("ledgerClosed", msg);
-  });
-  client.on("error", async (error: any) => {
-    devlog("Connection Errors", error);
-  });
+  // client.on("disconnected", async (msg: any) => {
+  //   devlog("Disconnected", msg);
+  // });
+  // client.on("connected", async (msg: any) => {
+  //   devlog("Connected", msg);
+  // });
+  // client.on("peerStatusChange", async (msg: any) => {
+  //   devlog("peerStatusChange", msg);
+  // });
+  // client.on("ledgerClosed", async (msg: any) => {
+  //   devlog("ledgerClosed", msg);
+  // });
+  // client.on("error", async (error: any) => {
+  //   devlog("Connection Errors", error);
+  // });
 
   await client.connect();
-  devlog("Client", client);
-  devlog("Client", client.isConnected);
-  devlog("Client", client.connection);
-  devlog("Client", client.url);
+
   return {
     connect,
     disconnect,
