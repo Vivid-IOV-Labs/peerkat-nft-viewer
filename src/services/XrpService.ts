@@ -221,7 +221,6 @@ async function getOne(
       author = metadata.find((m: any) => m.type == "Author").data;
       url = ipfsGateway + "/" + uri.split("//")[1];
       media_type = await getMediaType(url);
-      standard = "XLS-14d";
     } else {
       devlog("no metadata");
     }
@@ -229,7 +228,6 @@ async function getOne(
     const xlsProtocol = getXLSProtocol(source);
     url = getMediaByXLSProtocol(source, xlsProtocol, tokenName);
     media_type = await getMediaType(url);
-    standard = "XLS-14d";
     if (media_type == "application/json") {
       const { image } = await fetch(url).then((res) => res.json());
       if (image) {
