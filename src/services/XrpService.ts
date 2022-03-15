@@ -166,6 +166,7 @@ async function getOne(
   let desc;
   let author;
   let tokenName;
+  let sololimitFormatted;
   const ctiHex = getCtiHex(currency);
   const ctiDecimal = hexToDec(ctiHex);
   const ctiDecimalString = ctiDecimal.toString();
@@ -193,7 +194,7 @@ async function getOne(
       const res = await fetch(metadaNftUrl).then((res) => res.json());
       desc = res.description;
       tokenName = res.name;
-      limitFormatted = res.collection_item_count;
+      sololimitFormatted = res.collection_item_count;
       const fil_ext = content_type.split("/")[1];
       const mediaUrl = metadaNftUrl.replace("metadata.json", `data.${fil_ext}`);
       media_type = content_type;
@@ -242,7 +243,7 @@ async function getOne(
     url,
     media_type,
     balanceFormatted,
-    limitFormatted,
+    limitFormatted: sololimitFormatted ? sololimitFormatted : limitFormatted,
     desc,
     author,
   };
