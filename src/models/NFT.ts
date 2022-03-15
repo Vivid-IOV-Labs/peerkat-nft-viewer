@@ -3,6 +3,7 @@ export interface NFT {
   balanceFormatted?: string;
   limitFormatted?: string;
   desc?: string;
+  standard?: string;
   author?: string;
   currency: string;
   tokenName: string;

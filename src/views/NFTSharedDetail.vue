@@ -68,6 +68,10 @@
             <strong class="h7 font-weight-bold">Description </strong><br />
             <span>{{ nft.desc }}</span>
           </div>
+          <div v-if="nft.standard" class="mt-2">
+            <strong class="h7 font-weight-bold">Standard </strong><br />
+            <span>{{ nft.standard }}</span>
+          </div>
         </template>
         <template #footer>
           <external-link class="mr-2" :url="bihompUrl">Inspect</external-link>
