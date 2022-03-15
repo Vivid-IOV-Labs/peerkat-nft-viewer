@@ -193,6 +193,7 @@ async function getOne(
       const res = await fetch(metadaNftUrl).then((res) => res.json());
       desc = res.description;
       tokenName = res.name;
+      limitFormatted = res.collection_item_count;
       const fil_ext = content_type.split("/")[1];
       const mediaUrl = metadaNftUrl.replace("metadata.json", `data.${fil_ext}`);
       media_type = content_type;
