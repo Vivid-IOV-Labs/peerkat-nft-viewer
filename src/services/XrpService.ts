@@ -143,6 +143,15 @@ function hexToDec(s: string) {
   return digits.reverse().join("");
 }
 
+const toUTF8 = (string: string) =>
+  string
+    .split("")
+    .map((ch) =>
+      !ch.match(/^[^a-z0-9\s\t\r\n_|\\+()!@#$%^&*=?/~`:;'"[\]-]+$/i)
+        ? ch
+        : "\\" + "u" + "000" + ch.charCodeAt(0).toString(16)
+    )
+    .join("");
 async function getOne(
   account_data: any,
   account: string,
