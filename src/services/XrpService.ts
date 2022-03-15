@@ -143,15 +143,6 @@ function hexToDec(s: string) {
   return digits.reverse().join("");
 }
 
-const toUTF8 = (string: string) =>
-  string
-    .split("")
-    .map((ch) =>
-      !ch.match(/^[^a-z0-9\s\t\r\n_|\\+()!@#$%^&*=?/~`:;'"[\]-]+$/i)
-        ? ch
-        : "\\" + "u" + "000" + ch.charCodeAt(0).toString(16)
-    )
-    .join("");
 async function getOne(
   account_data: any,
   account: string,
@@ -208,7 +199,10 @@ async function getOne(
     );
     if (metadata) {
       const uri = metadata.find((m: any) => m.type == "PrimaryUri").data;
-      desc = metadata.find((m: any) => m.type == "Description").data;
+      desc = metadata
+        .find((m: any) => m.type == "Description")
+        .data.replace("â", "")
+        .replace("Â", "");
       author = metadata.find((m: any) => m.type == "Author").data;
       url = ipfsGateway + "/" + uri.split("//")[1];
       media_type = await getMediaType(url);
