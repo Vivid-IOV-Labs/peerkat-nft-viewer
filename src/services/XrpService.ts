@@ -228,7 +228,10 @@ async function getOne(
     );
     if (metadata) {
       const uri = metadata.find((m: any) => m.type == "PrimaryUri").data;
-      desc = metadata.find((m: any) => m.type == "Description").data;
+      desc = metadata
+        .find((m: any) => m.type == "Description")
+        .data.replace("â", "")
+        .replace("Â", "");
       author = metadata.find((m: any) => m.type == "Author").data;
       url = ipfsGateway + "/" + uri.split("//")[1];
       media_type = await getMediaType(url);
