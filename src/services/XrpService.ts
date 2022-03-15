@@ -165,7 +165,7 @@ async function getOne(
   let media_type;
   let desc;
   let author;
-
+  let tokenName;
   const ctiHex = getCtiHex(currency);
   const ctiDecimal = hexToDec(ctiHex);
   const ctiDecimalString = ctiDecimal.toString();
@@ -193,7 +193,7 @@ async function getOne(
   devlog("transactionIndex", transactionIndex);
   devlog("transactionIndexDecimal", transactionIndexDecimal);
   // const metadata = getMetadata();
-  const tokenName = getTokenName(currency);
+  tokenName = getTokenName(currency);
   if (isXls14Solo(currency)) {
     const metadataUrl = ipfsGateway + "/" + source.split("//")[1];
     devlog(metadataUrl);
@@ -204,12 +204,12 @@ async function getOne(
       const nft = nfts.find((n: any) => n.currency == currency);
       const { content_type, metadata } = nft;
       const metadaNftUrl = ipfsGateway + "/" + metadata.split("//")[1];
-      // const res = await fetch(metadaNftUrl).then((res) => res.json());
-      // console.log("res", res);
+      const res = await fetch(metadaNftUrl).then((res) => res.json());
+      console.log("res", res);
+      desc = res.description;
+      tokenName = res.name;
       const fil_ext = content_type.split("/")[1];
       const mediaUrl = metadaNftUrl.replace("metadata.json", `data.${fil_ext}`);
-      // const media = await fetch(mediaUrl).then((res) => res.blob());
-      // devlog(media);
       media_type = content_type;
       url = mediaUrl;
     } catch (error) {
