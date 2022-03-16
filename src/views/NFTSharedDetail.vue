@@ -98,8 +98,16 @@
         </ul>
       </div>
     </div>
-    <div v-if="malformedLink">
-      <h1 class="text-center">Item not found or link malformed</h1>
+    <div v-if="malformedLink" style="margin-top: 13%">
+      <h5 class="text-center mt-2">
+        Peerkat is not able to find an NFT from the link that you have followed
+      </h5>
+      <ul class="mt-2 p-2">
+        <li class="pb-2">
+          To view another user’s XRPL-issued NFT please ensure that you have
+          followed the correct link shared by the NFT owner
+        </li>
+      </ul>
     </div>
   </div>
 </template>
