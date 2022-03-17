@@ -1,10 +1,10 @@
 <template>
-  <div class="w-100 pt-0 p-1" style="overflow: scroll">
+  <div>
     <router-link :to="{ path: `/shared` }" class="mb-4 btn btn-link w-100"
       >Back
     </router-link>
 
-    <div class="w-100 p-1">
+    <div v-if="!malformedLink" class="w-100 p-1">
       <base-card v-if="nft">
         <template #picture>
           <figure style="overflow: hidden">
@@ -60,6 +60,18 @@
         <template #text>
           <strong class="h7 font-weight-bold">Issuer </strong><br />
           <span>{{ nft.issuer }}</span>
+          <div v-if="nft.author" class="mt-2">
+            <strong class="h7 font-weight-bold">Author </strong><br />
+            <span class="mr-3">{{ nft.author }} </span>
+          </div>
+          <div v-if="nft.desc" class="mt-2">
+            <strong class="h7 font-weight-bold">Description </strong><br />
+            <span>{{ nft.desc }}</span>
+          </div>
+          <div v-if="nft.standard" class="mt-2">
+            <strong class="h7 font-weight-bold">Standard </strong><br />
+            <span>{{ nft.standard }}</span>
+          </div>
         </template>
         <template #footer>
           <external-link class="mr-2" :url="bihompUrl">Inspect</external-link>
@@ -86,6 +98,17 @@
         </ul>
       </div>
     </div>
+    <div v-if="malformedLink" style="margin-top: 13%">
+      <h5 class="text-center mt-2">
+        Peerkat is not able to find an NFT from the link that you have followed
+      </h5>
+      <ul class="mt-2 p-2">
+        <li class="pb-2">
+          To view another user’s XRPL-issued NFT please ensure that you have
+          followed the correct link shared by the NFT owner
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -111,10 +134,10 @@ export default defineComponent({
     const nodetypefromlink = getNetworkTypeFromCode(
       parseInt(route.params.nodetype as string)
     );
-    const othernodetype = nodetypefromlink == "TESTNET" ? "MAINNET" : "TESTNET";
     const client = computed(() => store.getters["nft/getXrpClient"]);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const user = computed(() => store.getters["user/getUser"]);
+    const malformedLink = ref(false);
     const bihompUrl = computed(() =>
       nodetype.value == "TESTNET"
         ? `https://test.bithomp.com/explorer/${route.params.nftAddress.toString()}`
@@ -124,7 +147,8 @@ export default defineComponent({
     if (nodetypefromlink == nodetype.value) {
       try {
         nft.value = await client.value.fetchOne(
-          route.params.nftAddress.toString()
+          route.params.nftAddress.toString(),
+          route.params.currency.toString()
         );
         store.commit("nft/addShared", {
           shared: nft.value,
@@ -132,16 +156,19 @@ export default defineComponent({
           walletaddress: user.value,
         });
       } catch (error) {
+        malformedLink.value = true;
         devlog(error);
       }
+    } else {
+      malformedLink.value = true;
     }
 
     return {
       nft,
-      othernodetype,
       nodetype,
       nodetypefromlink,
       bihompUrl,
+      malformedLink,
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },

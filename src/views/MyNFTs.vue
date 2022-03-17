@@ -27,7 +27,7 @@
   </div>
   <div v-if="!NFTMedia.length" style="margin-top: 13%">
     <h5 class="text-center mt-2">
-      Peerkat is not able to find any XLS14 NFTs in this wallet
+      Peerkat is not able to find any NFTs in this wallet
     </h5>
     <ul class="mt-2 p-2">
       <li class="pb-2">
@@ -41,9 +41,9 @@
       </li>
       <li class="pb-2">
         <strong
-          >Please note that we currently support XLS14 NFTs on XRPL only</strong
-        >. We are considering support for XLS14/SOLO and other NFT variations,
-        we will support XLS20 native NFTs on XRPL (currently in devnet)
+          >Please note that we currently support XLS14 and XLS14/SOLO NFTs on
+          XRPL only</strong
+        >. We will support XLS20 native NFTs on XRPL (currently in devnet)
       </li>
     </ul>
   </div>
@@ -89,12 +89,10 @@ export default defineComponent({
 
     const isConnected = computed(() => store.getters["nft/getIsConnected"]);
     const endload = ref(false);
-    const isLoadingNext = ref(false);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const NFTMedia = computed(() => store.getters["nft/getAll"]);
     const lines = computed(() => store.getters["nft/getLines"]);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
-    devlog("Before fetchNftLines lines", lines.value);
 
     const populateNFTs = async () => {
       try {
@@ -102,29 +100,24 @@ export default defineComponent({
           walletAddress: walletAddress.value,
           nodetype: nodetype.value,
         });
-        devlog("After fetchNftLines lines", lines.value);
-        devlog("Before fetchNext NFTMedia", NFTMedia.value);
-
         await store.dispatch("nft/fetchNext", nodetype.value);
-        devlog("After fetchNext NFTMedia", NFTMedia.value[0].tokenName);
       } catch (error) {
         devlog("ON POPULATE", error);
       }
     };
 
-    const { unobserve, isIntersecting } = useIntersectionObserver(
+    const { unobserve, observe, isIntersecting } = useIntersectionObserver(
       scroller,
       sentinel
     );
     async function fetchNext() {
-      isLoadingNext.value = true;
-
       await store.dispatch("nft/fetchNext", nodetype.value);
-      isLoadingNext.value = false;
     }
     watch(isIntersecting, async () => {
-      if (!endload.value && !isLoadingNext.value) {
+      if (!endload.value) {
+        unobserve();
         await fetchNext();
+        observe();
       }
     });
     watch(NFTMedia, async (newNfts) => {

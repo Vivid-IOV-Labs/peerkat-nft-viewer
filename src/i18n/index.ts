@@ -24,9 +24,9 @@ function getStartingLocale() {
   const browserLocale = getBrowserLocale({ countryCodeOnly: true });
   return browserLocale;
 }
-const apiKey = import.meta.env.VITE_LOCIZE_API_KEY;
-const projectId = import.meta.env.VITE_LOCIZE_PROJECT_ID;
-const namespace = import.meta.env.VITE_LOCIZE_NAMESPACE;
+// const apiKey = import.meta.env.VITE_LOCIZE_API_KEY;
+// const projectId = import.meta.env.VITE_LOCIZE_PROJECT_ID;
+// const namespace = import.meta.env.VITE_LOCIZE_NAMESPACE;
 // locizer.init({
 //   projectId,
 //   apiKey,
