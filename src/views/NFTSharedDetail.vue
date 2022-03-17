@@ -1,5 +1,5 @@
 <template>
-  <div class="w-100 pt-0 p-1" style="overflow: scroll">
+  <div>
     <router-link :to="{ path: `/shared` }" class="mb-4 btn btn-link w-100"
       >Back
     </router-link>
