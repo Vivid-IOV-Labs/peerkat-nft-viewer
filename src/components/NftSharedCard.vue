@@ -43,6 +43,18 @@
       <strong class="h7 font-weight-bold">Issuer </strong><br />
       <span>{{ nft.issuer }}</span
       ><br />
+      <div v-if="nft.author" class="mt-2">
+        <strong class="h7 font-weight-bold">Author </strong><br />
+        <span class="mr-3">{{ nft.author }} </span>
+      </div>
+      <div v-if="nft.desc" class="mt-2">
+        <strong class="h7 font-weight-bold">Description </strong><br />
+        <span>{{ nft.desc }}</span>
+      </div>
+      <div v-if="nft.standard" class="mt-2">
+        <strong class="h7 font-weight-bold">Standard </strong><br />
+        <span>{{ nft.standard }}</span>
+      </div>
     </template>
     <template #footer>
       <div>

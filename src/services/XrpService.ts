@@ -1,5 +1,7 @@
 import { NFT } from "../models/NFT";
 import { devlog } from "../utils/devlog";
+const ipfsGateway = import.meta.env.VITE_IPFS_GATEWAY;
+
 const xrpl = (window as any).xrpl;
 type line = {
   balance: string;
@@ -69,7 +71,7 @@ function getXLSProtocol(source: string): string {
   if (/(http|https|ipfs)?:\/\//.test(source)) {
     return "xls-14";
   } else if (/(hash)?:/.test(source)) {
-    return "xls-16";
+    return "xls-16-peerkat";
   } else {
     return "";
   }
@@ -82,9 +84,9 @@ function getMediaByXLSProtocol(
   if (xlsProtocol == "xls-14") {
     const protocol = source.split("//")[0];
     return protocol + "//" + tokenName;
-  } else if (xlsProtocol == "xls-16") {
+  } else if (xlsProtocol == "xls-16-peerkat") {
     const cid = source.split(":")[1];
-    return "https://ipfs.io/ipfs/" + cid;
+    return ipfsGateway + "/" + cid;
   } else {
     return "";
   }
@@ -100,6 +102,54 @@ function getTokenName(currency: string): string {
     return hexToString(removeFirst02);
   }
 }
+function getCtiHex(currency: string): string {
+  const removeFirst02 = currency.replace("02", "");
+  return removeFirst02.substring(0, 14);
+}
+// function cti_is_simple(cti: bigint) {
+//   return cti >> 56n == 0;
+// }
+function cti_transaction_index(cti: bigint) {
+  return (cti >> 32n) & 0xffffn;
+}
+function cti_ledger_index(cti: bigint) {
+  return cti & 0xffffffffn;
+}
+function cti_ledger_check(cti: bigint) {
+  return (cti >> 52n) & 0xfn;
+}
+function cti_transaction_check(cti: bigint) {
+  return (cti >> 48n) & 0xfn;
+}
+
+function hexToDec(s: string) {
+  let i,
+    j,
+    // eslint-disable-next-line prefer-const
+    digits: number[] = [0],
+    carry;
+  for (i = 0; i < s.length; i += 1) {
+    carry = parseInt(s.charAt(i), 16);
+    for (j = 0; j < digits.length; j += 1) {
+      digits[j] = digits[j] * 16 + carry;
+      carry = (digits[j] / 10) | 0;
+      digits[j] %= 10;
+    }
+    while (carry > 0) {
+      digits.push(carry % 10);
+      carry = (carry / 10) | 0;
+    }
+  }
+  return digits.reverse().join("");
+}
+function isXls14Solo(currency: string) {
+  const first6 = currency.slice(0, 6);
+  //const next10 = currency.slice(6, 16);
+  const last24 = currency.slice(-24);
+  const first6ofLast24 = last24.slice(0, 6);
+  const isNFT = first6 === "023031" && hexToString(first6ofLast24) === "NFT";
+  return isNFT;
+}
 async function getOne(
   account_data: any,
   account: string,
@@ -111,21 +161,82 @@ async function getOne(
   const source = is_hexadecimal(hexToString(Domain))
     ? hexToString(hexToString(Domain))
     : hexToString(Domain);
+  let url;
+  let media_type;
+  let desc;
+  let author;
+  let tokenName;
+  let sololimitFormatted;
+  let standard;
+  const ctiHex = getCtiHex(currency);
+  const ctiDecimal = hexToDec(ctiHex);
+  const ctiDecimalString = ctiDecimal.toString();
+  const ctiBigInt = BigInt(ctiDecimalString);
 
-  const tokenName = getTokenName(currency);
+  //const isValidCti = cti_is_simple(ctiBigInt);
+  // const isValidCtiLedger = cti_ledger_check(ctiBigInt);
+  // const isValidCtiTransaction = cti_transaction_check(ctiBigInt);
 
-  const xlsProtocol = getXLSProtocol(source);
-  let url = getMediaByXLSProtocol(source, xlsProtocol, tokenName);
+  const ledgerIndex = cti_ledger_index(ctiBigInt);
+  const ledgerIndexDecimal = Number(ledgerIndex);
 
-  let media_type = await getMediaType(url);
+  const transactionIndex = cti_transaction_index(ctiBigInt);
+  const transactionIndexDecimal = Number(transactionIndex);
 
-  if (media_type == "application/json") {
-    const { image } = await fetch(url).then((res) => res.json());
-    if (image) {
-      url = getMediaByXLSProtocol(image, "xls-16");
+  tokenName = getTokenName(currency);
+  if (isXls14Solo(currency)) {
+    const metadataUrl = ipfsGateway + "/" + source.split("//")[1];
+    try {
+      const collection = await fetch(metadataUrl).then((res) => res.json());
+      const { nfts } = collection;
+      const nft = nfts.find((n: any) => n.currency == currency);
+      const { content_type, metadata } = nft;
+      const metadaNftUrl = ipfsGateway + "/" + metadata.split("//")[1];
+      const res = await fetch(metadaNftUrl).then((res) => res.json());
+      desc = res.description;
+      tokenName = res.name;
+      sololimitFormatted = collection.collection_item_count;
+      const fil_ext = content_type.split("/")[1];
+      const mediaUrl = metadaNftUrl.replace("metadata.json", `data.${fil_ext}`);
+      media_type = content_type;
+      url = mediaUrl;
+      standard = "XLS-14d/SOLO";
+    } catch (error) {
+      devlog(error);
+    }
+  } else if (
+    ledgerIndexDecimal.toString().length >= 8 &&
+    ledgerIndexDecimal.toString().length <= 9
+  ) {
+    const metadata = await getMetadata(
+      ledgerIndexDecimal,
+      transactionIndexDecimal
+    );
+    if (metadata) {
+      const uri = metadata.find((m: any) => m.type == "PrimaryUri").data;
+      desc = metadata
+        .find((m: any) => m.type == "Description")
+        .data.replace("â", "")
+        .replace("Â", "");
+      author = metadata.find((m: any) => m.type == "Author").data;
+      url = ipfsGateway + "/" + uri.split("//")[1];
       media_type = await getMediaType(url);
+    } else {
+      devlog("no metadata");
+    }
+  } else {
+    const xlsProtocol = getXLSProtocol(source);
+    url = getMediaByXLSProtocol(source, xlsProtocol, tokenName);
+    media_type = await getMediaType(url);
+    if (media_type == "application/json") {
+      const { image } = await fetch(url).then((res) => res.json());
+      if (image) {
+        url = getMediaByXLSProtocol(image, "xls-16-peerkat");
+        media_type = await getMediaType(url);
+      }
     }
   }
+
   return {
     issuer: account,
     issuerTruncated: truncate(account),
@@ -134,7 +245,10 @@ async function getOne(
     url,
     media_type,
     balanceFormatted,
-    limitFormatted,
+    limitFormatted: sololimitFormatted ? sololimitFormatted : limitFormatted,
+    desc,
+    standard,
+    author,
   };
 }
 let client: any;
@@ -145,6 +259,39 @@ async function connect() {
 async function disconnect() {
   await client.disconnect();
 }
+
+async function getMetadata(ledger_index: number, transactionIndex: number) {
+  try {
+    const { result } = await client.request({
+      command: "ledger",
+      ledger_index: ledger_index,
+      transactions: true,
+      binary: false,
+      expand: true,
+    });
+
+    const { ledger, error } = result;
+    if (error) {
+      throw new Error(error);
+    } else {
+      const getTransaction = ledger.transactions.find((t: any) => {
+        return t.metaData.TransactionIndex == transactionIndex;
+      });
+      const metadata = getTransaction.Memos.map(({ Memo }: any) => {
+        const { MemoData, MemoFormat, MemoType } = Memo;
+        return {
+          data: hexToString(MemoData),
+          format: hexToString(MemoFormat),
+          type: hexToString(MemoType),
+        };
+      });
+      return metadata;
+    }
+  } catch (error) {
+    return null;
+  }
+}
+
 async function fetchNftLines(walletAddress: string): Promise<any> {
   try {
     const { result } = await client.request({
@@ -229,27 +376,24 @@ export async function init(nodetype: string): Promise<any> {
   const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
   client = new xrpl.Client(X_url[0], { connectionTimeout: 2000 });
 
-  client.on("disconnected", async (msg: any) => {
-    devlog("Disconnected", msg);
-  });
-  client.on("connected", async (msg: any) => {
-    devlog("Connected", msg);
-  });
-  client.on("peerStatusChange", async (msg: any) => {
-    devlog("peerStatusChange", msg);
-  });
-  client.on("ledgerClosed", async (msg: any) => {
-    devlog("ledgerClosed", msg);
-  });
-  client.on("error", async (error: any) => {
-    devlog("Connection Errors", error);
-  });
+  // client.on("disconnected", async (msg: any) => {
+  //   devlog("Disconnected", msg);
+  // });
+  // client.on("connected", async (msg: any) => {
+  //   devlog("Connected", msg);
+  // });
+  // client.on("peerStatusChange", async (msg: any) => {
+  //   devlog("peerStatusChange", msg);
+  // });
+  // client.on("ledgerClosed", async (msg: any) => {
+  //   devlog("ledgerClosed", msg);
+  // });
+  // client.on("error", async (error: any) => {
+  //   devlog("Connection Errors", error);
+  // });
 
   await client.connect();
-  devlog("Client", client);
-  devlog("Client", client.isConnected);
-  devlog("Client", client.connection);
-  devlog("Client", client.url);
+
   return {
     connect,
     disconnect,

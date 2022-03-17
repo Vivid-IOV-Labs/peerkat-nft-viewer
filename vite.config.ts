@@ -26,6 +26,7 @@ export default defineConfig({
     include: ["axe-core"],
   },
   build: {
+    target: ["es2020"],
     rollupOptions: {
       output: {
         entryFileNames: `[name]` + hash + `.js`,
