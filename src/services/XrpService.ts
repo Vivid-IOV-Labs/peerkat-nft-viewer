@@ -251,7 +251,11 @@ async function getOne(
       }
     }
     if (media_type == "text/html") {
+      devlog(media_type, "media_type");
+
       const metadataUrl = ipfsGateway + "/" + source.split("ipfs/")[1];
+      devlog(metadataUrl, "metadataUrl");
+
       const data = await getPdfContent(metadataUrl);
       devlog(data, "data");
       url = ipfsGateway + "/" + data["Image IPFS CID"];
