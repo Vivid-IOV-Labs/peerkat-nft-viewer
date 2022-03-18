@@ -1,16 +1,20 @@
 import { NFT } from "../models/NFT";
 import { devlog } from "../utils/devlog";
-interface MyNamespacedWindow extends Window {
-  "pdfjs-dist/build/pdf": any;
-}
-
-declare let window: MyNamespacedWindow;
-
-const PDFJS = window["pdfjs-dist/build/pdf"];
-console.log(PDFJS, "PDFJS");
+import * as PDFJS from "pdfjs-dist";
 
 PDFJS.GlobalWorkerOptions.workerSrc =
-  "//mozilla.github.io/pdf.js/build/pdf.worker.js";
+  "../node_modules/pdfjs-dist/build/pdf.worker.js";
+// interface MyNamespacedWindow extends Window {
+//   "pdfjs-dist/build/pdf": any;
+// }
+
+// declare let window: MyNamespacedWindow;
+
+// const PDFJS = window["pdfjs-dist/build/pdf"];
+// console.log(PDFJS, "PDFJS");
+
+// PDFJS.GlobalWorkerOptions.workerSrc =
+//   "//mozilla.github.io/pdf.js/build/pdf.worker.js";
 
 const ipfsGateway = import.meta.env.VITE_IPFS_GATEWAY;
 
