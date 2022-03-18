@@ -263,6 +263,8 @@ async function getOne(
       author = data["Design"];
     }
   }
+  devlog(media_type, tokenName);
+
   return {
     issuer: account,
     issuerTruncated: truncate(account),
