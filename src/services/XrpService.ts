@@ -94,7 +94,7 @@ function getXLSProtocol(source: string): string {
 function getMediaByXLSProtocol(
   source: string,
   xlsProtocol: string,
-  tokenName?: string
+  tokenName?: string | unknown
 ): string {
   if (xlsProtocol == "xls-14") {
     const protocol = source.split("//")[0];
@@ -180,7 +180,7 @@ async function getOne(
   let media_type;
   let desc;
   let author;
-  let tokenName;
+  let tokenName: unknown;
   let sololimitFormatted;
   let standard;
   const ctiHex = getCtiHex(currency);
