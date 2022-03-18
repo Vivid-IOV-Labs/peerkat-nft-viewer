@@ -199,47 +199,8 @@ async function getOne(
   const transactionIndexDecimal = Number(transactionIndex);
 
   tokenName = getTokenName(currency);
-  if (isXls14Solo(currency)) {
-    const metadataUrl = ipfsGateway + "/" + source.split("//")[1];
-    try {
-      const collection = await fetch(metadataUrl).then((res) => res.json());
-      const { nfts } = collection;
-      const nft = nfts.find((n: any) => n.currency == currency);
-      const { content_type, metadata } = nft;
-      const metadaNftUrl = ipfsGateway + "/" + metadata.split("//")[1];
-      const res = await fetch(metadaNftUrl).then((res) => res.json());
-      desc = res.description;
-      tokenName = res.name;
-      sololimitFormatted = collection.collection_item_count;
-      const fil_ext = content_type.split("/")[1];
-      const mediaUrl = metadaNftUrl.replace("metadata.json", `data.${fil_ext}`);
-      media_type = content_type;
-      url = mediaUrl;
-      standard = "XLS-14d/SOLO";
-    } catch (error) {
-      devlog(error);
-    }
-  } else if (
-    ledgerIndexDecimal.toString().length >= 8 &&
-    ledgerIndexDecimal.toString().length <= 9
-  ) {
-    const metadata = await getMetadata(
-      ledgerIndexDecimal,
-      transactionIndexDecimal
-    );
-    if (metadata) {
-      const uri = metadata.find((m: any) => m.type == "PrimaryUri").data;
-      desc = metadata
-        .find((m: any) => m.type == "Description")
-        .data.replace("â", "")
-        .replace("Â", "");
-      author = metadata.find((m: any) => m.type == "Author").data;
-      url = ipfsGateway + "/" + uri.split("//")[1];
-      media_type = await getMediaType(url);
-    } else {
-      devlog("no metadata");
-    }
-  } else {
+
+  async function geXls14() {
     const xlsProtocol = getXLSProtocol(source);
     url = getMediaByXLSProtocol(source, xlsProtocol, tokenName);
     media_type = await getMediaType(url);
@@ -262,6 +223,53 @@ async function getOne(
       media_type = await getMediaType(url);
       author = data["Design"];
     }
+  }
+  if (isXls14Solo(currency)) {
+    const metadataUrl = ipfsGateway + "/" + source.split("//")[1];
+    try {
+      const collection = await fetch(metadataUrl).then((res) => res.json());
+      const { nfts } = collection;
+      const nft = nfts.find((n: any) => n.currency == currency);
+      const { content_type, metadata } = nft;
+      const metadaNftUrl = ipfsGateway + "/" + metadata.split("//")[1];
+      const res = await fetch(metadaNftUrl).then((res) => res.json());
+      desc = res.description;
+      tokenName = res.name;
+      sololimitFormatted = collection.collection_item_count;
+      const fil_ext = content_type.split("/")[1];
+      const mediaUrl = metadaNftUrl.replace("metadata.json", `data.${fil_ext}`);
+      media_type = content_type;
+      url = mediaUrl;
+      standard = "XLS-14d/SOLO";
+    } catch (error) {
+      await geXls14();
+
+      devlog(error);
+    }
+  } else if (
+    ledgerIndexDecimal.toString().length >= 8 &&
+    ledgerIndexDecimal.toString().length <= 9
+  ) {
+    const metadata = await getMetadata(
+      ledgerIndexDecimal,
+      transactionIndexDecimal
+    );
+    if (metadata) {
+      const uri = metadata.find((m: any) => m.type == "PrimaryUri").data;
+      desc = metadata
+        .find((m: any) => m.type == "Description")
+        .data.replace("â", "")
+        .replace("Â", "");
+      author = metadata.find((m: any) => m.type == "Author").data;
+      url = ipfsGateway + "/" + uri.split("//")[1];
+      media_type = await getMediaType(url);
+    } else {
+      await geXls14();
+
+      devlog("no metadata");
+    }
+  } else {
+    await geXls14();
   }
   devlog(media_type, tokenName);
 
