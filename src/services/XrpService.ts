@@ -250,7 +250,7 @@ async function getOne(
         media_type = await getMediaType(url);
       }
     }
-    if (media_type == "text/html") {
+    if (media_type == "text/html" || media_type == "text/html;") {
       devlog(media_type, "media_type");
 
       const metadataUrl = ipfsGateway + "/" + source.split("ipfs/")[1];
