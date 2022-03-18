@@ -1,8 +1,8 @@
 import { NFT } from "../models/NFT";
 import { devlog } from "../utils/devlog";
-import * as PDFJS from "pdfjs-dist";
+import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
 
-PDFJS.GlobalWorkerOptions.workerSrc =
+GlobalWorkerOptions.workerSrc =
   "../node_modules/pdfjs-dist/build/pdf.worker.js";
 // interface MyNamespacedWindow extends Window {
 //   "pdfjs-dist/build/pdf": any;
@@ -11,7 +11,6 @@ PDFJS.GlobalWorkerOptions.workerSrc =
 // declare let window: MyNamespacedWindow;
 
 // const PDFJS = window["pdfjs-dist/build/pdf"];
-console.log(PDFJS, "PDFJS");
 
 // PDFJS.GlobalWorkerOptions.workerSrc =
 //   "//mozilla.github.io/pdf.js/build/pdf.worker.js";
@@ -254,6 +253,7 @@ async function getOne(
     if (media_type == "text/html") {
       const metadataUrl = ipfsGateway + "/" + source.split("ipfs/")[1];
       const data = await getPdfContent(metadataUrl);
+      devlog(data, "data");
       url = ipfsGateway + "/" + data["Image IPFS CID"];
       media_type = await getMediaType(url);
       author = data["Design"];
@@ -275,9 +275,14 @@ async function getOne(
 }
 let client: any;
 async function getPdfContent(url: string) {
-  const doc = await PDFJS.getDocument(url).promise;
+  const doc = await getDocument(url).promise;
+  devlog(doc, "doc");
   const page = await doc.getPage(1);
+  devlog(page, "page");
+
   const textContent = await page.getTextContent();
+  devlog(textContent, "textContent");
+
   let lastY,
     text = "";
   for (const item of textContent.items as any) {
