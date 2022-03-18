@@ -7,6 +7,7 @@ interface MyNamespacedWindow extends Window {
 declare let window: MyNamespacedWindow;
 
 const PDFJS = window["pdfjs-dist/build/pdf"];
+console.log(PDFJS, "PDFJS");
 
 PDFJS.GlobalWorkerOptions.workerSrc =
   "//mozilla.github.io/pdf.js/build/pdf.worker.js";
