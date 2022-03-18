@@ -3,7 +3,7 @@ import { devlog } from "../utils/devlog";
 import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
 
 GlobalWorkerOptions.workerSrc =
-  "../node_modules/pdfjs-dist/build/pdf.worker.js";
+  "../../node_modules/pdfjs-dist/build/pdf.worker.js";
 // interface MyNamespacedWindow extends Window {
 //   "pdfjs-dist/build/pdf": any;
 // }
