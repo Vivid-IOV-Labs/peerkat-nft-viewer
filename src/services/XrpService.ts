@@ -1,5 +1,16 @@
 import { NFT } from "../models/NFT";
 import { devlog } from "../utils/devlog";
+interface MyNamespacedWindow extends Window {
+  "pdfjs-dist/build/pdf": any;
+}
+
+declare let window: MyNamespacedWindow;
+
+const PDFJS = window["pdfjs-dist/build/pdf"];
+
+PDFJS.GlobalWorkerOptions.workerSrc =
+  "//mozilla.github.io/pdf.js/build/pdf.worker.js";
+
 const ipfsGateway = import.meta.env.VITE_IPFS_GATEWAY;
 
 const xrpl = (window as any).xrpl;
@@ -235,8 +246,14 @@ async function getOne(
         media_type = await getMediaType(url);
       }
     }
+    if (media_type == "text/html") {
+      const metadataUrl = ipfsGateway + "/" + source.split("ipfs/")[1];
+      const data = await getPdfContent(metadataUrl);
+      url = ipfsGateway + "/" + data["Image IPFS CID"];
+      media_type = await getMediaType(url);
+      author = data["Design"];
+    }
   }
-
   return {
     issuer: account,
     issuerTruncated: truncate(account),
@@ -252,7 +269,27 @@ async function getOne(
   };
 }
 let client: any;
-
+async function getPdfContent(url: string) {
+  const doc = await PDFJS.getDocument(url).promise;
+  const page = await doc.getPage(1);
+  const textContent = await page.getTextContent();
+  let lastY,
+    text = "";
+  for (const item of textContent.items as any) {
+    if (lastY == item.transform[5] || !lastY) {
+      text += item.str;
+    } else {
+      text += "\n" + item.str;
+    }
+    lastY = item.transform[5];
+  }
+  return text.split(/\r\n|\r|\n/).reduce((acc: any, line) => {
+    const key = line.split(":")[0] as string;
+    const val = line.split(":")[1] as string;
+    acc[key] = val.trim();
+    return acc;
+  }, {});
+}
 async function connect() {
   await client.connect();
 }
