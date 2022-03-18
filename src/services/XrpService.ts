@@ -1,19 +1,19 @@
 import { NFT } from "../models/NFT";
 import { devlog } from "../utils/devlog";
-import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
+// import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
 
-GlobalWorkerOptions.workerSrc =
-  "../../node_modules/pdfjs-dist/build/pdf.worker.js";
-// interface MyNamespacedWindow extends Window {
-//   "pdfjs-dist/build/pdf": any;
-// }
+// GlobalWorkerOptions.workerSrc =
+//   "../../node_modules/pdfjs-dist/build/pdf.worker.js";
+interface MyNamespacedWindow extends Window {
+  "pdfjs-dist/build/pdf": any;
+}
 
-// declare let window: MyNamespacedWindow;
+declare let window: MyNamespacedWindow;
 
-// const PDFJS = window["pdfjs-dist/build/pdf"];
+const PDFJS = window["pdfjs-dist/build/pdf"];
 
-// PDFJS.GlobalWorkerOptions.workerSrc =
-//   "//mozilla.github.io/pdf.js/build/pdf.worker.js";
+PDFJS.GlobalWorkerOptions.workerSrc =
+  "//mozilla.github.io/pdf.js/build/pdf.worker.js";
 
 const ipfsGateway = import.meta.env.VITE_IPFS_GATEWAY;
 
@@ -281,7 +281,7 @@ async function getOne(
 }
 let client: any;
 async function getPdfContent(url: string) {
-  const doc = await getDocument(url).promise;
+  const doc = await PDFJS.getDocument(url).promise;
   devlog(doc, "doc");
   const page = await doc.getPage(1);
   devlog(page, "page");
