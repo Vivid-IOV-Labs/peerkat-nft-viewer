@@ -273,7 +273,6 @@ async function getOne(
   } else {
     await geXls14();
   }
-  devlog(media_type, tokenName);
 
   return {
     issuer: account,
