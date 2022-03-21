@@ -11,6 +11,7 @@ export default function useIntersectionObserver(
     if (target.value) {
       observer.observe(target.value);
     }
+    console.log("Is Observing");
   }
 
   let observer: IntersectionObserver;
@@ -38,6 +39,7 @@ export default function useIntersectionObserver(
     if (target.value) {
       observer.unobserve(target.value);
     }
+    console.log("Is Unobserving");
   }
 
   onUnmounted(unobserve);
