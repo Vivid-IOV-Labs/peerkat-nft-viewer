@@ -214,7 +214,8 @@ async function getOne(
     }
     if (media_type?.includes("text/html")) {
       devlog(media_type, "media_type");
-
+      devlog(source, "source");
+      devlog(tokenName, "tokenName");
       const metadataUrl = ipfsGateway + "/" + source.split("ipfs/")[1];
       devlog(metadataUrl, "metadataUrl");
 
