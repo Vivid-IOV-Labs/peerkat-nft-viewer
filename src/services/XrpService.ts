@@ -205,6 +205,8 @@ async function getOne(
     const xlsProtocol = getXLSProtocol(source);
     url = getMediaByXLSProtocol(source, xlsProtocol, tokenName);
     media_type = await getMediaType(url);
+    devlog(media_type, tokenName);
+
     if (media_type == "application/json") {
       const { image } = await fetch(url).then((res) => res.json());
       if (image) {
@@ -228,6 +230,7 @@ async function getOne(
   }
   if (isXls14Solo(currency)) {
     const metadataUrl = ipfsGateway + "/" + source.split("//")[1];
+
     try {
       const collection = await fetch(metadataUrl).then((res) => res.json());
       const { nfts } = collection;
