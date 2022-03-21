@@ -214,7 +214,10 @@ async function getOne(
         media_type = await getMediaType(url);
       }
     }
-    if (media_type?.includes("text/html")) {
+    if (
+      media_type?.includes("text/html") ||
+      media_type?.includes("text/plain")
+    ) {
       devlog(media_type, "media_type");
       devlog(source, "source");
       devlog(tokenName, "tokenName");
