@@ -111,13 +111,13 @@ export default defineComponent({
       sentinel
     );
     async function fetchNext() {
+      unobserve();
       await store.dispatch("nft/fetchNext", nodetype.value);
+      observe();
     }
     watch(isIntersecting, async () => {
       if (!endload.value) {
-        unobserve();
         await fetchNext();
-        observe();
       }
     });
     watch(NFTMedia, async (newNfts) => {
