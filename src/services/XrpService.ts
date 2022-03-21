@@ -8,7 +8,7 @@ import * as PDFJS from "pdfjs-dist";
 //   "pdfjs-dist/build/pdf": any;
 // }
 
-declare let window: MyNamespacedWindow;
+//declare let window: MyNamespacedWindow;
 
 //const PDFJS = window["pdfjs-dist/build/pdf"];
 
