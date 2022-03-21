@@ -12,9 +12,9 @@ declare let window: MyNamespacedWindow;
 
 const PDFJS = window["pdfjs-dist/build/pdf"];
 
-PDFJS.GlobalWorkerOptions.workerSrc =
-  "//mozilla.github.io/pdf.js/build/pdf.worker.js";
-
+// PDFJS.GlobalWorkerOptions.workerSrc =
+//   "//mozilla.github.io/pdf.js/build/pdf.worker.js";
+PDFJS.disableWorker = true;
 const ipfsGateway = import.meta.env.VITE_IPFS_GATEWAY;
 
 const xrpl = (window as any).xrpl;
