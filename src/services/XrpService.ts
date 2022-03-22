@@ -90,7 +90,7 @@ async function getMediaType(url: string) {
   }
 }
 function getXLSProtocol(source: string): string {
-  if (/(http|https|ipfs)?:\/\//.test(source)) {
+  if (/(http|https|ipfs)?:\/\//.test(source) || source.includes("ipfs.io")) {
     return "xls-14";
   } else if (/(hash)?:/.test(source)) {
     return "xls-16-peerkat";
@@ -199,7 +199,6 @@ async function getOne(
   const ledgerIndexDecimal = Number(ledgerIndex);
   const transactionIndex = cti_transaction_index(ctiBigInt);
   const transactionIndexDecimal = Number(transactionIndex);
-
   tokenName = getTokenName(currency);
   async function geXls14() {
     const xlsProtocol = getXLSProtocol(source);
