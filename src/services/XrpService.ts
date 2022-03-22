@@ -213,11 +213,7 @@ async function getOne(
         url = getMediaByXLSProtocol(image, "xls-16-peerkat");
         media_type = await getMediaType(url);
       }
-    }
-    if (
-      media_type?.includes("text/html") ||
-      media_type?.includes("text/plain")
-    ) {
+    } else if (media_type?.includes("text/html")) {
       devlog(media_type, "media_type");
       devlog(source, "source");
       devlog(tokenName, "tokenName");
@@ -229,6 +225,11 @@ async function getOne(
       url = ipfsGateway + "/" + data["Image IPFS CID"];
       media_type = await getMediaType(url);
       author = data["Design"];
+    } else {
+      devlog(source, "source");
+      devlog(tokenName, "tokenName");
+      devlog(media_type, "media_type");
+      devlog(url, "url");
     }
   }
   if (isXls14Solo(currency)) {
