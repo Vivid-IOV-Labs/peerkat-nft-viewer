@@ -201,13 +201,11 @@ async function getOne(
   const transactionIndexDecimal = Number(transactionIndex);
 
   tokenName = getTokenName(currency);
-  debugger;
   async function geXls14() {
     const xlsProtocol = getXLSProtocol(source);
     if (xlsProtocol) {
       url = getMediaByXLSProtocol(source, xlsProtocol, tokenName);
       media_type = await getMediaType(url);
-      debugger;
       devlog(media_type, tokenName);
 
       if (media_type == "application/json") {
