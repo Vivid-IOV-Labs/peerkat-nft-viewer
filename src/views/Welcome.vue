@@ -4,25 +4,19 @@
       <div class="form-group">
         <base-input
           id="user"
-          v-model="v$.user.$model"
+          v-model="user"
           placeholder="A user ID"
           label-text="User"
           class="w-full max-w-xl"
-          :is-required="v$.user.required"
-          :is-invalid="v$.user.$dirty && v$.user.$invalid"
-          :errors="formatVuelidateErrors(v$.user.$errors)"
         ></base-input>
       </div>
       <div class="form-group">
         <base-input
           id="walletaddress"
-          v-model="v$.walletAddress.$model"
+          v-model="walletAddress"
           placeholder="Enter your Ripple Wallet Address"
           label-text="Walletaddress"
           class="w-full max-w-xl"
-          :is-required="v$.walletAddress.required"
-          :is-invalid="v$.walletAddress.$dirty && v$.walletAddress.$invalid"
-          :errors="formatVuelidateErrors(v$.walletAddress.$errors)"
         ></base-input>
       </div>
       <div class="form-group">
@@ -50,11 +44,7 @@
         ></base-select>
       </div>
     </form>
-    <base-button
-      status="success"
-      class="mt-4"
-      :disabled="v$.$invalid || isLoading"
-      @click="runAsyncFunction"
+    <base-button status="success" class="mt-4" @click="runAsyncFunction"
       >Enter
       <div v-if="isLoading" class="spinner-grow spinner-grow-sm" role="status">
         <span class="sr-only">Loading...</span>
@@ -83,8 +73,6 @@ import { defineComponent, ref, computed } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseInput from "@/components/BaseInput.vue";
 import BaseSelect from "@/components/BaseSelect.vue";
-import useVuelidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
 import { useStore } from "vuex";
 import BaseDialog from "@/components/BaseDialog.vue";
 import { useRoute, useRouter } from "vue-router";
@@ -170,21 +158,6 @@ export default defineComponent({
     const shared = computed(() =>
       store.getters["nft/getShared"](nodetype.value)
     );
-
-    const rules = computed(() => ({
-      walletAddress: {
-        required,
-        // isRippleAddress,
-      },
-      user: {
-        required,
-      },
-    }));
-
-    const v$ = useVuelidate(rules, {
-      walletAddress,
-      user,
-    });
     const connectXrpClient = async () => {
       try {
         if (!shared.value) {
@@ -200,7 +173,8 @@ export default defineComponent({
     };
 
     return {
-      v$,
+      walletAddress,
+      user,
       nodetypes,
       nodetype,
       isLoading,

@@ -1,5 +1,21 @@
 import { NFT } from "../models/NFT";
 import { devlog } from "../utils/devlog";
+// import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
+// GlobalWorkerOptions.workerSrc =
+//   "../../node_modules/pdfjs-dist/build/pdf.worker.js";
+// GlobalWorkerOptions.workerSrc =
+//   "../../node_modules/pdfjs-dist/build/pdf.worker.js";
+interface MyNamespacedWindow extends Window {
+  "pdfjs-dist/build/pdf": any;
+}
+
+declare let window: MyNamespacedWindow;
+
+const PDFJS = window["pdfjs-dist/build/pdf"];
+
+// PDFJS.GlobalWorkerOptions.workerSrc =
+//   "//mozilla.github.io/pdf.js/build/pdf.worker.js";
+PDFJS.disableWorker = true;
 const ipfsGateway = import.meta.env.VITE_IPFS_GATEWAY;
 
 const xrpl = (window as any).xrpl;
@@ -11,9 +27,15 @@ type line = {
   balanceFormatted: string;
   limitFormatted: string;
 };
-function isNFT({ balance, limit }: line): boolean {
+function isNFT({ balance, limit, currency }: line): boolean {
   const isNFTRegex = /^(\d{16})(e-)(85|86|87|89|90|91|92|93|94|95|96)$/;
-  return isNFTRegex.test(balance) && isNFTRegex.test(limit);
+  const isCurrencyCorrect =
+    currency.length === 40 &&
+    /^(?=.*?\d)(?=.*?[a-zA-Z])[a-zA-Z\d]+$/.test(currency);
+  const allCheck =
+    isNFTRegex.test(balance) && isNFTRegex.test(limit) && isCurrencyCorrect;
+
+  return allCheck;
 }
 function formatXrpCurrency(xrpcurrency: string): string {
   const last2 = Number(xrpcurrency.slice(-2));
@@ -68,7 +90,7 @@ async function getMediaType(url: string) {
   }
 }
 function getXLSProtocol(source: string): string {
-  if (/(http|https|ipfs)?:\/\//.test(source)) {
+  if (/(http|https|ipfs)?:\/\//.test(source) || source.includes("ipfs.io")) {
     return "xls-14";
   } else if (/(hash)?:/.test(source)) {
     return "xls-16-peerkat";
@@ -165,27 +187,56 @@ async function getOne(
   let media_type;
   let desc;
   let author;
-  let tokenName;
+  let tokenName = "";
   let sololimitFormatted;
   let standard;
+
   const ctiHex = getCtiHex(currency);
   const ctiDecimal = hexToDec(ctiHex);
   const ctiDecimalString = ctiDecimal.toString();
   const ctiBigInt = BigInt(ctiDecimalString);
-
-  //const isValidCti = cti_is_simple(ctiBigInt);
-  // const isValidCtiLedger = cti_ledger_check(ctiBigInt);
-  // const isValidCtiTransaction = cti_transaction_check(ctiBigInt);
-
   const ledgerIndex = cti_ledger_index(ctiBigInt);
   const ledgerIndexDecimal = Number(ledgerIndex);
-
   const transactionIndex = cti_transaction_index(ctiBigInt);
   const transactionIndexDecimal = Number(transactionIndex);
-
   tokenName = getTokenName(currency);
+  async function geXls14() {
+    const xlsProtocol = getXLSProtocol(source);
+    if (xlsProtocol) {
+      url = getMediaByXLSProtocol(source, xlsProtocol, tokenName);
+      media_type = await getMediaType(url);
+      devlog(media_type, tokenName);
+
+      if (media_type == "application/json") {
+        const { image } = await fetch(url).then((res) => res.json());
+        if (image) {
+          url = getMediaByXLSProtocol(image, "xls-16-peerkat");
+          media_type = await getMediaType(url);
+        }
+      } else if (media_type?.includes("text/html")) {
+        devlog(media_type, "media_type");
+        devlog(source, "source");
+        devlog(tokenName, "tokenName");
+        const metadataUrl = ipfsGateway + "/" + source.split("ipfs/")[1];
+        devlog(metadataUrl, "metadataUrl");
+
+        const data = await getPdfContent(metadataUrl);
+        devlog(data, "data");
+        url = ipfsGateway + "/" + data["Image IPFS CID"];
+        media_type = await getMediaType(url);
+        author = data["Design"];
+      } else {
+        devlog(source, "source");
+        devlog(tokenName, "tokenName");
+        devlog(media_type, "media_type");
+        devlog(url, "url");
+      }
+    }
+  }
+
   if (isXls14Solo(currency)) {
     const metadataUrl = ipfsGateway + "/" + source.split("//")[1];
+
     try {
       const collection = await fetch(metadataUrl).then((res) => res.json());
       const { nfts } = collection;
@@ -202,6 +253,8 @@ async function getOne(
       url = mediaUrl;
       standard = "XLS-14d/SOLO";
     } catch (error) {
+      await geXls14();
+
       devlog(error);
     }
   } else if (
@@ -222,21 +275,26 @@ async function getOne(
       url = ipfsGateway + "/" + uri.split("//")[1];
       media_type = await getMediaType(url);
     } else {
+      await geXls14();
+
       devlog("no metadata");
     }
   } else {
-    const xlsProtocol = getXLSProtocol(source);
-    url = getMediaByXLSProtocol(source, xlsProtocol, tokenName);
-    media_type = await getMediaType(url);
-    if (media_type == "application/json") {
-      const { image } = await fetch(url).then((res) => res.json());
-      if (image) {
-        url = getMediaByXLSProtocol(image, "xls-16-peerkat");
-        media_type = await getMediaType(url);
-      }
-    }
+    await geXls14();
   }
-
+  console.log({
+    issuer: account,
+    issuerTruncated: truncate(account),
+    currency,
+    tokenName,
+    url,
+    media_type,
+    balanceFormatted,
+    limitFormatted: sololimitFormatted ? sololimitFormatted : limitFormatted,
+    desc,
+    standard,
+    author,
+  });
   return {
     issuer: account,
     issuerTruncated: truncate(account),
@@ -252,7 +310,32 @@ async function getOne(
   };
 }
 let client: any;
+async function getPdfContent(url: string) {
+  const doc = await PDFJS.getDocument(url).promise;
+  devlog(doc, "doc");
+  const page = await doc.getPage(1);
+  devlog(page, "page");
 
+  const textContent = await page.getTextContent();
+  devlog(textContent, "textContent");
+
+  let lastY,
+    text = "";
+  for (const item of textContent.items as any) {
+    if (lastY == item.transform[5] || !lastY) {
+      text += item.str;
+    } else {
+      text += "\n" + item.str;
+    }
+    lastY = item.transform[5];
+  }
+  return text.split(/\r\n|\r|\n/).reduce((acc: any, line) => {
+    const key = line.split(":")[0] as string;
+    const val = line.split(":")[1] as string;
+    acc[key] = val.trim();
+    return acc;
+  }, {});
+}
 async function connect() {
   await client.connect();
 }
@@ -302,13 +385,14 @@ async function fetchNftLines(walletAddress: string): Promise<any> {
     if (error) {
       throw new Error(error);
     } else {
-      return lines.filter(isNFT).map(function (line: line) {
+      const nftLines = lines.filter(isNFT).map(function (line: line) {
         return {
           ...line,
           balanceFormatted: formatXrpCurrency(line.balance),
           limitFormatted: formatXrpCurrency(line.limit),
         };
       });
+      return nftLines;
     }
   } catch (error) {
     devlog("fetchNftLines Error ", error);

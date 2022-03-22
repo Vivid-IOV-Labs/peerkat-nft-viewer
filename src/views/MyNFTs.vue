@@ -43,7 +43,7 @@
         <strong
           >Please note that we currently support XLS14 and XLS14/SOLO NFTs on
           XRPL only</strong
-        >. We will support XLS20 native NFTs on XRPL (currently in devnet)
+        >. We will support XLS20 native NFTs on XRPL
       </li>
     </ul>
   </div>
@@ -111,13 +111,13 @@ export default defineComponent({
       sentinel
     );
     async function fetchNext() {
+      unobserve();
       await store.dispatch("nft/fetchNext", nodetype.value);
+      observe();
     }
     watch(isIntersecting, async () => {
       if (!endload.value) {
-        unobserve();
         await fetchNext();
-        observe();
       }
     });
     watch(NFTMedia, async (newNfts) => {
