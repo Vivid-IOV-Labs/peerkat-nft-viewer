@@ -103,6 +103,8 @@ export default defineComponent({
     const nodetypes = [
       { label: "Main", value: "MAINNET" },
       { label: "Test", value: "TESTNET" },
+      { label: "Dev", value: "DEVNET" },
+      { label: "Custom", value: "CUSTOM" },
     ];
     const main_networks = [
       { label: "wss://xrpcluster.com", value: "wss://xrpcluster.com" },
