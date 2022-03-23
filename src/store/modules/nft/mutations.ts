@@ -30,7 +30,12 @@ const mutations: MutationTree<NFTState> = {
     state.all = [];
   },
   initSharedStore(state: NFTState, walletaddress) {
-    state.sharedwithme[walletaddress] = { TESTNET: [], MAINNET: [] };
+    state.sharedwithme[walletaddress] = {
+      TESTNET: [],
+      MAINNET: [],
+      CUSTOM: [],
+      DEVNET: [],
+    };
   },
   addShared(
     state: NFTState,
