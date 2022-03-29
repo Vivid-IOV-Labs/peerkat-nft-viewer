@@ -27,14 +27,12 @@ type line = {
   balanceFormatted: string;
   limitFormatted: string;
 };
-function isNFT({ balance, limit, currency }: line): boolean {
+function isNFT({ balance, currency }: line): boolean {
   const isNFTRegex = /^(\d{16})(e-)(85|86|87|89|90|91|92|93|94|95|96)$/;
   const isCurrencyCorrect =
     currency.length === 40 &&
     /^(?=.*?\d)(?=.*?[a-zA-Z])[a-zA-Z\d]+$/.test(currency);
-  const allCheck =
-    isNFTRegex.test(balance) && isNFTRegex.test(limit) && isCurrencyCorrect;
-
+  const allCheck = isNFTRegex.test(balance) && isCurrencyCorrect;
   return allCheck;
 }
 function formatXrpCurrency(xrpcurrency: string): string {
@@ -172,6 +170,21 @@ function isXls14Solo(currency: string) {
   const isNFT = first6 === "023031" && hexToString(first6ofLast24) === "NFT";
   return isNFT;
 }
+function encodeHTMLEntities(text: string) {
+  const textArea = document.createElement("textarea");
+  textArea.innerText = text;
+  return textArea.innerHTML;
+}
+const decodeHtmlEntity = function (str) {
+  return str.replace(/&#(\d+);/g, function (match, dec) {
+    return String.fromCharCode(dec);
+  });
+};
+function decodeHtml(html) {
+  const txt = document.createElement("textarea");
+  txt.innerHTML = html;
+  return txt.value;
+}
 async function getOne(
   account_data: any,
   account: string,
@@ -205,8 +218,6 @@ async function getOne(
     if (xlsProtocol) {
       url = getMediaByXLSProtocol(source, xlsProtocol, tokenName);
       media_type = await getMediaType(url);
-      devlog(media_type, tokenName);
-
       if (media_type == "application/json") {
         const { image } = await fetch(url).then((res) => res.json());
         if (image) {
@@ -214,22 +225,12 @@ async function getOne(
           media_type = await getMediaType(url);
         }
       } else if (media_type?.includes("text/html")) {
-        devlog(media_type, "media_type");
-        devlog(source, "source");
-        devlog(tokenName, "tokenName");
         const metadataUrl = ipfsGateway + "/" + source.split("ipfs/")[1];
-        devlog(metadataUrl, "metadataUrl");
 
         const data = await getPdfContent(metadataUrl);
-        devlog(data, "data");
         url = ipfsGateway + "/" + data["Image IPFS CID"];
         media_type = await getMediaType(url);
         author = data["Design"];
-      } else {
-        devlog(source, "source");
-        devlog(tokenName, "tokenName");
-        devlog(media_type, "media_type");
-        devlog(url, "url");
       }
     }
   }
@@ -244,7 +245,7 @@ async function getOne(
       const { content_type, metadata } = nft;
       const metadaNftUrl = ipfsGateway + "/" + metadata.split("//")[1];
       const res = await fetch(metadaNftUrl).then((res) => res.json());
-      desc = res.description;
+      desc = decodeHtmlEntity(res.description);
       tokenName = res.name;
       sololimitFormatted = collection.collection_item_count;
       const fil_ext = content_type.split("/")[1];
@@ -267,34 +268,21 @@ async function getOne(
     );
     if (metadata) {
       const uri = metadata.find((m: any) => m.type == "PrimaryUri").data;
-      desc = metadata
-        .find((m: any) => m.type == "Description")
-        .data.replace("â", "")
-        .replace("Â", "");
+      desc = decodeHtmlEntity(
+        metadata
+          .find((m: any) => m.type == "Description")
+          .data.replace("â", "")
+          .replace("Â", "")
+      );
       author = metadata.find((m: any) => m.type == "Author").data;
       url = ipfsGateway + "/" + uri.split("//")[1];
       media_type = await getMediaType(url);
     } else {
       await geXls14();
-
-      devlog("no metadata");
     }
   } else {
     await geXls14();
   }
-  console.log({
-    issuer: account,
-    issuerTruncated: truncate(account),
-    currency,
-    tokenName,
-    url,
-    media_type,
-    balanceFormatted,
-    limitFormatted: sololimitFormatted ? sololimitFormatted : limitFormatted,
-    desc,
-    standard,
-    author,
-  });
   return {
     issuer: account,
     issuerTruncated: truncate(account),
@@ -312,12 +300,9 @@ async function getOne(
 let client: any;
 async function getPdfContent(url: string) {
   const doc = await PDFJS.getDocument(url).promise;
-  devlog(doc, "doc");
   const page = await doc.getPage(1);
-  devlog(page, "page");
 
   const textContent = await page.getTextContent();
-  devlog(textContent, "textContent");
 
   let lastY,
     text = "";
