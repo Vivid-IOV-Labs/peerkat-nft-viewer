@@ -175,16 +175,12 @@ function encodeHTMLEntities(text: string) {
   textArea.innerText = text;
   return textArea.innerHTML;
 }
-const decodeHtmlEntity = function (str) {
+const decodeHtmlEntity = function (str: string) {
   return str.replace(/&#(\d+);/g, function (match, dec) {
     return String.fromCharCode(dec);
   });
 };
-function decodeHtml(html) {
-  const txt = document.createElement("textarea");
-  txt.innerHTML = html;
-  return txt.value;
-}
+
 async function getOne(
   account_data: any,
   account: string,
