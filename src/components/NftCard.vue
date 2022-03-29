@@ -56,7 +56,7 @@
       </div>
       <div v-if="nft.desc" class="mt-2">
         <strong class="h7 font-weight-bold">Description </strong><br />
-        <span>{{ nft.desc }}</span>
+        <div v-html="nft.desc"></div>
       </div>
       <div v-if="nft.standard" class="mt-2">
         <strong class="h7 font-weight-bold">Standard </strong><br />
