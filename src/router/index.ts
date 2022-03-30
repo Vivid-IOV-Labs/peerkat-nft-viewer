@@ -144,7 +144,6 @@ router.beforeEach(async (to, from, next) => {
           nodetype: nodetype.value,
         });
       } catch (error) {
-        devlog("On app enter connection error", error);
         next({
           path: "/network-error",
         });
