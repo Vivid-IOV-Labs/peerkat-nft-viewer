@@ -76,7 +76,7 @@ const test_networks = [
   "wss://s.altnet.rippletest.net:51233",
   "wss://xrpl.linkwss://testnet.xrpl-labs.com",
 ];
-const custom_networks = ["xls20-sandbox.rippletest.net:51233"];
+const custom_networks = ["wss://xls20-sandbox.rippletest.net:51233"];
 const dev_networks = ["wss://s.devnet.rippletest.net"];
 
 async function getMediaType(url: string) {

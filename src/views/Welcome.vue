@@ -123,8 +123,8 @@ export default defineComponent({
     ];
     const custom_networks = [
       {
-        label: "xls20-sandbox.rippletest.net:51233",
-        value: "xls20-sandbox.rippletest.net:51233",
+        label: "wss://xls20-sandbox.rippletest.net:51233",
+        value: "wss://xls20-sandbox.rippletest.net:51233",
       },
     ];
     const dev_networks = [
