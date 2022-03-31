@@ -77,7 +77,7 @@ const test_networks = [
   "wss://xrpl.linkwss://testnet.xrpl-labs.com",
 ];
 const custom_networks = ["wss://xls20-sandbox.rippletest.net:51233"];
-const dev_networks = ["wss://s.devnet.rippletest.net"];
+const dev_networks = ["wss://s.devnet.rippletest.net:51233"];
 
 async function getMediaType(url: string) {
   try {
@@ -435,7 +435,7 @@ async function fetchNext(nextLines: line[]): Promise<NFT[]> {
 }
 
 export async function init(nodetype: string): Promise<any> {
-  const X_url =
+  const netowrks =
     nodetype == "TESTNET"
       ? test_networks
       : nodetype == "MAINNET"
@@ -443,7 +443,7 @@ export async function init(nodetype: string): Promise<any> {
       : nodetype == "CUSTOM"
       ? custom_networks
       : dev_networks;
-  client = new xrpl.Client(X_url[0], { connectionTimeout: 2000 });
+  client = new xrpl.Client(netowrks[0], { connectionTimeout: 2000 });
 
   // client.on("disconnected", async (msg: any) => {
   //   devlog("Disconnected", msg);

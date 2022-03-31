@@ -129,8 +129,8 @@ export default defineComponent({
     ];
     const dev_networks = [
       {
-        label: "wss://s.devnet.rippletest.net",
-        value: "wss://s.devnet.rippletest.net",
+        label: "wss://s.devnet.rippletest.net:51233",
+        value: "wss://s.devnet.rippletest.net:51233",
       },
     ];
     const networks = computed(() => {
