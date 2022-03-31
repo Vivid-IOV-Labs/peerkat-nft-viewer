@@ -32,7 +32,7 @@
       </div>
 
       <div class="form-group">
-        {{ network }}
+        {{ networks }}
         <base-select
           id="network"
           v-model="network"
@@ -121,8 +121,18 @@ export default defineComponent({
         value: "wss://xrpl.linkwss://testnet.xrpl-labs.com",
       },
     ];
-    const custom_networks = ["xls20-sandbox.rippletest.net:51233"];
-    const dev_networks = ["wss://s.devnet.rippletest.net"];
+    const custom_networks = [
+      {
+        label: "xls20-sandbox.rippletest.net:51233",
+        value: "xls20-sandbox.rippletest.net:51233",
+      },
+    ];
+    const dev_networks = [
+      {
+        label: "wss://s.devnet.rippletest.net",
+        value: "wss://s.devnet.rippletest.net",
+      },
+    ];
     const networks = computed(() => {
       return nodetype.value == "TESTNET"
         ? test_networks
