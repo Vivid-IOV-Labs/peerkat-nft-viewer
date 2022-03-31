@@ -121,8 +121,16 @@ export default defineComponent({
         value: "wss://xrpl.linkwss://testnet.xrpl-labs.com",
       },
     ];
+    const custom_networks = ["xls20-sandbox.rippletest.net:51233"];
+    const dev_networks = ["wss://s.devnet.rippletest.net"];
     const networks = computed(() => {
-      return nodetype.value == "MAINNET" ? main_networks : test_networks;
+      return nodetype.value == "TESTNET"
+        ? test_networks
+        : nodetype.value == "MAINNET"
+        ? main_networks
+        : nodetype.value == "CUSTOM"
+        ? custom_networks
+        : dev_networks;
     });
 
     const walletAddress = computed({
