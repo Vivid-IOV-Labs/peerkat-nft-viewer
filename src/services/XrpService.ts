@@ -170,11 +170,6 @@ function isXls14Solo(currency: string) {
   const isNFT = first6 === "023031" && hexToString(first6ofLast24) === "NFT";
   return isNFT;
 }
-function encodeHTMLEntities(text: string) {
-  const textArea = document.createElement("textarea");
-  textArea.innerText = text;
-  return textArea.innerHTML;
-}
 const decodeHtmlEntity = function (str: string) {
   return str.replace(/&#(\d+);/g, function (match, dec) {
     return String.fromCharCode(dec);
