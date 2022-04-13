@@ -42,10 +42,9 @@ export default defineComponent({
   async setup() {
     const route = useRoute();
     const store = useStore();
+    const { currency, nftAddress } = route.params;
     const nft = computed(() => {
-      return store.getters["nft/getByAddress"](
-        route.params.nftAddress as string
-      );
+      return store.getters["nft/getByAddress"](nftAddress, currency);
     });
     return {
       nft,

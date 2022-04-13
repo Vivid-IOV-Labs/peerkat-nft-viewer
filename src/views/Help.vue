@@ -27,17 +27,18 @@
         FAQs
         <small
           ><br />
-          updated 16 March 2022
+          updated 13 April 2022
         </small>
       </h5>
       <ul class="mt-2 mb-4 p-2">
         <li class="pb-2">
           <strong>Why is my NFT's artwork not being displayed? </strong><br />
-          It could be that the viewer is unable to read the metadata
-          (referencing where the NFT asset is stored). We are actively working
-          on increasing the viewer’s support for different types of metadata so
-          that your NFT artwork will be visible in the future, however we will
-          not be supporting artwork for IOUs.
+          It could be due to a slow connection or the viewer is unable to read
+          the metadata (referencing where the NFT asset is stored). In the case
+          of a slow connection please try to reload the Peerkat xApp. We are
+          actively working on increasing the viewer’s support for different
+          types of metadata so that your NFT artwork will be visible in the
+          future, however we will not be supporting artwork for IOUs.
         </li>
         <li class="pb-2">
           <strong>

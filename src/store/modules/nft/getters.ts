@@ -19,15 +19,21 @@ export default {
   getLines: (state: NFTState): Array<NFT> => state.lines,
   getByAddress:
     (state: NFTState) =>
-    (address: string): NFT | undefined => {
-      return state.all.find(({ issuer }) => issuer == address);
+    (address: string, curr: string): NFT | undefined => {
+      return state.all.find(
+        ({ issuer, currency }) => issuer == address && currency == curr
+      );
     },
   getSharedByAddress:
     (state: NFTState, _getters: any, rootState: any) =>
-    (address: string, nodetype: keyof SharedNFTs): NFT | undefined => {
+    (
+      address: string,
+      nodetype: keyof SharedNFTs,
+      curr: string
+    ): NFT | undefined => {
       const useraddress = rootState.user.user;
       return state.sharedwithme[useraddress][nodetype].find(
-        ({ issuer }) => issuer == address
+        ({ issuer, currency }) => issuer == address && currency == curr
       );
     },
 };
