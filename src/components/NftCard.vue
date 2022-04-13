@@ -121,7 +121,7 @@ export default defineComponent({
       },
       view() {
         router.push({
-          path: `/wallet/${props.nft.issuer}/view`,
+          path: `/wallet/${props.nft.issuer}/view/${props.nft.currency}`,
         });
       },
     };

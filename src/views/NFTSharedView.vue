@@ -44,9 +44,12 @@ export default defineComponent({
     const route = useRoute();
     const store = useStore();
     const nft = computed(() => {
+      const { currency, nftAddress, nodetype } = route.params;
+
       return store.getters["nft/getSharedByAddress"](
-        route.params.nftAddress as string,
-        getNetworkTypeFromCode(parseInt(route.params.nodetype as string))
+        nftAddress,
+        getNetworkTypeFromCode(parseInt(nodetype as string)),
+        currency
       );
     });
     return {
