@@ -352,26 +352,41 @@ async function getMetadata(ledger_index: number, transactionIndex: number) {
     return null;
   }
 }
+async function recurseFetchNftLines(
+  walletAddress: string,
+  accLines: line[],
+  prev_marker?: string
+): Promise<line[]> {
+  const { result } = await client.request({
+    command: "account_lines",
+    account: walletAddress,
+    marker: prev_marker,
+  });
+  const { lines, error, marker } = result;
+  if (error) {
+    throw new Error(error);
+  }
+
+  accLines = [...accLines, ...lines];
+  if (marker) {
+    return await recurseFetchNftLines(walletAddress, accLines, marker);
+  } else {
+    return accLines;
+  }
+}
 
 async function fetchNftLines(walletAddress: string): Promise<any> {
   try {
-    const { result } = await client.request({
-      command: "account_lines",
-      account: walletAddress,
+    const accLines = await recurseFetchNftLines(walletAddress, []);
+    const nftLines = accLines.filter(isNFT).map(function (line: line) {
+      return {
+        ...line,
+        balanceFormatted: formatXrpCurrency(line.balance),
+        limitFormatted: formatXrpCurrency(line.limit),
+      };
     });
-    const { lines, error } = result;
-    if (error) {
-      throw new Error(error);
-    } else {
-      const nftLines = lines.filter(isNFT).map(function (line: line) {
-        return {
-          ...line,
-          balanceFormatted: formatXrpCurrency(line.balance),
-          limitFormatted: formatXrpCurrency(line.limit),
-        };
-      });
-      return nftLines;
-    }
+    return nftLines;
+    // }
   } catch (error) {
     devlog("fetchNftLines Error ", error);
   }
