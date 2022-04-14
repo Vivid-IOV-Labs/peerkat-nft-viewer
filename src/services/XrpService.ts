@@ -76,6 +76,8 @@ const test_networks = [
   "wss://s.altnet.rippletest.net:51233",
   "wss://xrpl.linkwss://testnet.xrpl-labs.com",
 ];
+const custom_networks = ["wss://xls20-sandbox.rippletest.net:51233"];
+const dev_networks = ["wss://s.devnet.rippletest.net:51233"];
 
 async function getMediaType(url: string) {
   try {
@@ -350,26 +352,41 @@ async function getMetadata(ledger_index: number, transactionIndex: number) {
     return null;
   }
 }
+async function recurseFetchNftLines(
+  walletAddress: string,
+  accLines: line[],
+  prev_marker?: string
+): Promise<line[]> {
+  const { result } = await client.request({
+    command: "account_lines",
+    account: walletAddress,
+    marker: prev_marker,
+  });
+  const { lines, error, marker } = result;
+  if (error) {
+    throw new Error(error);
+  }
+
+  accLines = [...accLines, ...lines];
+  if (marker) {
+    return await recurseFetchNftLines(walletAddress, accLines, marker);
+  } else {
+    return accLines;
+  }
+}
 
 async function fetchNftLines(walletAddress: string): Promise<any> {
   try {
-    const { result } = await client.request({
-      command: "account_lines",
-      account: walletAddress,
+    const accLines = await recurseFetchNftLines(walletAddress, []);
+    const nftLines = accLines.filter(isNFT).map(function (line: line) {
+      return {
+        ...line,
+        balanceFormatted: formatXrpCurrency(line.balance),
+        limitFormatted: formatXrpCurrency(line.limit),
+      };
     });
-    const { lines, error } = result;
-    if (error) {
-      throw new Error(error);
-    } else {
-      const nftLines = lines.filter(isNFT).map(function (line: line) {
-        return {
-          ...line,
-          balanceFormatted: formatXrpCurrency(line.balance),
-          limitFormatted: formatXrpCurrency(line.limit),
-        };
-      });
-      return nftLines;
-    }
+    return nftLines;
+    // }
   } catch (error) {
     devlog("fetchNftLines Error ", error);
   }
@@ -433,8 +450,15 @@ async function fetchNext(nextLines: line[]): Promise<NFT[]> {
 }
 
 export async function init(nodetype: string): Promise<any> {
-  const X_url = nodetype == "TESTNET" ? test_networks : main_networks;
-  client = new xrpl.Client(X_url[0], { connectionTimeout: 2000 });
+  const netowrks =
+    nodetype == "TESTNET"
+      ? test_networks
+      : nodetype == "MAINNET"
+      ? main_networks
+      : nodetype == "CUSTOM"
+      ? custom_networks
+      : dev_networks;
+  client = new xrpl.Client(netowrks[0], { connectionTimeout: 2000 });
 
   // client.on("disconnected", async (msg: any) => {
   //   devlog("Disconnected", msg);

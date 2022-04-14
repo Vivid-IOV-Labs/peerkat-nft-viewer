@@ -4,6 +4,8 @@ import { NFT } from "../../../models/NFT";
 export interface SharedNFTs {
   TESTNET: Array<NFT>;
   MAINNET: Array<NFT>;
+  DEVNET: Array<NFT>;
+  CUSTOM: Array<NFT>;
 }
 export interface SharedNFTsByWallet {
   [walletaddress: string]: SharedNFTs;

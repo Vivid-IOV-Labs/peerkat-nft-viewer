@@ -32,7 +32,6 @@
       </div>
 
       <div class="form-group">
-        {{ network }}
         <base-select
           id="network"
           v-model="network"
@@ -103,6 +102,8 @@ export default defineComponent({
     const nodetypes = [
       { label: "Main", value: "MAINNET" },
       { label: "Test", value: "TESTNET" },
+      { label: "Dev", value: "DEVNET" },
+      { label: "Custom", value: "CUSTOM" },
     ];
     const main_networks = [
       { label: "wss://xrpcluster.com", value: "wss://xrpcluster.com" },
@@ -119,8 +120,26 @@ export default defineComponent({
         value: "wss://xrpl.linkwss://testnet.xrpl-labs.com",
       },
     ];
+    const custom_networks = [
+      {
+        label: "wss://xls20-sandbox.rippletest.net:51233",
+        value: "wss://xls20-sandbox.rippletest.net:51233",
+      },
+    ];
+    const dev_networks = [
+      {
+        label: "wss://s.devnet.rippletest.net:51233",
+        value: "wss://s.devnet.rippletest.net:51233",
+      },
+    ];
     const networks = computed(() => {
-      return nodetype.value == "MAINNET" ? main_networks : test_networks;
+      return nodetype.value == "TESTNET"
+        ? test_networks
+        : nodetype.value == "MAINNET"
+        ? main_networks
+        : nodetype.value == "CUSTOM"
+        ? custom_networks
+        : dev_networks;
     });
 
     const walletAddress = computed({

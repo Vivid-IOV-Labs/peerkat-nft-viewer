@@ -30,7 +30,12 @@ const mutations: MutationTree<NFTState> = {
     state.all = [];
   },
   initSharedStore(state: NFTState, walletaddress) {
-    state.sharedwithme[walletaddress] = { TESTNET: [], MAINNET: [] };
+    state.sharedwithme[walletaddress] = {
+      TESTNET: [],
+      MAINNET: [],
+      CUSTOM: [],
+      DEVNET: [],
+    };
   },
   addShared(
     state: NFTState,
@@ -38,7 +43,8 @@ const mutations: MutationTree<NFTState> = {
   ): void {
     const exist =
       state.sharedwithme[walletaddress][nodetype].filter(
-        (n: { issuer: string }) => n.issuer === shared.issuer
+        (n: { issuer: string; currency: string }) =>
+          n.issuer === shared.issuer && n.issuer === shared.currency
       ).length > 0;
 
     if (!exist) {
