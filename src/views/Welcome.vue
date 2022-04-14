@@ -32,7 +32,6 @@
       </div>
 
       <div class="form-group">
-        {{ networks }}
         <base-select
           id="network"
           v-model="network"
