@@ -90,7 +90,7 @@ async function getMediaType(url: string) {
   }
 }
 function getXLSProtocol(source: string): string {
-  if (/(http|https|ipfs)?:\/\//.test(source) || source.includes("ipfs.io")) {
+  if (/(http|https|ipfs):\/\//.test(source) || source.includes("ipfs.io")) {
     return "xls-14";
   } else if (/(hash)?:/.test(source)) {
     return "xls-16-peerkat";
@@ -211,6 +211,7 @@ async function getOne(
     if (xlsProtocol) {
       url = getMediaByXLSProtocol(source, xlsProtocol, tokenName);
       media_type = await getMediaType(url);
+      debugger;
       if (media_type == "application/json") {
         const { image } = await fetch(url).then((res) => res.json());
         if (image) {
