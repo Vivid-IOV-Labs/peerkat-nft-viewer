@@ -211,7 +211,6 @@ async function getOne(
     if (xlsProtocol) {
       url = getMediaByXLSProtocol(source, xlsProtocol, tokenName);
       media_type = await getMediaType(url);
-      debugger;
       if (media_type == "application/json") {
         const { image } = await fetch(url).then((res) => res.json());
         if (image) {
@@ -451,23 +450,27 @@ async function fetchNext(nextLines: line[]): Promise<NFT[]> {
 }
 
 export async function init(network: string): Promise<any> {
-  client = new xrpl.Client(network, { connectionTimeout: 2000 });
+  client = new xrpl.Client(network, {
+    connectionTimeout: 2000,
+  });
+  devlog("network", network);
 
-  // client.on("disconnected", async (msg: any) => {
-  //   devlog("Disconnected", msg);
-  // });
-  // client.on("connected", async (msg: any) => {
-  //   devlog("Connected", msg);
-  // });
-  // client.on("peerStatusChange", async (msg: any) => {
-  //   devlog("peerStatusChange", msg);
-  // });
-  // client.on("ledgerClosed", async (msg: any) => {
-  //   devlog("ledgerClosed", msg);
-  // });
-  // client.on("error", async (error: any) => {
-  //   devlog("Connection Errors", error);
-  // });
+  client.on("disconnected", async (msg: any) => {
+    devlog("Disconnected", msg);
+  });
+  client.on("connected", async (msg: any) => {
+    devlog("Connected", msg);
+    devlog("Connected", client);
+  });
+  client.on("peerStatusChange", async (msg: any) => {
+    devlog("peerStatusChange", msg);
+  });
+  client.on("ledgerClosed", async (msg: any) => {
+    devlog("ledgerClosed", msg);
+  });
+  client.on("error", async (error: any) => {
+    devlog("Connection Errors", error);
+  });
 
   await client.connect();
 
