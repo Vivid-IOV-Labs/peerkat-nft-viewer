@@ -99,7 +99,7 @@ export default defineComponent({
         ? `https://test.bithomp.com/explorer/${props.nft.issuer}`
         : `https://bithomp.com/explorer/${props.nft.issuer}`
     );
-    function shareUrl(nodetypecode: string) {
+    function shareUrl(nodetypecode: number | undefined) {
       const xummSandbox = import.meta.env.VITE_XUMM_SANDBOX;
       return xummSandbox === "test"
         ? `https://xumm.app/detect/xapp:peerkat.sandbox.test?redirect=/shared/${props.nft.issuer}/${nodetypecode}/${props.nft.currency}`
