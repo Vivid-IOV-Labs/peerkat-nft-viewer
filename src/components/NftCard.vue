@@ -99,6 +99,14 @@ export default defineComponent({
         ? `https://test.bithomp.com/explorer/${props.nft.issuer}`
         : `https://bithomp.com/explorer/${props.nft.issuer}`
     );
+    function shareUrl(nodetypecode: string) {
+      const xummSandbox = import.meta.env.VITE_XUMM_SANDBOX;
+      return xummSandbox === "test"
+        ? `https://xumm.app/detect/xapp:peerkat.sandbox.test?redirect=/shared/${props.nft.issuer}/${nodetypecode}/${props.nft.currency}`
+        : xummSandbox === "dev"
+        ? `https://xumm.app/detect/xapp:peerkat.dev?redirect=/shared/${props.nft.issuer}/${nodetypecode}/${props.nft.currency}`
+        : `https://xumm.app/detect/xapp:peerkat.viewer?redirect=/shared/${props.nft.issuer}/${nodetypecode}/${props.nft.currency}`;
+    }
     return {
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
@@ -112,11 +120,7 @@ export default defineComponent({
           text: "Copied to clipboard",
         };
 
-        const xummSandbox = import.meta.env.VITE_XUMM_SANDBOX;
-        const url =
-          xummSandbox === "test"
-            ? `https://xumm.app/detect/xapp:peerkat.sandbox.test?redirect=/shared/${props.nft.issuer}/${nodetypecode}/${props.nft.currency}`
-            : `https://xumm.app/detect/xapp:peerkat.viewer?redirect=/shared/${props.nft.issuer}/${nodetypecode}/${props.nft.currency}`;
+        const url = shareUrl(nodetypecode);
         copyText(url, params);
       },
       view() {
