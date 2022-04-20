@@ -450,9 +450,9 @@ async function fetchNext(nextLines: line[]): Promise<NFT[]> {
 }
 
 export async function init(network: string): Promise<any> {
-  client = new xrpl.Client(network, {
-    connectionTimeout: 2000,
-  });
+  devlog("network", network);
+
+  client = new xrpl.Client(network);
   devlog("network", network);
 
   client.on("disconnected", async (msg: any) => {
