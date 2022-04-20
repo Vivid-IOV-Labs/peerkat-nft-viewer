@@ -118,12 +118,12 @@ const router = createRouter({
 const isInXumm = /xumm/.test(navigator.userAgent);
 const walletAddress = computed(() => store.getters["user/getAddress"]);
 const nodetype = computed(() => store.getters["user/getNodeType"]);
+const network = computed(() => store.getters["user/getNetwork"]);
 const isConnected = computed(() => store.getters["nft/getIsConnected"]);
 const shared = computed(() => store.getters["nft/getShared"](nodetype.value));
-
 const connectXrpClient = async () => {
   await store.dispatch("nft/initXrpClient", {
-    nodetype: nodetype.value,
+    network: network.value,
   });
 };
 let loggedIn = false;
@@ -137,13 +137,19 @@ router.beforeEach(async (to, from, next) => {
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
       await store.commit("user/setAddress", ottdata.value.account);
       await store.commit("user/setNodeType", ottdata.value.nodetype);
+      await store.commit("user/setNetwork", ottdata.value.nodewss);
       await store.commit("user/setUser", ottdata.value.user);
+      devlog("ottdata", ottdata.value);
 
       try {
         await store.dispatch("nft/initXrpClient", {
-          nodetype: nodetype.value,
+          network:
+            ottdata.value.nodetype == "CUSTOM"
+              ? "wss://" + ottdata.value.nodewss
+              : ottdata.value.nodewss,
         });
       } catch (error) {
+        devlog("/network-error", error);
         next({
           path: "/network-error",
         });

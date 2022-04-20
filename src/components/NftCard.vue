@@ -66,7 +66,9 @@
     <template #footer>
       <div>
         <base-button class="mr-2" @click="share">Share</base-button>
-        <external-link class="mr-2" :url="bihompUrl"> Inspect</external-link>
+        <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl">
+          Inspect</external-link
+        >
       </div>
     </template>
   </base-card>
@@ -80,6 +82,7 @@ import { useRouter } from "vue-router";
 import { copyText } from "../utils/copytext";
 import { useStore } from "vuex";
 import { getNetworkCodeFromType } from "../utils/getNetworkTypeFromCode";
+import { getInspectorUrl } from "../utils/getInspectorUrl";
 
 export default defineComponent({
   components: {
@@ -94,11 +97,18 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
     const nodetype = computed(() => store.getters["user/getNodeType"]);
+    const network = computed(() => store.getters["user/getNetwork"]);
     const bihompUrl = computed(() =>
-      nodetype.value == "TESTNET"
-        ? `https://test.bithomp.com/explorer/${props.nft.issuer}`
-        : `https://bithomp.com/explorer/${props.nft.issuer}`
+      getInspectorUrl(network.value, props.nft.issuer)
     );
+    function shareUrl(nodetypecode: number | undefined) {
+      const xummSandbox = import.meta.env.VITE_XUMM_SANDBOX;
+      return xummSandbox === "test"
+        ? `https://xumm.app/detect/xapp:peerkat.sandbox.test?redirect=/shared/${props.nft.issuer}/${nodetypecode}/${props.nft.currency}`
+        : xummSandbox === "dev"
+        ? `https://xumm.app/detect/xapp:peerkat.dev?redirect=/shared/${props.nft.issuer}/${nodetypecode}/${props.nft.currency}`
+        : `https://xumm.app/detect/xapp:peerkat.viewer?redirect=/shared/${props.nft.issuer}/${nodetypecode}/${props.nft.currency}`;
+    }
     return {
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
@@ -112,11 +122,7 @@ export default defineComponent({
           text: "Copied to clipboard",
         };
 
-        const xummSandbox = import.meta.env.VITE_XUMM_SANDBOX;
-        const url =
-          xummSandbox === "test"
-            ? `https://xumm.app/detect/xapp:peerkat.sandbox.test?redirect=/shared/${props.nft.issuer}/${nodetypecode}/${props.nft.currency}`
-            : `https://xumm.app/detect/xapp:peerkat.viewer?redirect=/shared/${props.nft.issuer}/${nodetypecode}/${props.nft.currency}`;
+        const url = shareUrl(nodetypecode);
         copyText(url, params);
       },
       view() {

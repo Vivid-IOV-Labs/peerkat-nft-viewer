@@ -1,4 +1,4 @@
-import { createStore, createLogger } from "vuex";
+import { createStore } from "vuex";
 import { NftModule } from "./modules/nft";
 import { XummModule } from "./modules/xumm";
 import { UserModule } from "./modules/user";

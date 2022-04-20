@@ -67,17 +67,6 @@ function truncate(
   if (fullStr.length <= strLen) return fullStr;
   return fullStr.substr(0, frontChars) + separator;
 }
-const main_networks = [
-  "wss://s2.ripple.com",
-  "wss://xrpl.link",
-  "wss://xrpcluster.com",
-];
-const test_networks = [
-  "wss://s.altnet.rippletest.net:51233",
-  "wss://xrpl.linkwss://testnet.xrpl-labs.com",
-];
-const custom_networks = ["wss://xls20-sandbox.rippletest.net:51233"];
-const dev_networks = ["wss://s.devnet.rippletest.net:51233"];
 
 async function getMediaType(url: string) {
   try {
@@ -90,7 +79,7 @@ async function getMediaType(url: string) {
   }
 }
 function getXLSProtocol(source: string): string {
-  if (/(http|https|ipfs)?:\/\//.test(source) || source.includes("ipfs.io")) {
+  if (/(http|https|ipfs):\/\//.test(source) || source.includes("ipfs.io")) {
     return "xls-14";
   } else if (/(hash)?:/.test(source)) {
     return "xls-16-peerkat";
@@ -449,32 +438,29 @@ async function fetchNext(nextLines: line[]): Promise<NFT[]> {
   return nextNfts;
 }
 
-export async function init(nodetype: string): Promise<any> {
-  const netowrks =
-    nodetype == "TESTNET"
-      ? test_networks
-      : nodetype == "MAINNET"
-      ? main_networks
-      : nodetype == "CUSTOM"
-      ? custom_networks
-      : dev_networks;
-  client = new xrpl.Client(netowrks[0], { connectionTimeout: 2000 });
+export async function init(network: string): Promise<any> {
+  devlog("network", network);
+  const networkToUse =
+    network == "wss://testnet.xrpl-labs.com"
+      ? "wss://s.altnet.rippletest.net:51233"
+      : network;
+  client = new xrpl.Client(networkToUse);
 
-  // client.on("disconnected", async (msg: any) => {
-  //   devlog("Disconnected", msg);
-  // });
-  // client.on("connected", async (msg: any) => {
-  //   devlog("Connected", msg);
-  // });
-  // client.on("peerStatusChange", async (msg: any) => {
-  //   devlog("peerStatusChange", msg);
-  // });
-  // client.on("ledgerClosed", async (msg: any) => {
-  //   devlog("ledgerClosed", msg);
-  // });
-  // client.on("error", async (error: any) => {
-  //   devlog("Connection Errors", error);
-  // });
+  client.on("disconnected", async (msg: any) => {
+    devlog("Disconnected");
+  });
+  client.on("connected", async (msg: any) => {
+    devlog("Connected", client);
+  });
+  client.on("peerStatusChange", async (msg: any) => {
+    devlog("peerStatusChange", msg);
+  });
+  client.on("ledgerClosed", async (msg: any) => {
+    devlog("ledgerClosed", msg);
+  });
+  client.on("error", async (error: any) => {
+    devlog("Connection Errors", error);
+  });
 
   await client.connect();
 
