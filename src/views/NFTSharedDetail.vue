@@ -124,6 +124,7 @@ import {
 } from "../utils/getNetworkTypeFromCode";
 import { NFT } from "../models/NFT";
 import { devlog } from "../utils/devlog";
+import { getInspectorUrl } from "../utils/getInspectorUrl";
 
 export default defineComponent({
   components: { BaseCard, ExternalLink },
@@ -138,10 +139,9 @@ export default defineComponent({
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const user = computed(() => store.getters["user/getUser"]);
     const malformedLink = ref(false);
+    const network = computed(() => store.getters["user/getNetwork"]);
     const bihompUrl = computed(() =>
-      nodetype.value == "TESTNET"
-        ? `https://test.bithomp.com/explorer/${route.params.nftAddress.toString()}`
-        : `https://bithomp.com/explorer/${route.params.nftAddress.toString()}`
+      getInspectorUrl(network.value, route.params.nftAddress.toString())
     );
     const nft = ref<NFT | null>(null);
     if (nodetypefromlink == nodetype.value) {

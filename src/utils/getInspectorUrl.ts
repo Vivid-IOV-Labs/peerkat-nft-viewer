@@ -18,7 +18,7 @@
 interface urlMap {
   [id: string]: string[];
 }
-export function getInspectorUrl(network: keyof urlMap): string {
+export function getInspectorUrl(network: keyof urlMap, issuer: string): string {
   const urlMap: urlMap = {
     /*test */
     "wss://s.altnet.rippletest.net:51233": ["https://test.bithomp.com/"],
@@ -30,5 +30,5 @@ export function getInspectorUrl(network: keyof urlMap): string {
     /*custom */
     "xls20-sandbox.rippletest.net:51233": ["https://xls20.bithomp.com/"],
   };
-  return urlMap[network][0];
+  return urlMap[network][0] + issuer;
 }

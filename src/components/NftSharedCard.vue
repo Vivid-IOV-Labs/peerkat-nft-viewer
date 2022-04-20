@@ -72,6 +72,7 @@ import ExternalLink from "@/components/ExternalLink.vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { getNetworkCodeFromType } from "../utils/getNetworkTypeFromCode";
+import { getInspectorUrl } from "../utils/getInspectorUrl";
 
 export default defineComponent({
   components: {
@@ -88,10 +89,9 @@ export default defineComponent({
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const user = computed(() => store.getters["user/getUser"]);
     const nodetypecode = computed(() => getNetworkCodeFromType(nodetype.value));
+    const network = computed(() => store.getters["user/getNetwork"]);
     const bihompUrl = computed(() =>
-      nodetype.value == "TESTNET"
-        ? `https://test.bithomp.com/explorer/${props.nft.issuer}`
-        : `https://bithomp.com/explorer/${props.nft.issuer}`
+      getInspectorUrl(network.value, props.nft.issuer)
     );
     return {
       bihompUrl,

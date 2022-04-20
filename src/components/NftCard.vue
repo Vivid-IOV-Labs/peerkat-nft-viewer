@@ -96,8 +96,9 @@ export default defineComponent({
     const store = useStore();
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const network = computed(() => store.getters["user/getNetwork"]);
-
-    const bihompUrl = computed(() => getInspectorUrl(network.value));
+    const bihompUrl = computed(() =>
+      getInspectorUrl(network.value, props.nft.issuer)
+    );
     function shareUrl(nodetypecode: number | undefined) {
       const xummSandbox = import.meta.env.VITE_XUMM_SANDBOX;
       return xummSandbox === "test"
