@@ -67,17 +67,6 @@ function truncate(
   if (fullStr.length <= strLen) return fullStr;
   return fullStr.substr(0, frontChars) + separator;
 }
-const main_networks = [
-  "wss://s2.ripple.com",
-  "wss://xrpl.link",
-  "wss://xrpcluster.com",
-];
-const test_networks = [
-  "wss://s.altnet.rippletest.net:51233",
-  "wss://xrpl.linkwss://testnet.xrpl-labs.com",
-];
-const custom_networks = ["wss://xls20-sandbox.rippletest.net:51233"];
-const dev_networks = ["wss://s.devnet.rippletest.net:51233"];
 
 async function getMediaType(url: string) {
   try {

@@ -80,6 +80,7 @@ import { useRouter } from "vue-router";
 import { copyText } from "../utils/copytext";
 import { useStore } from "vuex";
 import { getNetworkCodeFromType } from "../utils/getNetworkTypeFromCode";
+import { getInspectorUrl } from "../utils/getInspectorUrl";
 
 export default defineComponent({
   components: {
@@ -94,11 +95,9 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
     const nodetype = computed(() => store.getters["user/getNodeType"]);
-    const bihompUrl = computed(() =>
-      nodetype.value == "TESTNET"
-        ? `https://test.bithomp.com/explorer/${props.nft.issuer}`
-        : `https://bithomp.com/explorer/${props.nft.issuer}`
-    );
+    const network = computed(() => store.getters["user/getNetwork"]);
+
+    const bihompUrl = computed(() => getInspectorUrl(network.value));
     function shareUrl(nodetypecode: number | undefined) {
       const xummSandbox = import.meta.env.VITE_XUMM_SANDBOX;
       return xummSandbox === "test"
