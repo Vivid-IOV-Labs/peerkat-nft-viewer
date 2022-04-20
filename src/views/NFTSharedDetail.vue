@@ -74,7 +74,9 @@
           </div>
         </template>
         <template #footer>
-          <external-link class="mr-2" :url="bihompUrl">Inspect</external-link>
+          <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl"
+            >Inspect</external-link
+          >
         </template>
       </base-card>
       <div v-else class="p-2">

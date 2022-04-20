@@ -30,5 +30,5 @@ export function getInspectorUrl(network: keyof urlMap, issuer: string): string {
     /*custom */
     "xls20-sandbox.rippletest.net:51233": ["https://xls20.bithomp.com/"],
   };
-  return urlMap[network][0] + issuer;
+  return urlMap[network] ? urlMap[network][0] + issuer : "";
 }

@@ -66,7 +66,9 @@
     <template #footer>
       <div>
         <base-button class="mr-2" @click="share">Share</base-button>
-        <external-link class="mr-2" :url="bihompUrl"> Inspect</external-link>
+        <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl">
+          Inspect</external-link
+        >
       </div>
     </template>
   </base-card>
