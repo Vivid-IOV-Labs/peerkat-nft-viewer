@@ -116,8 +116,8 @@ export default defineComponent({
         value: "wss://s.altnet.rippletest.net:51233",
       },
       {
-        label: "wss://xrpl.linkwss://testnet.xrpl-labs.com",
-        value: "wss://xrpl.linkwss://testnet.xrpl-labs.com",
+        label: "wss://testnet.xrpl-labs.com",
+        value: "wss://testnet.xrpl-labs.com",
       },
     ];
     const custom_networks = [
