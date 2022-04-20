@@ -453,13 +453,11 @@ export async function init(network: string): Promise<any> {
   devlog("network", network);
 
   client = new xrpl.Client(network);
-  devlog("network", network);
 
   client.on("disconnected", async (msg: any) => {
-    devlog("Disconnected", msg);
+    devlog("Disconnected");
   });
   client.on("connected", async (msg: any) => {
-    devlog("Connected", msg);
     devlog("Connected", client);
   });
   client.on("peerStatusChange", async (msg: any) => {
