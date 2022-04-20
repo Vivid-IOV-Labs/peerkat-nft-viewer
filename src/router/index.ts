@@ -145,6 +145,7 @@ router.beforeEach(async (to, from, next) => {
           network: ottdata.value.nodewss,
         });
       } catch (error) {
+        devlog("/network-error", error);
         next({
           path: "/network-error",
         });
