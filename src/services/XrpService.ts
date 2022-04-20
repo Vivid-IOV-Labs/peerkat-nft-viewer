@@ -440,8 +440,11 @@ async function fetchNext(nextLines: line[]): Promise<NFT[]> {
 
 export async function init(network: string): Promise<any> {
   devlog("network", network);
-
-  client = new xrpl.Client(network);
+  const networkToUse =
+    network == "wss://testnet.xrpl-labs.com"
+      ? "wss://s.altnet.rippletest.net:51233"
+      : network;
+  client = new xrpl.Client(networkToUse);
 
   client.on("disconnected", async (msg: any) => {
     devlog("Disconnected");
