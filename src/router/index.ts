@@ -139,7 +139,6 @@ router.beforeEach(async (to, from, next) => {
       await store.commit("user/setNodeType", ottdata.value.nodetype);
       await store.commit("user/setNetwork", ottdata.value.nodewss);
       await store.commit("user/setUser", ottdata.value.user);
-      devlog("ottdata", ottdata.value);
 
       try {
         await store.dispatch("nft/initXrpClient", {
