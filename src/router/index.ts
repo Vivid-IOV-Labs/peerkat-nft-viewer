@@ -142,10 +142,9 @@ router.beforeEach(async (to, from, next) => {
 
       try {
         await store.dispatch("nft/initXrpClient", {
-          network:
-            ottdata.value.nodetype == "CUSTOM"
-              ? "wss://" + ottdata.value.nodewss
-              : ottdata.value.nodewss,
+          network: !ottdata.value.nodewss.includes("wss://")
+            ? "wss://" + ottdata.value.nodewss
+            : ottdata.value.nodewss,
         });
       } catch (error) {
         devlog("/network-error", error);
