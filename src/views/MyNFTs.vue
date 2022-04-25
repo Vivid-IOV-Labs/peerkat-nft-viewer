@@ -90,9 +90,20 @@ export default defineComponent({
     const isConnected = computed(() => store.getters["nft/getIsConnected"]);
     const endload = ref(false);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
+    const network = computed(() => store.getters["user/getNetwork"]);
     const NFTMedia = computed(() => store.getters["nft/getAll"]);
     const lines = computed(() => store.getters["nft/getLines"]);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
+
+    const poupulateXls20NFTs = async () => {
+      try {
+        await store.dispatch("nft/fetchXls20", {
+          walletAddress: walletAddress.value,
+        });
+      } catch (error) {
+        devlog("ON POPULATE", error);
+      }
+    };
 
     const populateNFTs = async () => {
       try {
@@ -127,9 +138,10 @@ export default defineComponent({
         await store.dispatch("nft/disconnect");
       }
     });
-    if (lines.value && lines.value.length === 0) {
-      await populateNFTs();
-    }
+    // if (lines.value && lines.value.length === 0) {
+    //   await populateNFTs();
+    // }
+    await poupulateXls20NFTs();
 
     return {
       sentinel,

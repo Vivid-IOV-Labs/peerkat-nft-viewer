@@ -437,14 +437,76 @@ async function fetchNext(nextLines: line[]): Promise<NFT[]> {
   );
   return nextNfts;
 }
+// async function getTokens() {
+//   const wallet = xrpl.Wallet.fromSeed("ssSP29PnUwcFPCNJiWj2wKD3u9G5u");
+//   const client = new xrpl.Client("wss://xls20-sandbox.rippletest.net:51233");
+//   await client.connect();
+//   console.log("Connected to devnet");
+//   const nfts = await client.request({
+//     method: "account_nfts",
+//     account: wallet.classicAddress,
+//   });
+//   console.log(nfts);
+//   client.disconnect();
+// }
+export async function getTokens(walletAddress: string): Promise<any> {
+  const nfts = await client.request({
+    method: "account_nfts",
+    account: walletAddress,
+  });
+  debugger;
+  return nfts;
+}
+
+async function getOneXls(nft: any) {
+  console.log(nft);
+  const { Issuer, NFTokenID, URI } = nft;
+  const url = ipfsGateway + "/" + hexToString(URI).split("//")[1];
+  const { description, image, name, schema } = await fetch(url).then((res) =>
+    res.json()
+  );
+  //const schemaUrl = ipfsGateway + "/" + schema.split("//")[1];
+  const imageUrl = ipfsGateway + "/" + image.split("//")[1];
+  // const result = await fetch(schemaUrl).then((res) => res.json());
+  const media_type = "image/jpeg";
+  return {
+    issuer: Issuer,
+    currency: NFTokenID,
+    tokenName: name,
+    url: imageUrl,
+    media_type,
+    desc: description,
+    issuerTruncated: truncate(Issuer),
+    standard: "XLS-20",
+  };
+}
+
+export async function fetchXls20(walletAddress: string): Promise<NFT> {
+  const {
+    result: { account_nfts },
+  } = await getTokens(walletAddress);
+  debugger;
+  return account_nfts;
+}
+
+export async function fetchNextXls20(walletAddress: string): Promise<NFT> {
+  const {
+    result: { account_nfts },
+  } = await getTokens(walletAddress);
+  debugger;
+  return account_nfts.map(async (nft: any) => {
+    return await getOneXls(nft);
+  });
+}
 
 export async function init(network: string): Promise<any> {
   devlog("network", network);
+  // await getTokens();
   const networkToUse =
     network == "wss://testnet.xrpl-labs.com"
       ? "wss://s.altnet.rippletest.net:51233"
       : network;
-  client = new xrpl.Client(networkToUse);
+  client = new xrpl.Client("wss://xls20-sandbox.rippletest.net:51233");
 
   client.on("disconnected", async (msg: any) => {
     devlog("Disconnected");
@@ -472,5 +534,6 @@ export async function init(network: string): Promise<any> {
     fetchIssuerCurrencies,
     fetchOne,
     fetchNext,
+    fetchXls20,
   };
 }

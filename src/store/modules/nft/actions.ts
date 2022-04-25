@@ -1,4 +1,4 @@
-import { init } from "../../../services/XrpService";
+import { fetchXls20, init } from "../../../services/XrpService";
 import { ActionTree } from "vuex";
 import { NFT } from "../../../models/NFT";
 import { NFTState } from "./state";
@@ -49,6 +49,14 @@ const actions: ActionTree<NFT, NFTState> = {
     const count = getters.getAll.length;
     const nextLines = getters.getLines.slice(count, count + 3);
     const nextNfts: NFT[] = await client.fetchNext(nextLines);
+    commit("setAll", nextNfts);
+  },
+  async fetchXls20(
+    { commit, getters },
+    { walletAddress }: FetchParams
+  ): Promise<void> {
+    const nextNfts = await fetchXls20(walletAddress);
+    debugger;
     commit("setAll", nextNfts);
   },
 };
