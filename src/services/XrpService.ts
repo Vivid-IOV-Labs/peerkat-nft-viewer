@@ -444,7 +444,7 @@ export async function init(network: string): Promise<any> {
     network == "wss://testnet.xrpl-labs.com"
       ? "wss://s.altnet.rippletest.net:51233"
       : network;
-  client = new xrpl.Client(networkToUse);
+  client = new xrpl.Client(network);
 
   client.on("disconnected", async (msg: any) => {
     devlog("Disconnected");
