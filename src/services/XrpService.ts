@@ -501,12 +501,7 @@ export async function fetchNextXls20(walletAddress: string): Promise<NFT> {
 
 export async function init(network: string): Promise<any> {
   devlog("network", network);
-  // await getTokens();
-  const networkToUse =
-    network == "wss://testnet.xrpl-labs.com"
-      ? "wss://s.altnet.rippletest.net:51233"
-      : network;
-  client = new xrpl.Client("wss://xls20-sandbox.rippletest.net:51233");
+  client = new xrpl.Client(network);
 
   client.on("disconnected", async (msg: any) => {
     devlog("Disconnected");
