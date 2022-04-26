@@ -56,8 +56,8 @@
     @close="showError = false"
   >
     <template #body>
-      <h3>{{ $t("Unable to connect") }}</h3>
-      <p>{{ $t("Please try another network") }}</p>
+      <h3>"Unable to connect"</h3>
+      <p>"Please try another network"</p>
     </template>
     <template #footer>
       <base-button class="mt-4" status="warning" @click="showError = false"
@@ -82,16 +82,6 @@ export default defineComponent({
     BaseSelect,
     BaseButton,
     BaseDialog,
-  },
-  props: {
-    isOpen: {
-      type: Boolean,
-      required: true,
-    },
-    asyncFun: {
-      type: Function,
-      required: true,
-    },
   },
   async setup() {
     const store = useStore();
