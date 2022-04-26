@@ -9,7 +9,7 @@ import { createApp, h, Fragment } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import { i18n } from "./i18n";
+// import { i18n } from "./i18n";
 import VueAxe, { VueAxePopup } from "vue-axe";
 import VueAnnouncer from "@vue-a11y/announcer";
 import Notifications from "@kyvg/vue3-notification";
@@ -24,7 +24,7 @@ if (process.env.NODE_ENV === "development") {
     .use(VueAnnouncer)
     .use(router)
     .use(store)
-    .use(i18n)
+    // .use(i18n)
     .use(Notifications)
     .use(VueLazyLoad, {
       loading: "loading.gif",
@@ -37,7 +37,7 @@ if (process.env.NODE_ENV === "development") {
     .use(VueAnnouncer)
     .use(router)
     .use(store)
-    .use(i18n)
+    // .use(i18n)
     .use(Notifications)
     .use(VueLazyLoad, {
       loading: "loading.gif",
