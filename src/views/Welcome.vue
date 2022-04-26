@@ -83,16 +83,6 @@ export default defineComponent({
     BaseButton,
     BaseDialog,
   },
-  props: {
-    isOpen: {
-      type: Boolean,
-      required: true,
-    },
-    asyncFun: {
-      type: Function,
-      required: true,
-    },
-  },
   async setup() {
     const store = useStore();
     const route = useRoute();
