@@ -17,11 +17,12 @@ import Notifications from "@kyvg/vue3-notification";
 import VueLazyLoad from "vue3-lazyload";
 
 if (process.env.NODE_ENV === "development") {
-  createApp({
-    render: () => h(Fragment, [h(App), h(VueAxePopup)]),
-  })
-    .use(VueAxe)
-    .use(VueAnnouncer)
+  createApp(App)
+    //   {
+    //   render: () => h(Fragment, [h(App), h(VueAxePopup)]),
+    // }
+    // .use(VueAxe)
+    // .use(VueAnnouncer)
     .use(router)
     .use(store)
     // .use(i18n)
@@ -34,7 +35,7 @@ if (process.env.NODE_ENV === "development") {
     .mount("#app");
 } else {
   createApp(App)
-    .use(VueAnnouncer)
+    //.use(VueAnnouncer)
     .use(router)
     .use(store)
     // .use(i18n)

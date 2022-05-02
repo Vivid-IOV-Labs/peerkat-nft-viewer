@@ -19,11 +19,17 @@ const mutations: MutationTree<NFTState> = {
   setIsConnected(state: NFTState, isConnected: boolean): void {
     state.isConnected = isConnected;
   },
-  setAll(state: NFTState, all: Array<NFT>): void {
+  setAll(state: NFTState, all: Array<any>): void {
     state.all = [...state.all, ...all];
+  },
+  setAllXls20(state: NFTState, allXls20: Array<any>): void {
+    state.allXls20 = [...state.allXls20, ...allXls20];
   },
   setLines(state: NFTState, lines: Array<any>): void {
     state.lines = lines;
+  },
+  setXls20(state: NFTState, xls20nfts: Array<any>): void {
+    state.xls20nfts = xls20nfts;
   },
   resetAll(state: NFTState): void {
     state.lines = [];

@@ -14,14 +14,18 @@ export interface NFTState {
   all: Array<NFT>;
   sharedwithme: SharedNFTsByWallet;
   lines: Array<NFT>;
+  xls20nfts: Array<any>;
+  allXls20: Array<any>;
   xrpClient: typeof XrplClient | null;
   isConnected: boolean;
 }
 
 const state = (): NFTState => ({
   all: [],
+  allXls20: [],
   sharedwithme: {},
   lines: [],
+  xls20nfts: [],
   xrpClient: null,
   isConnected: false,
 });

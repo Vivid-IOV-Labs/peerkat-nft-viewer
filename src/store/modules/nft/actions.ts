@@ -1,4 +1,4 @@
-import { fetchXls20, init } from "../../../services/XrpService";
+import { fetchNextXls20, fetchXls20, init } from "../../../services/XrpService";
 import { ActionTree } from "vuex";
 import { NFT } from "../../../models/NFT";
 import { NFTState } from "./state";
@@ -47,16 +47,22 @@ const actions: ActionTree<NFT, NFTState> = {
   async fetchNext({ commit, getters }): Promise<void> {
     const client = getters.getXrpClient;
     const count = getters.getAll.length;
-    const nextLines = getters.getLines.slice(count, count + 3);
+    const nextLines =
+      getters.getLines.length > 4
+        ? getters.getLines.slice(count, count + 4)
+        : getters.getLines;
     const nextNfts: NFT[] = await client.fetchNext(nextLines);
     commit("setAll", nextNfts);
   },
-  async fetchXls20(
-    { commit, getters },
-    { walletAddress }: FetchParams
-  ): Promise<void> {
-    const nextNfts = await fetchXls20(walletAddress);
-    debugger;
+  async fetchXls20({ commit }, { walletAddress }: FetchParams): Promise<void> {
+    const Xls20 = await fetchXls20(walletAddress);
+    commit("setXls20", Xls20);
+  },
+  async fetchNextXls20({ commit, getters }): Promise<void> {
+    const count = getters.getAll.length;
+    const nextXls20 = getters.getXls20.slice(count, count + 4);
+    const nextNfts = await fetchNextXls20(nextXls20);
+    commit("setAllXls20", nextNfts);
     commit("setAll", nextNfts);
   },
 };

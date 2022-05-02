@@ -16,6 +16,7 @@ const PDFJS = window["pdfjs-dist/build/pdf"];
 // PDFJS.GlobalWorkerOptions.workerSrc =
 //   "//mozilla.github.io/pdf.js/build/pdf.worker.js";
 PDFJS.disableWorker = true;
+const ipfsPublicGateway = import.meta.env.VITE_PUBLIC_IPFS_GATEWAY;
 const ipfsGateway = import.meta.env.VITE_IPFS_GATEWAY;
 
 const xrpl = (window as any).xrpl;
@@ -97,7 +98,7 @@ function getMediaByXLSProtocol(
     return protocol + "//" + tokenName;
   } else if (xlsProtocol == "xls-16-peerkat") {
     const cid = source.split(":")[1];
-    return ipfsGateway + "/" + cid;
+    return ipfsPublicGateway + "/" + cid;
   } else {
     return "";
   }
@@ -207,10 +208,10 @@ async function getOne(
           media_type = await getMediaType(url);
         }
       } else if (media_type?.includes("text/html")) {
-        const metadataUrl = ipfsGateway + "/" + source.split("ipfs/")[1];
+        const metadataUrl = ipfsPublicGateway + "/" + source.split("ipfs/")[1];
 
         const data = await getPdfContent(metadataUrl);
-        url = ipfsGateway + "/" + data["Image IPFS CID"];
+        url = ipfsPublicGateway + "/" + data["Image IPFS CID"];
         media_type = await getMediaType(url);
         author = data["Design"];
       }
@@ -218,14 +219,14 @@ async function getOne(
   }
 
   if (isXls14Solo(currency)) {
-    const metadataUrl = ipfsGateway + "/" + source.split("//")[1];
+    const metadataUrl = ipfsPublicGateway + "/" + source.split("//")[1];
 
     try {
       const collection = await fetch(metadataUrl).then((res) => res.json());
       const { nfts } = collection;
       const nft = nfts.find((n: any) => n.currency == currency);
       const { content_type, metadata } = nft;
-      const metadaNftUrl = ipfsGateway + "/" + metadata.split("//")[1];
+      const metadaNftUrl = ipfsPublicGateway + "/" + metadata.split("//")[1];
       const res = await fetch(metadaNftUrl).then((res) => res.json());
       desc = decodeHtmlEntity(res.description);
       tokenName = res.name;
@@ -257,7 +258,7 @@ async function getOne(
           .replace("Â", "")
       );
       author = metadata.find((m: any) => m.type == "Author").data;
-      url = ipfsGateway + "/" + uri.split("//")[1];
+      url = ipfsPublicGateway + "/" + uri.split("//")[1];
       media_type = await getMediaType(url);
     } else {
       await geXls14();
@@ -437,66 +438,70 @@ async function fetchNext(nextLines: line[]): Promise<NFT[]> {
   );
   return nextNfts;
 }
-// async function getTokens() {
-//   const wallet = xrpl.Wallet.fromSeed("ssSP29PnUwcFPCNJiWj2wKD3u9G5u");
-//   const client = new xrpl.Client("wss://xls20-sandbox.rippletest.net:51233");
-//   await client.connect();
-//   console.log("Connected to devnet");
-//   const nfts = await client.request({
-//     method: "account_nfts",
-//     account: wallet.classicAddress,
-//   });
-//   console.log(nfts);
-//   client.disconnect();
-// }
+
 export async function getTokens(walletAddress: string): Promise<any> {
   const nfts = await client.request({
     method: "account_nfts",
     account: walletAddress,
   });
-  debugger;
   return nfts;
 }
 
 async function getOneXls(nft: any) {
-  console.log(nft);
-  const { Issuer, NFTokenID, URI } = nft;
-  const url = ipfsGateway + "/" + hexToString(URI).split("//")[1];
-  const { description, image, name, schema } = await fetch(url).then((res) =>
-    res.json()
-  );
-  //const schemaUrl = ipfsGateway + "/" + schema.split("//")[1];
-  const imageUrl = ipfsGateway + "/" + image.split("//")[1];
-  // const result = await fetch(schemaUrl).then((res) => res.json());
-  const media_type = "image/jpeg";
-  return {
-    issuer: Issuer,
-    currency: NFTokenID,
-    tokenName: name,
-    url: imageUrl,
-    media_type,
-    desc: description,
-    issuerTruncated: truncate(Issuer),
-    standard: "XLS-20",
-  };
+  try {
+    const { Issuer, NFTokenID, URI } = nft;
+    const url =
+      ipfsGateway + "/" + hexToString(URI).split("//")[1] + "/base.json";
+    const res = await fetch(url);
+    const { description, image, name, schema } = await res.json();
+    //const schemaUrl = ipfsPublicGateway + "/" + schema.split("//")[1]+"/$SchemaFile.json";
+    const imageUrl = ipfsPublicGateway + "/" + image.split("//")[1];
+    // const result = await fetch(schemaUrl).then((res) => res.json());
+    const media_type = "image/jpeg";
+    devlog({
+      issuer: Issuer,
+      currency: NFTokenID,
+      tokenName: name,
+      url: imageUrl,
+      media_type,
+      desc: description,
+      issuerTruncated: truncate(Issuer),
+      standard: "XLS-20",
+    });
+    return {
+      issuer: Issuer,
+      currency: NFTokenID,
+      tokenName: name,
+      url: imageUrl,
+      media_type,
+      desc: description,
+      issuerTruncated: truncate(Issuer),
+      standard: "XLS-20",
+    };
+  } catch (error) {
+    devlog(error);
+  }
 }
 
 export async function fetchXls20(walletAddress: string): Promise<NFT> {
   const {
     result: { account_nfts },
   } = await getTokens(walletAddress);
-  debugger;
   return account_nfts;
 }
 
-export async function fetchNextXls20(walletAddress: string): Promise<NFT> {
-  const {
-    result: { account_nfts },
-  } = await getTokens(walletAddress);
-  debugger;
-  return account_nfts.map(async (nft: any) => {
-    return await getOneXls(nft);
-  });
+export async function fetchNextXls20(nextXls20: any[]): Promise<any> {
+  try {
+    const nextNfts = await Promise.all(
+      nextXls20.map(async (nft: any) => {
+        const one = await getOneXls(nft);
+        return one;
+      })
+    );
+    return nextNfts;
+  } catch (error) {
+    devlog(error);
+  }
 }
 
 export async function init(network: string): Promise<any> {

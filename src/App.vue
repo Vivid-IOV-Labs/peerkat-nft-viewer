@@ -25,7 +25,7 @@
     <auth-layout>
       <RouterView v-slot="{ Component }">
         <template v-if="Component">
-          <Transition mode="out-in">
+          <Transition>
             <KeepAlive>
               <Suspense>
                 <template #default>

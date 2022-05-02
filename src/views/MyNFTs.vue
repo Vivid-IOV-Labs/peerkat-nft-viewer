@@ -6,8 +6,8 @@
     class="d-flex h-100 flex-row flex-nowrap overflow-auto pb-4"
     style="padding-bottom: 2rem"
   >
-    <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-11">
-      <nft-card :nft="nft"></nft-card>
+    <div v-for="(nft, index) in NFTMedia" :key="index" class="col-11">
+      <nft-card v-if="nft" :nft="nft"></nft-card>
     </div>
     <div
       v-if="!endload"
@@ -57,30 +57,31 @@ import { inject } from "vue";
 import useIntersectionObserver from "../composable/useIntersectionObserver";
 import { devlog } from "../utils/devlog";
 import store from "../store";
+import { delay } from "../utils/delay";
 
 export default defineComponent({
   components: {
     NftCard,
   },
-  async beforeRouteEnter(from, to, next) {
-    const isConnected = store.getters["nft/getIsConnected"];
-    const all = store.getters["nft/getAll"];
-    const lines = store.getters["nft/getAll"];
+  // async beforeRouteEnter(from, to, next) {
+  //   const isConnected = store.getters["nft/getIsConnected"];
+  //   const all = store.getters["nft/getAll"];
+  //   const lines = store.getters["nft/getAll"];
 
-    const allLoaded = all.length == lines.length;
-    if (!isConnected && !allLoaded) {
-      await store.dispatch("nft/connect");
-    }
-    next();
-  },
-  beforeRouteLeave(from, to, next) {
-    const isConnected = store.getters["nft/getIsConnected"];
-    if (isConnected) {
-      store.dispatch("nft/disconnect");
-      next();
-    }
-    next();
-  },
+  //   const allLoaded = all.length == lines.length;
+  //   if (!isConnected && !allLoaded) {
+  //     await store.dispatch("nft/connect");
+  //   }
+  //   next();
+  // },
+  // beforeRouteLeave(from, to, next) {
+  //   const isConnected = store.getters["nft/getIsConnected"];
+  //   if (isConnected) {
+  //     store.dispatch("nft/disconnect");
+  //     next();
+  //   }
+  //   next();
+  // },
   async setup() {
     const store = useStore();
     const sentinel = ref<HTMLElement | null>(null);
@@ -90,22 +91,23 @@ export default defineComponent({
     const isConnected = computed(() => store.getters["nft/getIsConnected"]);
     const endload = ref(false);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
-    const network = computed(() => store.getters["user/getNetwork"]);
-    const NFTMedia = computed(() => store.getters["nft/getAll"]);
+    const NFTMedia = computed(() =>
+      store.getters["nft/getAll"].filter((a) => a)
+    );
+
     const lines = computed(() => store.getters["nft/getLines"]);
+    const xls20count = computed(() => store.getters["nft/getXls20"]);
+    const allXls20 = computed(() => store.getters["nft/getAllXls20"]);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
 
     const poupulateXls20NFTs = async () => {
-      try {
-        await store.dispatch("nft/fetchXls20", {
-          walletAddress: walletAddress.value,
-        });
-      } catch (error) {
-        devlog("ON POPULATE", error);
-      }
+      await store.dispatch("nft/fetchXls20", {
+        walletAddress: walletAddress.value,
+      });
+      await store.dispatch("nft/fetchNextXls20");
     };
 
-    const populateNFTs = async () => {
+    const populateXls14NFTs = async () => {
       try {
         await store.dispatch("nft/fetchNftLines", {
           walletAddress: walletAddress.value,
@@ -117,22 +119,49 @@ export default defineComponent({
       }
     };
 
+    const populateNFTs = async () => {
+      try {
+        await poupulateXls20NFTs();
+      } catch (error) {
+        devlog(error);
+        await populateXls14NFTs();
+      }
+    };
+
     const { unobserve, observe, isIntersecting } = useIntersectionObserver(
       scroller,
       sentinel
     );
     async function fetchNext() {
       unobserve();
+      await delay(3000);
       await store.dispatch("nft/fetchNext", nodetype.value);
       observe();
     }
-    watch(isIntersecting, async () => {
-      if (!endload.value) {
-        await fetchNext();
-      }
-    });
+    async function fetchNextXls20() {
+      unobserve();
+      await delay(3000);
+      await store.dispatch("nft/fetchNextXls20");
+      observe();
+    }
+    watch(
+      isIntersecting,
+      async (val) => {
+        if (val) {
+          if (xls20count.value.length > allXls20.value.length) {
+            await fetchNextXls20();
+          } else {
+            await fetchNext();
+          }
+        }
+      },
+      { deep: false }
+    );
     watch(NFTMedia, async (newNfts) => {
-      if (lines.value && lines.value.length == newNfts.length) {
+      if (
+        lines.value &&
+        lines.value.length + xls20count.value.length == newNfts.length
+      ) {
         unobserve();
         endload.value = true;
         await store.dispatch("nft/disconnect");
@@ -141,7 +170,11 @@ export default defineComponent({
     // if (lines.value && lines.value.length === 0) {
     //   await populateNFTs();
     // }
-    await poupulateXls20NFTs();
+    await store.dispatch("nft/fetchNftLines", {
+      walletAddress: walletAddress.value,
+      nodetype: nodetype.value,
+    });
+    await populateNFTs();
 
     return {
       sentinel,

@@ -6,6 +6,7 @@ interface NFT {
 }
 export default {
   getAll: (state: NFTState): Array<NFT> => state.all,
+  getAllXls20: (state: NFTState): Array<NFT> => state.allXls20,
   getXrpClient: (state: NFTState): typeof XrplClient | null => state.xrpClient,
   getIsConnected: (state: NFTState): boolean => state.isConnected,
   getShared:
@@ -17,6 +18,7 @@ export default {
         : state.sharedwithme[useraddress][nodetype];
     },
   getLines: (state: NFTState): Array<NFT> => state.lines,
+  getXls20: (state: NFTState): Array<NFT> => state.xls20nfts,
   getByAddress:
     (state: NFTState) =>
     (address: string, curr: string): NFT | undefined => {
