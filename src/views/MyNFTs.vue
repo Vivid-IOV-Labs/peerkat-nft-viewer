@@ -92,7 +92,7 @@ export default defineComponent({
     const endload = ref(false);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const NFTMedia = computed(() =>
-      store.getters["nft/getAll"].filter((a) => a)
+      store.getters["nft/getAll"].filter((a: any) => a)
     );
 
     const lines = computed(() => store.getters["nft/getLines"]);
