@@ -28,7 +28,7 @@ export function getInspectorUrl(network: keyof urlMap, issuer: string): string {
     "wss://xrpl.link": ["https://bithomp.com/"],
     "wss://xrplcluster.com": ["https://bithomp.com/"],
     /*custom */
-    "xls20-sandbox.rippletest.net:51233": ["https://xls20.bithomp.com/"],
+    "wss://xls20-sandbox.rippletest.net:51233": ["https://xls20.bithomp.com/"],
   };
   return urlMap[network] ? urlMap[network][0] + issuer : "";
 }

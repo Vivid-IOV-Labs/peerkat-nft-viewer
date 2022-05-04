@@ -44,11 +44,17 @@
       <strong class="h7 font-weight-bold">Issuer </strong><br />
       <span>{{ nft.issuer }}</span
       ><br />
-      <div class="mt-2">
-        <strong class="h7 font-weight-bold">Balance </strong>
-        <span class="mr-3">{{ nft.balanceFormatted }} </span>
-        <strong class="h7 font-weight-bold">Total Supply </strong>
-        <span>{{ nft.limitFormatted }}</span>
+      <div v-if="nft.balanceFormatted || nft.limitFormatted" class="mt-2">
+        <strong v-if="nft.balanceFormatted" class="h7 font-weight-bold"
+          >Balance
+        </strong>
+        <span v-if="nft.balanceFormatted" class="mr-3"
+          >{{ nft.balanceFormatted }}
+        </span>
+        <strong v-if="nft.limitFormatted" class="h7 font-weight-bold"
+          >Total Supply
+        </strong>
+        <span v-if="nft.limitFormatted">{{ nft.limitFormatted }}</span>
       </div>
       <div v-if="nft.author" class="mt-2">
         <strong class="h7 font-weight-bold">Author </strong><br />
