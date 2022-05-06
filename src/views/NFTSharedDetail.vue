@@ -127,6 +127,7 @@ import {
 import { NFT } from "../models/NFT";
 import { devlog } from "../utils/devlog";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
+import { fetchOneXls20, fetchXls20 } from "../services/XrpService";
 
 export default defineComponent({
   components: { BaseCard, ExternalLink },
@@ -140,13 +141,15 @@ export default defineComponent({
     const client = computed(() => store.getters["nft/getXrpClient"]);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const user = computed(() => store.getters["user/getUser"]);
+    const walletAddress = computed(() => store.getters["user/getAddress"]);
+
     const malformedLink = ref(false);
     const network = computed(() => store.getters["user/getNetwork"]);
     const bihompUrl = computed(() =>
       getInspectorUrl(network.value, route.params.nftAddress.toString())
     );
     const nft = ref<NFT | null>(null);
-    if (nodetypefromlink == nodetype.value) {
+    async function fetchOneXls14() {
       try {
         nft.value = await client.value.fetchOne(
           route.params.nftAddress.toString(),
@@ -161,6 +164,29 @@ export default defineComponent({
         malformedLink.value = true;
         devlog(error);
       }
+    }
+    async function fetchShared() {
+      try {
+        const nftXLS20 = await fetchOneXls20(
+          walletAddress.value,
+          route.params.currency.toString()
+        );
+        if (nftXLS20) {
+          nft.value = nftXLS20;
+          store.commit("nft/addShared", {
+            shared: nft.value,
+            nodetype: nodetype.value,
+            walletaddress: user.value,
+          });
+        } else {
+          throw new Error("Not an XLS20");
+        }
+      } catch (error) {
+        await fetchOneXls14();
+      }
+    }
+    if (nodetypefromlink == nodetype.value) {
+      await fetchShared();
     } else {
       malformedLink.value = true;
     }

@@ -447,6 +447,20 @@ export async function getTokens(walletAddress: string): Promise<any> {
   return nfts;
 }
 
+export async function fetchOneXls20(
+  walletAddress: string,
+  NFTokenID: string
+): Promise<any> {
+  const {
+    result: { account_nfts },
+  } = await getTokens(walletAddress);
+  const nftXLS20 = account_nfts.find((n: any) => n.NFTokenID == NFTokenID);
+  if (nftXLS20) {
+    return getOneXls(nftXLS20);
+  } else {
+    throw new Error("Not an XLS20");
+  }
+}
 async function getOneXls(nft: any) {
   try {
     const { Issuer, NFTokenID, URI } = nft;
@@ -494,7 +508,8 @@ export async function fetchNextXls20(nextXls20: any[]): Promise<any> {
   try {
     const nextNfts = await Promise.all(
       nextXls20.map(async (nft: any) => {
-        const one = await getOneXls(nft);
+        const { URI, Issuer, NFTokenID } = nft;
+        const one = await getOneXls({ URI, Issuer, NFTokenID });
         return one;
       })
     );
@@ -535,5 +550,6 @@ export async function init(network: string): Promise<any> {
     fetchOne,
     fetchNext,
     fetchXls20,
+    fetchOneXls20,
   };
 }
