@@ -24,9 +24,12 @@ class XummService {
     return ottdata;
   }
   async createPayload(newPayload: any): Promise<any> {
-    console.log(Sdk);
-    const created = await Sdk.payload.create(newPayload);
-    return created;
+    try {
+      const created = await Sdk.payload.create(newPayload);
+      return created;
+    } catch (error) {
+      devlog("createpayloade", error);
+    }
   }
   async saveToStorage(toStore: any) {
     await Sdk.storage.set(toStore);
