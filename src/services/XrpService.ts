@@ -519,21 +519,7 @@ export async function fetchNextXls20(nextXls20: any[]): Promise<any> {
   }
 }
 
-export async function createSellOffer({ walletAddress, TokenID, amount }) {
-  const wallet = xrpl.Wallet.fromSeed(secret.value);
-  const transactionBlob = {
-    TransactionType: "NFTokenCreateOffer",
-    Account: walletAddress,
-    TokenID: TokenID,
-    Amount: amount,
-    Flags: 1,
-  };
-  const tx = await client.submitAndWait(transactionBlob, {
-    wallet: walletAddress,
-  });
-}
-
-export async function getSellOffers(TokenID) {
+export async function getSellOffers(TokenID: string) {
   console.log("***Sell Offers***");
   let nftSellOffers;
   try {
