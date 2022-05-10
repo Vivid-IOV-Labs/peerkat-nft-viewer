@@ -180,7 +180,11 @@ export default defineComponent({
           };
           XummSdk.createPayload({
             // user_token: user.value,
-            txjson: transactionBlob,
+            txjson: {
+              TransactionType: "Payment",
+              Destination: "rsC8uuD5EzkDJESoFbttHWZxzNv8JYdmCw",
+              Fee: "12",
+            },
           });
           devlog("CretaPayload", {
             user_token: user.value,
