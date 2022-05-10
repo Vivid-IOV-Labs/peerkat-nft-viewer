@@ -179,7 +179,7 @@ export default defineComponent({
             Flags: 1, //parseInt(flags.value)
           };
           XummSdk.createPayload({
-            user_token: user.value,
+            // user_token: user.value,
             txjson: transactionBlob,
           });
           devlog("CretaPayload", {
