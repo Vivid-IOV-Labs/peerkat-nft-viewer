@@ -168,72 +168,72 @@ const connectXrpClient = async () => {
 let loggedIn = false;
 
 router.beforeEach(async (to, from, next) => {
-  if (isInXumm) {
-    if (!loggedIn) {
-      store.commit("ui/setIsloading", true);
+  //if (isInXumm) {
+  if (!loggedIn) {
+    store.commit("ui/setIsloading", true);
 
-      await store.dispatch("xumm/getOttData");
-      const ottdata = computed(() => store.getters["xumm/getOttData"]);
-      await store.commit("user/setAddress", ottdata.value.account);
-      await store.commit("user/setNodeType", ottdata.value.nodetype);
-      await store.commit("user/setNetwork", ottdata.value.nodewss);
-      await store.commit("user/setUser", ottdata.value.user);
+    await store.dispatch("xumm/getOttData");
+    const ottdata = computed(() => store.getters["xumm/getOttData"]);
+    await store.commit("user/setAddress", ottdata.value.account);
+    await store.commit("user/setNodeType", ottdata.value.nodetype);
+    await store.commit("user/setNetwork", ottdata.value.nodewss);
+    await store.commit("user/setUser", ottdata.value.user);
 
-      try {
-        await store.dispatch("nft/initXrpClient", {
-          network: !ottdata.value.nodewss.includes("wss://")
-            ? "wss://" + ottdata.value.nodewss
-            : ottdata.value.nodewss,
-        });
-      } catch (error) {
-        devlog("/network-error", error);
-        next({
-          path: "/network-error",
-        });
-      }
-      if (!shared.value) {
-        store.commit("nft/initSharedStore", ottdata.value.user);
-      }
+    try {
+      await store.dispatch("nft/initXrpClient", {
+        network: !ottdata.value.nodewss.includes("wss://")
+          ? "wss://" + ottdata.value.nodewss
+          : ottdata.value.nodewss,
+      });
+    } catch (error) {
+      devlog("/network-error", error);
+      next({
+        path: "/network-error",
+      });
+    }
+    if (!shared.value) {
+      store.commit("nft/initSharedStore", ottdata.value.user);
+    }
 
-      const path = ottdata.value.redirect;
-      loggedIn = true;
-      store.commit("ui/setIsloading", false);
+    const path = ottdata.value.redirect;
+    loggedIn = true;
+    store.commit("ui/setIsloading", false);
 
-      if (path) {
-        next({ path });
-      } else {
-        next();
-      }
+    if (path) {
+      next({ path });
     } else {
       next();
     }
   } else {
-    if (!walletAddress.value) {
-      if (to.fullPath !== "/welcome") {
-        next({
-          path: "/welcome",
-          params: { nextUrl: to.fullPath },
-        });
-      } else {
-        next();
-      }
-    } else {
-      if (!isConnected.value) {
-        try {
-          await connectXrpClient();
-          next();
-        } catch (error) {
-          devlog("On app enter connection error", error);
-
-          next({
-            path: "/network-error",
-          });
-        }
-      } else {
-        next();
-      }
-    }
+    next();
   }
+  // } else {
+  //   if (!walletAddress.value) {
+  //     if (to.fullPath !== "/welcome") {
+  //       next({
+  //         path: "/welcome",
+  //         params: { nextUrl: to.fullPath },
+  //       });
+  //     } else {
+  //       next();
+  //     }
+  //   } else {
+  //     if (!isConnected.value) {
+  //       try {
+  //         await connectXrpClient();
+  //         next();
+  //       } catch (error) {
+  //         devlog("On app enter connection error", error);
+
+  //         next({
+  //           path: "/network-error",
+  //         });
+  //       }
+  //     } else {
+  //       next();
+  //     }
+  //   }
+  // }
 });
 
 export default router;

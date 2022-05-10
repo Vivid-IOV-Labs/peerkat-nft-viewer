@@ -12,15 +12,15 @@ class XummService {
     if (Sdk) {
       throw new Error("You can only create one instance!");
     }
-    if (isInXumm) {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { XummSdkJwt } = require("xumm-sdk");
-      Sdk = new XummSdkJwt(xummApiKey);
-    }
+    ///if (isInXumm) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { XummSdkJwt } = require("xumm-sdk");
+    Sdk = new XummSdkJwt(xummApiKey);
+    //}
   }
   async getOttData(): Promise<xAppOttData> {
     const ottdata = await Sdk.getOttData();
-    devlog("ottdata", ottdata.value);
+    devlog("OTTDATA", ottdata.value);
     return ottdata;
   }
   async createPayload(newPayload: any): Promise<any> {
@@ -28,7 +28,7 @@ class XummService {
       const created = await Sdk.payload.create(newPayload);
       return created;
     } catch (error) {
-      devlog("createpayloade", error);
+      devlog("createpayload", error);
     }
   }
   async saveToStorage(toStore: any) {

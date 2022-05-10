@@ -15,6 +15,7 @@ import VueAnnouncer from "@vue-a11y/announcer";
 import Notifications from "@kyvg/vue3-notification";
 
 import VueLazyLoad from "vue3-lazyload";
+import { devlog } from "./utils/devlog";
 
 if (process.env.NODE_ENV === "development") {
   createApp(App)
@@ -47,3 +48,6 @@ if (process.env.NODE_ENV === "development") {
     .provide("isInXumm", isInXumm)
     .mount("#app");
 }
+
+const jwtToke = new URLSearchParams(document.location.href).get("xAppToken");
+devlog("xAppToken", jwtToke);
