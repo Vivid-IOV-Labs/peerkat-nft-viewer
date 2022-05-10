@@ -168,7 +168,7 @@ const connectXrpClient = async () => {
 let loggedIn = false;
 
 router.beforeEach(async (to, from, next) => {
-  //if (isInXumm) {
+  // if (isInXumm) {
   if (!loggedIn) {
     store.commit("ui/setIsloading", true);
 
