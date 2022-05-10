@@ -127,6 +127,7 @@ import { getNetworkCodeFromType } from "../utils/getNetworkTypeFromCode";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
 import { openSignRequest } from "../utils/XummActions";
 import XummSdk from "../services/XummService";
+import { devlog } from "../utils/devlog";
 
 export default defineComponent({
   components: {
@@ -169,14 +170,26 @@ export default defineComponent({
       saleamount,
       toggleSellDialog,
       confirmSell() {
-        const transactionBlob = {
-          TransactionType: "NFTokenCreateOffer",
-          Account: walletAddress.value,
-          TokenID: props.nft.currency,
-          Amount: saleamount.value,
-          Flags: 1, //parseInt(flags.value)
-        };
-        XummSdk.createPayload({ txjson: transactionBlob });
+        try {
+          const transactionBlob = {
+            TransactionType: "NFTokenCreateOffer",
+            Account: walletAddress.value,
+            TokenID: props.nft.currency,
+            Amount: saleamount.value,
+            Flags: 1, //parseInt(flags.value)
+          };
+          XummSdk.createPayload({
+            user_token: user.value,
+            txjson: transactionBlob,
+          });
+          devlog("CretaPayload", {
+            user_token: user.value,
+            txjson: transactionBlob,
+          });
+        } catch (error) {
+          devlog("CretaPayload", error);
+        }
+
         // openSignRequest(user.value);
       },
       openSellDialog() {
