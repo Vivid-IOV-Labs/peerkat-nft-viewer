@@ -108,6 +108,45 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/offers",
+    name: "Offers",
+    component: () => import("../views/Offers.vue"),
+    meta: {
+      withAuth: true,
+      title: "Home Wallet Page",
+      announcer: {
+        message: "Home Wallet Page",
+      },
+    },
+    children: [
+      {
+        path: "/sell",
+        name: "Sell",
+        component: () => import("../views/Sell.vue"),
+      },
+      {
+        path: "/buy",
+        name: "Buy",
+        component: () => import("../views/Buy.vue"),
+        meta: {
+          announcer: {
+            message: "NFT View Page",
+          },
+        },
+      },
+      {
+        path: "/sharedoffers",
+        name: "OfferShared",
+        component: () => import("../views/OfferShared.vue"),
+        meta: {
+          announcer: {
+            message: "NFT View Page",
+          },
+        },
+      },
+    ],
+  },
 ];
 
 const router = createRouter({

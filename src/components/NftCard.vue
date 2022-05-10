@@ -71,6 +71,12 @@
     </template>
     <template #footer>
       <div>
+        <base-button
+          v-if="nft.standard == 'XLS-20'"
+          class="mr-2"
+          @click="openSellDialog"
+          >Sell</base-button
+        >
         <base-button class="mr-2" @click="share">Share</base-button>
         <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl">
           Inspect</external-link
@@ -78,10 +84,40 @@
       </div>
     </template>
   </base-card>
+  <base-dialog v-model="toggleSellDialog" :cancellable="true" title="Sell">
+    <template #body>
+      <strong class="h6 font-weight-bold">Token Name </strong><br />
+      {{ nft.tokenName }}<br />
+      <strong class="h7 font-weight-bold">Token ID </strong><br />
+      <span style="word-break: break-all">{{ nft.currency }}</span
+      ><br />
+      <div v-if="nft.desc" class="mt-2">
+        <strong class="h7 font-weight-bold">Description </strong><br />
+        <div v-html="nft.desc"></div>
+      </div>
+      <div class="form-group flex justify-between">
+        <base-input
+          id="saleamount"
+          v-model="saleamount"
+          :label-hidden="true"
+          label-text="saleamount"
+          type="number"
+        ></base-input>
+        <strong>XRP</strong>
+      </div>
+    </template>
+    <template #footer>
+      <div>
+        <base-button class="mr-2" @click="confirmSell">Confirm</base-button>
+      </div>
+    </template></base-dialog
+  >
 </template>
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import BaseCard from "@/components/BaseCard.vue";
+import BaseInput from "@/components/BaseInput.vue";
+import BaseDialog from "@/components/BaseDialog.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import ExternalLink from "@/components/ExternalLink.vue";
 import { useRouter } from "vue-router";
@@ -89,22 +125,29 @@ import { copyText } from "../utils/copytext";
 import { useStore } from "vuex";
 import { getNetworkCodeFromType } from "../utils/getNetworkTypeFromCode";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
+import { openSignRequest } from "../utils/XummActions";
+import XummSdk from "../services/XummService";
 
 export default defineComponent({
   components: {
     BaseCard,
     BaseButton,
     ExternalLink,
+    BaseDialog,
+    BaseInput,
   },
   props: {
     nft: { type: Object, required: true },
   },
   async setup(props) {
+    const toggleSellDialog = ref(false);
+    const saleamount = ref(0);
     const router = useRouter();
     const store = useStore();
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const network = computed(() => store.getters["user/getNetwork"]);
     const user = computed(() => store.getters["user/getUser"]);
+    const walletAddress = computed(() => store.getters["user/getAddress"]);
 
     const bihompUrl = computed(() =>
       getInspectorUrl(network.value, props.nft.issuer)
@@ -123,6 +166,22 @@ export default defineComponent({
         : `https://xumm.app/detect/xapp:peerkat.viewer?redirect=/shared/${passNFTIssuerOrXUMMowner}/${nodetypecode}/${props.nft.currency}`;
     }
     return {
+      saleamount,
+      toggleSellDialog,
+      confirmSell() {
+        const transactionBlob = {
+          TransactionType: "NFTokenCreateOffer",
+          Account: walletAddress.value,
+          TokenID: props.nft.currency,
+          Amount: saleamount.value,
+          Flags: 1, //parseInt(flags.value)
+        };
+        XummSdk.createPayload({ txjson: transactionBlob });
+        // openSignRequest(user.value);
+      },
+      openSellDialog() {
+        toggleSellDialog.value = true;
+      },
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },

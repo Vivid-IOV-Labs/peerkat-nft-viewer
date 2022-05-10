@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label class="col-form-label w-100" :for="id">
+    <label class="col-form-label" :for="id">
       <span v-if="!labelHidden"> {{ labelText }}</span>
       <input
         :id="id"
@@ -63,7 +63,7 @@ export default defineComponent({
     },
     placeholder: {
       type: String,
-      required: true,
+      default: "",
     },
     errors: {
       type: Array,

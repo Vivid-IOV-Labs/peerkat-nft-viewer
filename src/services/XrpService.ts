@@ -519,6 +519,44 @@ export async function fetchNextXls20(nextXls20: any[]): Promise<any> {
   }
 }
 
+export async function createSellOffer({ walletAddress, TokenID, amount }) {
+  const wallet = xrpl.Wallet.fromSeed(secret.value);
+  const transactionBlob = {
+    TransactionType: "NFTokenCreateOffer",
+    Account: walletAddress,
+    TokenID: TokenID,
+    Amount: amount,
+    Flags: 1,
+  };
+  const tx = await client.submitAndWait(transactionBlob, {
+    wallet: walletAddress,
+  });
+}
+
+export async function getSellOffers(TokenID) {
+  console.log("***Sell Offers***");
+  let nftSellOffers;
+  try {
+    nftSellOffers = await client.request({
+      method: "nft_sell_offers",
+      tokenid: TokenID,
+    });
+  } catch (err) {
+    console.log("No sell offers.");
+  }
+  console.log(JSON.stringify(nftSellOffers, null, 2));
+  console.log("***Buy Offers***");
+  let nftBuyOffers;
+  try {
+    nftBuyOffers = await client.request({
+      method: "nft_buy_offers",
+      tokenid: TokenID,
+    });
+  } catch (err) {
+    console.log("No buy offers.");
+  }
+  console.log(JSON.stringify(nftBuyOffers, null, 2));
+}
 export async function init(network: string): Promise<any> {
   devlog("network", network);
   client = new xrpl.Client(network);

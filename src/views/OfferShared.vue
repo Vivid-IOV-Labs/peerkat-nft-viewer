@@ -1,0 +1,1 @@
+<template>OffersShared</template>

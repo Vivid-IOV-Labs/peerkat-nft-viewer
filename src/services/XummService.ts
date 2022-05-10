@@ -23,7 +23,8 @@ class XummService {
     devlog("ottdata", ottdata.value);
     return ottdata;
   }
-  async createPaylod(newPayload: XummTypes.CreatePayload): Promise<any> {
+  async createPayload(newPayload: any): Promise<any> {
+    console.log(Sdk);
     const created = await Sdk.payload.create(newPayload);
     return created;
   }

@@ -2,11 +2,11 @@
   <div
     :id="key"
     class="modal fade"
-    :class="{ 'show pr-4 d-block': show }"
+    :class="{ 'show pr-4 d-block': modelValue }"
     role="dialog"
     v-bind="describedBy"
     aria-modal="true"
-    :aria-hidden="!show"
+    :aria-hidden="!modelValue"
     tabindex="-1"
   >
     <div class="modal-dialog" role="document">
@@ -19,6 +19,7 @@
             class="close"
             data-dismiss="modal"
             aria-label="Close"
+            @click="close"
           >
             <span aria-hidden="true">&times;</span>
           </button>
@@ -35,11 +36,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
+import { defineComponent, computed, ref } from "vue";
 
 export default defineComponent({
   props: {
-    show: {
+    modelValue: {
       type: Boolean,
       required: true,
     },
@@ -52,11 +53,12 @@ export default defineComponent({
       default: false,
     },
   },
-  emits: ["close"],
+  emits: { "update:modelValue": null },
   setup(props, { emit }) {
+    const show = ref(props.modelValue);
     const key = props.title.trim().toLowerCase().replace(" ", "_");
     const describedBy = computed(() => {
-      return props.show
+      return props.modelValue
         ? {
             ariaDescribedby: `modal-desc-${key}`,
             ariaLabelledby: `modal-label-${key}`,
@@ -66,8 +68,9 @@ export default defineComponent({
     return {
       describedBy,
       key,
+      show,
       close(): void {
-        emit("close");
+        emit("update:modelValue", false);
       },
     };
   },
