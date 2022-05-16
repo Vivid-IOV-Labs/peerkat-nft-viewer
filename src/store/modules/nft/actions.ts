@@ -1,4 +1,10 @@
-import { fetchNextXls20, fetchXls20, init } from "../../../services/XrpService";
+import {
+  fetchNextXls20,
+  fetchSellOffers,
+  fetchXls20,
+  getSellOffers,
+  init,
+} from "../../../services/XrpService";
 import { ActionTree } from "vuex";
 import { NFT } from "../../../models/NFT";
 import { NFTState } from "./state";
@@ -62,6 +68,14 @@ const actions: ActionTree<NFT, NFTState> = {
     const count = getters.getAll.length;
     const nextXls20 = getters.getXls20.slice(count, count + 4);
     const nextNfts = await fetchNextXls20(nextXls20);
+    commit("setAllXls20", nextNfts);
+    commit("setAll", nextNfts);
+  },
+
+  async fetchSellOffers({ commit, getters }): Promise<void> {
+    const count = getters.getAll.length;
+    const nextXls20 = getters.getXls20.slice(count, count + 4);
+    const nextNfts = await fetchNextSellOffers(TokenID);
     commit("setAllXls20", nextNfts);
     commit("setAll", nextNfts);
   },

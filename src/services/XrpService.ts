@@ -18,6 +18,7 @@ const PDFJS = window["pdfjs-dist/build/pdf"];
 PDFJS.disableWorker = true;
 const ipfsPublicGateway = import.meta.env.VITE_PUBLIC_IPFS_GATEWAY;
 const ipfsGateway = import.meta.env.VITE_IPFS_GATEWAY;
+const walletSecret = import.meta.env.VITE_WALLET_SECRET;
 
 const xrpl = (window as any).xrpl;
 type line = {
@@ -519,30 +520,69 @@ export async function fetchNextXls20(nextXls20: any[]): Promise<any> {
   }
 }
 
-export async function getSellOffers(TokenID: string) {
-  console.log("***Sell Offers***");
-  let nftSellOffers;
+export async function createSellOffer({
+  TokenID,
+  amount,
+}: never): Promise<any> {
+  const wallet = xrpl.Wallet.fromSeed(walletSecret);
+  console.log(wallet);
+  const transactionBlob = {
+    TransactionType: "NFTokenCreateOffer",
+    Account: wallet.classicAddress,
+    TokenID: TokenID,
+    Amount: (amount * 1000000).toString(),
+    Flags: 1,
+  };
+  console.log(transactionBlob);
   try {
-    nftSellOffers = await client.request({
-      method: "nft_sell_offers",
-      tokenid: TokenID,
+    const tx = await client.submitAndWait(transactionBlob, {
+      wallet,
     });
+    console.log(tx);
+    await fetchSellOffers(TokenID);
+  } catch (error) {
+    console.log(error);
+  }
+}
+export async function fetchAllSellOffers(nextXls20: any[]): Promise<any> {
+  try {
+    const sellOffers = await Promise.all(
+      nextXls20.map(async (nft: any) => {
+        const { URI, Issuer, NFTokenID } = nft;
+        const one = await fetchSellOffers(NFTokenID);
+        return one;
+      })
+    );
+    return sellOffers;
+  } catch (error) {
+    devlog(error);
+  }
+}
+
+export async function fetchSellOffers(TokenID: string): Promise<any> {
+  try {
+    const nftSellOffers = await client.request({
+      method: "nft_sell_offers",
+      nft_id: TokenID, //nft_id
+    });
+    return nftSellOffers;
   } catch (err) {
     console.log("No sell offers.");
   }
-  console.log(JSON.stringify(nftSellOffers, null, 2));
-  console.log("***Buy Offers***");
-  let nftBuyOffers;
+}
+
+export async function fetchBuyOffers(TokenID: string): Promise<any> {
   try {
-    nftBuyOffers = await client.request({
+    const nftBuyOffers = await client.request({
       method: "nft_buy_offers",
-      tokenid: TokenID,
+      nft_id: TokenID,
     });
+    return nftBuyOffers;
   } catch (err) {
     console.log("No buy offers.");
   }
-  console.log(JSON.stringify(nftBuyOffers, null, 2));
 }
+
 export async function init(network: string): Promise<any> {
   devlog("network", network);
   client = new xrpl.Client(network);

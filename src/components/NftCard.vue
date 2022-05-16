@@ -128,6 +128,7 @@ import { getInspectorUrl } from "../utils/getInspectorUrl";
 import { openSignRequest } from "../utils/XummActions";
 import XummSdk from "../services/XummService";
 import { devlog } from "../utils/devlog";
+import { createSellOffer } from "../services/XrpService";
 
 export default defineComponent({
   components: {
@@ -169,27 +170,32 @@ export default defineComponent({
     return {
       saleamount,
       toggleSellDialog,
-      confirmSell() {
+      async confirmSell() {
         try {
-          const transactionBlob = {
-            TransactionType: "NFTokenCreateOffer",
-            Account: walletAddress.value,
+          await createSellOffer({
+            walletAddress: walletAddress.value,
             TokenID: props.nft.currency,
-            Amount: saleamount.value,
-            Flags: 1, //parseInt(flags.value)
-          };
-          XummSdk.createPayload({
-            // user_token: user.value,
-            txjson: {
-              TransactionType: "Payment",
-              Destination: "rsC8uuD5EzkDJESoFbttHWZxzNv8JYdmCw",
-              Fee: "12",
-            },
+            amount: saleamount.value,
           });
-          devlog("CretaPayload", {
-            user_token: user.value,
-            txjson: transactionBlob,
-          });
+          //   const transactionBlob = {
+          //     TransactionType: "NFTokenCreateOffer",
+          //     Account: walletAddress.value,
+          //     TokenID: props.nft.currency,
+          //     Amount: saleamount.value,
+          //     Flags: 1, //parseInt(flags.value)
+          //   };
+          //   XummSdk.createPayload({
+          //     // user_token: user.value,
+          //     txjson: {
+          //       TransactionType: "Payment",
+          //       Destination: "rsC8uuD5EzkDJESoFbttHWZxzNv8JYdmCw",
+          //       Fee: "12",
+          //     },
+          //   });
+          //   devlog("CretaPayload", {
+          //     user_token: user.value,
+          //     txjson: transactionBlob,
+          //   });
         } catch (error) {
           devlog("CretaPayload", error);
         }
