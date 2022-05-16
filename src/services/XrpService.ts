@@ -520,10 +520,7 @@ export async function fetchNextXls20(nextXls20: any[]): Promise<any> {
   }
 }
 
-export async function createSellOffer({
-  TokenID,
-  amount,
-}: never): Promise<any> {
+export async function createSellOffer({ TokenID, amount }: any): Promise<any> {
   const wallet = xrpl.Wallet.fromSeed(walletSecret);
   console.log(wallet);
   const transactionBlob = {
@@ -544,7 +541,7 @@ export async function createSellOffer({
     console.log(error);
   }
 }
-export async function fetchAllSellOffers(nextXls20: any[]): Promise<any> {
+export async function fetchNextSellOffers(nextXls20: any[]): Promise<any> {
   try {
     const sellOffers = await Promise.all(
       nextXls20.map(async (nft: any) => {
