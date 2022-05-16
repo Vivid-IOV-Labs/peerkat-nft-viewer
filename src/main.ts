@@ -1,4 +1,3 @@
-const isInXumm = /xumm/.test(navigator.userAgent);
 const xummSandbox = import.meta.env.VITE_XUMM_SANBDOX;
 
 if (!isInXumm && xummSandbox === "main") {
@@ -16,6 +15,7 @@ import Notifications from "@kyvg/vue3-notification";
 
 import VueLazyLoad from "vue3-lazyload";
 import { devlog } from "./utils/devlog";
+import { isInXumm } from "./utils/isInXumm";
 
 if (process.env.NODE_ENV === "development") {
   createApp(App)
@@ -32,7 +32,7 @@ if (process.env.NODE_ENV === "development") {
       loading: "loading.gif",
       error: "thumbnail.jpg",
     })
-    .provide("isInXumm", isInXumm)
+    .provide("isInXumm", isInXumm())
     .mount("#app");
 } else {
   createApp(App)
@@ -45,7 +45,7 @@ if (process.env.NODE_ENV === "development") {
       loading: "loading.gif",
       error: "thumbnail.jpg",
     })
-    .provide("isInXumm", isInXumm)
+    .provide("isInXumm", isInXumm())
     .mount("#app");
 }
 

@@ -2,6 +2,7 @@ import { computed } from "vue";
 import { createWebHistory, createRouter } from "vue-router";
 import store from "../store";
 import { devlog } from "../utils/devlog";
+import { isInXumm } from "../utils/isInXumm";
 
 const routes = [
   { path: "/", redirect: "/wallet" },
@@ -154,7 +155,6 @@ const router = createRouter({
   routes,
 });
 
-const isInXumm = /xumm/.test(navigator.userAgent);
 const walletAddress = computed(() => store.getters["user/getAddress"]);
 const nodetype = computed(() => store.getters["user/getNodeType"]);
 const network = computed(() => store.getters["user/getNetwork"]);
@@ -168,7 +168,7 @@ const connectXrpClient = async () => {
 let loggedIn = false;
 
 router.beforeEach(async (to, from, next) => {
-  if (isInXumm) {
+  if (isInXumm()) {
     if (!loggedIn) {
       store.commit("ui/setIsloading", true);
 
