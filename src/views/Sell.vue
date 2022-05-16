@@ -47,6 +47,7 @@
       </li>
     </ul>
   </div>
+  <div>{{ SellOffers }}</div>
 </template>
 
 <script lang="ts">
@@ -90,10 +91,7 @@ export default defineComponent({
 
     const populateSellOffers = async () => {
       try {
-        await store.dispatch("nft/fetchNextSellOffers", {
-          walletAddress: walletAddress.value,
-          nodetype: nodetype.value,
-        });
+        await store.dispatch("nft/fetchNextSellOffers");
       } catch (error) {
         devlog("ON POPULATE", error);
       }
@@ -136,10 +134,7 @@ export default defineComponent({
     // if (lines.value && lines.value.length === 0) {
     //   await populateNFTs();
     // }
-    await store.dispatch("nft/fetchNftLines", {
-      walletAddress: walletAddress.value,
-      nodetype: nodetype.value,
-    });
+    await populateSellOffers();
 
     return {
       sentinel,
