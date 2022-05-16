@@ -19,6 +19,7 @@ export default {
     },
   getLines: (state: NFTState): Array<NFT> => state.lines,
   getXls20: (state: NFTState): Array<NFT> => state.xls20nfts,
+  getSellOffers: (state: NFTState): Array<any> => state.sellOffers,
   getByAddress:
     (state: NFTState) =>
     (address: string, curr: string): NFT | undefined => {

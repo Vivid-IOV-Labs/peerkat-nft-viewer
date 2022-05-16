@@ -71,7 +71,7 @@ const actions: ActionTree<NFT, NFTState> = {
     commit("setAll", nextNfts);
   },
 
-  async fetchSellOffers({ commit, getters }): Promise<void> {
+  async fetchNextSellOffers({ commit, getters }): Promise<void> {
     const count = getters.getAll.length;
     const nextXls20 = getters.getXls20.slice(count, count + 4);
     const nextNfts = await fetchNextSellOffers(nextXls20);
