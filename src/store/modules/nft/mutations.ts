@@ -25,6 +25,9 @@ const mutations: MutationTree<NFTState> = {
   setAllXls20(state: NFTState, allXls20: Array<any>): void {
     state.allXls20 = [...state.allXls20, ...allXls20];
   },
+  setSellOffers(state: NFTState, sellOffers: Array<any>): void {
+    state.sellOffers = [...state.sellOffers, ...sellOffers];
+  },
   setLines(state: NFTState, lines: Array<any>): void {
     state.lines = lines;
   },

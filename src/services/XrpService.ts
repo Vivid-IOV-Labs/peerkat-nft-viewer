@@ -473,16 +473,6 @@ async function getOneXls(nft: any) {
     const imageUrl = ipfsPublicGateway + "/" + image.split("//")[1];
     // const result = await fetch(schemaUrl).then((res) => res.json());
     const media_type = "image/jpeg";
-    devlog({
-      issuer: Issuer,
-      currency: NFTokenID,
-      tokenName: name,
-      url: imageUrl,
-      media_type,
-      desc: description,
-      issuerTruncated: truncate(Issuer),
-      standard: "XLS-20",
-    });
     return {
       issuer: Issuer,
       currency: NFTokenID,
@@ -519,6 +509,25 @@ export async function fetchNextXls20(nextXls20: any[]): Promise<any> {
     devlog(error);
   }
 }
+export async function fetchNextXls20WithSellOffer(
+  nextXls20: any[]
+): Promise<any> {
+  try {
+    const nextNfts = await Promise.all(
+      nextXls20.map(async (nft: any) => {
+        const { URI, Issuer, NFTokenID } = nft;
+        const schema = await getOneXls({ URI, Issuer, NFTokenID });
+        const offersResponse = await fetchSellOffers(NFTokenID);
+        return offersResponse
+          ? { schema, offers: offersResponse.offers }
+          : null;
+      })
+    );
+    return nextNfts;
+  } catch (error) {
+    devlog(error);
+  }
+}
 
 export async function createSellOffer({ TokenID, amount }: any): Promise<any> {
   const wallet = xrpl.Wallet.fromSeed(walletSecret);
@@ -546,11 +555,13 @@ export async function fetchNextSellOffers(nextXls20: any[]): Promise<any> {
     const sellOffers = await Promise.all(
       nextXls20.map(async (nft: any) => {
         const { URI, Issuer, NFTokenID } = nft;
+
         const one = await fetchSellOffers(NFTokenID);
+
         return one;
       })
     );
-    return sellOffers;
+    return sellOffers.filter((a: any) => a);
   } catch (error) {
     devlog(error);
   }
@@ -558,11 +569,11 @@ export async function fetchNextSellOffers(nextXls20: any[]): Promise<any> {
 
 export async function fetchSellOffers(TokenID: string): Promise<any> {
   try {
-    const nftSellOffers = await client.request({
+    const { result } = await client.request({
       method: "nft_sell_offers",
       nft_id: TokenID, //nft_id
     });
-    return nftSellOffers;
+    return result;
   } catch (err) {
     console.log("No sell offers.");
   }

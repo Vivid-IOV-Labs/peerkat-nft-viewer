@@ -6,8 +6,17 @@
     class="d-flex h-100 flex-row flex-nowrap overflow-auto pb-4"
     style="padding-bottom: 2rem"
   >
-    <div v-for="(sell, index) in SellOffers" :key="index" class="col-11">
-      {{ sell }}
+    <!-- <pre class="col-11 card">{{ SellOffers }}</pre> -->
+    <div v-for="sell in SellOffers" :key="sell.nft_id" class="col-11">
+      <sell-nft-card v-if="sell.schema" :nft="sell.schema">
+        <div v-for="(offer, index) in sell.offers" :key="index" class="mt-4">
+          <sell-card
+            v-if="offer"
+            :key="offer.nft_offer_index"
+            :offer="offer"
+          ></sell-card>
+        </div>
+      </sell-nft-card>
     </div>
     <div
       v-if="!endload"
@@ -47,50 +56,38 @@
       </li>
     </ul>
   </div>
-  <div>{{ SellOffers }}</div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from "vue";
-import NftCard from "@/components/NftCard.vue";
+import SellCard from "@/components/SellCard.vue";
+import SellNftCard from "@/components/SellNftCard.vue";
 import { useStore } from "vuex";
 import useIntersectionObserver from "../composable/useIntersectionObserver";
 import { devlog } from "../utils/devlog";
 import { delay } from "../utils/delay";
 
 export default defineComponent({
-  // async beforeRouteEnter(from, to, next) {
-  //   const isConnected = store.getters["nft/getIsConnected"];
-  //   const all = store.getters["nft/getAll"];
-  //   const lines = store.getters["nft/getAll"];
-
-  //   const allLoaded = all.length == lines.length;
-  //   if (!isConnected && !allLoaded) {
-  //     await store.dispatch("nft/connect");
-  //   }
-  //   next();
-  // },
-  // beforeRouteLeave(from, to, next) {
-  //   const isConnected = store.getters["nft/getIsConnected"];
-  //   if (isConnected) {
-  //     store.dispatch("nft/disconnect");
-  //     next();
-  //   }
-  //   next();
-  // },
+  components: {
+    SellCard,
+    SellNftCard,
+  },
   async setup() {
     const store = useStore();
     const sentinel = ref<HTMLElement | null>(null);
     const scroller = ref<HTMLElement | null>(null);
     const endload = ref(false);
-    const nodetype = computed(() => store.getters["user/getNodeType"]);
-    const SellOffers = computed(() => store.getters["nft/getSellOffers"]);
+    const SellOffers = computed(() =>
+      store.getters["nft/getSellOffers"].filter((a: any) => a)
+    );
     const xls20count = computed(() => store.getters["nft/getXls20"]);
-    const allXls20 = computed(() => store.getters["nft/getAllXls20"]);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
 
     const populateSellOffers = async () => {
       try {
+        await store.dispatch("nft/fetchXls20", {
+          walletAddress: walletAddress.value,
+        });
         await store.dispatch("nft/fetchNextSellOffers");
       } catch (error) {
         devlog("ON POPULATE", error);
@@ -104,36 +101,28 @@ export default defineComponent({
     async function fetchNextSellOffers() {
       unobserve();
       await delay(3000);
-      // await store.dispatch("nft/fetchNext", nodetype.value);
+      await store.dispatch("nft/fetchNextSellOffers");
       observe();
     }
 
-    // watch(
-    //   isIntersecting,
-    //   async (val) => {
-    //     if (val) {
-    //       if (xls20count.value.length > allXls20.value.length) {
-    //         await fetchNextXls20();
-    //       } else {
-    //         await fetchNext();
-    //       }
-    //     }
-    //   },
-    //   { deep: false }
-    // );
-    // watch(NFTMedia, async (newNfts) => {
-    //   if (
-    //     lines.value &&
-    //     lines.value.length + xls20count.value.length == newNfts.length
-    //   ) {
-    //     unobserve();
-    //     endload.value = true;
-    //     await store.dispatch("nft/disconnect");
-    //   }
-    // });
-    // if (lines.value && lines.value.length === 0) {
-    //   await populateNFTs();
-    // }
+    watch(
+      isIntersecting,
+      async (val) => {
+        if (val) {
+          if (xls20count.value.length > SellOffers.value.length) {
+            await fetchNextSellOffers();
+          }
+        }
+      },
+      { deep: false }
+    );
+    watch(SellOffers, async (newNfts) => {
+      if (xls20count.value.length == newNfts.length) {
+        unobserve();
+        endload.value = true;
+      }
+    });
+
     await populateSellOffers();
 
     return {
@@ -141,13 +130,6 @@ export default defineComponent({
       endload,
       scroller,
       SellOffers,
-
-      async connect() {
-        await store.dispatch("nft/connect", nodetype.value);
-      },
-      async disconnect() {
-        await store.dispatch("nft/disconnect", nodetype.value);
-      },
     };
   },
 });

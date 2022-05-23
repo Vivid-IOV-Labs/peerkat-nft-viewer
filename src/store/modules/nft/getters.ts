@@ -18,6 +18,11 @@ export default {
         : state.sharedwithme[useraddress][nodetype];
     },
   getLines: (state: NFTState): Array<NFT> => state.lines,
+  getXls20ByTokenId:
+    (state: NFTState) =>
+    (TokenID: string): any => {
+      return state.allXls20.find(({ currency }) => currency == TokenID);
+    },
   getXls20: (state: NFTState): Array<NFT> => state.xls20nfts,
   getSellOffers: (state: NFTState): Array<any> => state.sellOffers,
   getByAddress:
