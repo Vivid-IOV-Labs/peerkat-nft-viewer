@@ -7,7 +7,7 @@
     style="padding-bottom: 2rem"
   >
     <!-- <pre class="col-11 card">{{ SellOffers }}</pre> -->
-    <div v-for="sell in SellOffers" :key="sell.nft_id" class="col-11">
+    <div v-for="sell in sellOffersNotNull" :key="sell.nft_id" class="col-11">
       <sell-nft-card v-if="sell.schema" :nft="sell.schema">
         <div v-for="(offer, index) in sell.offers" :key="index" class="mt-4">
           <sell-card
@@ -77,8 +77,9 @@ export default defineComponent({
     const sentinel = ref<HTMLElement | null>(null);
     const scroller = ref<HTMLElement | null>(null);
     const endload = ref(false);
-    const SellOffers = computed(() =>
-      store.getters["nft/getSellOffers"].filter((a: any) => a)
+    const SellOffers = computed(() => store.getters["nft/getSellOffers"]);
+    const sellOffersNotNull = computed(() =>
+      SellOffers.value.filter((a: any) => a)
     );
     const xls20count = computed(() => store.getters["nft/getXls20"]);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
@@ -117,6 +118,9 @@ export default defineComponent({
       { deep: false }
     );
     watch(SellOffers, async (newNfts) => {
+      console.log(xls20count.value.length);
+      console.log(newNfts.length);
+      debugger;
       if (xls20count.value.length == newNfts.length) {
         unobserve();
         endload.value = true;
@@ -130,6 +134,7 @@ export default defineComponent({
       endload,
       scroller,
       SellOffers,
+      sellOffersNotNull,
     };
   },
 });

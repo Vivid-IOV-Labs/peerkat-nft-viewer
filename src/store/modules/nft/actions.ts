@@ -82,11 +82,11 @@ const actions: ActionTree<NFT, NFTState> = {
       "nfts_sells",
       nfts_sells.every((a: any) => !a)
     );
+
+    commit("setSellOffers", nfts_sells);
     if (nfts_sells.every((a: any) => !a) && count < getters.getXls20.length) {
-      debugger;
       await dispatch("fetchNextSellOffers");
     }
-    commit("setSellOffers", nfts_sells);
   },
 };
 export default actions;
