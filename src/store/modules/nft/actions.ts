@@ -77,14 +77,9 @@ const actions: ActionTree<NFT, NFTState> = {
     const count = getters.getSellOffers.length;
     const nextXls20 = getters.getXls20.slice(count, count + 4);
     const nfts_sells = await fetchNextXls20WithSellOffer(nextXls20);
-    console.log("nfts_sells", nfts_sells);
-    console.log(
-      "nfts_sells",
-      nfts_sells.every((a: any) => !a)
-    );
-
     commit("setSellOffers", nfts_sells);
     if (nfts_sells.every((a: any) => !a) && count < getters.getXls20.length) {
+      debugger;
       await dispatch("fetchNextSellOffers");
     }
   },

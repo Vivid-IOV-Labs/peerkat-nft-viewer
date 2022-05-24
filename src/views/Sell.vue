@@ -118,9 +118,6 @@ export default defineComponent({
       { deep: false }
     );
     watch(SellOffers, async (newNfts) => {
-      console.log(xls20count.value.length);
-      console.log(newNfts.length);
-      debugger;
       if (xls20count.value.length == newNfts.length) {
         unobserve();
         endload.value = true;

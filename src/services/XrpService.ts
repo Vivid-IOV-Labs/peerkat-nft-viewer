@@ -531,7 +531,6 @@ export async function fetchNextXls20WithSellOffer(
 
 export async function createSellOffer({ TokenID, amount }: any): Promise<any> {
   const wallet = xrpl.Wallet.fromSeed(walletSecret);
-  console.log(wallet);
   const transactionBlob = {
     TransactionType: "NFTokenCreateOffer",
     Account: wallet.classicAddress,
@@ -539,15 +538,13 @@ export async function createSellOffer({ TokenID, amount }: any): Promise<any> {
     Amount: (amount * 1000000).toString(),
     Flags: 1,
   };
-  console.log(transactionBlob);
   try {
     const tx = await client.submitAndWait(transactionBlob, {
       wallet,
     });
-    console.log(tx);
     await fetchSellOffers(TokenID);
   } catch (error) {
-    console.log(error);
+    devlog(error);
   }
 }
 export async function fetchNextSellOffers(nextXls20: any[]): Promise<any> {
@@ -575,7 +572,7 @@ export async function fetchSellOffers(TokenID: string): Promise<any> {
     });
     return result;
   } catch (err) {
-    console.log("No sell offers.");
+    devlog("No sell offers.");
   }
 }
 
@@ -587,7 +584,7 @@ export async function fetchBuyOffers(TokenID: string): Promise<any> {
     });
     return nftBuyOffers;
   } catch (err) {
-    console.log("No buy offers.");
+    devlog("No buy offers.");
   }
 }
 
