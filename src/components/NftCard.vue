@@ -132,7 +132,7 @@ export default defineComponent({
       async goToOffer() {
         await store.commit("nft/setCurrent", props.nft);
         router.push({
-          path: `/sell/${props.nft.currency}`,
+          path: `/sell`,
         });
       },
       bihompUrl,

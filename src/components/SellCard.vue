@@ -19,7 +19,8 @@
     <div class="card-footer mt-auto d-flex justify-content-between pb-4">
       <base-button>Cancel</base-button>
       <div class="d-flex justify-content-between">
-        <base-button>Share</base-button> <base-button>Inspect</base-button>
+        <base-button class="mr-2" @click="share">Share</base-button>
+        <base-button>Inspect</base-button>
       </div>
     </div>
   </div>
@@ -27,6 +28,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
+import { copyText } from "../utils/copytext";
 
 export default defineComponent({
   components: {
@@ -34,9 +36,28 @@ export default defineComponent({
   },
   props: {
     offer: { type: Object, required: true },
+    token: { type: String, required: true },
   },
-  async setup() {
-    return {};
+  async setup(props) {
+    function shareUrl() {
+      const xummSandbox = import.meta.env.VITE_XUMM_SANDBOX;
+      return xummSandbox === "test"
+        ? `https://xumm.app/detect/xapp:peerkat.sandbox.test?redirect=/shared/${props.offer.nft_offer_index}/${props.token}/${props.offer.owner}`
+        : xummSandbox === "dev"
+        ? `https://xumm.app/detect/xapp:peerkat.dev?redirect=/shared/${props.offer.nft_offer_index}/${props.token}/${props.offer.owner}`
+        : `https://xumm.app/detect/xapp:peerkat.viewer?redirect=/shared/${props.offer.nft_offer_index}/${props.token}/${props.offer.owner}`;
+    }
+    return {
+      share() {
+        const params = {
+          title: "Share Offer NFT link",
+          text: "Copied to clipboard",
+        };
+
+        const url = shareUrl();
+        copyText(url, params);
+      },
+    };
   },
 });
 </script>

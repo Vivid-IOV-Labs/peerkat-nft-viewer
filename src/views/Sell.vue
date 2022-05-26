@@ -27,15 +27,29 @@
     </ul>
     <div class="p-4 scroller">
       <div v-if="showTab === 'sell'">
-        <div v-for="(offer, index) in nft.offers" :key="index" class="mt-4">
-          <sell-card
-            v-if="offer"
-            :key="offer.nft_offer_index"
-            :offer="offer"
-          ></sell-card>
+        <div v-if="nft.offers.length == 0">
+          <p>
+            Peerkat is not able to find any sell offers, created by this wallet
+            for this NFT
+          </p>
+        </div>
+        <div v-else>
+          <div v-for="(offer, index) in nft.offers" :key="index" class="mt-4">
+            <sell-card
+              v-if="offer"
+              :key="offer.nft_offer_index"
+              :token="nft.currency"
+              :offer="offer"
+            ></sell-card>
+          </div>
         </div>
       </div>
-      <div v-if="showTab === 'buy'" class="p-4">BUY</div>
+      <div v-if="showTab === 'buy'" class="p-4">
+        <p>
+          Peerkat is not able to find any buy offers, shared with this wallet
+          for this NFT
+        </p>
+      </div>
     </div>
   </div>
   <base-dialog v-model="toggleSellDialog" title="Sell">
