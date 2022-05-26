@@ -17,13 +17,13 @@ const store = createStore({
     xummSandbox == "main"
       ? [
           createPersistedState({
-            paths: ["nft.sharedwithme"],
+            paths: ["nft.sharedwithme", "nft.currentNFT"],
           }),
         ]
       : [
           //createLogger(),
           createPersistedState({
-            paths: ["nft.sharedwithme", "user"],
+            paths: ["nft.sharedwithme", "user", "nft.currentNFT"],
           }),
         ],
 });

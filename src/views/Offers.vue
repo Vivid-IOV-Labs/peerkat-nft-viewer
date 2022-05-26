@@ -1,5 +1,5 @@
 <template>
-  <ul class="nav nav-tabs">
+  <!-- <ul class="nav nav-tabs">
     <li class="nav-item">
       <router-link
         v-slot="{ navigate, href, isActive }"
@@ -44,6 +44,6 @@
         >
       </router-link>
     </li>
-  </ul>
+  </ul> -->
   <router-view></router-view>
 </template>

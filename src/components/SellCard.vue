@@ -16,15 +16,21 @@
         <span class="mr-3">{{ offer.flags }} </span>
       </div>
     </div>
+    <div class="card-footer mt-auto d-flex justify-content-between pb-4">
+      <base-button>Cancel</base-button>
+      <div class="d-flex justify-content-between">
+        <base-button>Share</base-button> <base-button>Inspect</base-button>
+      </div>
+    </div>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import BaseCard from "@/components/BaseCard.vue";
+import BaseButton from "@/components/BaseButton.vue";
 
 export default defineComponent({
   components: {
-    BaseCard,
+    BaseButton,
   },
   props: {
     offer: { type: Object, required: true },

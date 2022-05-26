@@ -19,12 +19,14 @@ export interface NFTState {
   sellOffers: Array<any>;
   buyOffers: Array<any>;
   xrpClient: typeof XrplClient | null;
+  currentNFT: any;
   isConnected: boolean;
 }
 
 const state = (): NFTState => ({
   all: [],
   allXls20: [],
+  currentNFT: null,
   sellOffers: [],
   buyOffers: [],
   sharedwithme: {},

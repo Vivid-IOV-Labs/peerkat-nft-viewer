@@ -34,6 +34,9 @@ const mutations: MutationTree<NFTState> = {
   setXls20(state: NFTState, xls20nfts: Array<any>): void {
     state.xls20nfts = xls20nfts;
   },
+  setCurrent(state: NFTState, nft: NFT): void {
+    state.currentNFT = nft;
+  },
   resetAll(state: NFTState): void {
     state.lines = [];
     state.all = [];
@@ -62,6 +65,10 @@ const mutations: MutationTree<NFTState> = {
         shared,
       ];
     }
+  },
+  addSellOffer(state, { offers }) {
+    debugger;
+    if (state.currentNFT) state.currentNFT.offers = offers;
   },
   deleteShared(
     state: NFTState,

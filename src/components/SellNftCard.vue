@@ -1,6 +1,6 @@
 <template>
-  <div style="height: 100%; overflow: hidden" class="card">
-    <div style="height: 100%" class="card-body">
+  <div class="card">
+    <div class="card-body">
       <div class="d-flex justify-content-between"></div>
       <div>
         <strong class="h6 font-weight-bold">Token Name </strong><br />
@@ -11,11 +11,9 @@
         <strong class="h7 font-weight-bold">Description </strong><br />
         <div v-html="nft.desc"></div>
       </div>
-      <div style="overflow-y: scroll; height: 100%" class="card-text">
-        <div class="pt-2 pb-4 px-4">
-          <slot></slot>
-        </div>
-      </div>
+    </div>
+    <div class="card-footer mt-auto d-flex justify-content-end pb-4">
+      <slot name="footer"></slot>
     </div>
   </div>
 </template>

@@ -4,6 +4,7 @@ import {
   fetchXls20,
   init,
   fetchNextXls20WithSellOffer,
+  createSellOffer,
 } from "../../../services/XrpService";
 import { ActionTree } from "vuex";
 import { NFT } from "../../../models/NFT";
@@ -68,7 +69,7 @@ const actions: ActionTree<NFT, NFTState> = {
   async fetchNextXls20({ commit, getters }): Promise<void> {
     const count = getters.getAll.length;
     const nextXls20 = getters.getXls20.slice(count, count + 4);
-    const nextNfts = await fetchNextXls20(nextXls20);
+    const nextNfts = await fetchNextXls20WithSellOffer(nextXls20);
     commit("setAllXls20", nextNfts);
     commit("setAll", nextNfts);
   },
@@ -81,6 +82,13 @@ const actions: ActionTree<NFT, NFTState> = {
     if (nfts_sells.every((a: any) => !a) && count < getters.getXls20.length) {
       await dispatch("fetchNextSellOffers");
     }
+  },
+  async createSellOffer(
+    { commit },
+    { walletAddress, TokenID, amount }
+  ): Promise<void> {
+    const sellOffer = await createSellOffer({ walletAddress, TokenID, amount });
+    commit("addSellOffer", sellOffer);
   },
 };
 export default actions;

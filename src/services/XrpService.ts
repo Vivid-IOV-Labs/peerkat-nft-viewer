@@ -518,9 +518,13 @@ export async function fetchNextXls20WithSellOffer(
         const { URI, Issuer, NFTokenID } = nft;
         const schema = await getOneXls({ URI, Issuer, NFTokenID });
         const offersResponse = await fetchSellOffers(NFTokenID);
-        return offersResponse
-          ? { schema, offers: offersResponse.offers }
-          : null;
+        return {
+          ...schema,
+          offers:
+            offersResponse && offersResponse.offers
+              ? offersResponse.offers
+              : [],
+        };
       })
     );
     return nextNfts;
@@ -542,7 +546,8 @@ export async function createSellOffer({ TokenID, amount }: any): Promise<any> {
     const tx = await client.submitAndWait(transactionBlob, {
       wallet,
     });
-    await fetchSellOffers(TokenID);
+    const sellOffer = await fetchSellOffers(TokenID);
+    return sellOffer;
   } catch (error) {
     devlog(error);
   }

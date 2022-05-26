@@ -1,137 +1,148 @@
 <template>
-  <div
-    v-if="SellOffers.length"
-    id="scroller"
-    ref="scroller"
-    class="d-flex h-100 flex-row flex-nowrap overflow-auto pb-4"
-    style="padding-bottom: 2rem"
-  >
-    <!-- <pre class="col-11 card">{{ SellOffers }}</pre> -->
-    <div v-for="sell in sellOffersNotNull" :key="sell.nft_id" class="col-11">
-      <sell-nft-card v-if="sell.schema" :nft="sell.schema">
-        <div v-for="(offer, index) in sell.offers" :key="index" class="mt-4">
+  <div v-if="nft" class="p-4">
+    <sell-nft-card v-if="nft" :nft="nft">
+      <template #footer>
+        <base-button @click="openSellDialog">Create Sell Offer</base-button>
+      </template>
+    </sell-nft-card>
+    <ul class="nav nav-pills nav-fill my-4">
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          :class="{ active: showTab === 'sell' }"
+          href="#"
+          @click="showTab = 'sell'"
+          >My Sell Offers ({{ nft.offers.length }})</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          :class="{ active: showTab === 'buy' }"
+          href="#"
+          @click="showTab = 'buy'"
+          >Buy Offers shared with me
+        </a>
+      </li>
+    </ul>
+    <div class="p-4 scroller">
+      <div v-if="showTab === 'sell'">
+        <div v-for="(offer, index) in nft.offers" :key="index" class="mt-4">
           <sell-card
             v-if="offer"
             :key="offer.nft_offer_index"
             :offer="offer"
           ></sell-card>
         </div>
-      </sell-nft-card>
-    </div>
-    <div
-      v-if="!endload"
-      ref="sentinel"
-      style="height: 100%"
-      class="col-11 card"
-    >
-      <div class="d-flex align-items-center justify-content-center card-body">
-        <div
-          class="spinner-border"
-          style="width: 4rem; height: 4rem; color: #666"
-          role="status"
-        ></div>
       </div>
-      <h5>Loading Next NFTs...</h5>
+      <div v-if="showTab === 'buy'" class="p-4">BUY</div>
     </div>
   </div>
-  <div v-if="!SellOffers.length" style="margin-top: 13%">
-    <h5 class="text-center mt-2">
-      Peerkat is not able to find any NFTs in this wallet
-    </h5>
-    <ul class="mt-2 p-2">
-      <li class="pb-2">
-        To receive an XRPL-issued NFT please ensure that you have correctly
-        signed the corresponding trustline transaction
-      </li>
-      <li class="pb-2">
-        You can view an NFT in fullscreen mode, inspect the transaction history
-        of an NFT via the Bithomp explorer and share your NFTs with another user
-        to enable them to view the NFTs too
-      </li>
-      <li class="pb-2">
-        <strong
-          >Please note that we currently support XLS14 and XLS14/SOLO NFTs on
-          XRPL only</strong
-        >. We will support XLS20 native NFTs on XRPL
-      </li>
-    </ul>
-  </div>
+  <base-dialog v-model="toggleSellDialog" title="Sell">
+    <template #body>
+      <strong class="h6 font-weight-bold">Token Name </strong><br />
+      {{ nft.tokenName }}<br />
+      <strong class="h7 font-weight-bold">Token ID </strong><br />
+      <span style="word-break: break-all">{{ nft.currency }}</span
+      ><br />
+      <div v-if="nft.desc" class="mt-2">
+        <strong class="h7 font-weight-bold">Description </strong><br />
+        <div v-html="nft.desc"></div>
+      </div>
+      <div class="form-group flex justify-between">
+        <base-input
+          id="saleamount"
+          v-model="saleamount"
+          :label-hidden="true"
+          label-text="saleamount"
+          type="number"
+        ></base-input>
+        <strong>XRP</strong>
+      </div>
+    </template>
+    <template #footer>
+      <div>
+        <base-button class="mr-2" @click="confirmSell">Confirm</base-button>
+      </div>
+    </template>
+  </base-dialog>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from "vue";
+import { defineComponent, computed, ref } from "vue";
 import SellCard from "@/components/SellCard.vue";
 import SellNftCard from "@/components/SellNftCard.vue";
+import BaseDialog from "@/components/BaseDialog.vue";
+import BaseInput from "@/components/BaseInput.vue";
+import BaseButton from "@/components/BaseButton.vue";
 import { useStore } from "vuex";
-import useIntersectionObserver from "../composable/useIntersectionObserver";
+import { createSellOffer } from "../services/XrpService";
 import { devlog } from "../utils/devlog";
-import { delay } from "../utils/delay";
 
 export default defineComponent({
   components: {
     SellCard,
     SellNftCard,
+    BaseDialog,
+    BaseInput,
+    BaseButton,
   },
   async setup() {
     const store = useStore();
-    const sentinel = ref<HTMLElement | null>(null);
-    const scroller = ref<HTMLElement | null>(null);
-    const endload = ref(false);
-    const SellOffers = computed(() => store.getters["nft/getSellOffers"]);
-    const sellOffersNotNull = computed(() =>
-      SellOffers.value.filter((a: any) => a)
-    );
-    const xls20count = computed(() => store.getters["nft/getXls20"]);
+    // const route = useRoute();
+    // const tokenID = route.params.id.toString();
+    const nft = computed(() => store.getters["nft/getCurrent"]);
+    const saleamount = ref(0);
+    const toggleSellDialog = ref(false);
+
+    const showTab = ref("sell");
     const walletAddress = computed(() => store.getters["user/getAddress"]);
-
-    const populateSellOffers = async () => {
-      try {
-        await store.dispatch("nft/fetchXls20", {
-          walletAddress: walletAddress.value,
-        });
-        await store.dispatch("nft/fetchNextSellOffers");
-      } catch (error) {
-        devlog("ON POPULATE", error);
-      }
-    };
-
-    const { unobserve, observe, isIntersecting } = useIntersectionObserver(
-      scroller,
-      sentinel
-    );
-    async function fetchNextSellOffers() {
-      unobserve();
-      await delay(3000);
-      await store.dispatch("nft/fetchNextSellOffers");
-      observe();
-    }
-
-    watch(
-      isIntersecting,
-      async (val) => {
-        if (val) {
-          if (xls20count.value.length > SellOffers.value.length) {
-            await fetchNextSellOffers();
-          }
-        }
-      },
-      { deep: false }
-    );
-    watch(SellOffers, async (newNfts) => {
-      if (xls20count.value.length == newNfts.length) {
-        unobserve();
-        endload.value = true;
-      }
-    });
-
-    await populateSellOffers();
-
     return {
-      sentinel,
-      endload,
-      scroller,
-      SellOffers,
-      sellOffersNotNull,
+      nft,
+      saleamount,
+      toggleSellDialog,
+      showTab,
+      openSellDialog() {
+        toggleSellDialog.value = true;
+      },
+      async confirmSell() {
+        try {
+          await store.dispatch("nft/createSellOffer", {
+            walletAddress: walletAddress.value,
+            TokenID: nft.value.currency,
+            amount: saleamount.value,
+          });
+          toggleSellDialog.value = false;
+          // const sellOffer = await createSellOffer({
+          //   walletAddress: walletAddress.value,
+          //   TokenID: nft.value.currency,
+          //   amount: saleamount.value,
+          // });
+          //   const transactionBlob = {
+          //     TransactionType: "NFTokenCreateOffer",
+          //     Account: walletAddress.value,
+          //     TokenID: props.nft.currency,
+          //     Amount: saleamount.value,
+          //     Flags: 1, //parseInt(flags.value)
+          //   };
+          //   XummSdk.createPayload({
+          //     // user_token: user.value,
+          //     txjson: {
+          //       TransactionType: "Payment",
+          //       Destination: "rsC8uuD5EzkDJESoFbttHWZxzNv8JYdmCw",
+          //       Fee: "12",
+          //     },
+          //   });
+          //   devlog("CretaPayload", {
+          //     user_token: user.value,
+          //     txjson: transactionBlob,
+          //   });
+        } catch (error) {
+          devlog("CretaPayload", error);
+        }
+
+        // openSignRequest(user.value);
+      },
     };
   },
 });

@@ -74,7 +74,7 @@
         <base-button
           v-if="nft.standard == 'XLS-20'"
           class="mr-2"
-          @click="openSellDialog"
+          @click="goToOffer"
           >Sell</base-button
         >
         <base-button class="mr-2" @click="share">Share</base-button>
@@ -84,40 +84,10 @@
       </div>
     </template>
   </base-card>
-  <base-dialog v-model="toggleSellDialog" :cancellable="true" title="Sell">
-    <template #body>
-      <strong class="h6 font-weight-bold">Token Name </strong><br />
-      {{ nft.tokenName }}<br />
-      <strong class="h7 font-weight-bold">Token ID </strong><br />
-      <span style="word-break: break-all">{{ nft.currency }}</span
-      ><br />
-      <div v-if="nft.desc" class="mt-2">
-        <strong class="h7 font-weight-bold">Description </strong><br />
-        <div v-html="nft.desc"></div>
-      </div>
-      <div class="form-group flex justify-between">
-        <base-input
-          id="saleamount"
-          v-model="saleamount"
-          :label-hidden="true"
-          label-text="saleamount"
-          type="number"
-        ></base-input>
-        <strong>XRP</strong>
-      </div>
-    </template>
-    <template #footer>
-      <div>
-        <base-button class="mr-2" @click="confirmSell">Confirm</base-button>
-      </div>
-    </template></base-dialog
-  >
 </template>
 <script lang="ts">
 import { computed, defineComponent, ref } from "vue";
 import BaseCard from "@/components/BaseCard.vue";
-import BaseInput from "@/components/BaseInput.vue";
-import BaseDialog from "@/components/BaseDialog.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import ExternalLink from "@/components/ExternalLink.vue";
 import { useRouter } from "vue-router";
@@ -125,31 +95,22 @@ import { copyText } from "../utils/copytext";
 import { useStore } from "vuex";
 import { getNetworkCodeFromType } from "../utils/getNetworkTypeFromCode";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
-import { openSignRequest } from "../utils/XummActions";
-import XummSdk from "../services/XummService";
-import { devlog } from "../utils/devlog";
-import { createSellOffer } from "../services/XrpService";
 
 export default defineComponent({
   components: {
     BaseCard,
     BaseButton,
     ExternalLink,
-    BaseDialog,
-    BaseInput,
   },
   props: {
     nft: { type: Object, required: true },
   },
   async setup(props) {
-    const toggleSellDialog = ref(false);
-    const saleamount = ref(0);
     const router = useRouter();
     const store = useStore();
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const network = computed(() => store.getters["user/getNetwork"]);
     const user = computed(() => store.getters["user/getUser"]);
-    const walletAddress = computed(() => store.getters["user/getAddress"]);
 
     const bihompUrl = computed(() =>
       getInspectorUrl(network.value, props.nft.issuer)
@@ -168,42 +129,11 @@ export default defineComponent({
         : `https://xumm.app/detect/xapp:peerkat.viewer?redirect=/shared/${passNFTIssuerOrXUMMowner}/${nodetypecode}/${props.nft.currency}`;
     }
     return {
-      saleamount,
-      toggleSellDialog,
-      async confirmSell() {
-        try {
-          await createSellOffer({
-            walletAddress: walletAddress.value,
-            TokenID: props.nft.currency,
-            amount: saleamount.value,
-          });
-          //   const transactionBlob = {
-          //     TransactionType: "NFTokenCreateOffer",
-          //     Account: walletAddress.value,
-          //     TokenID: props.nft.currency,
-          //     Amount: saleamount.value,
-          //     Flags: 1, //parseInt(flags.value)
-          //   };
-          //   XummSdk.createPayload({
-          //     // user_token: user.value,
-          //     txjson: {
-          //       TransactionType: "Payment",
-          //       Destination: "rsC8uuD5EzkDJESoFbttHWZxzNv8JYdmCw",
-          //       Fee: "12",
-          //     },
-          //   });
-          //   devlog("CretaPayload", {
-          //     user_token: user.value,
-          //     txjson: transactionBlob,
-          //   });
-        } catch (error) {
-          devlog("CretaPayload", error);
-        }
-
-        // openSignRequest(user.value);
-      },
-      openSellDialog() {
-        toggleSellDialog.value = true;
+      async goToOffer() {
+        await store.commit("nft/setCurrent", props.nft);
+        router.push({
+          path: `/sell/${props.nft.currency}`,
+        });
       },
       bihompUrl,
       share() {
