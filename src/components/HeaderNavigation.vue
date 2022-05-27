@@ -82,7 +82,7 @@
                   :class="{ active: isActive }"
                   :href="href"
                   @click="navigate"
-                  >My Offers</a
+                  >Offers</a
                 >
               </router-link>
             </li>

@@ -34,10 +34,13 @@
           </p>
         </div>
         <div v-else>
-          <div v-for="(offer, index) in nft.offers" :key="index" class="mt-4">
+          <div
+            v-for="(offer, index) in nft.offers"
+            :key="offer.nft_offer_index"
+            class="mt-4"
+          >
             <sell-card
               v-if="offer"
-              :key="offer.nft_offer_index"
               :token="nft.currency"
               :offer="offer"
             ></sell-card>

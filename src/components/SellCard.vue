@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div v-if="offer" class="card">
     <div class="card-body">
       <div class="card-title mt-1">
         <strong class="h6 font-weight-bold">NFT Offer Index </strong><br />
@@ -20,25 +20,40 @@
       <base-button>Cancel</base-button>
       <div class="d-flex justify-content-between">
         <base-button class="mr-2" @click="share">Share</base-button>
-        <base-button>Inspect</base-button>
+        <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl">
+          Inspect</external-link
+        >
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
+import ExternalLink from "@/components/ExternalLink.vue";
+
 import { copyText } from "../utils/copytext";
+import { getInspectorUrl } from "../utils/getInspectorUrl";
+import { useStore } from "vuex";
 
 export default defineComponent({
   components: {
     BaseButton,
+    ExternalLink,
   },
   props: {
     offer: { type: Object, required: true },
     token: { type: String, required: true },
   },
   async setup(props) {
+    console.log(props.offer);
+    const store = useStore();
+    const network = computed(() => store.getters["user/getNetwork"]);
+
+    const bihompUrl = computed(() =>
+      getInspectorUrl(network.value, props.offer.nft_offer_index)
+    );
+
     function shareUrl() {
       const xummSandbox = import.meta.env.VITE_XUMM_SANDBOX;
       return xummSandbox === "test"
@@ -48,6 +63,7 @@ export default defineComponent({
         : `https://xumm.app/detect/xapp:peerkat.viewer?redirect=/shared/${props.offer.nft_offer_index}/${props.token}/${props.offer.owner}`;
     }
     return {
+      bihompUrl,
       share() {
         const params = {
           title: "Share Offer NFT link",

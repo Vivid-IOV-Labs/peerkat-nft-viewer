@@ -75,7 +75,7 @@
           v-if="nft.standard == 'XLS-20'"
           class="mr-2"
           @click="goToOffer"
-          >Sell</base-button
+          >Offer</base-button
         >
         <base-button class="mr-2" @click="share">Share</base-button>
         <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl">
