@@ -35,7 +35,7 @@
         </div>
         <div v-else>
           <div
-            v-for="(offer, index) in nft.offers"
+            v-for="offer in nft.offers"
             :key="offer.nft_offer_index"
             class="mt-4"
           >
