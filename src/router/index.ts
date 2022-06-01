@@ -122,6 +122,44 @@ const routes = [
     },
     children: [
       {
+        path: "/shared_buy_offer",
+        name: "Shared Buy Offer",
+        component: () => import("../views/Shared.vue"),
+        meta: {
+          withAuth: true,
+          title: "Home Wallet Page",
+        },
+        children: [
+          {
+            path: "",
+            name: "SharedNFTs",
+            component: () => import("../views/SharedNFTs.vue"),
+          },
+          {
+            path: ":nftAddress/:nodetype/:currency?",
+            name: "NFTSharedDetail",
+            component: () => import("../views/NFTSharedDetail.vue"),
+            meta: {
+              withAuth: true,
+              announcer: {
+                message: "NFT Shared Detail Page",
+              },
+            },
+          },
+          {
+            path: ":nftAddress/:nodetype/view/:currency?",
+            name: "NFTSharedView",
+            component: () => import("../views/NFTSharedView.vue"),
+            meta: {
+              withAuth: true,
+              announcer: {
+                message: "NFT Shared View Page",
+              },
+            },
+          },
+        ],
+      },
+      {
         path: "/sell",
         name: "Sell",
         component: () => import("../views/Sell.vue"),

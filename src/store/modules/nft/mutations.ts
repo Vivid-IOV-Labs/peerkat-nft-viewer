@@ -67,7 +67,6 @@ const mutations: MutationTree<NFTState> = {
     }
   },
   addSellOffer(state, { offers }) {
-    debugger;
     if (state.currentNFT) state.currentNFT.offers = offers;
   },
   deleteShared(

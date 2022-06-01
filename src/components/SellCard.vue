@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="card-footer mt-auto d-flex justify-content-between pb-4">
-      <base-button>Cancel</base-button>
+      <base-button @click="cancelOffer">Cancel</base-button>
       <div class="d-flex justify-content-between">
         <base-button class="mr-2" @click="share">Share</base-button>
         <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl">
@@ -57,13 +57,16 @@ export default defineComponent({
     function shareUrl() {
       const xummSandbox = import.meta.env.VITE_XUMM_SANDBOX;
       return xummSandbox === "test"
-        ? `https://xumm.app/detect/xapp:peerkat.sandbox.test?redirect=/shared/${props.offer.nft_offer_index}/${props.token}/${props.offer.owner}`
+        ? `https://xumm.app/detect/xapp:peerkat.sandbox.test?redirect=/shared_buy_offer/${props.offer.nft_offer_index}/${props.token}/${props.offer.owner}`
         : xummSandbox === "dev"
-        ? `https://xumm.app/detect/xapp:peerkat.dev?redirect=/shared/${props.offer.nft_offer_index}/${props.token}/${props.offer.owner}`
-        : `https://xumm.app/detect/xapp:peerkat.viewer?redirect=/shared/${props.offer.nft_offer_index}/${props.token}/${props.offer.owner}`;
+        ? `https://xumm.app/detect/xapp:peerkat.dev?redirect=/shared_buy_offer/${props.offer.nft_offer_index}/${props.token}/${props.offer.owner}`
+        : `https://xumm.app/detect/xapp:peerkat.viewer?redirect=/shared_buy_offer/${props.offer.nft_offer_index}/${props.token}/${props.offer.owner}`;
     }
     return {
       bihompUrl,
+      async cancelOffer() {
+        await store.dispatch("nft/cancelOffer", { TokenID: props.token });
+      },
       share() {
         const params = {
           title: "Share Offer NFT link",
