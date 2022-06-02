@@ -167,14 +167,15 @@ export default defineComponent({
         await store.dispatch("nft/disconnect");
       }
     });
-    // if (lines.value && lines.value.length === 0) {
-    //   await populateNFTs();
-    // }
-    await store.dispatch("nft/fetchNftLines", {
-      walletAddress: walletAddress.value,
-      nodetype: nodetype.value,
-    });
-    await populateNFTs();
+    if (lines.value && lines.value.length === 0) {
+      await store.dispatch("nft/fetchNftLines", {
+        walletAddress: walletAddress.value,
+        nodetype: nodetype.value,
+      });
+    }
+    if (xls20count.value && xls20count.value.length === 0) {
+      await populateNFTs();
+    }
 
     return {
       sentinel,
