@@ -136,24 +136,13 @@ const routes = [
             component: () => import("../views/SharedNFTs.vue"),
           },
           {
-            path: ":nftAddress/:nodetype/:currency?",
+            path: ":offerId/:nftId/:owner?",
             name: "NFTSharedDetail",
-            component: () => import("../views/NFTSharedDetail.vue"),
+            component: () => import("../views/NFTSharedSellOfferDetail.vue"),
             meta: {
               withAuth: true,
               announcer: {
                 message: "NFT Shared Detail Page",
-              },
-            },
-          },
-          {
-            path: ":nftAddress/:nodetype/view/:currency?",
-            name: "NFTSharedView",
-            component: () => import("../views/NFTSharedView.vue"),
-            meta: {
-              withAuth: true,
-              announcer: {
-                message: "NFT Shared View Page",
               },
             },
           },

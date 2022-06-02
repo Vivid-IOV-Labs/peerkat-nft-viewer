@@ -92,11 +92,10 @@ const actions: ActionTree<NFT, NFTState> = {
     const sellOffer = await createSellOffer({ walletAddress, TokenID, amount });
     commit("addSellOffer", sellOffer);
   },
-  async cancelOffer({ commit }, { TokenID }): Promise<void> {
-    debugger;
-    const sellOffer = await cancelOffer(TokenID);
-    debugger;
-    commit("addSellOffer", sellOffer);
+  async cancelOffer({ commit }, { TokenID, OfferID }): Promise<void> {
+    const sellOffer = await cancelOffer({ TokenID, OfferID });
+    const newSellOffers = sellOffer ? sellOffer : [];
+    commit("addSellOffer", newSellOffers);
   },
 };
 export default actions;

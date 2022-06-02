@@ -65,7 +65,10 @@ export default defineComponent({
     return {
       bihompUrl,
       async cancelOffer() {
-        await store.dispatch("nft/cancelOffer", { TokenID: props.token });
+        await store.dispatch("nft/cancelOffer", {
+          TokenID: props.token,
+          OfferID: props.offer.nft_offer_index,
+        });
       },
       share() {
         const params = {
