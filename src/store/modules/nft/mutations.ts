@@ -8,7 +8,7 @@ interface addSharedParams {
   walletaddress: string;
 }
 interface deleteSharedParams {
-  issuer: string;
+  currency: string;
   nodetype: keyof SharedNFTs;
   walletaddress: string;
 }
@@ -56,11 +56,11 @@ const mutations: MutationTree<NFTState> = {
   },
   deleteShared(
     state: NFTState,
-    { issuer, nodetype, walletaddress }: deleteSharedParams
+    { currency, nodetype, walletaddress }: deleteSharedParams
   ): void {
     state.sharedwithme[walletaddress][nodetype] = state.sharedwithme[
       walletaddress
-    ][nodetype].filter((n) => n.issuer !== issuer);
+    ][nodetype].filter((n) => n.currency !== currency);
   },
 };
 
