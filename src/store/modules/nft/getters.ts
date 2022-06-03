@@ -10,6 +10,12 @@ export default {
   getCurrent: (state: NFTState): NFT | null => state.currentNFT,
   getXrpClient: (state: NFTState): typeof XrplClient | null => state.xrpClient,
   getIsConnected: (state: NFTState): boolean => state.isConnected,
+  getSharedSellOffers: (state: NFTState, _getters: any, rootState: any) => {
+    const useraddress = rootState.user.address;
+    return !state.sharedSellOffers[useraddress]
+      ? null
+      : state.sharedSellOffers[useraddress];
+  },
   getShared:
     (state: NFTState, _getters: any, rootState: any) =>
     (nodetype: keyof SharedNFTs): Array<NFT> | null => {

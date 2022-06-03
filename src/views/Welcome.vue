@@ -167,10 +167,16 @@ export default defineComponent({
     const shared = computed(() =>
       store.getters["nft/getShared"](nodetype.value)
     );
+    const sharedSellOffers = computed(
+      () => store.getters["nft/getSharedSellOffers"]
+    );
     const connectXrpClient = async () => {
       try {
         if (!shared.value) {
           store.commit("nft/initSharedStore", user.value);
+        }
+        if (!sharedSellOffers.value) {
+          store.commit("nft/initSharedSellOffersStore", walletAddress.value);
         }
         store.commit("nft/resetAll");
         await store.dispatch("nft/initXrpClient", {

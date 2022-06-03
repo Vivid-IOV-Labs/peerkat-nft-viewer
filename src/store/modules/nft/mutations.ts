@@ -53,10 +53,20 @@ const mutations: MutationTree<NFTState> = {
     state.sharedSellOffers[walletaddress] = [];
   },
   addSharedSellOffers(state: NFTState, { selloffer, walletaddress }: any) {
-    state.sharedSellOffers[walletaddress] = [
-      ...state.sharedSellOffers[walletaddress],
-      selloffer,
-    ];
+    console.log("state.sharedSellOffers");
+    console.log(state.sharedSellOffers);
+    console.log(state.sharedSellOffers[walletaddress]);
+    const exist =
+      state.sharedSellOffers[walletaddress].filter((o: any) => {
+        o.offer.nft_offer_index == selloffer.offer.nft_offer_index;
+      }).length > 0;
+
+    if (!exist) {
+      state.sharedSellOffers[walletaddress] = [
+        ...state.sharedSellOffers[walletaddress],
+        selloffer,
+      ];
+    }
   },
   addShared(
     state: NFTState,

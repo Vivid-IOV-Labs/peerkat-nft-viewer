@@ -1,6 +1,9 @@
 <template>
   <div>
-    <router-link :to="{ path: `/shared` }" class="mb-4 btn btn-link w-100">
+    <router-link
+      :to="{ path: `/shared_sell_offers` }"
+      class="mb-4 btn btn-link w-100"
+    >
       Back
     </router-link>
     <h2 class="text-center">Sell Offer</h2>
@@ -112,7 +115,6 @@
 </template>
 
 <script lang="ts">
-debugger;
 import { computed, defineComponent, ref } from "vue";
 import ExternalLink from "@/components/ExternalLink.vue";
 import { useRoute, useRouter } from "vue-router";
@@ -130,18 +132,15 @@ import {
   fetchXls20,
   getOneXls,
 } from "../services/XrpService";
-debugger;
 export default defineComponent({
   components: { BaseCard, ExternalLink, AsyncButton },
   async setup() {
-    debugger;
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
     const nodetypefromlink = getNetworkTypeFromCode(
       parseInt(route.params.nodetype as string)
     );
-    const client = computed(() => store.getters["nft/getXrpClient"]);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const user = computed(() => store.getters["user/getUser"]);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
@@ -167,6 +166,13 @@ export default defineComponent({
     if (offers) {
       offer.value = offers.find((o: any) => o.nft_offer_index === offerId);
     }
+    if (offer.value) {
+      store.commit("nft/addSharedSellOffers", {
+        selloffer: { nft: nft.value, offer: offer.value },
+        walletaddress: walletAddress.value,
+      });
+    }
+
     return {
       nft,
       offer,
@@ -179,6 +185,9 @@ export default defineComponent({
       },
       async accept() {
         await acceptOffer({ OfferID: offerId });
+        router.push({
+          path: `/wallet`,
+        });
       },
       view() {
         if (nft.value) {
