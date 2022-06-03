@@ -1,5 +1,4 @@
 <template>
-  test
   <div
     v-if="sharedNFTs.length"
     ref="root"
@@ -42,15 +41,12 @@ export default defineComponent({
     NftSharedCard,
   },
   async setup() {
-    debugger;
     const store = useStore();
     const isInXumm = inject("isInXumm");
     const nodetype = computed(() => store.getters["user/getNodeType"]);
-    debugger;
     const sharedNFTs = computed(() => {
       return store.getters["nft/getShared"](nodetype.value);
     });
-    debugger;
     return {
       sharedNFTs,
       isInXumm,
