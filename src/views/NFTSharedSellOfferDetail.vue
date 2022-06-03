@@ -1,7 +1,7 @@
 <template>
   <div>
-    <router-link :to="{ path: `/shared` }" class="mb-4 btn btn-link w-100"
-      >Back
+    <router-link :to="{ path: `/shared` }" class="mb-4 btn btn-link w-100">
+      Back
     </router-link>
     <h2 class="text-center">Sell Offer</h2>
     <div v-if="!malformedLink" class="w-80 p-1">
@@ -19,7 +19,7 @@
                   height: 100%;
                   object-position: center top;
                 "
-              ></video>
+              />
               <img
                 v-else-if="nft.media_type?.includes('image')"
                 v-lazy="nft.url"
@@ -69,11 +69,11 @@
           </div>
         </template>
         <template #footer>
-          <async-button :on-click="accept">Accept</async-button>
+          <async-button :on-click="accept"> Accept </async-button>
 
-          <external-link v-if="bihompUrl" class="ml-2" :url="bihompUrl"
-            >Inspect</external-link
-          >
+          <external-link v-if="bihompUrl" class="ml-2" :url="bihompUrl">
+            Inspect
+          </external-link>
         </template>
       </base-card>
       <div v-else class="p-2">
@@ -112,12 +112,12 @@
 </template>
 
 <script lang="ts">
+debugger;
 import { computed, defineComponent, ref } from "vue";
 import ExternalLink from "@/components/ExternalLink.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import BaseCard from "../components/BaseCard.vue";
-import BaseButton from "../components/BaseButton.vue";
 import AsyncButton from "../components/AsyncButton.vue";
 import {
   getNetworkCodeFromType,
@@ -126,15 +126,15 @@ import {
 import { getInspectorUrl } from "../utils/getInspectorUrl";
 import {
   acceptOffer,
-  fetchOneXls20,
   fetchSellOffers,
   fetchXls20,
   getOneXls,
 } from "../services/XrpService";
-
+debugger;
 export default defineComponent({
-  components: { BaseCard, ExternalLink, BaseButton, AsyncButton },
+  components: { BaseCard, ExternalLink, AsyncButton },
   async setup() {
+    debugger;
     const route = useRoute();
     const router = useRouter();
     const store = useStore();

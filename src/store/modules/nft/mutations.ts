@@ -49,6 +49,15 @@ const mutations: MutationTree<NFTState> = {
       DEVNET: [],
     };
   },
+  initSharedSellOffersStore(state: NFTState, walletaddress) {
+    state.sharedSellOffers[walletaddress] = [];
+  },
+  addSharedSellOffers(state: NFTState, { selloffer, walletaddress }: any) {
+    state.sharedSellOffers[walletaddress] = [
+      ...state.sharedSellOffers[walletaddress],
+      selloffer,
+    ];
+  },
   addShared(
     state: NFTState,
     { shared, nodetype, walletaddress }: addSharedParams
@@ -66,6 +75,7 @@ const mutations: MutationTree<NFTState> = {
       ];
     }
   },
+
   addSellOffer(state, { offers }) {
     if (state.currentNFT) state.currentNFT.offers = offers ? offers : [];
   },
