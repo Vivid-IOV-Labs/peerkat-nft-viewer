@@ -55,7 +55,7 @@
       </div>
     </div>
   </div>
-  <base-dialog v-model="toggleSellDialog" title="Sell">
+  <base-dialog v-model="toggleSellDialog" :cancellable="true" title="Sell">
     <template #body>
       <strong class="h6 font-weight-bold">Token Name </strong><br />
       {{ nft.tokenName }}<br />
@@ -79,7 +79,9 @@
     </template>
     <template #footer>
       <div>
-        <base-button class="mr-2" @click="confirmSell">Confirm</base-button>
+        <async-button class="mr-2" :on-click="confirmSell"
+          >Confirm</async-button
+        >
       </div>
     </template>
   </base-dialog>
@@ -92,6 +94,7 @@ import SellNftCard from "@/components/SellNftCard.vue";
 import BaseDialog from "@/components/BaseDialog.vue";
 import BaseInput from "@/components/BaseInput.vue";
 import BaseButton from "@/components/BaseButton.vue";
+import AsyncButton from "@/components/AsyncButton.vue";
 import { useStore } from "vuex";
 import { createSellOffer } from "../services/XrpService";
 import { devlog } from "../utils/devlog";
@@ -103,6 +106,7 @@ export default defineComponent({
     BaseDialog,
     BaseInput,
     BaseButton,
+    AsyncButton,
   },
   async setup() {
     const store = useStore();

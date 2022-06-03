@@ -69,7 +69,7 @@
           </div>
         </template>
         <template #footer>
-          <base-button @click="accept">Accept</base-button>
+          <async-button :on-click="accept">Accept</async-button>
 
           <external-link v-if="bihompUrl" class="ml-2" :url="bihompUrl"
             >Inspect</external-link
@@ -118,6 +118,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import BaseCard from "../components/BaseCard.vue";
 import BaseButton from "../components/BaseButton.vue";
+import AsyncButton from "../components/AsyncButton.vue";
 import {
   getNetworkCodeFromType,
   getNetworkTypeFromCode,
@@ -132,7 +133,7 @@ import {
 } from "../services/XrpService";
 
 export default defineComponent({
-  components: { BaseCard, ExternalLink, BaseButton },
+  components: { BaseCard, ExternalLink, BaseButton, AsyncButton },
   async setup() {
     const route = useRoute();
     const router = useRouter();

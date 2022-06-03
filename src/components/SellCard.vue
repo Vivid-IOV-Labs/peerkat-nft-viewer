@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="card-footer mt-auto d-flex justify-content-between pb-4">
-      <base-button @click="cancelOffer">Cancel</base-button>
+      <async-button :on-click="cancelOffer">Cancel</async-button>
       <div class="d-flex justify-content-between">
         <base-button class="mr-2" @click="share">Share</base-button>
         <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl">
@@ -31,6 +31,7 @@
 import { computed, defineComponent } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
 import ExternalLink from "@/components/ExternalLink.vue";
+import AsyncButton from "@/components/AsyncButton.vue";
 
 import { copyText } from "../utils/copytext";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
@@ -40,6 +41,7 @@ export default defineComponent({
   components: {
     BaseButton,
     ExternalLink,
+    AsyncButton,
   },
   props: {
     offer: { type: Object, required: true },
