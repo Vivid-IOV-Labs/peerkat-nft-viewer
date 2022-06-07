@@ -1,5 +1,5 @@
 <template>
-  <div v-if="nft" class="p-4" style="height: 100%; overflow: hidden">
+  <div v-if="nft"  style="height: 100%; overflow: hidden">
     <sell-nft-card v-if="nft" :nft="nft">
       <template #footer>
         <base-button @click="openSellDialog">Create Sell Offer</base-button>

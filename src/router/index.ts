@@ -122,7 +122,7 @@ const routes = [
     },
     children: [
       {
-        path: "/sell",
+        path: "",
         name: "Sell",
         component: () => import("../views/Sell.vue"),
       },
