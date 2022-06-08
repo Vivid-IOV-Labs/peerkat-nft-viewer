@@ -139,13 +139,22 @@ const routes = [
       {
         path: "/shared_sell_offers",
         name: "OfferShared",
-        component: () => import("../views/OfferShared.vue"),
+        component: () => import("../views/Shared.vue"),
         meta: {
           announcer: {
             message: "NFT View Page",
           },
         },
         children: [
+          {
+            path: "",
+            name: "OfferSharedList",
+            component: () => import("../views/OfferShared.vue"),
+            meta: {
+              withAuth: true,
+              title: "Home Wallet Page",
+            },
+          },
           {
             path: ":offerId/:nftId/:owner",
             name: "NFTSharedSellOfferDetail",

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="nft"  style="height: 100%; overflow: hidden">
+  <div v-if="nft" style="height: 100%; overflow: hidden">
     <sell-nft-card v-if="nft" :nft="nft">
       <template #footer>
         <base-button @click="openSellDialog">Create Sell Offer</base-button>
@@ -12,7 +12,7 @@
           :class="{ active: showTab === 'sell' }"
           href="#"
           @click="showTab = 'sell'"
-          >My Sell Offers ({{ nft.offers.length }})</a
+          >My Sell Offers ({{ nft.selloffers.length }})</a
         >
       </li>
       <li class="nav-item">
@@ -27,7 +27,7 @@
     </ul>
     <div class="p-4" style="height: 60%; overflow-y: scroll">
       <div v-if="showTab === 'sell'">
-        <div v-if="nft.offers.length == 0">
+        <div v-if="nft.selloffers.length == 0">
           <p>
             Peerkat is not able to find any sell offers, created by this wallet
             for this NFT
@@ -35,7 +35,7 @@
         </div>
         <div v-else>
           <div
-            v-for="offer in nft.offers"
+            v-for="offer in nft.selloffers"
             :key="offer.nft_offer_index"
             class="mt-4"
           >
@@ -96,7 +96,6 @@ import BaseInput from "@/components/BaseInput.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import AsyncButton from "@/components/AsyncButton.vue";
 import { useStore } from "vuex";
-import { createSellOffer } from "../services/XrpService";
 import { devlog } from "../utils/devlog";
 
 export default defineComponent({
@@ -118,11 +117,15 @@ export default defineComponent({
 
     const showTab = ref("sell");
     const walletAddress = computed(() => store.getters["user/getAddress"]);
+    const sharedSellOffers = computed(() => {
+      return store.getters["nft/getSharedSellOffers"];
+    });
     return {
       nft,
       saleamount,
       toggleSellDialog,
       showTab,
+      sharedSellOffers,
       openSellDialog() {
         toggleSellDialog.value = true;
       },

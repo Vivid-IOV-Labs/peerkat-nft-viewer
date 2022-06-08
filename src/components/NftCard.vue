@@ -10,7 +10,7 @@
         >
           <video
             v-if="nft.media_type?.includes('video')"
-            :src="`${nft.url}#t=0.5`"
+            :src="nft.url"
             poster="/thumbnail.jpg"
             muted
             class="img-fluid card-img-top"
@@ -132,7 +132,7 @@ export default defineComponent({
       async goToOffer() {
         await store.commit("nft/setCurrent", props.nft);
         router.push({
-          path: `/sell`,
+          path: `/offers`,
         });
       },
       bihompUrl,
