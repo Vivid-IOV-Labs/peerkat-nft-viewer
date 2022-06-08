@@ -16,7 +16,7 @@
             >
               <video
                 v-if="nft.media_type?.includes('video')"
-                :src="`${nft.url}#t=0.5`"
+                :src="nft.url"
                 muted
                 class="img-fluid card-img"
                 style="
@@ -213,14 +213,3 @@ export default defineComponent({
   },
 });
 </script>
-<style>
-.smooth-enter-active,
-.smooth-leave-active {
-  transition: 0.5s;
-}
-.smooth-enter,
-.smooth-leave-to {
-  height: 0;
-  opacity: 0;
-}
-</style>

@@ -4,6 +4,7 @@ import { NFT } from "../../../models/NFT";
 import { NFTState, SharedNFTs } from "./state";
 interface addSharedParams {
   shared: NFT;
+  offer?: any;
   nodetype: keyof SharedNFTs;
   walletaddress: string;
 }
@@ -70,24 +71,41 @@ const mutations: MutationTree<NFTState> = {
   },
   addShared(
     state: NFTState,
-    { shared, nodetype, walletaddress }: addSharedParams
+    { shared, nodetype, walletaddress, offer }: addSharedParams
   ): void {
-    const exist =
-      state.sharedwithme[walletaddress][nodetype].filter(
-        (n: { issuer: string; currency: string }) =>
-          n.issuer === shared.issuer && n.issuer === shared.currency
-      ).length > 0;
-
+    const exist = state.sharedwithme[walletaddress][nodetype].find(
+      (n: { issuer: string; currency: string }) => {
+        console.log(n.issuer, shared.issuer);
+        console.log(n.currency, shared.currency);
+        return n.issuer === shared.issuer && n.currency === shared.currency;
+      }
+    );
+    debugger;
     if (!exist) {
+      if (offer) {
+        shared.selloffers = [offer];
+      }
       state.sharedwithme[walletaddress][nodetype] = [
         ...state.sharedwithme[walletaddress][nodetype],
         shared,
       ];
     }
+    if (exist && offer) {
+      const offerExists =
+        exist.selloffers &&
+        exist.selloffers.filter((o: any) => {
+          o.nft_offer_index == offer.nft_offer_index;
+        }).length > 0;
+      debugger;
+      if (!offerExists) {
+        exist.selloffers = [...exist.selloffers, offer];
+        debugger;
+      }
+    }
   },
 
   addSellOffer(state, { offers }) {
-    if (state.currentNFT) state.currentNFT.offers = offers ? offers : [];
+    if (state.currentNFT) state.currentNFT.selloffers = offers ? offers : [];
   },
   deleteShared(
     state: NFTState,

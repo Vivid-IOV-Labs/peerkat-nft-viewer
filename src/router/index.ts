@@ -127,7 +127,7 @@ const routes = [
         component: () => import("../views/Sell.vue"),
       },
       {
-        path: "/buy",
+        path: "buy",
         name: "Buy",
         component: () => import("../views/Buy.vue"),
         meta: {

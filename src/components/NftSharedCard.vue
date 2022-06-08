@@ -10,7 +10,7 @@
         >
           <video
             v-if="nft.media_type?.includes('video')"
-            :src="`${nft.url}#t=0.5`"
+            :src="nft.url"
             poster="/thumbnail.jpg"
             muted
             class="img-fluid card-img-top"
@@ -55,9 +55,20 @@
         <strong class="h7 font-weight-bold">Standard </strong><br />
         <span>{{ nft.standard }}</span>
       </div>
+      <div v-for="offer in nft.selloffers" :key="offer.nft_offer_index">
+        <!-- <pre>{{ offer }}</pre> -->
+
+        <accept-sell-offer-card
+          v-if="offer"
+          :offer="offer"
+        ></accept-sell-offer-card>
+      </div>
     </template>
     <template #footer>
       <div>
+        <base-button class="mr-2" @click="goToOffer"
+          >Offers ({{ nft.selloffers.length }})</base-button
+        >
         <base-button class="mr-2" @click="deleteShared">Delete</base-button>
         <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl">
           Inspect</external-link
@@ -71,6 +82,7 @@ import { computed, defineComponent } from "vue";
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import ExternalLink from "@/components/ExternalLink.vue";
+import AcceptSellOfferCard from "@/components/AcceptSellOfferCard.vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { getNetworkCodeFromType } from "../utils/getNetworkTypeFromCode";
@@ -81,6 +93,7 @@ export default defineComponent({
     BaseCard,
     BaseButton,
     ExternalLink,
+    AcceptSellOfferCard,
   },
   props: {
     nft: { type: Object, required: true },
@@ -103,6 +116,12 @@ export default defineComponent({
       view() {
         router.push({
           path: `/shared/${props.nft.issuer}/${nodetypecode.value}/view/${props.nft.currency}`,
+        });
+      },
+      async goToOffer() {
+        await store.commit("nft/setCurrent", props.nft);
+        router.push({
+          path: `/offers/buy`,
         });
       },
       deleteShared() {

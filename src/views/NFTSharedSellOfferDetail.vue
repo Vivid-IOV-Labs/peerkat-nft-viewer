@@ -14,7 +14,7 @@
             <a href="#" @click.prevent="view">
               <video
                 v-if="nft.media_type?.includes('video')"
-                :src="`${nft.url}#t=0.5`"
+                :src="nft.url"
                 muted
                 class="img-fluid card-img"
                 style="
@@ -167,9 +167,15 @@ export default defineComponent({
       offer.value = offers.find((o: any) => o.nft_offer_index === offerId);
     }
     if (offer.value) {
-      store.commit("nft/addSharedSellOffers", {
-        selloffer: { nft: nft.value, offer: offer.value },
-        walletaddress: walletAddress.value,
+      // store.commit("nft/addSharedSellOffers", {
+      //   selloffer: { nft: nft.value, offer: offer.value },
+      //   walletaddress: walletAddress.value,
+      // });
+      store.commit("nft/addShared", {
+        shared: nft.value,
+        nodetype: nodetype.value,
+        walletaddress: user.value,
+        offer: offer.value,
       });
     }
 

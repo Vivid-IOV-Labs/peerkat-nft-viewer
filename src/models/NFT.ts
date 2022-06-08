@@ -9,4 +9,6 @@ export interface NFT {
   tokenName: string;
   url?: string;
   media_type?: string | null;
+  selloffers?: any[];
+  buyoffers?: any[];
 }
