@@ -162,6 +162,7 @@ export default defineComponent({
     const currentNft = account_nfts.find((n: any) => n.NFTokenID == nftId);
     const { URI, Issuer, NFTokenID } = currentNft;
     nft.value = await getOneXls({ URI, Issuer, NFTokenID });
+    debugger;
     const { offers } = sellOffers;
     if (offers) {
       offer.value = offers.find((o: any) => o.nft_offer_index === offerId);

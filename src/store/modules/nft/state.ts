@@ -16,8 +16,8 @@ export interface NFTState {
   lines: Array<NFT>;
   xls20nfts: Array<any>;
   allXls20: Array<any>;
-  sellOffers: Array<any>;
-  buyOffers: Array<any>;
+  sellOffers: any;
+  buyOffers: any;
   sharedSellOffers: any;
   xrpClient: typeof XrplClient | null;
   currentNFT: any;
@@ -28,8 +28,8 @@ const state = (): NFTState => ({
   all: [],
   allXls20: [],
   currentNFT: null,
-  sellOffers: [],
-  buyOffers: [],
+  sellOffers: {},
+  buyOffers: {},
   sharedSellOffers: {},
   sharedwithme: {},
   lines: [],

@@ -32,6 +32,7 @@ export default {
     },
   getXls20: (state: NFTState): Array<NFT> => state.xls20nfts,
   getSellOffers: (state: NFTState): Array<any> => state.sellOffers,
+  getBuyOffers: (state: NFTState): Array<any> => state.buyOffers,
   getByAddress:
     (state: NFTState) =>
     (address: string, curr: string): NFT | undefined => {

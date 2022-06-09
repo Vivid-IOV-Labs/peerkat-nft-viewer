@@ -519,7 +519,7 @@ export async function fetchNextXls20WithSellOffer(
         const schema = await getOneXls({ URI, Issuer, NFTokenID });
         const sellOffersResponse = await fetchSellOffers(NFTokenID);
         const buyOffersResponse = await fetchBuyOffers(NFTokenID);
-        debugger
+        debugger;
         return {
           ...schema,
           selloffers:
@@ -527,9 +527,9 @@ export async function fetchNextXls20WithSellOffer(
               ? sellOffersResponse.offers
               : [],
           buyoffers:
-              buyOffersResponse && buyOffersResponse.offers
-                ? buyOffersResponse.offers
-                : [],
+            buyOffersResponse && buyOffersResponse.offers
+              ? buyOffersResponse.offers
+              : [],
         };
       })
     );
@@ -600,6 +600,32 @@ export async function createSellOffer({ TokenID, amount }: any): Promise<any> {
     devlog(error);
   }
 }
+
+export async function createBuyOffer({
+  TokenID,
+  Amount,
+  Owner,
+}: any): Promise<any> {
+  const wallet = xrpl.Wallet.fromSeed(walletSecret);
+  const transactionBlob = {
+    TransactionType: "NFTokenCreateOffer",
+    Account: wallet.classicAddress,
+    Owner,
+    TokenID,
+    Amount,
+    Flags: 0,
+  };
+  try {
+    await client.submitAndWait(transactionBlob, {
+      wallet,
+    });
+    const buyOffer = await fetchBuyOffers(TokenID);
+    return buyOffer;
+  } catch (error) {
+    devlog(error);
+  }
+}
+
 export async function fetchNextSellOffers(nextXls20: any[]): Promise<any> {
   try {
     const sellOffers = await Promise.all(
@@ -635,7 +661,7 @@ export async function fetchBuyOffers(TokenID: string): Promise<any> {
       method: "nft_buy_offers",
       nft_id: TokenID,
     });
-    debugger
+    debugger;
     return nftBuyOffers;
   } catch (err) {
     devlog("No buy offers.");

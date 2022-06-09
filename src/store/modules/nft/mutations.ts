@@ -83,8 +83,10 @@ const mutations: MutationTree<NFTState> = {
     debugger;
     if (!exist) {
       if (offer) {
+        shared.selloffers = [];
         shared.selloffers = [offer];
       }
+      debugger;
       state.sharedwithme[walletaddress][nodetype] = [
         ...state.sharedwithme[walletaddress][nodetype],
         shared,
@@ -106,6 +108,9 @@ const mutations: MutationTree<NFTState> = {
 
   addSellOffer(state, { offers }) {
     if (state.currentNFT) state.currentNFT.selloffers = offers ? offers : [];
+  },
+  addBuyOffer(state, { offers }) {
+    if (state.currentNFT) state.currentNFT.buyoffers = offers ? offers : [];
   },
   deleteShared(
     state: NFTState,

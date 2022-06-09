@@ -39,10 +39,10 @@
             :key="offer.nft_offer_index"
             class="mt-4"
           >
-            <acceptSell-offer-card
+            <accept-sell-offer-card
               v-if="offer"
               :offer="offer"
-            ></acceptSell-offer-card>
+            ></accept-sell-offer-card>
           </div>
         </div>
       </div>
@@ -54,7 +54,7 @@
       </div>
     </div>
   </div>
-  <base-dialog v-model="toggleSellDialog" :cancellable="true" title="Sell">
+  <base-dialog v-model="toggleSellDialog" :cancellable="true" title="Buy">
     <template #body>
       <strong class="h6 font-weight-bold">Token Name </strong><br />
       {{ nft.tokenName }}<br />
@@ -87,7 +87,6 @@
 </template>
 
 <script lang="ts">
-debugger;
 import { defineComponent, computed, ref } from "vue";
 import AcceptSellOfferCard from "@/components/AcceptSellOfferCard.vue";
 import SellNftCard from "@/components/SellNftCard.vue";
@@ -131,10 +130,11 @@ export default defineComponent({
       },
       async confirmSell() {
         try {
-          await store.dispatch("nft/createSellOffer", {
+          await store.dispatch("nft/createBuyOffer", {
             walletAddress: walletAddress.value,
             TokenID: nft.value.currency,
-            amount: saleamount.value,
+            Owner: nft.value.issuer,
+            Amount: saleamount.value,
           });
           toggleSellDialog.value = false;
           // const sellOffer = await createSellOffer({

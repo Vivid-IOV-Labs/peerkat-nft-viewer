@@ -25,11 +25,12 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
 import AsyncButton from "@/components/AsyncButton.vue";
 
 import { copyText } from "../utils/copytext";
+import { getInspectorUrl } from "../utils/getInspectorUrl";
 import { useStore } from "vuex";
 
 export default defineComponent({
@@ -44,6 +45,11 @@ export default defineComponent({
   async setup(props) {
     console.log(props.offer);
     const store = useStore();
+    const network = computed(() => store.getters["user/getNetwork"]);
+
+    const bihompUrl = computed(() =>
+      getInspectorUrl(network.value, props.token)
+    );
 
     function shareUrl() {
       const xummSandbox = import.meta.env.VITE_XUMM_SANDBOX;
@@ -54,6 +60,7 @@ export default defineComponent({
         : `https://xumm.app/detect/xapp:peerkat.viewer?redirect=/shared_sell_offers/${props.offer.nft_offer_index}/${props.token}/${props.offer.owner}`;
     }
     return {
+      bihompUrl,
       async cancelOffer() {
         await store.dispatch("nft/cancelOffer", {
           TokenID: props.token,

@@ -14,22 +14,34 @@
     </div>
     <div class="card-footer mt-auto d-flex justify-content-end pb-4">
       <slot name="footer"></slot>
+      <external-link v-if="bihompUrl" class="ml-2" :url="bihompUrl">
+        Inspect</external-link
+      >
     </div>
   </div>
 </template>
 <script lang="ts">
+import { computed } from "@vue/reactivity";
 import { defineComponent } from "vue";
-import BaseCard from "@/components/BaseCard.vue";
-
+import { useStore } from "vuex";
+import ExternalLink from "@/components/ExternalLink.vue";
+import { getInspectorUrl } from "../utils/getInspectorUrl";
 export default defineComponent({
   components: {
-    BaseCard,
+    ExternalLink,
   },
   props: {
     nft: { type: Object, required: true },
   },
   async setup(props) {
-    return {};
+    const store = useStore();
+    const network = computed(() => store.getters["user/getNetwork"]);
+
+    const bihompUrl = computed(() =>
+      getInspectorUrl(network.value, props.nft.tokenName)
+    );
+
+    return { bihompUrl };
   },
 });
 </script>

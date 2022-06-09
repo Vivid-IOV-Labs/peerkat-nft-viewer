@@ -6,6 +6,7 @@ import {
   fetchNextXls20WithSellOffer,
   createSellOffer,
   cancelOffer,
+  createBuyOffer,
 } from "../../../services/XrpService";
 import { ActionTree } from "vuex";
 import { NFT } from "../../../models/NFT";
@@ -96,6 +97,18 @@ const actions: ActionTree<NFT, NFTState> = {
     const sellOffer = await cancelOffer({ TokenID, OfferID });
     const newSellOffers = sellOffer ? sellOffer : [];
     commit("addSellOffer", newSellOffers);
+  },
+  async createBuyOffer(
+    { commit },
+    { walletAddress, TokenID, Amount, Owner }
+  ): Promise<void> {
+    const buyOffer = await createBuyOffer({
+      walletAddress,
+      TokenID,
+      Amount,
+      Owner,
+    });
+    commit("addBuyOffer", buyOffer);
   },
 };
 export default actions;
