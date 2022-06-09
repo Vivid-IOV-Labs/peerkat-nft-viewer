@@ -55,14 +55,6 @@
         <strong class="h7 font-weight-bold">Standard </strong><br />
         <span>{{ nft.standard }}</span>
       </div>
-      <div v-for="offer in nft.selloffers" :key="offer.nft_offer_index">
-        <!-- <pre>{{ offer }}</pre> -->
-
-        <accept-sell-offer-card
-          v-if="offer"
-          :offer="offer"
-        ></accept-sell-offer-card>
-      </div>
     </template>
     <template #footer>
       <div>
@@ -82,7 +74,6 @@ import { computed, defineComponent } from "vue";
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import ExternalLink from "@/components/ExternalLink.vue";
-import AcceptSellOfferCard from "@/components/AcceptSellOfferCard.vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { getNetworkCodeFromType } from "../utils/getNetworkTypeFromCode";
@@ -93,7 +84,6 @@ export default defineComponent({
     BaseCard,
     BaseButton,
     ExternalLink,
-    AcceptSellOfferCard,
   },
   props: {
     nft: { type: Object, required: true },

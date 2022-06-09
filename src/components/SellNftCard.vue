@@ -38,7 +38,7 @@ export default defineComponent({
     const network = computed(() => store.getters["user/getNetwork"]);
 
     const bihompUrl = computed(() =>
-      getInspectorUrl(network.value, props.nft.tokenName)
+      getInspectorUrl(network.value, props.nft.currency)
     );
 
     return { bihompUrl };

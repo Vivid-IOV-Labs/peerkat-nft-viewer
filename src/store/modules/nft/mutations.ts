@@ -80,13 +80,11 @@ const mutations: MutationTree<NFTState> = {
         return n.issuer === shared.issuer && n.currency === shared.currency;
       }
     );
-    debugger;
     if (!exist) {
       if (offer) {
         shared.selloffers = [];
         shared.selloffers = [offer];
       }
-      debugger;
       state.sharedwithme[walletaddress][nodetype] = [
         ...state.sharedwithme[walletaddress][nodetype],
         shared,
@@ -98,10 +96,8 @@ const mutations: MutationTree<NFTState> = {
         exist.selloffers.filter((o: any) => {
           o.nft_offer_index == offer.nft_offer_index;
         }).length > 0;
-      debugger;
       if (!offerExists) {
         exist.selloffers = [...exist.selloffers, offer];
-        debugger;
       }
     }
   },

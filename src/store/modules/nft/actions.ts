@@ -108,7 +108,9 @@ const actions: ActionTree<NFT, NFTState> = {
       Amount,
       Owner,
     });
-    commit("addBuyOffer", buyOffer);
+    const newBuyOffers = buyOffer ? buyOffer : [];
+    debugger;
+    commit("addBuyOffer", newBuyOffers);
   },
 };
 export default actions;

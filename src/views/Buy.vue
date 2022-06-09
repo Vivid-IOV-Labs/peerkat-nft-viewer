@@ -47,10 +47,25 @@
         </div>
       </div>
       <div v-if="showTab === 'buy'" class="p-4">
-        <p>
-          Peerkat is not able to find any buy offers, shared with this wallet
-          for this NFT
-        </p>
+        <div v-if="nft.buyoffers.length == 0">
+          <p>
+            Peerkat is not able to find any buy offers, shared with this wallet
+            for this NFT
+          </p>
+        </div>
+        <div v-else>
+          <div
+            v-for="offer in nft.buyoffers"
+            :key="offer.nft_offer_index"
+            class="mt-4"
+          >
+            <buy-offer-card
+              v-if="offer"
+              :token="nft.currency"
+              :offer="offer"
+            ></buy-offer-card>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -90,6 +105,7 @@
 import { defineComponent, computed, ref } from "vue";
 import AcceptSellOfferCard from "@/components/AcceptSellOfferCard.vue";
 import SellNftCard from "@/components/SellNftCard.vue";
+import BuyOfferCard from "@/components/BuyOfferCard.vue";
 import BaseDialog from "@/components/BaseDialog.vue";
 import BaseInput from "@/components/BaseInput.vue";
 import BaseButton from "@/components/BaseButton.vue";
@@ -105,6 +121,7 @@ export default defineComponent({
     BaseInput,
     BaseButton,
     AsyncButton,
+    BuyOfferCard,
   },
   async setup() {
     const store = useStore();
@@ -114,7 +131,7 @@ export default defineComponent({
     const saleamount = ref(0);
     const toggleSellDialog = ref(false);
 
-    const showTab = ref("sell");
+    const showTab = ref("buy");
     const walletAddress = computed(() => store.getters["user/getAddress"]);
     const sharedSellOffers = computed(() => {
       return store.getters["nft/getSharedSellOffers"];

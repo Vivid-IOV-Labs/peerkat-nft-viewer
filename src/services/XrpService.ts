@@ -19,6 +19,7 @@ PDFJS.disableWorker = true;
 const ipfsPublicGateway = import.meta.env.VITE_PUBLIC_IPFS_GATEWAY;
 const ipfsGateway = import.meta.env.VITE_IPFS_GATEWAY;
 const walletSecret = import.meta.env.VITE_WALLET_SECRET;
+const walletSecretAlice = import.meta.env.VITE_WALLET_SECRET_ALICE;
 
 const xrpl = (window as any).xrpl;
 type line = {
@@ -606,13 +607,13 @@ export async function createBuyOffer({
   Amount,
   Owner,
 }: any): Promise<any> {
-  const wallet = xrpl.Wallet.fromSeed(walletSecret);
+  const wallet = xrpl.Wallet.fromSeed(walletSecretAlice);
   const transactionBlob = {
     TransactionType: "NFTokenCreateOffer",
     Account: wallet.classicAddress,
     Owner,
     TokenID,
-    Amount,
+    Amount: (Amount * 1000000).toString(),
     Flags: 0,
   };
   try {
@@ -620,9 +621,11 @@ export async function createBuyOffer({
       wallet,
     });
     const buyOffer = await fetchBuyOffers(TokenID);
+    debugger;
     return buyOffer;
   } catch (error) {
     devlog(error);
+    debugger;
   }
 }
 
@@ -657,12 +660,11 @@ export async function fetchSellOffers(TokenID: string): Promise<any> {
 
 export async function fetchBuyOffers(TokenID: string): Promise<any> {
   try {
-    const nftBuyOffers = await client.request({
+    const { result } = await client.request({
       method: "nft_buy_offers",
       nft_id: TokenID,
     });
-    debugger;
-    return nftBuyOffers;
+    return result;
   } catch (err) {
     devlog("No buy offers.");
   }

@@ -6,6 +6,7 @@
     class="d-flex h-100 flex-row flex-nowrap overflow-auto pb-4"
     style="padding-bottom: 2rem"
   >
+    {{ xls20count.length }}
     <div v-for="(nft, index) in NFTMedia" :key="index" class="col-11">
       <nft-card v-if="nft" :nft="nft"></nft-card>
     </div>
@@ -99,7 +100,6 @@ export default defineComponent({
     const xls20count = computed(() => store.getters["nft/getXls20"]);
     const allXls20 = computed(() => store.getters["nft/getAllXls20"]);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
-
     const poupulateXls20NFTs = async () => {
       await store.dispatch("nft/fetchXls20", {
         walletAddress: walletAddress.value,
@@ -185,6 +185,7 @@ export default defineComponent({
       isConnected,
       NFTMedia,
       isInXumm,
+      xls20count,
       async connect() {
         await store.dispatch("nft/connect", nodetype.value);
       },
