@@ -78,7 +78,7 @@
         </div>
       </div>
       <div v-if="showTab === 'buy'" class="p-4">
-        <div v-if="sharedBUyOffers.length == 0">
+        <div v-if="!sharedBUyOffers || sharedBUyOffers.length == 0">
           <p>
             Peerkat is not able to find any buy offers, shared with this wallet
             for this NFT
@@ -90,7 +90,6 @@
             :key="offer.nft_offer_index"
             class="mt-4"
           >
-            {{ offer }}
             <accept-sell-offer-card
               v-if="offer"
               :offer="offer"
