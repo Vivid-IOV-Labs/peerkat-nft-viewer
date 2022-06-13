@@ -1,18 +1,15 @@
 import {
-  fetchNextXls20,
-  fetchNextSellOffers,
   fetchXls20,
   init,
   fetchNextXls20WithSellOffer,
   createSellOffer,
   cancelOffer,
   createBuyOffer,
+  cancelBuyOffer,
 } from "../../../services/XrpService";
 import { ActionTree } from "vuex";
 import { NFT } from "../../../models/NFT";
 import { NFTState } from "./state";
-import { unref } from "vue";
-import { devlog } from "../../../utils/devlog";
 type line = {
   balance: string;
   limit: string;
@@ -97,6 +94,11 @@ const actions: ActionTree<NFT, NFTState> = {
     const sellOffer = await cancelOffer({ TokenID, OfferID });
     const newSellOffers = sellOffer ? sellOffer : [];
     commit("addSellOffer", newSellOffers);
+  },
+  async cancelBuyOffer({ commit }, { TokenID, OfferID }): Promise<void> {
+    const sellOffer = await cancelBuyOffer({ TokenID, OfferID });
+    const newSellOffers = sellOffer ? sellOffer : [];
+    commit("addBuyOffer", newSellOffers);
   },
   async createBuyOffer(
     { commit },

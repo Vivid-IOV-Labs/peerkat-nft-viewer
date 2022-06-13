@@ -20,7 +20,7 @@ const store = createStore({
             paths: [
               "nft.sharedwithme",
               "nft.currentNFT",
-              "nft.sharedSellOffers",
+              "nft.sharedBuyOffers",
             ],
           }),
         ]
@@ -31,7 +31,7 @@ const store = createStore({
               "nft.sharedwithme",
               "user",
               "nft.currentNFT",
-              "nft.sharedSellOffers",
+              "nft.sharedBuyOffers",
             ],
           }),
         ],

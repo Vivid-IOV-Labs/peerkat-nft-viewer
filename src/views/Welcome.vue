@@ -176,7 +176,7 @@ export default defineComponent({
           store.commit("nft/initSharedStore", user.value);
         }
         if (!sharedSellOffers.value) {
-          store.commit("nft/initSharedSellOffersStore", walletAddress.value);
+          store.commit("nft/initSharedBuyOffersStore", walletAddress.value);
         }
         store.commit("nft/resetAll");
         await store.dispatch("nft/initXrpClient", {

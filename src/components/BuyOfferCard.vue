@@ -41,6 +41,7 @@ export default defineComponent({
   props: {
     offer: { type: Object, required: true },
     token: { type: String, required: true },
+    owner: { type: String, required: true },
   },
   async setup(props) {
     console.log(props.offer);
@@ -54,15 +55,15 @@ export default defineComponent({
     function shareUrl() {
       const xummSandbox = import.meta.env.VITE_XUMM_SANDBOX;
       return xummSandbox === "test"
-        ? `https://xumm.app/detect/xapp:peerkat.sandbox.test?redirect=/shared_buy_offers/${props.offer.nft_offer_index}/${props.token}/${props.offer.owner}`
+        ? `https://xumm.app/detect/xapp:peerkat.sandbox.test?redirect=/shared_buy_offers/${props.offer.nft_offer_index}/${props.token}/${props.owner}`
         : xummSandbox === "dev"
-        ? `https://xumm.app/detect/xapp:peerkat.dev?redirect=/shared_buy_offers/${props.offer.nft_offer_index}/${props.token}/${props.offer.owner}`
-        : `https://xumm.app/detect/xapp:peerkat.viewer?redirect=/shared_buy_offers/${props.offer.nft_offer_index}/${props.token}/${props.offer.owner}`;
+        ? `https://xumm.app/detect/xapp:peerkat.dev?redirect=/shared_buy_offers/${props.offer.nft_offer_index}/${props.token}/${props.owner}`
+        : `https://xumm.app/detect/xapp:peerkat.viewer?redirect=/shared_buy_offers/${props.offer.nft_offer_index}/${props.token}/${props.owner}`;
     }
     return {
       bihompUrl,
       async cancelOffer() {
-        await store.dispatch("nft/cancelOffer", {
+        await store.dispatch("nft/cancelBuyOffer", {
           TokenID: props.token,
           OfferID: props.offer.nft_offer_index,
         });

@@ -457,6 +457,7 @@ export async function fetchOneXls20(
     result: { account_nfts },
   } = await getTokens(walletAddress);
   const nftXLS20 = account_nfts.find((n: any) => n.NFTokenID == NFTokenID);
+
   if (nftXLS20) {
     return getOneXls(nftXLS20);
   } else {
@@ -555,7 +556,50 @@ export async function cancelOffer({ TokenID, OfferID }: any): Promise<any> {
     devlog(error);
   }
 }
+export async function cancelBuyOffer({ TokenID, OfferID }: any): Promise<any> {
+  const wallet = xrpl.Wallet.fromSeed(walletSecret);
+  const tokenIDs = [OfferID];
+  const transactionBlob = {
+    TransactionType: "NFTokenCancelOffer",
+    Account: wallet.classicAddress,
+    TokenIDs: tokenIDs,
+  };
+  try {
+    await client.submitAndWait(transactionBlob, { wallet });
+    const sellOffer = await fetchBuyOffers(TokenID);
+    return sellOffer;
+  } catch (error) {
+    devlog(error);
+  }
+}
 export async function acceptOffer({ OfferID }: any): Promise<any> {
+  const wallet = xrpl.Wallet.fromSeed(walletSecretAlice);
+  const transactionBlob = {
+    TransactionType: "NFTokenAcceptOffer",
+    Account: wallet.classicAddress,
+    SellOffer: OfferID,
+  };
+
+  try {
+    const tx = await client.submitAndWait(transactionBlob, { wallet });
+    const nfts = await client.request({
+      method: "account_nfts",
+      account: wallet.classicAddress,
+    });
+    console.log(JSON.stringify(nfts, null, 2));
+    console.log(
+      "Transaction result:",
+      JSON.stringify(tx.result.meta.TransactionResult, null, 2)
+    );
+    console.log(
+      "Balance changes:",
+      JSON.stringify(xrpl.getBalanceChanges(tx.result.meta), null, 2)
+    );
+  } catch (error) {
+    devlog(error);
+  }
+}
+export async function acceptBuyOffer({ OfferID }: any): Promise<any> {
   const wallet = xrpl.Wallet.fromSeed(walletSecret);
   const transactionBlob = {
     TransactionType: "NFTokenAcceptOffer",

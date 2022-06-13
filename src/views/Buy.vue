@@ -62,6 +62,7 @@
             <buy-offer-card
               v-if="offer"
               :token="nft.currency"
+              :owner="nft.issuer"
               :offer="offer"
             ></buy-offer-card>
           </div>
@@ -133,15 +134,12 @@ export default defineComponent({
 
     const showTab = ref("buy");
     const walletAddress = computed(() => store.getters["user/getAddress"]);
-    const sharedSellOffers = computed(() => {
-      return store.getters["nft/getSharedSellOffers"];
-    });
+
     return {
       nft,
       saleamount,
       toggleSellDialog,
       showTab,
-      sharedSellOffers,
       openSellDialog() {
         toggleSellDialog.value = true;
       },

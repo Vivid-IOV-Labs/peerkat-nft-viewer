@@ -18,17 +18,11 @@
     </div>
     <div class="card-footer mt-auto d-flex justify-content-between pb-4">
       <async-button :on-click="accept">Accept</async-button>
-      <div class="d-flex justify-content-between">
-        <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl">
-          Inspect</external-link
-        >
-      </div>
     </div>
   </div>
 </template>
 <script lang="ts">
 import { computed, defineComponent } from "vue";
-import ExternalLink from "@/components/ExternalLink.vue";
 import AsyncButton from "@/components/AsyncButton.vue";
 
 import { getInspectorUrl } from "../utils/getInspectorUrl";
@@ -37,7 +31,6 @@ import { useRouter } from "vue-router";
 import { acceptOffer } from "../services/XrpService";
 export default defineComponent({
   components: {
-    ExternalLink,
     AsyncButton,
   },
   props: {

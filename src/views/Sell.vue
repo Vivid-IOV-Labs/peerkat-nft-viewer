@@ -1,5 +1,35 @@
 <template>
   <div v-if="nft" style="height: 100%; overflow: hidden">
+    <base-dialog v-model="toggleSellDialog" :cancellable="true" title="Sell">
+      <template #body>
+        <strong class="h6 font-weight-bold">Token Name </strong><br />
+        {{ nft.tokenName }}<br />
+        <strong class="h7 font-weight-bold">Token ID </strong><br />
+        <span style="word-break: break-all">{{ nft.currency }}</span
+        ><br />
+        <div v-if="nft.desc" class="mt-2">
+          <strong class="h7 font-weight-bold">Description </strong><br />
+          <div v-html="nft.desc"></div>
+        </div>
+        <div class="form-group flex justify-between">
+          <base-input
+            id="saleamount"
+            v-model="saleamount"
+            :label-hidden="true"
+            label-text="saleamount"
+            type="number"
+          ></base-input>
+          <strong>XRP</strong>
+        </div>
+      </template>
+      <template #footer>
+        <div>
+          <async-button class="mr-2" :on-click="confirmSell"
+            >Confirm</async-button
+          >
+        </div>
+      </template>
+    </base-dialog>
     <sell-nft-card v-if="nft" :nft="nft">
       <template #footer>
         <base-button @click="openSellDialog">Create Sell Offer</base-button>
@@ -48,49 +78,38 @@
         </div>
       </div>
       <div v-if="showTab === 'buy'" class="p-4">
-        <p>
-          Peerkat is not able to find any buy offers, shared with this wallet
-          for this NFT
-        </p>
+        <div v-if="sharedBUyOffers.length == 0">
+          <p>
+            Peerkat is not able to find any buy offers, shared with this wallet
+            for this NFT
+          </p>
+        </div>
+        <div v-else>
+          <div
+            v-for="offer in sharedBUyOffers"
+            :key="offer.nft_offer_index"
+            class="mt-4"
+          >
+            {{ offer }}
+            <accept-sell-offer-card
+              v-if="offer"
+              :offer="offer"
+            ></accept-sell-offer-card>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <base-dialog v-model="toggleSellDialog" :cancellable="true" title="Sell">
-    <template #body>
-      <strong class="h6 font-weight-bold">Token Name </strong><br />
-      {{ nft.tokenName }}<br />
-      <strong class="h7 font-weight-bold">Token ID </strong><br />
-      <span style="word-break: break-all">{{ nft.currency }}</span
-      ><br />
-      <div v-if="nft.desc" class="mt-2">
-        <strong class="h7 font-weight-bold">Description </strong><br />
-        <div v-html="nft.desc"></div>
-      </div>
-      <div class="form-group flex justify-between">
-        <base-input
-          id="saleamount"
-          v-model="saleamount"
-          :label-hidden="true"
-          label-text="saleamount"
-          type="number"
-        ></base-input>
-        <strong>XRP</strong>
-      </div>
-    </template>
-    <template #footer>
-      <div>
-        <async-button class="mr-2" :on-click="confirmSell"
-          >Confirm</async-button
-        >
-      </div>
-    </template>
-  </base-dialog>
+  <div v-else>
+    <p></p>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, ref } from "vue";
 import SellCard from "@/components/SellCard.vue";
 import SellNftCard from "@/components/SellNftCard.vue";
+import AcceptSellOfferCard from "@/components/AcceptSellOfferCard.vue";
 import BaseDialog from "@/components/BaseDialog.vue";
 import BaseInput from "@/components/BaseInput.vue";
 import BaseButton from "@/components/BaseButton.vue";
@@ -106,6 +125,7 @@ export default defineComponent({
     BaseInput,
     BaseButton,
     AsyncButton,
+    AcceptSellOfferCard,
   },
   async setup() {
     const store = useStore();
@@ -117,15 +137,15 @@ export default defineComponent({
 
     const showTab = ref("sell");
     const walletAddress = computed(() => store.getters["user/getAddress"]);
-    const sharedSellOffers = computed(() => {
-      return store.getters["nft/getSharedSellOffers"];
+    const sharedBUyOffers = computed(() => {
+      return store.getters["nft/getSharedBuyOffers"](nft.value.currency);
     });
     return {
       nft,
       saleamount,
       toggleSellDialog,
       showTab,
-      sharedSellOffers,
+      sharedBUyOffers,
       openSellDialog() {
         toggleSellDialog.value = true;
       },

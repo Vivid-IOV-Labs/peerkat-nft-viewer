@@ -50,23 +50,39 @@ const mutations: MutationTree<NFTState> = {
       DEVNET: [],
     };
   },
-  initSharedSellOffersStore(state: NFTState, walletaddress) {
-    state.sharedSellOffers[walletaddress] = [];
+  initSharedBuyOffersStore(state: NFTState, walletaddress) {
+    state.sharedBuyOffers[walletaddress] = {};
   },
-  addSharedSellOffers(state: NFTState, { selloffer, walletaddress }: any) {
-    console.log("state.sharedSellOffers");
-    console.log(state.sharedSellOffers);
-    console.log(state.sharedSellOffers[walletaddress]);
-    const exist =
-      state.sharedSellOffers[walletaddress].filter((o: any) => {
-        o.offer.nft_offer_index == selloffer.offer.nft_offer_index;
-      }).length > 0;
-
-    if (!exist) {
-      state.sharedSellOffers[walletaddress] = [
-        ...state.sharedSellOffers[walletaddress],
-        selloffer,
-      ];
+  addSharedBuyOffer(state: NFTState, { buyoffer, walletaddress, nftID }: any) {
+    console.log("state.sharedBuyOffers");
+    console.log(state.sharedBuyOffers);
+    debugger;
+    console.log(state.sharedBuyOffers[walletaddress]);
+    debugger;
+    if (!state.sharedBuyOffers[walletaddress]) {
+      state.sharedBuyOffers[walletaddress] = {};
+    }
+    console.log(state.sharedBuyOffers[walletaddress]);
+    debugger;
+    if (!state.sharedBuyOffers[walletaddress][nftID]) {
+      state.sharedBuyOffers[walletaddress][nftID] = [buyoffer];
+      console.log(state.sharedBuyOffers[walletaddress]);
+      debugger;
+    } else {
+      debugger;
+      const exist =
+        state.sharedBuyOffers[walletaddress][nftID].filter((o: any) => {
+          debugger;
+          return o.nft_offer_index == buyoffer.nft_offer_index;
+        }).length > 0;
+      debugger;
+      if (!exist) {
+        state.sharedBuyOffers[walletaddress][nftID] = [
+          ...state.sharedBuyOffers[walletaddress][nftID],
+          buyoffer,
+        ];
+        debugger;
+      }
     }
   },
   addShared(

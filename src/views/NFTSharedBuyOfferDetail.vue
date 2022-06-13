@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div v-if="nft">
     <router-link
-      :to="{ path: `/shared_sell_offers` }"
+      :to="{ path: `/shared_buy_offers` }"
       class="mb-4 btn btn-link w-100"
     >
       Back
@@ -121,6 +121,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import BaseCard from "../components/BaseCard.vue";
 import AsyncButton from "../components/AsyncButton.vue";
+
 import {
   getNetworkCodeFromType,
   getNetworkTypeFromCode,
@@ -151,7 +152,6 @@ export default defineComponent({
     const offerId = route.params.offerId.toString();
     const nftId = route.params.nftId.toString();
     const owner = route.params.owner.toString();
-
     const bihompUrl = computed(() =>
       getInspectorUrl(network.value, route.params.offerId.toString())
     );
@@ -160,20 +160,24 @@ export default defineComponent({
     const buyOffers = await fetchBuyOffers(nftId);
     const account_nfts = await fetchXls20(owner);
     const currentNft = account_nfts.find((n: any) => n.NFTokenID == nftId);
+
     const { URI, Issuer, NFTokenID } = currentNft;
     nft.value = await getOneXls({ URI, Issuer, NFTokenID });
+
     const { offers } = buyOffers;
+    debugger;
+
     if (offers) {
+      debugger;
+
       offer.value = offers.find((o: any) => o.nft_offer_index === offerId);
     }
     if (offer.value) {
-      // store.commit("nft/addSharedbuyOffers", {
-      //   selloffer: { nft: nft.value, offer: offer.value },
-      //   walletaddress: walletAddress.value,
-      // });
+      debugger;
       store.commit("nft/addSharedBuyOffer", {
+        buyoffer: offer.value,
+        walletaddress: walletAddress.value,
         nftID: nft.value.currency,
-        offer: offer.value,
       });
     }
 
