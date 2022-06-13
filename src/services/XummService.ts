@@ -45,9 +45,11 @@ class XummService {
       Amount,
       Flags: 1,
     };
-    await this.createPayload({
+    const offer = await this.createPayload({
       txjson: transactionBlob,
     });
+    devlog("offercreated", offer);
+    return offer;
   }
   async createBuyOffer({ Account, TokenID, Amount, Owner }: any) {
     const transactionBlob = {
@@ -59,9 +61,11 @@ class XummService {
       Flags: 1,
     };
 
-    await this.createPayload({
+    const offer = await this.createPayload({
       txjson: transactionBlob,
     });
+    devlog("offercreated", offer);
+    return offer;
   }
   async cancelOffer({ Account, TokenIDs }: any) {
     const transactionBlob = {
@@ -69,9 +73,23 @@ class XummService {
       Account,
       TokenIDs,
     };
-    await this.createPayload({
+    const offer = await this.createPayload({
       txjson: transactionBlob,
     });
+    devlog("offercancelled", offer);
+    return offer;
+  }
+  async acceptOffer({ Account, OfferID }: any) {
+    const transactionBlob = {
+      TransactionType: "NFTokenAcceptOffer",
+      Account,
+      SellOffer: OfferID,
+    };
+    const offer = await this.createPayload({
+      txjson: transactionBlob,
+    });
+    devlog("offer accepted", offer);
+    return offer;
   }
 }
 

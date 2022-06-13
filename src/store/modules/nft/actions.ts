@@ -7,9 +7,12 @@ import {
   createBuyOffer,
   cancelBuyOffer,
 } from "../../../services/XrpService";
+import XummSdk from "../../../services/XummService";
 import { ActionTree } from "vuex";
 import { NFT } from "../../../models/NFT";
 import { NFTState } from "./state";
+import { isInXumm } from "../../../utils/isInXumm";
+import { devlog } from "../../../utils/devlog";
 type line = {
   balance: string;
   limit: string;
@@ -87,11 +90,27 @@ const actions: ActionTree<NFT, NFTState> = {
     { commit },
     { walletAddress, TokenID, amount }
   ): Promise<void> {
-    const sellOffer = await createSellOffer({ walletAddress, TokenID, amount });
+    let sellOffer;
+    if (isInXumm()) {
+      sellOffer = XummSdk.createSellOffer({ walletAddress, TokenID, amount });
+      devlog("sellOffer", sellOffer);
+    } else {
+      sellOffer = await createSellOffer({
+        walletAddress,
+        TokenID,
+        amount,
+      });
+    }
     commit("addSellOffer", sellOffer);
   },
   async cancelOffer({ commit }, { TokenID, OfferID }): Promise<void> {
-    const sellOffer = await cancelOffer({ TokenID, OfferID });
+    let sellOffer;
+    if (isInXumm()) {
+      sellOffer = XummSdk.cancelOffer({ TokenID, TokenIDs: [OfferID] });
+      devlog("sellOffer", sellOffer);
+    } else {
+      sellOffer = await cancelOffer({ TokenID, OfferID });
+    }
     const newSellOffers = sellOffer ? sellOffer : [];
     commit("addSellOffer", newSellOffers);
   },

@@ -26,9 +26,12 @@ import { computed, defineComponent } from "vue";
 import AsyncButton from "@/components/AsyncButton.vue";
 
 import { getInspectorUrl } from "../utils/getInspectorUrl";
+import { isInXumm } from "../utils/isInXumm";
+import { devlog } from "../utils/devlog";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { acceptOffer } from "../services/XrpService";
+import XummSdk from "../services/XummService";
 export default defineComponent({
   components: {
     AsyncButton,
@@ -40,6 +43,7 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
     const network = computed(() => store.getters["user/getNetwork"]);
+    const walletaddress = computed(() => store.getters["user/getAddress"]);
 
     const bihompUrl = computed(() =>
       getInspectorUrl(network.value, props.offer.nft_offer_index)
@@ -48,7 +52,18 @@ export default defineComponent({
     return {
       bihompUrl,
       async accept() {
-        await acceptOffer({ OfferID: props.offer.nft_offer_index });
+        let sellOffer;
+        if (isInXumm()) {
+          sellOffer = XummSdk.cancelOffer({
+            Account: walletaddress.value,
+            OfferID: props.offer.nft_offer_index,
+          });
+          devlog("sellOffer", sellOffer);
+        } else {
+          await acceptOffer({
+            OfferID: props.offer.nft_offer_index,
+          });
+        }
         router.push({
           path: `/wallet`,
         });
