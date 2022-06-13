@@ -42,7 +42,6 @@ export default defineComponent({
     token: { type: String, required: true },
   },
   async setup(props) {
-    console.log(props.offer);
     const store = useStore();
 
     function shareUrl() {

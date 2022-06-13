@@ -521,7 +521,6 @@ export async function fetchNextXls20WithSellOffer(
         const schema = await getOneXls({ URI, Issuer, NFTokenID });
         const sellOffersResponse = await fetchSellOffers(NFTokenID);
         const buyOffersResponse = await fetchBuyOffers(NFTokenID);
-        debugger;
         return {
           ...schema,
           selloffers:
@@ -665,11 +664,9 @@ export async function createBuyOffer({
       wallet,
     });
     const buyOffer = await fetchBuyOffers(TokenID);
-    debugger;
     return buyOffer;
   } catch (error) {
     devlog(error);
-    debugger;
   }
 }
 

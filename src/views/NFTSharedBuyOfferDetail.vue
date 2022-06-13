@@ -165,15 +165,10 @@ export default defineComponent({
     nft.value = await getOneXls({ URI, Issuer, NFTokenID });
 
     const { offers } = buyOffers;
-    debugger;
-
     if (offers) {
-      debugger;
-
       offer.value = offers.find((o: any) => o.nft_offer_index === offerId);
     }
     if (offer.value) {
-      debugger;
       store.commit("nft/addSharedBuyOffer", {
         buyoffer: offer.value,
         walletaddress: walletAddress.value,

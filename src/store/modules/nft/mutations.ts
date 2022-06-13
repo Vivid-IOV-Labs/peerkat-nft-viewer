@@ -54,34 +54,21 @@ const mutations: MutationTree<NFTState> = {
     state.sharedBuyOffers[walletaddress] = {};
   },
   addSharedBuyOffer(state: NFTState, { buyoffer, walletaddress, nftID }: any) {
-    console.log("state.sharedBuyOffers");
-    console.log(state.sharedBuyOffers);
-    debugger;
-    console.log(state.sharedBuyOffers[walletaddress]);
-    debugger;
     if (!state.sharedBuyOffers[walletaddress]) {
       state.sharedBuyOffers[walletaddress] = {};
     }
-    console.log(state.sharedBuyOffers[walletaddress]);
-    debugger;
     if (!state.sharedBuyOffers[walletaddress][nftID]) {
       state.sharedBuyOffers[walletaddress][nftID] = [buyoffer];
-      console.log(state.sharedBuyOffers[walletaddress]);
-      debugger;
     } else {
-      debugger;
       const exist =
         state.sharedBuyOffers[walletaddress][nftID].filter((o: any) => {
-          debugger;
           return o.nft_offer_index == buyoffer.nft_offer_index;
         }).length > 0;
-      debugger;
       if (!exist) {
         state.sharedBuyOffers[walletaddress][nftID] = [
           ...state.sharedBuyOffers[walletaddress][nftID],
           buyoffer,
         ];
-        debugger;
       }
     }
   },
@@ -91,8 +78,6 @@ const mutations: MutationTree<NFTState> = {
   ): void {
     const exist = state.sharedwithme[walletaddress][nodetype].find(
       (n: { issuer: string; currency: string }) => {
-        console.log(n.issuer, shared.issuer);
-        console.log(n.currency, shared.currency);
         return n.issuer === shared.issuer && n.currency === shared.currency;
       }
     );

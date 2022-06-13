@@ -37,6 +37,42 @@ class XummService {
   async getStorage() {
     return await Sdk.storage.get();
   }
+  async createSellOffer({ Account, TokenID, Amount }: any) {
+    const transactionBlob = {
+      TransactionType: "NFTokenCreateOffer",
+      Account,
+      TokenID,
+      Amount,
+      Flags: 1,
+    };
+    await this.createPayload({
+      txjson: transactionBlob,
+    });
+  }
+  async createBuyOffer({ Account, TokenID, Amount, Owner }: any) {
+    const transactionBlob = {
+      TransactionType: "NFTokenCreateOffer",
+      Account,
+      Owner,
+      TokenID,
+      Amount,
+      Flags: 1,
+    };
+
+    await this.createPayload({
+      txjson: transactionBlob,
+    });
+  }
+  async cancelOffer({ Account, TokenIDs }: any) {
+    const transactionBlob = {
+      TransactionType: "NFTokenCancelOffer",
+      Account,
+      TokenIDs,
+    };
+    await this.createPayload({
+      txjson: transactionBlob,
+    });
+  }
 }
 
 const XummSDK = new XummService();

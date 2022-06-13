@@ -44,7 +44,6 @@ export default defineComponent({
     owner: { type: String, required: true },
   },
   async setup(props) {
-    console.log(props.offer);
     const store = useStore();
     const network = computed(() => store.getters["user/getNetwork"]);
 
