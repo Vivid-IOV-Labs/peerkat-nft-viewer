@@ -48,7 +48,7 @@
           </div>
         </div>
       </div>
-      <div v-if="showTab === 'buy'" class="p-4">
+      <div v-if="showTab === 'buy' && nft.buyoffers" class="p-4">
         <div v-if="nft.buyoffers.length == 0">
           <p>
             Peerkat is not able to find any buy offers, shared with this wallet
@@ -105,6 +105,7 @@
 </template>
 
 <script lang="ts">
+debugger;
 import { defineComponent, computed, ref } from "vue";
 import AcceptSellOfferCard from "@/components/AcceptSellOfferCard.vue";
 import SellNftCard from "@/components/SellNftCard.vue";
