@@ -21,7 +21,9 @@
           :class="{ active: showTab === 'sell' }"
           href="#"
           @click="showTab = 'sell'"
-          >Sell Offers Shared With Me ({{ nft.selloffers.length }})</a
+          >Sell Offers Shared With Me ({{
+            nft.selloffers && nft.selloffers.length
+          }})</a
         >
       </li>
     </ul>
