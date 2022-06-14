@@ -1,5 +1,5 @@
 <template>
-  <div v-if="nft" style="height: 100%; overflow: hidden">
+  <div v-if="nft">
     <sell-nft-card v-if="nft" :nft="nft">
       <template #footer>
         <base-button @click="openSellDialog">Create Buy Offer</base-button>
@@ -27,7 +27,7 @@
         >
       </li>
     </ul>
-    <div class="p-4" style="height: 60%; overflow-y: scroll">
+    <div>
       <div v-if="showTab === 'sell' && nft.selloffers">
         <div v-if="nft.selloffers.length == 0">
           <p>
@@ -48,7 +48,7 @@
           </div>
         </div>
       </div>
-      <div v-if="showTab === 'buy' && nft.buyoffers" class="p-4">
+      <div v-if="showTab === 'buy' && nft.buyoffers">
         <div v-if="nft.buyoffers.length == 0">
           <p>
             Peerkat is not able to find any buy offers, shared with this wallet
