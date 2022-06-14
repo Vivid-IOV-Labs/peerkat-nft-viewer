@@ -1,5 +1,5 @@
 <template>
-  <div v-if="nft" style="height: 100%; overflow: hidden">
+  <div v-if="nft">
     <base-dialog v-model="toggleSellDialog" :cancellable="true" title="Sell">
       <template #body>
         <strong class="h6 font-weight-bold">Token Name </strong><br />
@@ -55,7 +55,7 @@
         </a>
       </li>
     </ul>
-    <div style="height: 50%; overflow-y: scroll">
+    <div>
       <div v-if="showTab === 'sell'">
         <div v-if="nft.selloffers.length == 0">
           <p>
