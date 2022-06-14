@@ -1,9 +1,6 @@
 <template>
   <div v-if="nft">
-    <router-link
-      :to="{ path: `/shared_buy_offers` }"
-      class="mb-4 btn btn-link w-100"
-    >
+    <router-link :to="{ path: `/wallet` }" class="mb-4 btn btn-link w-100">
       Back
     </router-link>
     <h2 class="text-center">Sell Offer</h2>

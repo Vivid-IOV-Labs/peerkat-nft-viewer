@@ -1,9 +1,6 @@
 <template>
   <div>
-    <router-link
-      :to="{ path: `/shared_sell_offers` }"
-      class="mb-4 btn btn-link w-100"
-    >
+    <router-link :to="{ path: `/shared` }" class="mb-4 btn btn-link w-100">
       Back
     </router-link>
     <h2 class="text-center">Sell Offer</h2>
