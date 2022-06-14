@@ -33,6 +33,11 @@ import { copyText } from "../utils/copytext";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
 import { useStore } from "vuex";
 
+import { isInXumm } from "../utils/isInXumm";
+import { devlog } from "../utils/devlog";
+import XummSdk from "../services/XummService";
+import { openSignRequest } from "../utils/XummActions";
+
 export default defineComponent({
   components: {
     BaseButton,
@@ -61,11 +66,22 @@ export default defineComponent({
     }
     return {
       bihompUrl,
+
       async cancelOffer() {
-        await store.dispatch("nft/cancelBuyOffer", {
-          TokenID: props.token,
-          OfferID: props.offer.nft_offer_index,
-        });
+        if (isInXumm()) {
+          const resp = XummSdk.cancelOffer({
+            TokenID: props.token,
+            TokenIDs: [props.offer.nft_offer_index],
+          });
+          devlog("cancell", resp);
+          const { uuid } = resp;
+          openSignRequest(uuid);
+        } else {
+          await store.dispatch("nft/cancelBuyOffer", {
+            TokenID: props.token,
+            OfferID: props.offer.nft_offer_index,
+          });
+        }
       },
       share() {
         const params = {

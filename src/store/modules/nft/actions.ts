@@ -107,7 +107,7 @@ const actions: ActionTree<NFT, NFTState> = {
     let sellOffer;
     if (isInXumm()) {
       sellOffer = XummSdk.cancelOffer({ TokenID, TokenIDs: [OfferID] });
-      devlog("sellOffer", sellOffer);
+      devlog("cancell", sellOffer);
     } else {
       sellOffer = await cancelOffer({ TokenID, OfferID });
     }
