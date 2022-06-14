@@ -55,7 +55,7 @@
         </a>
       </li>
     </ul>
-    <div class="p-4" style="height: 60%; overflow-y: scroll">
+    <div style="height: 50%; overflow-y: scroll">
       <div v-if="showTab === 'sell'">
         <div v-if="nft.selloffers.length == 0">
           <p>
@@ -77,7 +77,7 @@
           </div>
         </div>
       </div>
-      <div v-if="showTab === 'buy'" class="p-4">
+      <div v-if="showTab === 'buy'">
         <div v-if="!sharedBUyOffers || sharedBUyOffers.length == 0">
           <p>
             Peerkat is not able to find any buy offers, shared with this wallet
