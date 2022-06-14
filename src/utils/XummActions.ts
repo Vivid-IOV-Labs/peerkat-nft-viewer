@@ -1,3 +1,5 @@
+import { devlog } from "./devlog";
+
 function command(message: any) {
   if (typeof window.ReactNativeWebView !== "undefined") {
     window.ReactNativeWebView.postMessage(JSON.stringify(message));
@@ -16,4 +18,5 @@ export function openSignRequest(uuid: string): void {
     command: "openSignRequest",
     uuid,
   });
+  devlog("Opensinge request uuid");
 }
