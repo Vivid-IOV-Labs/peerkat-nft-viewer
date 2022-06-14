@@ -138,7 +138,7 @@ const routes = [
       },
       {
         path: "/shared_sell_offers",
-        name: "OfferShared",
+        name: "SellOfferShared",
         component: () => import("../views/Shared.vue"),
         meta: {
           announcer: {
@@ -148,7 +148,7 @@ const routes = [
         children: [
           {
             path: "",
-            name: "OfferSharedList",
+            name: "SellOfferSharedList",
             component: () => import("../views/OfferShared.vue"),
             meta: {
               withAuth: true,
@@ -168,7 +168,7 @@ const routes = [
       },
       {
         path: "/shared_buy_offers",
-        name: "OfferShared",
+        name: "SharedBuyOffers",
         component: () => import("../views/Shared.vue"),
         meta: {
           announcer: {
@@ -178,7 +178,7 @@ const routes = [
         children: [
           {
             path: "",
-            name: "OfferSharedList",
+            name: "SharedBuyOffersList",
             component: () => import("../views/OfferShared.vue"),
             meta: {
               withAuth: true,
@@ -187,7 +187,7 @@ const routes = [
           },
           {
             path: ":offerId/:nftId/:owner",
-            name: "NFTSharedSellOfferDetail",
+            name: "NFTSharedBuyOfferDetail",
             component: () => import("../views/NFTSharedBuyOfferDetail.vue"),
             meta: {
               withAuth: true,

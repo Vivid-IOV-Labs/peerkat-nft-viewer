@@ -166,7 +166,7 @@ export default defineComponent({
     if (offers) {
       offer.value = offers.find((o: any) => o.nft_offer_index === offerId);
     }
-    if (offer.value) {
+    if (offer.value && nft.value) {
       // store.commit("nft/addSharedSellOffers", {
       //   selloffer: { nft: nft.value, offer: offer.value },
       //   walletaddress: walletAddress.value,
