@@ -85,11 +85,11 @@ class XummService {
       Account,
       SellOffer: OfferID,
     };
-    const offer = await this.createPayload({
+    const resp = await this.createPayload({
       txjson: transactionBlob,
     });
-    devlog("offer accepted", offer);
-    return offer;
+    devlog("accept offer to sign", resp);
+    return resp;
   }
 }
 

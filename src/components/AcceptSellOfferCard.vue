@@ -32,6 +32,7 @@ import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { acceptOffer } from "../services/XrpService";
 import XummSdk from "../services/XummService";
+import { openSignRequest } from "../utils/XummActions";
 export default defineComponent({
   components: {
     AsyncButton,
@@ -54,19 +55,21 @@ export default defineComponent({
       async accept() {
         let sellOffer;
         if (isInXumm()) {
-          sellOffer = XummSdk.cancelOffer({
+          sellOffer = XummSdk.acceptOffer({
             Account: walletaddress.value,
             OfferID: props.offer.nft_offer_index,
           });
           devlog("sellOffer", sellOffer);
+          const { uuid } = sellOffer;
+          openSignRequest(uuid);
         } else {
           await acceptOffer({
             OfferID: props.offer.nft_offer_index,
           });
+          router.push({
+            path: `/wallet`,
+          });
         }
-        router.push({
-          path: `/wallet`,
-        });
       },
     };
   },
