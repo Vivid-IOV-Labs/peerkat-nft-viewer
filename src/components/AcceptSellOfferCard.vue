@@ -63,7 +63,7 @@ export default defineComponent({
           });
           devlog("sellOffer", sellOffer);
           const { uuid } = sellOffer;
-          openSignRequest(uuid);
+          // openSignRequest(uuid);
         } else {
           await acceptOffer({
             OfferID: props.offer.nft_offer_index,
