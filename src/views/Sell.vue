@@ -164,6 +164,8 @@ export default defineComponent({
       },
       async confirmSell() {
         if (isInXumm()) {
+          devlog("isInXumm", isInXumm);
+
           const resp = XummSdk.createSellOffer({
             Account: walletAddress.value,
             TokenID: nft.value.currency,
