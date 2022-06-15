@@ -28,8 +28,8 @@ class XummService {
     return ottdata;
   }
   async createPayload(newPayload: any, userToken: string): Promise<any> {
-    const pong = await Sdk.ping();
-    devlog("ping pong", pong.application);
+    // const pong = await Sdk.ping();
+    // devlog("ping pong", pong.application);
     devlog("createPayload", {
       user_token: userToken,
       txjson: newPayload,
