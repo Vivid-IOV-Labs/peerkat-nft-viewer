@@ -18,5 +18,5 @@ export function openSignRequest(uuid: string): void {
     command: "openSignRequest",
     uuid,
   });
-  devlog("Opensinge request uuid");
+  devlog("Opensinge request uuid", uuid);
 }
