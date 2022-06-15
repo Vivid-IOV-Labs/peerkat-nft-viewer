@@ -75,7 +75,7 @@ class XummService {
 
     try {
       const { created } = await this.createPayload(transactionBlob, User);
-      devlog("Sell offercreated", offer);
+      devlog("Sell offercreated", created);
       return created;
     } catch (error) {
       devlog("Sell offercreated error", error);
