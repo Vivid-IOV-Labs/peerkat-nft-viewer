@@ -30,10 +30,10 @@ class XummService {
   async createPayload(newPayload: any, userToken: string): Promise<any> {
     // const pong = await Sdk.ping();
     // devlog("ping pong", pong.application);
-    devlog("createPayload", {
-      user_token: userToken,
-      txjson: newPayload,
-    });
+    // devlog("createPayload", {
+    //   user_token: userToken,
+    //   txjson: newPayload,
+    // });
 
     try {
       // const created = await Sdk.payload.createAndSubscribe({
@@ -49,8 +49,6 @@ class XummService {
           Destination: "rwietsevLFg8XSmG3bEZzFein1g8RBqWDZ",
         },
       });
-
-      devlog("createPayload", created);
 
       return created;
     } catch (error) {
@@ -74,7 +72,7 @@ class XummService {
     devlog("Sell transactionBlob", transactionBlob);
 
     try {
-      const { created } = await this.createPayload(transactionBlob, User);
+      const created = await this.createPayload(transactionBlob, User);
       devlog("Sell offercreated", created);
       return created;
     } catch (error) {
