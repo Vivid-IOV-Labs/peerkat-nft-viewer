@@ -141,6 +141,7 @@ export default defineComponent({
 
     const showTab = ref("buy");
     const walletAddress = computed(() => store.getters["user/getAddress"]);
+    const user = computed(() => store.getters["user/getUser"]);
 
     return {
       nft,
@@ -161,6 +162,7 @@ export default defineComponent({
             TokenID: nft.value.currency,
             Owner: nft.value.issuer,
             Amount: (saleamount.value * 1000).toString(),
+            User: user.value,
           });
           devlog("cancell", resp);
           const { uuid } = resp;

@@ -51,6 +51,7 @@ export default defineComponent({
   async setup(props) {
     const store = useStore();
     const network = computed(() => store.getters["user/getNetwork"]);
+    const user = computed(() => store.getters["user/getUser"]);
 
     const bihompUrl = computed(() =>
       getInspectorUrl(network.value, props.token)
@@ -72,6 +73,7 @@ export default defineComponent({
           const resp = XummSdk.cancelOffer({
             TokenID: props.token,
             TokenIDs: [props.offer.nft_offer_index],
+            User: user.value,
           });
           devlog("cancell", resp);
           const { uuid } = resp;

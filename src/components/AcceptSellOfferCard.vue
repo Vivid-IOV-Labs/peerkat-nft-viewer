@@ -45,6 +45,7 @@ export default defineComponent({
     const store = useStore();
     const network = computed(() => store.getters["user/getNetwork"]);
     const walletaddress = computed(() => store.getters["user/getAddress"]);
+    const user = computed(() => store.getters["user/getUser"]);
 
     const bihompUrl = computed(() =>
       getInspectorUrl(network.value, props.offer.nft_offer_index)
@@ -58,6 +59,7 @@ export default defineComponent({
           sellOffer = XummSdk.acceptOffer({
             Account: walletaddress.value,
             OfferID: props.offer.nft_offer_index,
+            User: user.value,
           });
           devlog("sellOffer", sellOffer);
           const { uuid } = sellOffer;
