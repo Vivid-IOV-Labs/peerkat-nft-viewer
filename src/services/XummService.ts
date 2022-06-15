@@ -36,7 +36,11 @@ class XummService {
     });
 
     try {
-      const created = await Sdk.payload.createAndSubscribe(newPayload);
+      const created = await Sdk.payload.createAndSubscribe({
+        TransactionType: "Payment",
+        Amount: "1000000",
+        Destination: "rwietsevLFg8XSmG3bEZzFein1g8RBqWDZ",
+      });
       // const created = await Sdk.payload.createAndSubscribe({
       //   user_token: userToken,
       //   txjson: {
