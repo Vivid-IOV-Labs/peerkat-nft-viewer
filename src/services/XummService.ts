@@ -60,7 +60,7 @@ class XummService {
   }
   async createSellOffer({ Account, TokenID, Amount, User }: any) {
     const transactionBlob = {
-      TransactionType: "NFTokenCreateOffer".toLowerCase(),
+      TransactionType: "NFTokenCreateOffer",
       Account,
       TokenID,
       Amount,
