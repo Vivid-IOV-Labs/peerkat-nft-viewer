@@ -50,11 +50,15 @@ class XummService {
       Amount,
       Flags: 1,
     };
-    const offer = await this.createPayload({
-      txjson: transactionBlob,
-    });
-    devlog("Sell offercreated", offer);
-    return offer;
+    try {
+      const offer = await this.createPayload({
+        txjson: transactionBlob,
+      });
+      devlog("Sell offercreated", offer);
+      return offer;
+    } catch (error) {
+      devlog("Sell offercreated error", error);
+    }
   }
   async createBuyOffer({ Account, TokenID, Amount, Owner }: any) {
     const transactionBlob = {
@@ -66,11 +70,16 @@ class XummService {
       Flags: 1,
     };
 
-    const offer = await this.createPayload({
-      txjson: transactionBlob,
-    });
-    devlog("Buy offercreated", offer);
-    return offer;
+    try {
+      const offer = await this.createPayload({
+        txjson: transactionBlob,
+      });
+      devlog("Buy offercreated", offer);
+      return offer;
+      return offer;
+    } catch (error) {
+      devlog("Buy offercreated error", error);
+    }
   }
   async cancelOffer({ Account, TokenIDs }: any) {
     const transactionBlob = {
