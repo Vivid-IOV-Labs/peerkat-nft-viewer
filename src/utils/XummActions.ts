@@ -18,5 +18,6 @@ export function openSignRequest(uuid: string): void {
     command: "openSignRequest",
     uuid,
   });
+  window.ReactNativeWebView.onMessage(console.log);
   devlog("Opensinge request uuid");
 }

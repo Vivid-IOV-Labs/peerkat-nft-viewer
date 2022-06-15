@@ -117,6 +117,10 @@ import AsyncButton from "@/components/AsyncButton.vue";
 import { useStore } from "vuex";
 import { devlog } from "../utils/devlog";
 
+import { isInXumm } from "../utils/isInXumm";
+import XummSdk from "../services/XummService";
+import { openSignRequest } from "../utils/XummActions";
+
 export default defineComponent({
   components: {
     AcceptSellOfferCard,
@@ -147,43 +151,33 @@ export default defineComponent({
         toggleSellDialog.value = true;
       },
       async confirmSell() {
-        try {
-          await store.dispatch("nft/createBuyOffer", {
-            walletAddress: walletAddress.value,
+        devlog("isInXumm", isInXumm);
+
+        if (isInXumm()) {
+          devlog("isInXumm", isInXumm);
+
+          const resp = XummSdk.createBuyOffer({
+            Account: walletAddress.value,
             TokenID: nft.value.currency,
             Owner: nft.value.issuer,
-            Amount: saleamount.value,
+            Amount: (saleamount.value * 1000).toString(),
           });
-          toggleSellDialog.value = false;
-          // const sellOffer = await createSellOffer({
-          //   walletAddress: walletAddress.value,
-          //   TokenID: nft.value.currency,
-          //   amount: saleamount.value,
-          // });
-          //   const transactionBlob = {
-          //     TransactionType: "NFTokenCreateOffer",
-          //     Account: walletAddress.value,
-          //     TokenID: props.nft.currency,
-          //     Amount: saleamount.value,
-          //     Flags: 1, //parseInt(flags.value)
-          //   };
-          //   XummSdk.createPayload({
-          //     // user_token: user.value,
-          //     txjson: {
-          //       TransactionType: "Payment",
-          //       Destination: "rsC8uuD5EzkDJESoFbttHWZxzNv8JYdmCw",
-          //       Fee: "12",
-          //     },
-          //   });
-          //   devlog("CretaPayload", {
-          //     user_token: user.value,
-          //     txjson: transactionBlob,
-          //   });
-        } catch (error) {
-          devlog("CretaPayload", error);
+          devlog("cancell", resp);
+          const { uuid } = resp;
+          openSignRequest(uuid);
+        } else {
+          try {
+            await store.dispatch("nft/createBuyOffer", {
+              walletAddress: walletAddress.value,
+              TokenID: nft.value.currency,
+              Owner: nft.value.issuer,
+              Amount: saleamount.value,
+            });
+          } catch (error) {
+            devlog("CretaPayload", error);
+          }
         }
-
-        // openSignRequest(user.value);
+        toggleSellDialog.value = false;
       },
     };
   },

@@ -25,9 +25,12 @@ class XummService {
   }
   async createPayload(newPayload: any): Promise<any> {
     const pong = await Sdk.ping();
-    console.log(pong.application);
+    devlog("ping pong", pong.application);
+
     try {
       const created = await Sdk.payload.create(newPayload);
+      devlog("createPayload", created);
+
       return created;
     } catch (error) {
       devlog("createpayload", error);
@@ -50,7 +53,7 @@ class XummService {
     const offer = await this.createPayload({
       txjson: transactionBlob,
     });
-    devlog("offercreated", offer);
+    devlog("Sell offercreated", offer);
     return offer;
   }
   async createBuyOffer({ Account, TokenID, Amount, Owner }: any) {
@@ -66,7 +69,7 @@ class XummService {
     const offer = await this.createPayload({
       txjson: transactionBlob,
     });
-    devlog("offercreated", offer);
+    devlog("Buy offercreated", offer);
     return offer;
   }
   async cancelOffer({ Account, TokenIDs }: any) {
