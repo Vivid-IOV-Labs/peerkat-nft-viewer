@@ -24,6 +24,8 @@ class XummService {
     return ottdata;
   }
   async createPayload(newPayload: any): Promise<any> {
+    const pong = await Sdk.ping();
+    console.log(pong.application);
     try {
       const created = await Sdk.payload.create(newPayload);
       return created;
