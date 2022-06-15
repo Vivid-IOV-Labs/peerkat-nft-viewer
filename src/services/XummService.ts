@@ -36,10 +36,7 @@ class XummService {
     });
 
     try {
-      const created = await Sdk.payload.createAndSubscribe({
-        user_token: userToken,
-        txjson: newPayload,
-      });
+      const created = await Sdk.payload.createAndSubscribe(newPayload);
       // const created = await Sdk.payload.createAndSubscribe({
       //   user_token: userToken,
       //   txjson: {
@@ -65,10 +62,10 @@ class XummService {
   async createSellOffer({ Account, TokenID, Amount, User }: any) {
     const transactionBlob = {
       TransactionType: "NFTokenCreateOffer",
-      //Account,
+      Account,
       TokenID,
-      // Amount,
-      // Flags: 1,
+      Amount,
+      Flags: 1,
     };
     devlog("Sell transactionBlob", transactionBlob);
 
