@@ -163,6 +163,8 @@ export default defineComponent({
         toggleSellDialog.value = true;
       },
       async confirmSell() {
+        devlog("isInXumm", isInXumm);
+
         if (isInXumm()) {
           devlog("isInXumm", isInXumm);
 
