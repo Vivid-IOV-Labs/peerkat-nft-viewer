@@ -60,12 +60,14 @@ class XummService {
   }
   async createSellOffer({ Account, TokenID, Amount, User }: any) {
     const transactionBlob = {
-      TransactionType: "NFTokenCreateOffer",
+      TransactionType: "NFTokenCreateOffer".toLowerCase(),
       Account,
       TokenID,
       Amount,
       Flags: 1,
     };
+    devlog("Sell transactionBlob", transactionBlob);
+
     try {
       const offer = await this.createPayload(transactionBlob, User);
       devlog("Sell offercreated", offer);
