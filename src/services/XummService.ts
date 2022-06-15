@@ -14,6 +14,10 @@ class XummService {
     }
     if (isInXumm()) {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const urlParams = new URLSearchParams(document.location.href);
+      const jwtToke = urlParams.get("xAppToken");
+      console.log("Sdk jwtToke", jwtToke);
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { XummSdkJwt } = require("xumm-sdk");
       Sdk = new XummSdkJwt(xummApiKey);
     }
