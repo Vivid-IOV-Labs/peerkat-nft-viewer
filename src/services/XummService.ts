@@ -67,8 +67,8 @@ class XummService {
       TransactionType: "NFTokenCreateOffer",
       Account,
       TokenID,
-      Amount,
-      Flags: 1,
+      // Amount,
+      // Flags: 1,
     };
     devlog("Sell transactionBlob", transactionBlob);
 
