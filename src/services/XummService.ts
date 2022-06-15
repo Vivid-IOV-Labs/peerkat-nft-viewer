@@ -36,7 +36,7 @@ class XummService {
       //   user_token: userToken,
       //   txjson: newPayload,
       // });
-      const created = await Sdk.payload.create({
+      const created = await Sdk.payload.createAndSubscribe({
         user_token: userToken,
         txjson: {
           TransactionType: "Payment",
