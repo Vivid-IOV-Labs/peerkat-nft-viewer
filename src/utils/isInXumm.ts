@@ -7,5 +7,9 @@ export function isInXumm(): boolean {
   console.log("xAppToken", jwtToke);
   console.log("xAppTokenInUrl", xAppTokenInUrl);
   console.log("isInXUmm", /xumm/.test(navigator.userAgent) || xAppTokenInUrl);
-  return /xumm/.test(navigator.userAgent) || xAppTokenInUrl;
+  return (
+    /xumm/.test(navigator.userAgent) ||
+    xAppTokenInUrl ||
+    document.location.href.includes("https://xappdev.peerkat.io")
+  );
 }
