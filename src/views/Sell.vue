@@ -175,7 +175,7 @@ export default defineComponent({
             Amount: (saleamount.value * 1000000).toString(),
             User: user.value,
           });
-          devlog("cancell", resp);
+          devlog("sell create confirm ", resp);
           const { uuid } = resp;
           openSignRequest(uuid);
         } else {
