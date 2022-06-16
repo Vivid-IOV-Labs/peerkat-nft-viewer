@@ -156,7 +156,7 @@ export default defineComponent({
         if (isInXumm()) {
           devlog("isInXumm", isInXumm);
 
-          const { created } = await XummSdk.createBuyOffer({
+          const created = await XummSdk.createBuyOffer({
             Account: walletAddress.value,
             NFTokenID: nft.value.currency,
             Owner: nft.value.issuer,
