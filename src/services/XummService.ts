@@ -75,12 +75,12 @@ class XummService {
       devlog("Sell offercreated error", error);
     }
   }
-  async createBuyOffer({ Account, TokenID, Amount, Owner, User }: any) {
+  async createBuyOffer({ Account, NFTokenID, Amount, Owner, User }: any) {
     const transactionBlob = {
       TransactionType: "NFTokenCreateOffer",
       Account,
       Owner,
-      TokenID,
+      NFTokenID,
       Amount,
       Flags: 1,
     };
