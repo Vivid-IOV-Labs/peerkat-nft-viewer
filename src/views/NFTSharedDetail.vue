@@ -161,11 +161,11 @@ export default defineComponent({
         console.log(nft.value);
         debugger;
 
-        store.commit("nft/addShared", {
-          shared: nft.value,
-          nodetype: nodetype.value,
-          walletaddress: user.value,
-        });
+        // store.commit("nft/addShared", {
+        //   shared: nft.value,
+        //   nodetype: nodetype.value,
+        //   walletaddress: user.value,
+        // });
       } catch (error) {
         malformedLink.value = true;
         devlog(error);
