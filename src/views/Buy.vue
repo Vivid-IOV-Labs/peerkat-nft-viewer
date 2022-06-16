@@ -156,15 +156,15 @@ export default defineComponent({
         if (isInXumm()) {
           devlog("isInXumm", isInXumm);
 
-          const resp = XummSdk.createBuyOffer({
+          const { created } = await XummSdk.createBuyOffer({
             Account: walletAddress.value,
             NFTokenID: nft.value.currency,
             Owner: nft.value.issuer,
             Amount: (saleamount.value * 1000).toString(),
             User: user.value,
           });
-          devlog("cancell", resp);
-          const { uuid } = resp;
+          devlog("create buy", created);
+          const { uuid } = created;
           openSignRequest(uuid);
         } else {
           try {
