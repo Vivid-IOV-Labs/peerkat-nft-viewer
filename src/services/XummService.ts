@@ -28,28 +28,15 @@ class XummService {
     return ottdata;
   }
   async createPayload(newPayload: any, userToken: string): Promise<any> {
-    // const pong = await Sdk.ping();
-    // devlog("ping pong", pong.application);
-    // devlog("createPayload", {
-    //   user_token: userToken,
-    //   txjson: newPayload,
-    // });
+    const pong = await Sdk.ping();
+    devlog("ping pong", pong.application);
 
-    try {
-      // const created = await Sdk.payload.createAndSubscribe({
-      //   TransactionType: "Payment",
-      //   Amount: "1000000",
-      //   Destination: "rwietsevLFg8XSmG3bEZzFein1g8RBqWDZ",
-      // });
-      const created = await Sdk.payload.create({
-        user_token: userToken,
-        txjson: newPayload,
-      });
+    const created = await Sdk.payload.create({
+      user_token: userToken,
+      txjson: newPayload,
+    });
 
-      return created;
-    } catch (error) {
-      devlog("createpayload", error);
-    }
+    return created;
   }
   async saveToStorage(toStore: any) {
     await Sdk.storage.set(toStore);
