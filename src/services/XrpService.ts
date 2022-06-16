@@ -524,6 +524,7 @@ export async function fetchNextXls20WithSellOffer(
         const schema = await getOneXls({ URI, Issuer, NFTokenID });
         const sellOffersResponse = await fetchSellOffers(NFTokenID);
         const buyOffersResponse = await fetchBuyOffers(NFTokenID);
+        devlog("buyOffersResponse", buyOffersResponse);
         return {
           ...schema,
           selloffers:
