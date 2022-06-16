@@ -57,11 +57,11 @@ class XummService {
   async getStorage() {
     return await Sdk.storage.get();
   }
-  async createSellOffer({ Account, TokenID, Amount, User }: any) {
+  async createSellOffer({ Account, NFTokenID, Amount, User }: any) {
     const transactionBlob = {
       TransactionType: "NFTokenCreateOffer",
       Account,
-      TokenID,
+      NFTokenID,
       Amount,
       Flags: 1,
     };
