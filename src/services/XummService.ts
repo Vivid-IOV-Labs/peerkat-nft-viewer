@@ -111,10 +111,15 @@ class XummService {
       Account,
       SellOffer: OfferID,
     };
-    const offer = await this.createPayload(transactionBlob, User);
 
-    devlog("accept offer to sign", offer);
-    return offer;
+    try {
+      const offer = await this.createPayload(transactionBlob, User);
+
+      devlog("Accept offer", offer);
+      return offer;
+    } catch (error) {
+      devlog("Accept offer error", error);
+    }
   }
 }
 

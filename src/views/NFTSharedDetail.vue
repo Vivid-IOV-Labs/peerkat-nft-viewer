@@ -151,13 +151,16 @@ export default defineComponent({
     const nft = ref<NFT | null>(null);
     async function fetchOneXls14() {
       try {
+        console.log(route.params.nftAddress);
+        console.log(route.params.currency);
+        debugger;
         nft.value = await client.value.fetchOne(
           route.params.nftAddress.toString(),
           route.params.currency.toString()
         );
         console.log(nft.value);
-        console.log(route.params.nftAddress);
-        console.log(route.params.currency);
+        debugger;
+
         store.commit("nft/addShared", {
           shared: nft.value,
           nodetype: nodetype.value,
@@ -169,18 +172,24 @@ export default defineComponent({
       }
     }
     async function fetchShared() {
+      console.log(walletAddress.value, route.params.currency.toString());
+      debugger;
+
       try {
         const nftXLS20 = await fetchOneXls20(
           walletAddress.value,
           route.params.currency.toString()
         );
+        debugger;
         if (nftXLS20) {
           nft.value = nftXLS20;
+          debugger;
           store.commit("nft/addShared", {
             shared: nft.value,
             nodetype: nodetype.value,
             walletaddress: user.value,
           });
+          debugger;
         } else {
           throw new Error("Not an XLS20");
         }

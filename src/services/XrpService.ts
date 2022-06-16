@@ -178,9 +178,11 @@ async function getOne(
   limitFormatted?: string
 ) {
   const { Domain } = account_data;
+  debugger;
   const source = is_hexadecimal(hexToString(Domain))
     ? hexToString(hexToString(Domain))
     : hexToString(Domain);
+  debugger;
   let url;
   let media_type;
   let desc;
@@ -456,8 +458,9 @@ export async function fetchOneXls20(
   const {
     result: { account_nfts },
   } = await getTokens(walletAddress);
+  debugger;
   const nftXLS20 = account_nfts.find((n: any) => n.NFTokenID == NFTokenID);
-
+  debugger;
   if (nftXLS20) {
     return getOneXls(nftXLS20);
   } else {
