@@ -709,6 +709,7 @@ export async function fetchBuyOffers(TokenID: string): Promise<any> {
       method: "nft_buy_offers",
       nft_id: TokenID,
     });
+    console.log("nft_buy_offers", result);
     return result;
   } catch (err) {
     devlog("No buy offers.");

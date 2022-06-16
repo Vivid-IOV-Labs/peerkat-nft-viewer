@@ -138,11 +138,18 @@ export default defineComponent({
     const nft = computed(() => store.getters["nft/getCurrent"]);
     const saleamount = ref(0);
     const toggleSellDialog = ref(false);
+    const buyoffers = ref([]);
 
     const showTab = ref("buy");
     const walletAddress = computed(() => store.getters["user/getAddress"]);
     const user = computed(() => store.getters["user/getUser"]);
-    const buyoffers = await fetchBuyOffers(nft.value.currency);
+
+    try {
+      buyoffers.value = await fetchBuyOffers(nft.value.currency);
+      console.log("buyoffers", buyoffers);
+    } catch (err) {
+      console.log("err", err);
+    }
 
     return {
       nft,
