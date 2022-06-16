@@ -6,7 +6,6 @@
     class="d-flex h-100 flex-row flex-nowrap overflow-auto pb-4"
     style="padding-bottom: 2rem"
   >
-    {{ xls20count.length }}
     <div v-for="(nft, index) in NFTMedia" :key="index" class="col-11">
       <nft-card v-if="nft" :nft="nft"></nft-card>
     </div>

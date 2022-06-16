@@ -105,7 +105,6 @@
 </template>
 
 <script lang="ts">
-debugger;
 import { defineComponent, computed, ref } from "vue";
 import AcceptSellOfferCard from "@/components/AcceptSellOfferCard.vue";
 import SellNftCard from "@/components/SellNftCard.vue";
