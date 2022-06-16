@@ -31,10 +31,15 @@ class XummService {
     const pong = await Sdk.ping();
     devlog("ping pong", pong.application);
 
-    const created = await Sdk.payload.create({
-      user_token: userToken,
-      txjson: newPayload,
-    });
+    const created = await Sdk.payload.createAndSubscribe(
+      {
+        user_token: userToken,
+        txjson: newPayload,
+      },
+      function (resp: any) {
+        console.log("response create adn subscribe", resp);
+      }
+    );
 
     return created;
   }
