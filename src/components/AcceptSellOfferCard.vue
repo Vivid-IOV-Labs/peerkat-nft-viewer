@@ -54,16 +54,15 @@ export default defineComponent({
     return {
       bihompUrl,
       async accept() {
-        let sellOffer;
         if (isInXumm()) {
-          sellOffer = XummSdk.acceptOffer({
+          const acceptOffer = XummSdk.acceptOffer({
             Account: walletaddress.value,
             OfferID: props.offer.nft_offer_index,
             User: user.value,
           });
-          devlog("sellOffer", sellOffer);
-          const { uuid } = sellOffer;
-          // openSignRequest(uuid);
+          devlog("acceptOffer", acceptOffer);
+          const { uuid } = acceptOffer;
+          openSignRequest(uuid);
         } else {
           await acceptOffer({
             OfferID: props.offer.nft_offer_index,

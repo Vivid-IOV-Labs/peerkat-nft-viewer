@@ -96,7 +96,7 @@ class XummService {
     const transactionBlob = {
       TransactionType: "NFTokenAcceptOffer",
       Account,
-      SellOffer: OfferID,
+      NFTokenSellOffer: OfferID,
     };
 
     try {
