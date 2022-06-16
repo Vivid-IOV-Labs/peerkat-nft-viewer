@@ -171,7 +171,7 @@ export default defineComponent({
 
           const resp = await XummSdk.createSellOffer({
             Account: walletAddress.value,
-            TokenID: nft.value.currency,
+            NFTokenID: nft.value.currency,
             Amount: (saleamount.value * 1000000).toString(),
             User: user.value,
           });
