@@ -160,7 +160,7 @@ export default defineComponent({
             Account: walletAddress.value,
             NFTokenID: nft.value.currency,
             Owner: nft.value.issuer,
-            Amount: (saleamount.value * 1000).toString(),
+            Amount: (saleamount.value * 1000000).toString(),
             User: user.value,
           });
           devlog("create buy", created);
