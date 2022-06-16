@@ -74,7 +74,7 @@ class XummService {
       Owner,
       NFTokenID,
       Amount,
-      Flags: 1,
+      Flags: 0,
     };
 
     try {
