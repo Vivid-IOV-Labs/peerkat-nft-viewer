@@ -130,6 +130,12 @@ import {
   fetchXls20,
   getOneXls,
 } from "../services/XrpService";
+
+import { isInXumm } from "../utils/isInXumm";
+import { devlog } from "../utils/devlog";
+import XummSdk from "../services/XummService";
+import { openSignRequest } from "../utils/XummActions";
+
 export default defineComponent({
   components: { BaseCard, ExternalLink, AsyncButton },
   async setup() {
@@ -184,10 +190,23 @@ export default defineComponent({
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
       async accept() {
-        await acceptOffer({ OfferID: offerId });
-        router.push({
-          path: `/wallet`,
-        });
+        if (isInXumm()) {
+          const { created } = await XummSdk.acceptOffer({
+            Account: walletaddress.value,
+            OfferID: props.offer.nft_offer_index,
+            User: user.value,
+          });
+          devlog("acceptOffer", created);
+          const { uuid } = created;
+          openSignRequest(uuid);
+        } else {
+          await acceptOffer({
+            OfferID: props.offer.nft_offer_index,
+          });
+          router.push({
+            path: `/wallet`,
+          });
+        }
       },
       view() {
         if (nft.value) {
