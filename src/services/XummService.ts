@@ -78,12 +78,11 @@ class XummService {
     };
 
     try {
-      const offer = await this.createPayload(transactionBlob, User);
-
-      devlog("Buy offercreated", offer);
-      return offer;
+      const created = await this.createPayload(transactionBlob, User);
+      devlog("Sell offercreated", created);
+      return created;
     } catch (error) {
-      devlog("Buy offercreated error", error);
+      devlog("Sell offercreated error", error);
     }
   }
   async cancelOffer({ Account, TokenIDs, User }: any) {
