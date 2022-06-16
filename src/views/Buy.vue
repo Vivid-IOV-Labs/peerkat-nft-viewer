@@ -57,7 +57,7 @@
         </div>
         <div v-else>
           <div
-            v-for="offer in nft.buyoffers"
+            v-for="offer in buyoffers"
             :key="offer.nft_offer_index"
             class="mt-4"
           >
@@ -118,6 +118,7 @@ import { devlog } from "../utils/devlog";
 
 import { isInXumm } from "../utils/isInXumm";
 import XummSdk from "../services/XummService";
+import { fetchBuyOffers } from "../services/XrpService";
 import { openSignRequest } from "../utils/XummActions";
 
 export default defineComponent({
@@ -141,10 +142,12 @@ export default defineComponent({
     const showTab = ref("buy");
     const walletAddress = computed(() => store.getters["user/getAddress"]);
     const user = computed(() => store.getters["user/getUser"]);
+    const buyoffers = await fetchBuyOffers(nft.value.currency);
 
     return {
       nft,
       saleamount,
+      buyoffers,
       toggleSellDialog,
       showTab,
       openSellDialog() {
