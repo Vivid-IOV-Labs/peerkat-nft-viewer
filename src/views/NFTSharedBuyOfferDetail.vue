@@ -193,7 +193,7 @@ export default defineComponent({
         if (isInXumm()) {
           const { created } = await XummSdk.acceptOffer({
             Account: walletaddress.value,
-            OfferID: props.offer.nft_offer_index,
+            OfferID: offer.value.nft_offer_index,
             User: user.value,
           });
           devlog("acceptOffer", created);
@@ -201,7 +201,7 @@ export default defineComponent({
           openSignRequest(uuid);
         } else {
           await acceptOffer({
-            OfferID: props.offer.nft_offer_index,
+            OfferID: offer.value.nft_offer_index,
           });
           router.push({
             path: `/wallet`,
