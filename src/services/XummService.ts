@@ -39,17 +39,14 @@ class XummService {
       // },
       newPayload,
       (event: any) => {
-        console.log("event", event);
-        console.log("event.data", event.data);
+        // console.log("event", event);
+        // console.log("event.data", event.data);
         if (typeof event.data.message !== "undefined") {
           const payloadEventId = event.data.message.split(" ")[1];
           console.log("payloadEventId", payloadEventId);
         }
         if (event.data.expires_in_seconds === 0) {
           console.log("expired");
-        }
-        if (event.data.signed === true) {
-          console.log("signed");
         }
         if (event.data.signed === true) {
           console.log("signed");

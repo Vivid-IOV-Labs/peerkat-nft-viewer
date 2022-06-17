@@ -90,10 +90,10 @@
             :key="offer.nft_offer_index"
             class="mt-4"
           >
-            <accept-sell-offer-card
+            <accept-buy-offer-card
               v-if="offer"
               :offer="offer"
-            ></accept-sell-offer-card>
+            ></accept-buy-offer-card>
           </div>
         </div>
       </div>
@@ -118,7 +118,7 @@
 import { defineComponent, computed, ref } from "vue";
 import SellCard from "@/components/SellCard.vue";
 import SellNftCard from "@/components/SellNftCard.vue";
-import AcceptSellOfferCard from "@/components/AcceptSellOfferCard.vue";
+import AcceptBuyOfferCard from "@/components/AcceptBuyOfferCard.vue";
 import BaseDialog from "@/components/BaseDialog.vue";
 import BaseInput from "@/components/BaseInput.vue";
 import BaseButton from "@/components/BaseButton.vue";
@@ -138,7 +138,7 @@ export default defineComponent({
     BaseInput,
     BaseButton,
     AsyncButton,
-    AcceptSellOfferCard,
+    AcceptBuyOfferCard,
   },
   async setup() {
     const store = useStore();
