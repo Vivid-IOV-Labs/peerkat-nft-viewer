@@ -607,7 +607,7 @@ export async function acceptBuyOffer({ OfferID }: any): Promise<any> {
   const transactionBlob = {
     TransactionType: "NFTokenAcceptOffer",
     Account: wallet.classicAddress,
-    SellOffer: OfferID,
+    NFTokenBuyOffer: OfferID,
   };
 
   try {
