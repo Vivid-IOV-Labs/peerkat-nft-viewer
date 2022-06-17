@@ -32,10 +32,12 @@ class XummService {
     devlog("ping pong", pong.application);
 
     const created = await Sdk.payload.createAndSubscribe(
-      {
-        user_token: userToken,
-        txjson: newPayload,
-      },
+      // {
+      //   user_token: userToken,
+      //   txjson:
+      //   newPayload,
+      // },
+      newPayload,
       function (resp: any) {
         console.log("response create adn subscribe", resp);
       }
@@ -101,6 +103,22 @@ class XummService {
       TransactionType: "NFTokenAcceptOffer",
       Account,
       NFTokenSellOffer: OfferID,
+    };
+
+    try {
+      const offer = await this.createPayload(transactionBlob, User);
+
+      devlog("Accept offer", offer);
+      return offer;
+    } catch (error) {
+      devlog("Accept offer error", error);
+    }
+  }
+  async acceptBuyOffer({ Account, OfferID, User }: any) {
+    const transactionBlob = {
+      TransactionType: "NFTokenAcceptOffer",
+      Account,
+      NFTokenBuyOffer: OfferID,
     };
 
     try {
