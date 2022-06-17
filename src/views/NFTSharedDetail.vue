@@ -161,11 +161,11 @@ export default defineComponent({
         console.log(nft.value);
         debugger;
 
-        // store.commit("nft/addShared", {
-        //   shared: nft.value,
-        //   nodetype: nodetype.value,
-        //   walletaddress: user.value,
-        // });
+        store.commit("nft/addShared", {
+          shared: nft.value,
+          nodetype: nodetype.value,
+          walletaddress: user.value,
+        });
       } catch (error) {
         malformedLink.value = true;
         devlog(error);
@@ -177,7 +177,7 @@ export default defineComponent({
 
       try {
         const nftXLS20 = await fetchOneXls20(
-          walletAddress.value,
+          route.params.nftAddress.toString(),
           route.params.currency.toString()
         );
         debugger;
