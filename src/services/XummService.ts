@@ -38,8 +38,20 @@ class XummService {
       //   newPayload,
       // },
       newPayload,
-      function (resp: any) {
-        console.log("response create adn subscribe", resp);
+      (event: any) => {
+        if (typeof event.data.message !== "undefined") {
+          const payloadEventId = event.data.message.split(" ")[1];
+          console.log(payloadEventId);
+        }
+        if (event.data.expires_in_seconds === 0) {
+          console.log("expired");
+        }
+        if (event.data.signed === true) {
+          console.log("signed");
+        }
+        if (event.data.signed === false) {
+          console.log("not signed");
+        }
       }
     );
 
