@@ -48,8 +48,8 @@
           </div>
         </div>
       </div>
-      <div v-if="showTab === 'buy' && nft.buyoffers">
-        <div v-if="nft.buyoffers.length == 0">
+      <div v-if="showTab === 'buy' && buyoffers">
+        <div v-if="buyoffers.length == 0">
           <p>
             Peerkat is not able to find any buy offers, shared with this wallet
             for this NFT
@@ -145,8 +145,9 @@ export default defineComponent({
     const user = computed(() => store.getters["user/getUser"]);
 
     try {
-      buyoffers.value = await fetchBuyOffers(nft.value.currency);
-      console.log("buyoffers", buyoffers);
+      const { offers } = await fetchBuyOffers(nft.value.currency);
+      buyoffers.value = offers;
+      console.log("buyoffers", buyoffers.value);
     } catch (err) {
       console.log("err", err);
     }

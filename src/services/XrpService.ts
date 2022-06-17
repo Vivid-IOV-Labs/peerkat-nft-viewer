@@ -705,14 +705,12 @@ export async function fetchSellOffers(TokenID: string): Promise<any> {
 
 export async function fetchBuyOffers(TokenID: string): Promise<any> {
   try {
-    const {
-      result: { offers },
-    } = await client.request({
+    const { result } = await client.request({
       method: "nft_buy_offers",
       nft_id: TokenID,
     });
-    console.log("nft_buy_offers", offers);
-    return offers;
+    console.log("nft_buy_offers", result);
+    return result;
   } catch (err) {
     devlog("No buy offers.");
   }
