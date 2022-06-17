@@ -27,17 +27,19 @@ class XummService {
     devlog("OTTDATA", ottdata);
     return ottdata;
   }
-  async createPayload(newPayload: any, userToken: string): Promise<any> {
+  async createPayload(
+    newPayload: any,
+    userToken: string,
+    onSigned: any
+  ): Promise<any> {
     const pong = await Sdk.ping();
     devlog("ping pong", pong.application);
 
     const created = await Sdk.payload.createAndSubscribe(
-      // {
-      //   user_token: userToken,
-      //   txjson:
-      //   newPayload,
-      // },
-      newPayload,
+      {
+        user_token: userToken,
+        txjson: newPayload,
+      },
       (event: any) => {
         // console.log("event", event);
         // console.log("event.data", event.data);
@@ -50,6 +52,7 @@ class XummService {
         }
         if (event.data.signed === true) {
           console.log("signed");
+          onSigned();
         }
         if (event.data.signed === false) {
           console.log("not signed");
@@ -83,7 +86,10 @@ class XummService {
       devlog("Sell offercreated error", error);
     }
   }
-  async createBuyOffer({ Account, NFTokenID, Amount, Owner, User }: any) {
+  async createBuyOffer(
+    { Account, NFTokenID, Amount, Owner, User }: any,
+    onSigned: any
+  ) {
     const transactionBlob = {
       TransactionType: "NFTokenCreateOffer",
       Account,
@@ -94,25 +100,25 @@ class XummService {
     };
 
     try {
-      const created = await this.createPayload(transactionBlob, User);
+      const created = await this.createPayload(transactionBlob, User, onSigned);
       devlog("Sell offercreated", created);
       return created;
     } catch (error) {
       devlog("Sell offercreated error", error);
     }
   }
-  async cancelOffer({ Account, TokenIDs, User }: any) {
+  async cancelOffer({ Account, TokenIDs, User }: any, onSigned: any) {
     const transactionBlob = {
       TransactionType: "NFTokenCancelOffer",
       Account,
       TokenIDs,
     };
-    const offer = await this.createPayload(transactionBlob, User);
+    const offer = await this.createPayload(transactionBlob, User, onSigned);
 
     devlog("offercancelled", offer);
     return offer;
   }
-  async acceptOffer({ Account, OfferID, User }: any) {
+  async acceptOffer({ Account, OfferID, User }: any, onSigned: any) {
     const transactionBlob = {
       TransactionType: "NFTokenAcceptOffer",
       Account,
@@ -120,7 +126,7 @@ class XummService {
     };
 
     try {
-      const offer = await this.createPayload(transactionBlob, User);
+      const offer = await this.createPayload(transactionBlob, User, onSigned);
 
       devlog("Accept offer", offer);
       return offer;
@@ -128,7 +134,7 @@ class XummService {
       devlog("Accept offer error", error);
     }
   }
-  async acceptBuyOffer({ Account, OfferID, User }: any) {
+  async acceptBuyOffer({ Account, OfferID, User }: any, onSigned: any) {
     const transactionBlob = {
       TransactionType: "NFTokenAcceptOffer",
       Account,
@@ -136,7 +142,7 @@ class XummService {
     };
 
     try {
-      const offer = await this.createPayload(transactionBlob, User);
+      const offer = await this.createPayload(transactionBlob, User, onSigned);
 
       devlog("Accept offer", offer);
       return offer;
