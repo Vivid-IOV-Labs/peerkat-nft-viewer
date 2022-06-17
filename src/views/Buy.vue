@@ -44,6 +44,7 @@
             <accept-sell-offer-card
               v-if="offer"
               :offer="offer"
+              :issuer="nft.issuer"
             ></accept-sell-offer-card>
           </div>
         </div>
@@ -143,14 +144,16 @@ export default defineComponent({
     const showTab = ref("buy");
     const walletAddress = computed(() => store.getters["user/getAddress"]);
     const user = computed(() => store.getters["user/getUser"]);
-
-    try {
-      const { offers } = await fetchBuyOffers(nft.value.currency);
-      buyoffers.value = offers;
-      console.log("buyoffers", buyoffers.value);
-    } catch (err) {
-      console.log("err", err);
+    async function populateBuyOffers() {
+      try {
+        const { offers } = await fetchBuyOffers(nft.value.currency);
+        buyoffers.value = offers;
+        console.log("buyoffers", buyoffers.value);
+      } catch (err) {
+        console.log("err", err);
+      }
     }
+    await populateBuyOffers();
 
     return {
       nft,
@@ -167,13 +170,19 @@ export default defineComponent({
         if (isInXumm()) {
           devlog("isInXumm", isInXumm);
 
-          const { created } = await XummSdk.createBuyOffer({
-            Account: walletAddress.value,
-            NFTokenID: nft.value.currency,
-            Owner: nft.value.issuer,
-            Amount: (saleamount.value * 1000000).toString(),
-            User: user.value,
-          });
+          const { created } = await XummSdk.createBuyOffer(
+            {
+              Account: walletAddress.value,
+              NFTokenID: nft.value.currency,
+              Owner: nft.value.issuer,
+              Amount: (saleamount.value * 1000000).toString(),
+              User: user.value,
+            },
+            async () => {
+              await populateBuyOffers();
+              toggleSellDialog.value = false;
+            }
+          );
           devlog("create buy", created);
           const { uuid } = created;
           openSignRequest(uuid);
@@ -185,11 +194,11 @@ export default defineComponent({
               Owner: nft.value.issuer,
               Amount: saleamount.value,
             });
+            toggleSellDialog.value = false;
           } catch (error) {
             devlog("CretaPayload", error);
           }
         }
-        toggleSellDialog.value = false;
       },
     };
   },

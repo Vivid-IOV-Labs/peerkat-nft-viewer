@@ -39,11 +39,13 @@ export default defineComponent({
   },
   props: {
     offer: { type: Object, required: true },
+    issuer: { type: String, required: true },
   },
   async setup(props) {
     const router = useRouter();
     const store = useStore();
     const network = computed(() => store.getters["user/getNetwork"]);
+    const nodetype = computed(() => store.getters["user/getNodeType"]);
     const walletaddress = computed(() => store.getters["user/getAddress"]);
     const user = computed(() => store.getters["user/getUser"]);
 
@@ -55,11 +57,23 @@ export default defineComponent({
       bihompUrl,
       async accept() {
         if (isInXumm()) {
-          const { created } = await XummSdk.acceptOffer({
-            Account: walletaddress.value,
-            OfferID: props.offer.nft_offer_index,
-            User: user.value,
-          });
+          const { created } = await XummSdk.acceptOffer(
+            {
+              Account: walletaddress.value,
+              OfferID: props.offer.nft_offer_index,
+              User: user.value,
+            },
+            async () => {
+              await store.commit("nft/deleteShared", {
+                issuer: props.issuer,
+                nodetype: nodetype.value,
+                walletaddress: user.value,
+              });
+              router.push({
+                path: `/wallet`,
+              });
+            }
+          );
           devlog("acceptOffer", created);
           const { uuid } = created;
           openSignRequest(uuid);
