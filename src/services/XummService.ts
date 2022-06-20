@@ -111,7 +111,7 @@ class XummService {
     const transactionBlob = {
       TransactionType: "NFTokenCancelOffer",
       Account,
-      TokenIDs,
+      NFTokenOffers: TokenIDs,
     };
     const offer = await this.createPayload(transactionBlob, User, onSigned);
 
