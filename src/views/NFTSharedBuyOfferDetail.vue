@@ -156,12 +156,13 @@ export default defineComponent({
     const nftId = route.params.nftId.toString();
     const owner = route.params.owner.toString();
     const bihompUrl = computed(() =>
-      getInspectorUrl(network.value, route.params.offerId.toString())
+      getInspectorUrl(network.value, route.params.nftId.toString())
     );
     const nft = ref<any | null>(null);
     const offer = ref<any | null>(null);
     const buyOffers = await fetchBuyOffers(nftId);
     const account_nfts = await fetchXls20(owner);
+
     const currentNft = account_nfts.find((n: any) => n.NFTokenID == nftId);
 
     const { URI, Issuer, NFTokenID } = currentNft;

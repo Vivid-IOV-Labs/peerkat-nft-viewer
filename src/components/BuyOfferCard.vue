@@ -48,7 +48,8 @@ export default defineComponent({
     token: { type: String, required: true },
     owner: { type: String, required: true },
   },
-  async setup(props) {
+  emits: { "update:modelValue": null },
+  async setup(props, { emit }) {
     const store = useStore();
     const network = computed(() => store.getters["user/getNetwork"]);
     const user = computed(() => store.getters["user/getUser"]);
@@ -77,6 +78,7 @@ export default defineComponent({
               User: user.value,
             },
             async () => {
+              emit("singed");
               await store.commit("nft/deleteBuyOffer", {
                 offerID: props.offer.nft_offer_index,
               });

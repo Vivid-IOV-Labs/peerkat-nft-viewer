@@ -155,7 +155,7 @@ export default defineComponent({
     const owner = route.params.owner.toString();
 
     const bihompUrl = computed(() =>
-      getInspectorUrl(network.value, route.params.offerId.toString())
+      getInspectorUrl(network.value, route.params.nftId.toString())
     );
     const nft = ref<any | null>(null);
     const offer = ref<any | null>(null);
