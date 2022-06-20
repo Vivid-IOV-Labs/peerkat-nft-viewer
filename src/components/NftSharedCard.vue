@@ -59,7 +59,7 @@
     <template #footer>
       <div>
         <base-button class="mr-2" @click="goToOffer"
-          >Offers ({{ nft.selloffers.length }})</base-button
+          >Offers ({{ nft.selloffers && nft.selloffers.length }})</base-button
         >
         <base-button class="mr-2" @click="deleteShared">Delete</base-button>
         <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl">
