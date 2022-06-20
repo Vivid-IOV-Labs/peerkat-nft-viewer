@@ -60,9 +60,7 @@
       <div>
         <base-button class="mr-2" @click="goToOffer"
           >Offers
-          <span v-if="nft.selloffers && nft.selloffers.length"
-            >({{ nft.selloffers && nft.selloffers.length }})</span
-          ></base-button
+          <span v-if="countOffers">({{ countOffers }})</span></base-button
         >
         <base-button class="mr-2" @click="deleteShared">Delete</base-button>
         <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl">
@@ -101,8 +99,18 @@ export default defineComponent({
     const bihompUrl = computed(() =>
       getInspectorUrl(network.value, props.nft.issuer)
     );
+    ù    const countSellOffer =
+      props.nft.selloffers && props.nft.selloffers.length
+        ? props.nft.selloffers.length
+        : 0;
+    const countBuyOffer =
+      props.nft.selloffers && props.nft.selloffers.length
+        ? props.nft.selloffers.length
+        : 0;
+    const countOffers = countSellOffer + countBuyOffer;
     return {
       bihompUrl,
+      countOffers,
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },

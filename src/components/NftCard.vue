@@ -75,7 +75,8 @@
           v-if="nft.standard == 'XLS-20'"
           class="mr-2"
           @click="goToOffer"
-          >Offers</base-button
+          >Offers
+          <span v-if="countOffers">({{ countOffers }})</span></base-button
         >
         <base-button class="mr-2" @click="share">Share</base-button>
         <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl">
@@ -128,6 +129,15 @@ export default defineComponent({
         ? `https://xumm.app/detect/xapp:peerkat.dev?redirect=/shared/${passNFTIssuerOrXUMMowner}/${nodetypecode}/${props.nft.currency}`
         : `https://xumm.app/detect/xapp:peerkat.viewer?redirect=/shared/${passNFTIssuerOrXUMMowner}/${nodetypecode}/${props.nft.currency}`;
     }
+    const countSellOffer =
+      props.nft.selloffers && props.nft.selloffers.length
+        ? props.nft.selloffers.length
+        : 0;
+    const countBuyOffer =
+      props.nft.selloffers && props.nft.selloffers.length
+        ? props.nft.selloffers.length
+        : 0;
+    const countOffers = countSellOffer + countBuyOffer;
     return {
       async goToOffer() {
         await store.commit("nft/setCurrent", props.nft);
@@ -136,6 +146,7 @@ export default defineComponent({
         });
       },
       bihompUrl,
+      countOffers,
       share() {
         const nodetypecode = getNetworkCodeFromType(nodetype.value);
 
