@@ -129,6 +129,7 @@ import { devlog } from "../utils/devlog";
 import { isInXumm } from "../utils/isInXumm";
 import XummSdk from "../services/XummService";
 import { openSignRequest } from "../utils/XummActions";
+import { fetchSellOffers } from "../services/XrpService";
 
 export default defineComponent({
   components: {
@@ -169,12 +170,18 @@ export default defineComponent({
         if (isInXumm()) {
           devlog("isInXumm", isInXumm);
 
-          const { created } = await XummSdk.createSellOffer({
-            Account: walletAddress.value,
-            NFTokenID: nft.value.currency,
-            Amount: (saleamount.value * 1000000).toString(),
-            User: user.value,
-          });
+          const { created } = await XummSdk.createSellOffer(
+            {
+              Account: walletAddress.value,
+              NFTokenID: nft.value.currency,
+              Amount: (saleamount.value * 1000000).toString(),
+              User: user.value,
+            },
+            async () => {
+              const { offers } = await fetchSellOffers(nft.value.currency);
+              await store.commit("nft/addSellOffer", offers);
+            }
+          );
           devlog("sell create confirm ", created);
           const { uuid } = created;
           openSignRequest(uuid);
