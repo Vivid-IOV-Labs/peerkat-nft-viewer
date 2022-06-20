@@ -39,7 +39,7 @@ export default defineComponent({
   },
   props: {
     offer: { type: Object, required: true },
-    issuer: { type: String, required: true },
+    nftId: { type: String, required: true },
   },
   async setup(props) {
     const router = useRouter();
@@ -65,7 +65,7 @@ export default defineComponent({
             },
             async () => {
               await store.commit("nft/deleteShared", {
-                issuer: props.issuer,
+                currency: props.nftId,
                 nodetype: nodetype.value,
                 walletaddress: user.value,
               });

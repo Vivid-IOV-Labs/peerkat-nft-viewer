@@ -48,7 +48,7 @@
             <accept-sell-offer-card
               v-if="offer"
               :offer="offer"
-              :issuer="nft.issuer"
+              :nft-id="nft.currency"
             ></accept-sell-offer-card>
           </div>
         </div>
@@ -61,11 +61,7 @@
           </p>
         </div>
         <div v-else>
-          <div
-            v-for="offer in buyoffers"
-            :key="offer.nft_offer_index"
-            class="mt-4"
-          >
+          <div v-for="(offer, index) in buyoffers" :key="index" class="mt-4">
             <buy-offer-card
               v-if="offer"
               :token="nft.currency"

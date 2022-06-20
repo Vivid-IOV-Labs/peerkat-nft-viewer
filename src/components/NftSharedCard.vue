@@ -127,7 +127,7 @@ export default defineComponent({
       },
       deleteShared() {
         store.commit("nft/deleteShared", {
-          issuer: props.nft.issuer,
+          currency: props.nft.currency,
           nodetype: nodetype.value,
           walletaddress: user.value,
         });
