@@ -146,7 +146,7 @@ export default defineComponent({
     const malformedLink = ref(false);
     const network = computed(() => store.getters["user/getNetwork"]);
     const bihompUrl = computed(() =>
-      getInspectorUrl(network.value, route.params.nftAddress.toString())
+      getInspectorUrl(network.value, route.params.currency.toString())
     );
     const nft = ref<NFT | null>(null);
     async function fetchOneXls14() {
