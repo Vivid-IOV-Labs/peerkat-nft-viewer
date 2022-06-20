@@ -13,6 +13,9 @@
           href="#"
           @click="showTab = 'buy'"
           >My Buy Offers
+          <span v-if="buyoffers && buyoffers.length"
+            >({{ buyoffers && buyoffers.length }})</span
+          >
         </a>
       </li>
       <li class="nav-item">

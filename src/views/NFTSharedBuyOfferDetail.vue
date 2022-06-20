@@ -167,7 +167,7 @@ export default defineComponent({
     const { URI, Issuer, NFTokenID } = currentNft;
     nft.value = await getOneXls({ URI, Issuer, NFTokenID });
 
-    const { offers } = buyOffers;
+    const { offers = null } = buyOffers;
     if (offers) {
       offer.value = offers.find((o: any) => o.nft_offer_index === offerId);
     }
