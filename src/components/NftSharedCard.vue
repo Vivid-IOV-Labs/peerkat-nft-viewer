@@ -99,7 +99,7 @@ export default defineComponent({
     const bihompUrl = computed(() =>
       getInspectorUrl(network.value, props.nft.issuer)
     );
-    ù    const countSellOffer =
+    const countSellOffer =
       props.nft.selloffers && props.nft.selloffers.length
         ? props.nft.selloffers.length
         : 0;
