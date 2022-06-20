@@ -90,27 +90,15 @@ const actions: ActionTree<NFT, NFTState> = {
     { commit },
     { walletAddress, TokenID, amount }
   ): Promise<void> {
-    let sellOffer;
-    if (isInXumm()) {
-      sellOffer = XummSdk.createSellOffer({ walletAddress, TokenID, amount });
-      devlog("sellOffer", sellOffer);
-    } else {
-      sellOffer = await createSellOffer({
-        walletAddress,
-        TokenID,
-        amount,
-      });
-    }
+    const sellOffer = await createSellOffer({
+      walletAddress,
+      TokenID,
+      amount,
+    });
     commit("addSellOffer", sellOffer);
   },
   async cancelOffer({ commit }, { TokenID, OfferID }): Promise<void> {
-    let sellOffer;
-    if (isInXumm()) {
-      sellOffer = XummSdk.cancelOffer({ TokenID, TokenIDs: [OfferID] });
-      devlog("cancell", sellOffer);
-    } else {
-      sellOffer = await cancelOffer({ TokenID, OfferID });
-    }
+    const sellOffer = await cancelOffer({ TokenID, OfferID });
     const newSellOffers = sellOffer ? sellOffer : [];
     commit("addSellOffer", newSellOffers);
   },

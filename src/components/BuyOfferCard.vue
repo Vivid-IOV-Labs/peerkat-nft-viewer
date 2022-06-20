@@ -70,11 +70,18 @@ export default defineComponent({
 
       async cancelOffer() {
         if (isInXumm()) {
-          const { created } = await XummSdk.cancelOffer({
-            TokenID: props.token,
-            TokenIDs: [props.offer.nft_offer_index],
-            User: user.value,
-          });
+          const { created } = await XummSdk.cancelOffer(
+            {
+              TokenID: props.token,
+              TokenIDs: [props.offer.nft_offer_index],
+              User: user.value,
+            },
+            async () => {
+              await store.commit("nft/deleteBuyOffer", {
+                offerID: props.offer.nft_offer_index,
+              });
+            }
+          );
           devlog("cancell", created);
           const { uuid } = created;
           openSignRequest(uuid);

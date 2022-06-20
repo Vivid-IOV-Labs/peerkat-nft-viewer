@@ -35,6 +35,7 @@ import { devlog } from "../utils/devlog";
 import XummSdk from "../services/XummService";
 import { useStore } from "vuex";
 import { openSignRequest } from "../utils/XummActions";
+import { fetchSellOffers } from "../services/XrpService";
 
 export default defineComponent({
   components: {
@@ -59,10 +60,17 @@ export default defineComponent({
     return {
       async cancelOffer() {
         if (isInXumm()) {
-          const { created } = await XummSdk.cancelOffer({
-            TokenID: props.token,
-            TokenIDs: [props.offer.nft_offer_index],
-          });
+          const { created } = await XummSdk.cancelOffer(
+            {
+              TokenID: props.token,
+              TokenIDs: [props.offer.nft_offer_index],
+            },
+            async () => {
+              await store.commit("nft/deleteSellOffer", {
+                offerID: props.offer.nft_offer_index,
+              });
+            }
+          );
           devlog("cancell", created);
           const { uuid } = created;
           openSignRequest(uuid);
