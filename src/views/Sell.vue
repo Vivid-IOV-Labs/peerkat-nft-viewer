@@ -178,8 +178,8 @@ export default defineComponent({
               User: user.value,
             },
             async () => {
-              const { offers } = await fetchSellOffers(nft.value.currency);
-              await store.commit("nft/addSellOffer", offers);
+              const resp = await fetchSellOffers(nft.value.currency);
+              await store.commit("nft/addSellOffer", resp);
             }
           );
           devlog("sell create confirm ", created);
