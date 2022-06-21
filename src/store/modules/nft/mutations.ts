@@ -125,6 +125,8 @@ const mutations: MutationTree<NFTState> = {
       );
 
       const { currency } = state.currentNFT;
+      console.log(" state.currentNFT", state.currentNFT);
+      console.log(" state.currentNFT", offerID);
       console.log(" state.currentNFT", currency);
 
       const currentNft: any = state.allXls20.find(
