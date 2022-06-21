@@ -107,10 +107,15 @@ const mutations: MutationTree<NFTState> = {
     if (state.currentNFT) state.currentNFT.selloffers = offers ? offers : [];
   },
   deleteSellOffer(state, { offerID }) {
+    console.log("deleteSellOffer", offerID);
+    console.log("deleteSellOffer state.currentNFT", state.currentNFT);
+
     if (state.currentNFT)
-      state.currentNFT.selloffers.filter(
-        (o: any) => o.nft_offer_index === offerID
-      );
+      state.currentNFT.selloffers.filter((o: any) => {
+        console.log(" state.currentNFT", state.currentNFT);
+
+        return o.nft_offer_index === offerID;
+      });
   },
   addBuyOffer(state, { offers }) {
     if (state.currentNFT) state.currentNFT.buyoffers = offers ? offers : [];
