@@ -34,7 +34,6 @@ import { getInspectorUrl } from "../utils/getInspectorUrl";
 import { useStore } from "vuex";
 
 import { isInXumm } from "../utils/isInXumm";
-import { devlog } from "../utils/devlog";
 import XummSdk from "../services/XummService";
 import { openSignRequest } from "../utils/XummActions";
 
@@ -48,7 +47,7 @@ export default defineComponent({
     token: { type: String, required: true },
     owner: { type: String, required: true },
   },
-  emits: { "update:modelValue": null },
+  emits: { "update:modelValue": null, singed: null },
   async setup(props, { emit }) {
     const store = useStore();
     const network = computed(() => store.getters["user/getNetwork"]);
@@ -84,7 +83,6 @@ export default defineComponent({
               });
             }
           );
-          devlog("cancell", created);
           const { uuid } = created;
           openSignRequest(uuid);
         } else {

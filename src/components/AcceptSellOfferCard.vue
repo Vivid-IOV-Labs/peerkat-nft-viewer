@@ -74,7 +74,6 @@ export default defineComponent({
               });
             }
           );
-          devlog("acceptOffer", created);
           const { uuid } = created;
           openSignRequest(uuid);
         } else {

@@ -27,7 +27,6 @@ import AsyncButton from "@/components/AsyncButton.vue";
 
 import { getInspectorUrl } from "../utils/getInspectorUrl";
 import { isInXumm } from "../utils/isInXumm";
-import { devlog } from "../utils/devlog";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { acceptBuyOffer } from "../services/XrpService";
@@ -67,7 +66,6 @@ export default defineComponent({
               });
             }
           );
-          devlog("acceptOffer", created);
           const { uuid } = created;
           openSignRequest(uuid);
         } else {

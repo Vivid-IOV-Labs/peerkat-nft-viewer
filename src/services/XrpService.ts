@@ -526,7 +526,6 @@ export async function fetchNextXls20WithSellOffer(
         const schema = await getOneXls({ URI, Issuer, NFTokenID });
         const sellOffersResponse = await fetchSellOffers(NFTokenID);
         const buyOffersResponse = await fetchBuyOffers(NFTokenID);
-        devlog("buyOffersResponse", buyOffersResponse);
         return {
           ...schema,
           selloffers:
@@ -556,7 +555,6 @@ export async function cancelOffer({ TokenID, OfferID }: any): Promise<any> {
   try {
     await client.submitAndWait(transactionBlob, { wallet });
     const sellOffer = await fetchSellOffers(TokenID);
-    devlog("sellfoofer", sellOffer);
     return sellOffer;
   } catch (error) {
     devlog(error);

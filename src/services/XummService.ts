@@ -24,7 +24,6 @@ class XummService {
   }
   async getOttData(): Promise<xAppOttData> {
     const ottdata = await Sdk.getOttData();
-    devlog("OTTDATA", ottdata);
     return ottdata;
   }
   async createPayload(
