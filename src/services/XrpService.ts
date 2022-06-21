@@ -556,6 +556,7 @@ export async function cancelOffer({ TokenID, OfferID }: any): Promise<any> {
   try {
     await client.submitAndWait(transactionBlob, { wallet });
     const sellOffer = await fetchSellOffers(TokenID);
+    devlog("sellfoofer", sellOffer);
     return sellOffer;
   } catch (error) {
     devlog(error);
