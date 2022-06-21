@@ -112,6 +112,7 @@ export default defineComponent({
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const network = computed(() => store.getters["user/getNetwork"]);
     const user = computed(() => store.getters["user/getUser"]);
+    const walletAddress = computed(() => store.getters["user/getAddress"]);
 
     const bihompUrl = computed(() =>
       getInspectorUrl(network.value, props.nft.issuer)
@@ -120,7 +121,7 @@ export default defineComponent({
     const passNFTIssuerOrXUMMowner =
       props.nft.standard && props.nft.standard === "XLS20"
         ? user.value
-        : props.nft.issuer;
+        : walletAddress.value;
     function shareUrl(nodetypecode: number | undefined) {
       const xummSandbox = import.meta.env.VITE_XUMM_SANDBOX;
       return xummSandbox === "test"

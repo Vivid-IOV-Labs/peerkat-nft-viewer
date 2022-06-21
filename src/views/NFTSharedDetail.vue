@@ -151,7 +151,6 @@ export default defineComponent({
     const nft = ref<NFT | null>(null);
     async function fetchOneXls14() {
       try {
-        debugger;
         nft.value = await client.value.fetchOne(
           route.params.nftAddress.toString(),
           route.params.currency.toString()
@@ -167,9 +166,6 @@ export default defineComponent({
       }
     }
     async function fetchShared() {
-      console.log(walletAddress.value, route.params.currency.toString());
-      debugger;
-
       try {
         const nftXLS20 = await fetchOneXls20(
           route.params.nftAddress.toString(),

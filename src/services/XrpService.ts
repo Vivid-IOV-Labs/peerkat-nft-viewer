@@ -458,10 +458,12 @@ export async function fetchOneXls20(
   const {
     result: { account_nfts },
   } = await getTokens(walletAddress);
-  debugger;
-  console.log(NFTokenID, account_nfts[0].NFTokenID);
-  console.log("NFTokenID", NFTokenID == account_nfts[0].NFTokenID);
-  const nftXLS20 = account_nfts.find((n: any) => n.NFTokenID == NFTokenID);
+  console.log("walletAddress", walletAddress);
+  const nftXLS20 = account_nfts.find((n: any) => {
+    console.log("n.NFTokenID", n.NFTokenID);
+    console.log("NFTokenID", NFTokenID);
+    return n.NFTokenID == NFTokenID;
+  });
   debugger;
   if (nftXLS20) {
     return getOneXls(nftXLS20);
