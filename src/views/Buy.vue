@@ -148,7 +148,6 @@ export default defineComponent({
       try {
         const { offers } = await fetchBuyOffers(nft.value.currency);
         buyoffers.value = offers;
-        console.log("buyoffers", buyoffers.value);
       } catch (err) {
         console.log("err", err);
       }

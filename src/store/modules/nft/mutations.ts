@@ -125,34 +125,54 @@ const mutations: MutationTree<NFTState> = {
       );
 
       const { currency } = state.currentNFT;
-      console.log(" state.currentNFT", state.currentNFT);
-      console.log(" state.currentNFT", offerID);
-      console.log(" state.currentNFT", currency);
 
       const currentNft: any = state.allXls20.find(
         (n) => n.currency === currency
       );
-      console.log("currentNft", currentNft);
 
       if (currentNft) {
         if (!currentNft.selloffers) currentNft.selloffers = [];
         currentNft.selloffers = currentNft.selloffers.filter((o: any) => {
-          console.log("currentNft", o.nft_offer_index);
-
           return o.nft_offer_index != offerID;
         });
       }
     }
   },
   addBuyOffer(state, { offers }) {
-    if (state.currentNFT) state.currentNFT.buyoffers = offers ? offers : [];
+    if (state.currentNFT) {
+      state.currentNFT.buyoffers = offers ? offers : [];
+
+      const { currency } = state.currentNFT;
+      const currentNft: any = state.allXls20.find(
+        (n) => n.currency === currency
+      );
+      if (currentNft) {
+        currentNft.buyoffers = offers ? offers : [];
+      }
+    }
   },
-  // deleteBuyOffer(state, { offerID }) {
-  //   if (state.currentNFT)
-  //     state.currentNFT.buyoffers.filter(
-  //       (o: any) => o.nft_offer_index === offerID
-  //     );
-  // },
+  deleteBuyOffer(state, { offerID }) {
+    if (state.currentNFT) {
+      state.currentNFT.buyoffers = state.currentNFT.buyoffers.filter(
+        (o: any) => {
+          return o.nft_offer_index != offerID;
+        }
+      );
+
+      const { currency } = state.currentNFT;
+
+      const currentNft: any = state.allXls20.find(
+        (n) => n.currency === currency
+      );
+
+      if (currentNft) {
+        if (!currentNft.buyoffers) currentNft.buyoffers = [];
+        currentNft.buyoffers = currentNft.buyoffers.filter((o: any) => {
+          return o.nft_offer_index != offerID;
+        });
+      }
+    }
+  },
   deleteShared(
     state: NFTState,
     { currency, nodetype, walletaddress }: deleteSharedParams

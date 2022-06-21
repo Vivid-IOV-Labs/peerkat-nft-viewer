@@ -151,16 +151,11 @@ export default defineComponent({
     const nft = ref<NFT | null>(null);
     async function fetchOneXls14() {
       try {
-        console.log(route.params.nftAddress);
-        console.log(route.params.currency);
         debugger;
         nft.value = await client.value.fetchOne(
           route.params.nftAddress.toString(),
           route.params.currency.toString()
         );
-        console.log(nft.value);
-        debugger;
-
         store.commit("nft/addShared", {
           shared: nft.value,
           nodetype: nodetype.value,
