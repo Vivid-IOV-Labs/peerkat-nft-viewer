@@ -120,7 +120,7 @@ const mutations: MutationTree<NFTState> = {
     if (state.currentNFT) {
       state.currentNFT.selloffers = state.currentNFT.selloffers.filter(
         (o: any) => {
-          return o.nft_offer_index === offerID;
+          return o.nft_offer_index != offerID;
         }
       );
 
@@ -139,7 +139,7 @@ const mutations: MutationTree<NFTState> = {
         currentNft.selloffers = currentNft.selloffers.filter((o: any) => {
           console.log("currentNft", o.nft_offer_index);
 
-          return o.nft_offer_index === offerID;
+          return o.nft_offer_index != offerID;
         });
       }
     }
