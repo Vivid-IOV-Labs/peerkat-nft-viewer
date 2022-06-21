@@ -108,7 +108,7 @@ const mutations: MutationTree<NFTState> = {
       state.currentNFT.selloffers = offers ? offers : [];
 
       const { currency } = state.currentNFT;
-      const currentNft: any = state.allXls20.filter(
+      const currentNft: any = state.allXls20.find(
         (n) => n.currency === currency
       );
       if (currentNft) {
@@ -127,12 +127,13 @@ const mutations: MutationTree<NFTState> = {
       const { currency } = state.currentNFT;
       console.log(" state.currentNFT", currency);
 
-      const currentNft: any = state.allXls20.filter(
+      const currentNft: any = state.allXls20.find(
         (n) => n.currency === currency
       );
       console.log("currentNft", currentNft);
 
       if (currentNft) {
+        if (!currentNft.selloffers) currentNft.selloffers = [];
         currentNft.selloffers = currentNft.selloffers.filter((o: any) => {
           console.log("currentNft", o.nft_offer_index);
 
