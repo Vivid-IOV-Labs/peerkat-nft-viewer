@@ -76,7 +76,7 @@ const mutations: MutationTree<NFTState> = {
     state: NFTState,
     { shared, nodetype, walletaddress, offer }: addSharedParams
   ): void {
-    const exist = state.sharedwithme[walletaddress][nodetype].find(
+    const exist: any = state.sharedwithme[walletaddress][nodetype].find(
       (n: { issuer: string; currency: string }) => {
         return n.issuer === shared.issuer && n.currency === shared.currency;
       }
@@ -108,33 +108,30 @@ const mutations: MutationTree<NFTState> = {
       state.currentNFT.selloffers = offers ? offers : [];
 
       const { currency } = state.currentNFT;
-      console.log("addSellOffer", currency);
       const currentNft: any = state.allXls20.filter(
         (n) => n.currency === currency
       );
-      console.log("addSellOffer", currentNft);
-
       if (currentNft) {
         currentNft.selloffers = offers ? offers : [];
       }
     }
   },
   deleteSellOffer(state, { offerID }) {
-    console.log("deleteSellOffer", offerID);
-    console.log("deleteSellOffer state.currentNFT", state.currentNFT);
-
     if (state.currentNFT) {
       state.currentNFT.selloffers = state.currentNFT.selloffers.filter(
         (o: any) => {
-          console.log(" state.currentNFT", o.nft_offer_index);
-
           return o.nft_offer_index === offerID;
         }
       );
+
       const { currency } = state.currentNFT;
+      console.log(" state.currentNFT", currency);
+
       const currentNft: any = state.allXls20.filter(
         (n) => n.currency === currency
       );
+      console.log("currentNft", currentNft);
+
       if (currentNft) {
         currentNft.selloffers = currentNft.selloffers.filter((o: any) => {
           console.log("currentNft", o.nft_offer_index);
