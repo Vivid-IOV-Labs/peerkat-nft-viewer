@@ -53,15 +53,19 @@
           </div>
         </div>
       </div>
-      <div v-if="showTab === 'buy' && buyoffers">
-        <div v-if="buyoffers.length == 0">
+      <div v-if="showTab === 'buy' && nft.buyoffers">
+        <div v-if="nft.buyoffers.length == 0">
           <p>
             Peerkat is not able to find any buy offers, shared with this wallet
             for this NFT
           </p>
         </div>
         <div v-else>
-          <div v-for="(offer, index) in buyoffers" :key="index" class="mt-4">
+          <div
+            v-for="(offer, index) in nft.buyoffers"
+            :key="index"
+            class="mt-4"
+          >
             <buy-offer-card
               v-if="offer"
               :token="nft.currency"
@@ -145,16 +149,6 @@ export default defineComponent({
     const walletAddress = computed(() => store.getters["user/getAddress"]);
     const user = computed(() => store.getters["user/getUser"]);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
-
-    async function populateBuyOffers() {
-      try {
-        const { offers } = await fetchBuyOffers(nft.value.currency);
-        buyoffers.value = offers;
-      } catch (err) {
-        console.log("err", err);
-      }
-    }
-    await populateBuyOffers();
 
     return {
       nft,
