@@ -42,7 +42,10 @@
           :class="{ active: showTab === 'sell' }"
           href="#"
           @click="showTab = 'sell'"
-          >My Sell Offers ({{ nft.selloffers.length }})</a
+          >My Sell Offers
+          <span v-if="nft.selloffers && nft.selloffers.length"
+            >({{ nft.selloffers.length }})</span
+          ></a
         >
       </li>
       <li class="nav-item">
@@ -52,6 +55,9 @@
           href="#"
           @click="showTab = 'buy'"
           >Buy Offers shared with me
+          <span v-if="sharedBUyOffers && sharedBUyOffers.length"
+            >({{ sharedBUyOffers.length }})</span
+          >
         </a>
       </li>
     </ul>
