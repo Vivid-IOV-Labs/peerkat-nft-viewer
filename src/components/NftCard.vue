@@ -142,6 +142,7 @@ export default defineComponent({
       : 0;
     console.log("countSellOffer", countSellOffer);
     console.log("countSharedBuyOffer", countSharedBuyOffer);
+    console.log("sharedBUyOffers", sharedBUyOffers);
     const countOffers = countSellOffer + countSharedBuyOffer;
     console.log("countOffers", countOffers);
 
