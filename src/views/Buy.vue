@@ -144,6 +144,8 @@ export default defineComponent({
     const showTab = ref("buy");
     const walletAddress = computed(() => store.getters["user/getAddress"]);
     const user = computed(() => store.getters["user/getUser"]);
+    const nodetype = computed(() => store.getters["user/getNodeType"]);
+
     async function populateBuyOffers() {
       try {
         const { offers } = await fetchBuyOffers(nft.value.currency);
@@ -178,7 +180,13 @@ export default defineComponent({
               User: user.value,
             },
             async () => {
-              await populateBuyOffers();
+              const { offers } = await fetchBuyOffers(nft.value.currency);
+
+              await store.commit("nft/addBuyOffer", {
+                offers,
+                nodetype: nodetype.value,
+                walletaddress: user.value,
+              });
               toggleSellDialog.value = false;
             }
           );

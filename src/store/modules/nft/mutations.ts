@@ -13,6 +13,17 @@ interface deleteSharedParams {
   nodetype: keyof SharedNFTs;
   walletaddress: string;
 }
+interface addBuyOfferParams {
+  offers: any[];
+  nodetype: keyof SharedNFTs;
+  walletaddress: string;
+}
+interface deleteBuyOfferParams {
+  offerID: string;
+  nodetype: keyof SharedNFTs;
+  walletaddress: string;
+}
+
 const mutations: MutationTree<NFTState> = {
   setXrpClient(state: NFTState, xrpClient: typeof XrplClient): void {
     state.xrpClient = xrpClient;
@@ -138,12 +149,28 @@ const mutations: MutationTree<NFTState> = {
       }
     }
   },
-  addBuyOffer(state, { offers }) {
+  addBuyOffer(state, { offers, nodetype, walletaddress }: addBuyOfferParams) {
     if (state.currentNFT) {
       state.currentNFT.buyoffers = offers ? offers : [];
     }
+    if (state.currentNFT) {
+      state.currentNFT.selloffers = offers ? offers : [];
+
+      const { currency } = state.currentNFT;
+      if (state.sharedwithme[walletaddress][nodetype]) {
+        const currentNft: any = state.sharedwithme[walletaddress][
+          nodetype
+        ].find((n: any) => n.currency === currency);
+        if (currentNft) {
+          currentNft.buyoffers = offers ? offers : [];
+        }
+      }
+    }
   },
-  deleteBuyOffer(state, { offerID }) {
+  deleteBuyOffer(
+    state,
+    { offerID, nodetype, walletaddress }: deleteBuyOfferParams
+  ) {
     if (state.currentNFT) {
       state.currentNFT.buyoffers = state.currentNFT.buyoffers.filter(
         (o: any) => {
@@ -152,16 +179,17 @@ const mutations: MutationTree<NFTState> = {
       );
 
       const { currency } = state.currentNFT;
+      if (state.sharedwithme[walletaddress][nodetype]) {
+        const currentNft: any = state.sharedwithme[walletaddress][
+          nodetype
+        ].find((n) => n.currency === currency);
 
-      const currentNft: any = state.allXls20.find(
-        (n) => n.currency === currency
-      );
-
-      if (currentNft) {
-        if (!currentNft.buyoffers) currentNft.buyoffers = [];
-        currentNft.buyoffers = currentNft.buyoffers.filter((o: any) => {
-          return o.nft_offer_index != offerID;
-        });
+        if (currentNft) {
+          if (!currentNft.buyoffers) currentNft.buyoffers = [];
+          currentNft.buyoffers = currentNft.buyoffers.filter((o: any) => {
+            return o.nft_offer_index != offerID;
+          });
+        }
       }
     }
   },

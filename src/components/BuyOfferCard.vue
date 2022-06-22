@@ -52,6 +52,7 @@ export default defineComponent({
     const store = useStore();
     const network = computed(() => store.getters["user/getNetwork"]);
     const user = computed(() => store.getters["user/getUser"]);
+    const nodetype = computed(() => store.getters["user/getNodeType"]);
 
     const bihompUrl = computed(() =>
       getInspectorUrl(network.value, props.token)
@@ -80,6 +81,8 @@ export default defineComponent({
               emit("onCancel");
               await store.commit("nft/deleteBuyOffer", {
                 offerID: props.offer.nft_offer_index,
+                nodetype: nodetype.value,
+                walletaddress: user,
               });
             }
           );
