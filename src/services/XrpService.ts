@@ -178,11 +178,9 @@ async function getOne(
   limitFormatted?: string
 ) {
   const { Domain } = account_data;
-  debugger;
   const source = is_hexadecimal(hexToString(Domain))
     ? hexToString(hexToString(Domain))
     : hexToString(Domain);
-  debugger;
   let url;
   let media_type;
   let desc;
@@ -464,7 +462,6 @@ export async function fetchOneXls20(
     console.log("NFTokenID", NFTokenID);
     return n.NFTokenID == NFTokenID;
   });
-  debugger;
   if (nftXLS20) {
     return getOneXls(nftXLS20);
   } else {
@@ -527,16 +524,11 @@ export async function fetchNextXls20WithSellOffer(
         const { URI, Issuer, NFTokenID } = nft;
         const schema = await getOneXls({ URI, Issuer, NFTokenID });
         const sellOffersResponse = await fetchSellOffers(NFTokenID);
-        const buyOffersResponse = await fetchBuyOffers(NFTokenID);
         return {
           ...schema,
           selloffers:
             sellOffersResponse && sellOffersResponse.offers
               ? sellOffersResponse.offers
-              : [],
-          buyoffers:
-            buyOffersResponse && buyOffersResponse.offers
-              ? buyOffersResponse.offers
               : [],
         };
       })

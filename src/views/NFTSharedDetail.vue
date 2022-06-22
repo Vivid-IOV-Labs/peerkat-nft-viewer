@@ -171,16 +171,13 @@ export default defineComponent({
           route.params.nftAddress.toString(),
           route.params.currency.toString()
         );
-        debugger;
         if (nftXLS20) {
           nft.value = nftXLS20;
-          debugger;
           store.commit("nft/addShared", {
             shared: nft.value,
             nodetype: nodetype.value,
             walletaddress: user.value,
           });
-          debugger;
         } else {
           throw new Error("Not an XLS20");
         }

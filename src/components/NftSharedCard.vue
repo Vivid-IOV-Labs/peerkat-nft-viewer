@@ -79,6 +79,7 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { getNetworkCodeFromType } from "../utils/getNetworkTypeFromCode";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
+import { fetchBuyOffers } from "../services/XrpService";
 
 export default defineComponent({
   components: {
@@ -97,7 +98,7 @@ export default defineComponent({
     const nodetypecode = computed(() => getNetworkCodeFromType(nodetype.value));
     const network = computed(() => store.getters["user/getNetwork"]);
     const bihompUrl = computed(() =>
-      getInspectorUrl(network.value, props.nft.issuer)
+      getInspectorUrl(network.value, props.nft.currency)
     );
     const countSellOffer =
       props.nft.selloffers && props.nft.selloffers.length
@@ -107,6 +108,17 @@ export default defineComponent({
       props.nft.selloffers && props.nft.selloffers.length
         ? props.nft.selloffers.length
         : 0;
+
+    async function populateBuyOffers() {
+      try {
+        const { offers } = await fetchBuyOffers(props.nft.currency);
+        buyoffers.value = offers;
+      } catch (err) {
+        console.log("err", err);
+      }
+    }
+    await populateBuyOffers();
+
     const countOffers = countSellOffer + countBuyOffer;
     return {
       bihompUrl,
