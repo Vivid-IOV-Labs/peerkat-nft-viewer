@@ -15,7 +15,6 @@ export default {
     (state: NFTState, _getters: any, rootState: any) =>
     (TokenID: string): any => {
       const useraddress = rootState.user.address;
-      state.sharedBuyOffers[useraddress][TokenID];
       return !state.sharedBuyOffers[useraddress]
         ? null
         : !state.sharedBuyOffers[useraddress][TokenID]
