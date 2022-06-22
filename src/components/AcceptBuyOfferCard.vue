@@ -62,7 +62,7 @@ export default defineComponent({
             },
             () => {
               router.push({
-                path: `/wallet`,
+                path: `/wallet?refresh="true"`,
                 replace: true,
               });
             }

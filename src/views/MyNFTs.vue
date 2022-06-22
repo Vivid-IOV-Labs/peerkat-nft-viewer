@@ -84,6 +84,8 @@ export default defineComponent({
   // },
   async setup() {
     const store = useStore();
+    const route = useRoute();
+    console.log(route);
     const sentinel = ref<HTMLElement | null>(null);
     const scroller = ref<HTMLElement | null>(null);
     const isInXumm = inject("isInXumm");
@@ -172,7 +174,10 @@ export default defineComponent({
         nodetype: nodetype.value,
       });
     }
-    if (xls20count.value && xls20count.value.length === 0) {
+    if (
+      (xls20count.value && xls20count.value.length === 0) ||
+      route.query.refresh
+    ) {
       await populateNFTs();
     }
 
