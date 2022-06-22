@@ -134,10 +134,10 @@ export default defineComponent({
       props.nft.selloffers && props.nft.selloffers.length
         ? props.nft.selloffers.length
         : 0;
-    const sharedBUyOffers = computed(() => {
-      return store.getters["nft/getSharedBuyOffers"](props.nft.currency);
-    });
-    const countOffers = countSellOffer + sharedBUyOffers.value.length;
+    // const sharedBUyOffers = computed(() => {
+    //   return store.getters["nft/getSharedBuyOffers"](props.nft.currency);
+    // });
+    const countOffers = countSellOffer; //+ sharedBUyOffers.value.length;
     return {
       async goToOffer() {
         await store.commit("nft/setCurrent", props.nft);
