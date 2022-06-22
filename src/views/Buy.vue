@@ -13,8 +13,8 @@
           href="#"
           @click="showTab = 'buy'"
           >My Buy Offers
-          <span v-if="buyoffers && buyoffers.length"
-            >({{ buyoffers && buyoffers.length }})</span
+          <span v-if="nft.buyoffers && nft.buyoffers.length"
+            >({{ nft.buyoffers && nft.buyoffers.length }})</span
           >
         </a>
       </li>
