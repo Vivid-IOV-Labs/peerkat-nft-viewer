@@ -141,7 +141,7 @@ export default defineComponent({
       sharedBUyOffers.value && sharedBUyOffers.value.length
         ? props.nft.selloffers.length
         : 0;
-    console.log("sharedBUyOffers", sharedBUyOffers.value);
+    console.log("sharedBUyOffers", countSharedBuyOffer);
     const countOffers = countSellOffer + countSharedBuyOffer;
     return {
       async goToOffer() {
