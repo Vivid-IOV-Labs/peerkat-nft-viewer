@@ -143,7 +143,6 @@ export default defineComponent({
     const nft = computed(() => store.getters["nft/getCurrent"]);
     const saleamount = ref(0);
     const toggleSellDialog = ref(false);
-    const buyoffers = ref([]);
 
     const showTab = ref("buy");
     const walletAddress = computed(() => store.getters["user/getAddress"]);
@@ -153,7 +152,6 @@ export default defineComponent({
     return {
       nft,
       saleamount,
-      buyoffers,
       toggleSellDialog,
       showTab,
       openSellDialog() {

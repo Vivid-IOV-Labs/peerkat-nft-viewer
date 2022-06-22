@@ -105,19 +105,9 @@ export default defineComponent({
         ? props.nft.selloffers.length
         : 0;
     const countBuyOffer =
-      props.nft.selloffers && props.nft.selloffers.length
-        ? props.nft.selloffers.length
+      props.nft.buyoffers && props.nft.buyoffers.length
+        ? props.nft.buyoffers.length
         : 0;
-
-    async function populateBuyOffers() {
-      try {
-        const { offers } = await fetchBuyOffers(props.nft.currency);
-        buyoffers.value = offers;
-      } catch (err) {
-        console.log("err", err);
-      }
-    }
-    await populateBuyOffers();
 
     const countOffers = countSellOffer + countBuyOffer;
     return {
