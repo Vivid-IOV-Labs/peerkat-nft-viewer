@@ -119,6 +119,11 @@ const routes = [
       announcer: {
         message: "Home Wallet Page",
       },
+      beforeEnter: (to, from) => {
+        console.log("to", to);
+        console.log("from", from);
+        return false;
+      },
     },
     children: [
       {
