@@ -53,8 +53,6 @@
         </template>
 
         <template #text>
-          <strong class="h7 font-weight-bold">Issuer </strong><br />
-          <span>{{ nft.issuer }}</span>
           <div v-if="nft.author" class="mt-2">
             <strong class="h7 font-weight-bold">Author </strong><br />
             <span class="mr-3">{{ nft.author }} </span>
@@ -63,9 +61,17 @@
             <strong class="h7 font-weight-bold">Description </strong><br />
             <span>{{ nft.desc }}</span>
           </div>
-          <div v-if="nft.standard" class="mt-2">
-            <strong class="h7 font-weight-bold">Standard </strong><br />
-            <span>{{ nft.standard }}</span>
+          <div v-if="nft.currency" class="mt-2">
+            <strong class="h7 font-weight-bold">Tokent ID </strong><br />
+            <span>{{ nft.currency }}</span>
+          </div>
+          <div v-if="offer.nft_offer_index" class="mt-2">
+            <strong class="h7 font-weight-bold">Offer ID </strong><br />
+            <span>{{ offer.nft_offer_index }}</span>
+          </div>
+          <div v-if="offer.saleamount" class="mt-2">
+            <strong class="h7 font-weight-bold">Amount </strong><br />
+            <span>{{ offer.saleamount }} XRP</span>
           </div>
         </template>
         <template #footer>
