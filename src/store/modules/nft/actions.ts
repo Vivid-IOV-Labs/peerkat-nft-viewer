@@ -67,10 +67,12 @@ const actions: ActionTree<NFT, NFTState> = {
     const Xls20 = await fetchXls20(walletAddress);
     commit("setXls20", Xls20);
   },
-  async fetchNextXls20({ commit, getters }): Promise<void> {
+  async fetchNextXls20({ commit, getters, rootGetters }): Promise<void> {
     const count = getters.getAll.length;
     const nextXls20 = getters.getXls20.slice(count, count + 4);
-    const nextNfts = await fetchNextXls20WithSellOffer(nextXls20);
+    const owner = rootGetters.user.getAddress;
+
+    const nextNfts = await fetchNextXls20WithSellOffer(nextXls20, owner);
     commit("setAllXls20", nextNfts);
     commit("setAll", nextNfts);
   },
