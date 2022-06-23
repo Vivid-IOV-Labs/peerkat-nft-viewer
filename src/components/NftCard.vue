@@ -150,7 +150,7 @@ export default defineComponent({
       async goToOffer() {
         await store.commit("nft/setCurrent", props.nft);
         router.push({
-          path: `/offers`,
+          path: `/offers/sell`,
         });
       },
       bihompUrl,
