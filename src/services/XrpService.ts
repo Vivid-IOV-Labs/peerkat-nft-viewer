@@ -519,7 +519,8 @@ export async function fetchNextXls20(nextXls20: any[]): Promise<any> {
   }
 }
 export async function fetchNextXls20WithSellOffer(
-  nextXls20: any[]
+  nextXls20: any[],
+  owner: string
 ): Promise<any> {
   try {
     const nextNfts = await Promise.all(
@@ -533,7 +534,9 @@ export async function fetchNextXls20WithSellOffer(
           ...schema,
           selloffers:
             sellOffersResponse && sellOffersResponse.offers
-              ? sellOffersResponse.offers
+              ? sellOffersResponse.offers.filter(
+                  (offer: any) => offer.owner == owner
+                )
               : [],
           buyoffers:
             buyOffersResponse && buyOffersResponse.offers

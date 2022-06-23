@@ -7,11 +7,9 @@ import {
   createBuyOffer,
   cancelBuyOffer,
 } from "../../../services/XrpService";
-import XummSdk from "../../../services/XummService";
 import { ActionTree } from "vuex";
 import { NFT } from "../../../models/NFT";
 import { NFTState } from "./state";
-import { isInXumm } from "../../../utils/isInXumm";
 import { devlog } from "../../../utils/devlog";
 type line = {
   balance: string;
@@ -77,10 +75,16 @@ const actions: ActionTree<NFT, NFTState> = {
     commit("setAll", nextNfts);
   },
 
-  async fetchNextSellOffers({ commit, getters, dispatch }): Promise<void> {
+  async fetchNextSellOffers({
+    commit,
+    getters,
+    dispatch,
+    rootGetters,
+  }): Promise<void> {
     const count = getters.getSellOffers.length;
     const nextXls20 = getters.getXls20.slice(count, count + 4);
-    const nfts_sells = await fetchNextXls20WithSellOffer(nextXls20);
+    const owner = rootGetters.user.getAddress;
+    const nfts_sells = await fetchNextXls20WithSellOffer(nextXls20, owner);
     commit("setSellOffers", nfts_sells);
     if (nfts_sells.every((a: any) => !a) && count < getters.getXls20.length) {
       await dispatch("fetchNextSellOffers");
