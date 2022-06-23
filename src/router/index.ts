@@ -119,7 +119,7 @@ const routes = [
       announcer: {
         message: "Home Wallet Page",
       },
-      beforeEnter: (to, from) => {
+      beforeEnter: (to, from, next) => {
         console.log("to", to);
         console.log("from", from);
         return false;
