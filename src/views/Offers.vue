@@ -1,49 +1,35 @@
 <template>
-  <!-- <ul class="nav nav-tabs">
-    <li class="nav-item">
-      <router-link
-        v-slot="{ navigate, href, isActive }"
-        to="offers/sell"
-        custom
-      >
-        <a
-          class="nav-link"
-          style="padding: 0.4rem 0.6rem"
-          :class="{ active: isActive }"
-          :href="href"
-          @click="navigate"
-          >sell</a
-        >
-      </router-link>
-    </li>
-    <li class="nav-item">
-      <router-link v-slot="{ navigate, href, isActive }" to="offers/buy" custom>
-        <a
-          class="nav-link"
-          style="padding: 0.4rem 0.6rem"
-          :class="{ active: isActive }"
-          :href="href"
-          @click="navigate"
-          >Buy</a
-        >
-      </router-link>
-    </li>
-    <li class="nav-item">
-      <router-link
-        v-slot="{ navigate, href, isActive }"
-        to="offers/sharedoffers"
-        custom
-      >
-        <a
-          class="nav-link"
-          style="padding: 0.4rem 0.6rem"
-          :class="{ active: isActive }"
-          :href="href"
-          @click="navigate"
-          >Offers Shared with me</a
-        >
-      </router-link>
-    </li>
-  </ul> -->
+  <div v-if="route.path == `/offers` || !nft">
+    <h5 class="mt-4 text-center bold">An XLS20 NFT has not been selected</h5>
+    <ul class="mt-2 mb-4 p-2">
+      <li class="pb-2">
+        To view offers for an XLS20 NFT, please select the “Offers” button on
+        one of your XLS20 NFTs in the “My Wallet” or “Shared with me” pages
+      </li>
+      <li class="pb-2">
+        If you do not have any XLS20 NFT that are in your wallet or have been
+        shared with you, please click here to find out how to get one.
+      </li>
+    </ul>
+  </div>
   <router-view></router-view>
 </template>
+<script lang="ts">
+import { defineComponent, computed } from "vue";
+
+import { useStore } from "vuex";
+
+import { useRoute } from "vue-router";
+
+export default defineComponent({
+  setup() {
+    const store = useStore();
+    const route = useRoute();
+    const nft = computed(() => store.getters["nft/getCurrent"]);
+    return {
+      nft,
+      route,
+    };
+  },
+});
+</script>

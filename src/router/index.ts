@@ -113,16 +113,31 @@ const routes = [
     path: "/offers",
     name: "Offers",
     component: () => import("../views/Offers.vue"),
+    beforeEnter: (to: any, from: any, next: any) => {
+      if (to.path === "/offers/sell") {
+        localStorage.setItem("offerpage", "/offers/sell");
+        next();
+        return;
+      }
+      if (to.path === "/offers/buy") {
+        localStorage.setItem("offerpage", "/offers/buy");
+        next();
+        return;
+      }
+      const offerpage = localStorage.getItem("offerpage");
+      if (offerpage && to.path === "/offers") {
+        next({ path: offerpage });
+        return;
+      } else {
+        next();
+        return;
+      }
+    },
     meta: {
       withAuth: true,
       title: "Home Wallet Page",
       announcer: {
         message: "Home Wallet Page",
-      },
-      beforeEnter: (to, from, next) => {
-        console.log("to", to);
-        console.log("from", from);
-        return false;
       },
     },
     children: [
