@@ -164,7 +164,11 @@ export default defineComponent({
     const currentNft = account_nfts.find((n: any) => n.NFTokenID == nftId);
     const { URI, Issuer, NFTokenID } = currentNft;
     nft.value = await getOneXls({ URI, Issuer, NFTokenID });
+    console.log("nft", nft);
     const { offers } = sellOffers;
+    console.log("sellOffers", sellOffers);
+    console.log("offers", offers);
+
     if (offers) {
       offer.value = offers.find((o: any) => o.nft_offer_index === offerId);
     }
@@ -173,6 +177,8 @@ export default defineComponent({
       //   selloffer: { nft: nft.value, offer: offer.value },
       //   walletaddress: walletAddress.value,
       // });
+      console.log("addShared", offer.value);
+
       store.commit("nft/addShared", {
         shared: nft.value,
         nodetype: nodetype.value,

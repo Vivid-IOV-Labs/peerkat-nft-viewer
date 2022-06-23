@@ -93,8 +93,10 @@ const mutations: MutationTree<NFTState> = {
       }
     );
     if (!exist) {
-      if (offer) {
+      if (!shared.selloffers) {
         shared.selloffers = [];
+      }
+      if (offer) {
         shared.selloffers = [offer];
       }
       state.sharedwithme[walletaddress][nodetype] = [
