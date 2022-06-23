@@ -86,7 +86,6 @@ export default defineComponent({
   async setup() {
     const store = useStore();
     const route = useRoute();
-    console.log(route);
     const sentinel = ref<HTMLElement | null>(null);
     const scroller = ref<HTMLElement | null>(null);
     const isInXumm = inject("isInXumm");
@@ -170,23 +169,20 @@ export default defineComponent({
       }
     });
 
-    if ((lines.value && lines.value.length === 0) || route.query.refresh) {
+    if (lines.value && lines.value.length === 0) {
       await store.dispatch("nft/fetchNftLines", {
         walletAddress: walletAddress.value,
         nodetype: nodetype.value,
       });
     }
-    if (
-      (xls20count.value && xls20count.value.length === 0) ||
-      route.query.refresh
-    ) {
+    if (xls20count.value && xls20count.value.length === 0) {
       await populateNFTs();
     }
-    console.log(route.query.refresh);
-    if (route.query.refresh) {
+    if (route.query.refresh == "true") {
       await store.commit("nft/setAllXls20", []);
       await store.commit("nft/setAll", []);
       await store.commit("nft/setLines", []);
+      console.log("populate again");
       await populateNFTs();
     }
     return {
