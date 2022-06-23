@@ -86,6 +86,11 @@ const mutations: MutationTree<NFTState> = {
       }
     }
   },
+  deleteSharedBuyOffer(state: NFTState, { walletaddress, nftID }: any) {
+    if (state.sharedBuyOffers[walletaddress][nftID]) {
+      state.sharedBuyOffers[walletaddress][nftID] = [];
+    }
+  },
   addShared(
     state: NFTState,
     { shared, nodetype, walletaddress, offer }: addSharedParams
@@ -95,11 +100,7 @@ const mutations: MutationTree<NFTState> = {
         return n.issuer === shared.issuer && n.currency === shared.currency;
       }
     );
-    console.log("shared", shared);
-
     if (!exist) {
-      console.log("!exist", exist);
-
       if (offer) {
         shared.selloffers = [offer];
       }
@@ -122,7 +123,6 @@ const mutations: MutationTree<NFTState> = {
       }
     }
   },
-
   addSellOffer(state, offers) {
     if (state.currentNFT) {
       state.currentNFT.selloffers = offers ? offers : [];
@@ -143,13 +143,10 @@ const mutations: MutationTree<NFTState> = {
           return o.nft_offer_index != offerID;
         }
       );
-
       const { currency } = state.currentNFT;
-
       const currentNft: any = state.allXls20.find(
         (n) => n.currency === currency
       );
-
       if (currentNft) {
         if (!currentNft.selloffers) currentNft.selloffers = [];
         currentNft.selloffers = currentNft.selloffers.filter((o: any) => {

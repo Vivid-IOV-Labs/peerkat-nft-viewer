@@ -45,6 +45,7 @@ export default defineComponent({
     const network = computed(() => store.getters["user/getNetwork"]);
     const walletaddress = computed(() => store.getters["user/getAddress"]);
     const user = computed(() => store.getters["user/getUser"]);
+    const nodetype = computed(() => store.getters["user/getNodeType"]);
 
     const bihompUrl = computed(() =>
       getInspectorUrl(network.value, props.offer.nft_offer_index)
@@ -61,6 +62,10 @@ export default defineComponent({
               User: user.value,
             },
             async () => {
+              await store.commit("nft/deleteSharedBuyOffer", {
+                nodetype: nodetype.value,
+                walletaddress: user,
+              });
               await store.commit("nft/deleteCurrent");
               await store.commit("nft/setAllXls20", []);
               await store.commit("nft/setAll", []);
