@@ -186,7 +186,10 @@ export default defineComponent({
             async () => {
               const { offers } = await fetchSellOffers(nft.value.currency);
 
-              await store.commit("nft/addSellOffer", offers);
+              await store.commit(
+                "nft/addSellOffer",
+                offers.filter((o) => o.owner == walletAddress.value)
+              );
             }
           );
           const { uuid } = created;
