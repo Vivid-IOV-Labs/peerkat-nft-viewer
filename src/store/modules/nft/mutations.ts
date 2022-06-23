@@ -95,11 +95,8 @@ const mutations: MutationTree<NFTState> = {
     console.log("shared", shared);
 
     if (!exist) {
-      console.log("exist", exist);
+      console.log("!exist", exist);
 
-      if (!shared.selloffers) {
-        shared.selloffers = [];
-      }
       if (offer) {
         shared.selloffers = [offer];
       }
@@ -109,6 +106,9 @@ const mutations: MutationTree<NFTState> = {
       ];
     }
     if (exist && offer) {
+      if (!exist.selloffers) {
+        exist.selloffers = [];
+      }
       const offerExists =
         exist.selloffers &&
         exist.selloffers.filter((o: any) => {
