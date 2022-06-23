@@ -182,7 +182,13 @@ export default defineComponent({
     ) {
       await populateNFTs();
     }
-
+    console.log(route.query.refresh);
+    if (route.query.refresh) {
+      await store.commit("nft/setAllXls20", []);
+      await store.commit("nft/setAll", []);
+      await store.commit("nft/setLines", []);
+      await populateNFTs();
+    }
     return {
       sentinel,
       endload,
