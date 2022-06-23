@@ -60,7 +60,8 @@ export default defineComponent({
               OfferID: props.offer.nft_offer_index,
               User: user.value,
             },
-            () => {
+            async () => {
+              await store.commit("nft/deleteCurrent");
               router.push({
                 path: `/wallet?refresh="true"`,
                 replace: true,

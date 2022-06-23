@@ -49,6 +49,9 @@ const mutations: MutationTree<NFTState> = {
   setCurrent(state: NFTState, nft: NFT): void {
     state.currentNFT = nft;
   },
+  deleteCurrent(state: NFTState): void {
+    state.currentNFT = null;
+  },
   resetAll(state: NFTState): void {
     state.lines = [];
     state.all = [];
