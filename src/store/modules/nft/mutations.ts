@@ -92,7 +92,11 @@ const mutations: MutationTree<NFTState> = {
         return n.issuer === shared.issuer && n.currency === shared.currency;
       }
     );
+    console.log("shared", shared);
+
     if (!exist) {
+      console.log("exist", exist);
+
       if (!shared.selloffers) {
         shared.selloffers = [];
       }
