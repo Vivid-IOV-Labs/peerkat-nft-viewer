@@ -169,7 +169,8 @@ export default defineComponent({
         await store.dispatch("nft/disconnect");
       }
     });
-    if (lines.value && lines.value.length === 0) {
+
+    if ((lines.value && lines.value.length === 0) || route.query.refresh) {
       await store.dispatch("nft/fetchNftLines", {
         walletAddress: walletAddress.value,
         nodetype: nodetype.value,

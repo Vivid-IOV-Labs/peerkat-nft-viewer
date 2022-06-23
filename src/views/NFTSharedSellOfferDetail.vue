@@ -151,7 +151,7 @@ export default defineComponent({
     );
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const user = computed(() => store.getters["user/getUser"]);
-    const walletAddress = computed(() => store.getters["user/getAddress"]);
+    const walletaddress = computed(() => store.getters["user/getAddress"]);
 
     const malformedLink = ref(false);
     const network = computed(() => store.getters["user/getNetwork"]);
@@ -205,11 +205,26 @@ export default defineComponent({
       },
       async accept() {
         if (isInXumm()) {
-          const acceptOffer = XummSdk.acceptOffer({
-            Account: walletaddress.value,
-            OfferID: props.offer.nft_offer_index,
-            User: user.value,
-          });
+          const acceptOffer = XummSdk.acceptOffer(
+            {
+              Account: walletaddress.value,
+              OfferID: offerId,
+              User: user.value,
+            },
+            async () => {
+              await store.commit("nft/deleteShared", {
+                currency: nft.value.currency,
+                nodetype: nodetype.value,
+                walletaddress: user.value,
+              });
+              await store.commit("nft/setAllXls20", []);
+              await store.commit("nft/setAll", []);
+              await store.commit("nft/setLines", []);
+              router.push({
+                path: `/wallet?refresh="true"`,
+              });
+            }
+          );
           devlog("acceptOffer", acceptOffer);
           const { uuid } = acceptOffer;
           openSignRequest(uuid);

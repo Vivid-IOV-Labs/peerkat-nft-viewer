@@ -204,7 +204,10 @@ export default defineComponent({
               OfferID: offer.value.nft_offer_index,
               User: user.value,
             },
-            () => {
+            async () => {
+              await store.commit("nft/setAllXls20", []);
+              await store.commit("nft/setAll", []);
+              await store.commit("nft/setLines", []);
               router.push({
                 path: `/wallet?refresh="true"`,
               });
