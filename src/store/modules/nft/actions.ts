@@ -70,7 +70,7 @@ const actions: ActionTree<NFT, NFTState> = {
   async fetchNextXls20({ commit, getters, rootGetters }): Promise<void> {
     const count = getters.getAll.length;
     const nextXls20 = getters.getXls20.slice(count, count + 4);
-    const owner = rootGetters.user.getAddress;
+    const owner = rootGetters["user/getAddress"];
 
     const nextNfts = await fetchNextXls20WithSellOffer(nextXls20, owner);
     commit("setAllXls20", nextNfts);
@@ -85,7 +85,8 @@ const actions: ActionTree<NFT, NFTState> = {
   }): Promise<void> {
     const count = getters.getSellOffers.length;
     const nextXls20 = getters.getXls20.slice(count, count + 4);
-    const owner = rootGetters.user.getAddress;
+    const owner = rootGetters["user/getAddress"];
+
     const nfts_sells = await fetchNextXls20WithSellOffer(nextXls20, owner);
     commit("setSellOffers", nfts_sells);
     if (nfts_sells.every((a: any) => !a) && count < getters.getXls20.length) {
