@@ -100,6 +100,7 @@ class XummService {
       Amount,
       Flags: 0,
     };
+    devlog("transactionBlob", transactionBlob);
 
     try {
       const created = await this.createPayload(transactionBlob, User, onSigned);
