@@ -188,7 +188,7 @@ export default defineComponent({
       store.commit("nft/addShared", {
         shared: nft.value,
         nodetype: nodetype.value,
-        walletaddress: walletaddress.value,
+        walletaddress: route.params.owner.toString(),
         user: user.value,
         offer: offer.value,
       });

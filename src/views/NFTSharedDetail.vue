@@ -158,7 +158,7 @@ export default defineComponent({
         store.commit("nft/addShared", {
           shared: nft.value,
           nodetype: nodetype.value,
-          walletaddress: walletAddress.value,
+          walletaddress: route.params.nftAddress.toString(),
           user: user.value,
         });
       } catch (error) {
@@ -177,7 +177,7 @@ export default defineComponent({
           store.commit("nft/addShared", {
             shared: nft.value,
             nodetype: nodetype.value,
-            walletaddress: walletAddress.value,
+            walletaddress: route.params.nftAddress.toString(),
             user: user.value,
           });
         } else {
