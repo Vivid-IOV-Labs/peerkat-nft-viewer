@@ -7,6 +7,7 @@ interface addSharedParams {
   offer?: any;
   nodetype: keyof SharedNFTs;
   walletaddress: string;
+  user: string;
 }
 interface deleteSharedParams {
   currency: string;
@@ -93,9 +94,9 @@ const mutations: MutationTree<NFTState> = {
   },
   addShared(
     state: NFTState,
-    { shared, nodetype, walletaddress, offer }: addSharedParams
+    { shared, nodetype, walletaddress, offer, user }: addSharedParams
   ): void {
-    const exist: any = state.sharedwithme[walletaddress][nodetype].find(
+    const exist: any = state.sharedwithme[user][nodetype].find(
       (n: { issuer: string; currency: string }) => {
         return n.issuer === shared.issuer && n.currency === shared.currency;
       }
@@ -105,8 +106,8 @@ const mutations: MutationTree<NFTState> = {
       if (offer) {
         shared.selloffers = [offer];
       }
-      state.sharedwithme[walletaddress][nodetype] = [
-        ...state.sharedwithme[walletaddress][nodetype],
+      state.sharedwithme[user][nodetype] = [
+        ...state.sharedwithme[user][nodetype],
         shared,
       ];
     }

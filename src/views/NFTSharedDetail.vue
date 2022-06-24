@@ -158,7 +158,8 @@ export default defineComponent({
         store.commit("nft/addShared", {
           shared: nft.value,
           nodetype: nodetype.value,
-          walletaddress: user.value,
+          walletaddress: walletAddress.value,
+          user: user.value,
         });
       } catch (error) {
         malformedLink.value = true;
@@ -176,7 +177,8 @@ export default defineComponent({
           store.commit("nft/addShared", {
             shared: nft.value,
             nodetype: nodetype.value,
-            walletaddress: user.value,
+            walletaddress: walletAddress.value,
+            user: user.value,
           });
         } else {
           throw new Error("Not an XLS20");
