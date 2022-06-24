@@ -175,7 +175,9 @@ export default defineComponent({
               const { offers } = await fetchBuyOffers(nft.value.currency);
 
               await store.commit("nft/addBuyOffer", {
-                offers,
+                offers: offers.filter(
+                  (o: any) => o.owner == walletAddress.value
+                ),
                 nodetype: nodetype.value,
                 walletaddress: user.value,
               });
