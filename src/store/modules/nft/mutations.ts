@@ -162,8 +162,6 @@ const mutations: MutationTree<NFTState> = {
       state.currentNFT.buyoffers = offers ? offers : [];
     }
     if (state.currentNFT) {
-      state.currentNFT.selloffers = offers ? offers : [];
-
       const { currency } = state.currentNFT;
       if (state.sharedwithme[walletaddress][nodetype]) {
         const currentNft: any = state.sharedwithme[walletaddress][
