@@ -172,6 +172,7 @@ export default defineComponent({
     const account_nfts = await fetchXls20(owner);
     console.log("owner", owner);
     console.log("account_nfts", account_nfts);
+    console.log("nftId", nftId);
 
     const currentNft = account_nfts.find((n: any) => n.NFTokenID == nftId);
     console.log("currentNft", currentNft);
