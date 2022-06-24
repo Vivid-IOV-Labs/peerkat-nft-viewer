@@ -474,14 +474,17 @@ export async function fetchOneXls20(
 export async function getOneXls(nft: any) {
   try {
     const { Issuer, NFTokenID, URI } = nft;
+    console.log(nft);
     const url =
       ipfsGateway + "/" + hexToString(URI).split("//")[1] + "/base.json";
     const res = await fetch(url);
-    const { description, image, name, schema } = await res.json();
+    const details = await res.json();
+    const { description, image, name, schema } = details;
     //const schemaUrl = ipfsPublicGateway + "/" + schema.split("//")[1]+"/$SchemaFile.json";
     const imageUrl = ipfsPublicGateway + "/" + image.split("//")[1];
     // const result = await fetch(schemaUrl).then((res) => res.json());
     const media_type = "image/jpeg";
+    debugger;
     return {
       issuer: Issuer,
       currency: NFTokenID,
@@ -508,8 +511,7 @@ export async function fetchNextXls20(nextXls20: any[]): Promise<any> {
   try {
     const nextNfts = await Promise.all(
       nextXls20.map(async (nft: any) => {
-        const { URI, Issuer, NFTokenID } = nft;
-        const one = await getOneXls({ URI, Issuer, NFTokenID });
+        const one = await getOneXls(nft);
         return one;
       })
     );
@@ -525,8 +527,8 @@ export async function fetchNextXls20WithSellOffer(
   try {
     const nextNfts = await Promise.all(
       nextXls20.map(async (nft: any) => {
-        const { URI, Issuer, NFTokenID } = nft;
-        const schema = await getOneXls({ URI, Issuer, NFTokenID });
+        const { NFTokenID } = nft;
+        const schema = await getOneXls(nft);
         const sellOffersResponse = await fetchSellOffers(NFTokenID);
         const buyOffersResponse = await fetchBuyOffers(NFTokenID);
         console.log("buyOffersResponse", buyOffersResponse);

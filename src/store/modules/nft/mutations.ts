@@ -100,6 +100,7 @@ const mutations: MutationTree<NFTState> = {
         return n.issuer === shared.issuer && n.currency === shared.currency;
       }
     );
+    shared.owner = walletaddress;
     if (!exist) {
       if (offer) {
         shared.selloffers = [offer];
