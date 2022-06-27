@@ -231,7 +231,7 @@ export default defineComponent({
           openSignRequest(uuid);
         } else {
           await acceptOffer({
-            OfferID: props.offer.nft_offer_index,
+            OfferID: offerId,
           });
           router.push({
             path: `/wallet`,

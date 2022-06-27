@@ -1,5 +1,5 @@
 <template>
-  <div v-if="route.path == `/offers` || !nft">
+  <div v-if="route.path == `/offers` && !nft">
     <h5 class="mt-4 text-center bold">An XLS20 NFT has not been selected</h5>
     <ul class="mt-2 mb-4 p-2">
       <li class="pb-2">
