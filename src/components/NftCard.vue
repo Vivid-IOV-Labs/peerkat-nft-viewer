@@ -135,8 +135,8 @@ export default defineComponent({
         ? props.nft.selloffers.length
         : 0;
     const countBuyOffer =
-      props.nft.buyoffer && props.nft.buyoffer.length
-        ? props.nft.buyoffer.length
+      props.nft.buyoffers && props.nft.buyoffers.length
+        ? props.nft.buyoffers.length
         : 0;
     const countOffers = countSellOffer + countBuyOffer;
 
