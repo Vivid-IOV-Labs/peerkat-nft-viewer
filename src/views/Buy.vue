@@ -69,7 +69,7 @@
             <buy-offer-card
               v-if="offer"
               :token="nft.currency"
-              :owner="nft.issuer"
+              :owner="nft.owner"
               :offer="offer"
             ></buy-offer-card>
           </div>
