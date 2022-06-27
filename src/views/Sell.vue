@@ -55,8 +55,8 @@
           href="#"
           @click="showTab = 'buy'"
           >Buy Offers shared with me
-          <span v-if="sharedBUyOffers && sharedBUyOffers.length"
-            >({{ sharedBUyOffers.length }})</span
+          <span v-if="nft.buyoffers && nft.buyoffers.length"
+            >({{ nft.buyoffers.length }})</span
           >
         </a>
       </li>
@@ -84,7 +84,7 @@
         </div>
       </div>
       <div v-if="showTab === 'buy'">
-        <div v-if="!sharedBUyOffers || sharedBUyOffers.length == 0">
+        <div v-if="!nft.buyoffers || nft.buyoffers.length == 0">
           <p>
             Peerkat is not able to find any buy offers, shared with this wallet
             for this NFT
@@ -92,7 +92,7 @@
         </div>
         <div v-else>
           <div
-            v-for="offer in sharedBUyOffers"
+            v-for="offer in nft.buyoffers"
             :key="offer.nft_offer_index"
             class="mt-4"
           >
@@ -158,6 +158,7 @@ export default defineComponent({
     const showTab = ref("sell");
     const walletAddress = computed(() => store.getters["user/getAddress"]);
     const user = computed(() => store.getters["user/getUser"]);
+
     const sharedBUyOffers = computed(() => {
       return store.getters["nft/getSharedBuyOffers"](nft.value.currency);
     });
