@@ -45,8 +45,6 @@ export default defineComponent({
     const network = computed(() => store.getters["user/getNetwork"]);
     const walletaddress = computed(() => store.getters["user/getAddress"]);
     const user = computed(() => store.getters["user/getUser"]);
-    const nodetype = computed(() => store.getters["user/getNodeType"]);
-
     const bihompUrl = computed(() =>
       getInspectorUrl(network.value, props.offer.nft_offer_index)
     );
