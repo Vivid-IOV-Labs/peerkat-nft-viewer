@@ -169,7 +169,8 @@ export default defineComponent({
       }
     });
 
-    console.log("route.query.refresh", route.query.refresh);
+    console.log("route.query.refresh", route);
+    console.log("route.query.refresh", route.query);
     if (route.query.refresh == "true" || route.query.refresh) {
       await store.commit("nft/setAllXls20", []);
       await store.commit("nft/setAll", []);

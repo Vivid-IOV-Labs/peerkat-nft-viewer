@@ -519,36 +519,32 @@ export async function fetchNextXls20WithSellOffer(
   nextXls20: any[],
   owner: string
 ): Promise<any> {
-  try {
-    const nextNfts = await Promise.all(
-      nextXls20.map(async (nft: any) => {
-        const { NFTokenID } = nft;
-        const schema = await getOneXls(nft);
-        const sellOffersResponse = await fetchSellOffers(NFTokenID);
-        const buyOffersResponse = await fetchBuyOffers(NFTokenID);
-        console.log("buyOffersResponse", buyOffersResponse);
-        return {
-          ...schema,
-          selloffers:
-            sellOffersResponse && sellOffersResponse.offers
-              ? sellOffersResponse.offers.filter(
-                  (offer: any) => offer.owner == owner
-                )
-              : [],
-          buyoffers:
-            buyOffersResponse && buyOffersResponse.offers
-              ? buyOffersResponse.offers
-              : // .filter(
-                //     (offer: any) => offer.owner == owner
-                //   )
-                [],
-        };
-      })
-    );
-    return nextNfts;
-  } catch (error) {
-    devlog(error);
-  }
+  const nextNfts = await Promise.all(
+    nextXls20.map(async (nft: any) => {
+      const { NFTokenID } = nft;
+      const schema = await getOneXls(nft);
+      const sellOffersResponse = await fetchSellOffers(NFTokenID);
+      const buyOffersResponse = await fetchBuyOffers(NFTokenID);
+      console.log("buyOffersResponse", buyOffersResponse);
+      return {
+        ...schema,
+        selloffers:
+          sellOffersResponse && sellOffersResponse.offers
+            ? sellOffersResponse.offers.filter(
+                (offer: any) => offer.owner == owner
+              )
+            : [],
+        buyoffers:
+          buyOffersResponse && buyOffersResponse.offers
+            ? buyOffersResponse.offers
+            : // .filter(
+              //     (offer: any) => offer.owner == owner
+              //   )
+              [],
+      };
+    })
+  );
+  return nextNfts;
 }
 export async function cancelOffer({ TokenID, OfferID }: any): Promise<any> {
   const wallet = xrpl.Wallet.fromSeed(walletSecret);
