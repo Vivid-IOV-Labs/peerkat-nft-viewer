@@ -119,8 +119,10 @@ const mutations: MutationTree<NFTState> = {
         exist.selloffers.filter((o: any) => {
           o.nft_offer_index == offer.nft_offer_index;
         }).length > 0;
-      console.log("offerExists", offerExists);
+      console.log("offer", offer);
       console.log("selloffers", exist.selloffers);
+      console.log("offerExists", offerExists);
+
       if (!offerExists) {
         exist.selloffers = [...exist.selloffers, offer];
       }
