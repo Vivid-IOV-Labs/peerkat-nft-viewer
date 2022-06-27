@@ -178,7 +178,7 @@ export default defineComponent({
     if (xls20count.value && xls20count.value.length === 0) {
       await populateNFTs();
     }
-    if (route.query.refresh == "true") {
+    if (route.query.refresh == "true" || route.query.refresh) {
       await store.commit("nft/setAllXls20", []);
       await store.commit("nft/setAll", []);
       await store.commit("nft/setLines", []);

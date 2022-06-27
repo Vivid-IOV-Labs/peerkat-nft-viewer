@@ -62,13 +62,10 @@ export default defineComponent({
               User: user.value,
             },
             async () => {
-              console.log("deleteCurrent");
               await store.commit("nft/deleteCurrent");
               await store.commit("nft/setAllXls20", []);
               await store.commit("nft/setAll", []);
               await store.commit("nft/setLines", []);
-              console.log("nft/setLines");
-
               router.push({
                 path: `/wallet?refresh="true"`,
                 replace: true,
