@@ -192,7 +192,7 @@ export default defineComponent({
             await store.dispatch("nft/createBuyOffer", {
               walletAddress: walletAddress.value,
               TokenID: nft.value.currency,
-              Owner: nft.value.issuer,
+              Owner: nft.value.owner,
               Amount: saleamount.value,
             });
             toggleSellDialog.value = false;
