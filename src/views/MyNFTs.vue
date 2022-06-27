@@ -185,6 +185,8 @@ export default defineComponent({
     }
     if (xls20count.value && xls20count.value.length === 0) {
       await populateNFTs();
+    } else {
+      await populateXls14NFTs();
     }
     return {
       sentinel,
