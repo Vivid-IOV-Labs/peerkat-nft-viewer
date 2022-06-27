@@ -183,13 +183,13 @@ export default defineComponent({
     if (offers) {
       offer.value = offers.find((o: any) => o.nft_offer_index === offerId);
     }
-    if (offer.value) {
-      store.commit("nft/addSharedBuyOffer", {
-        buyoffer: offer.value,
-        walletaddress: walletAddress.value,
-        nftID: nft.value.currency,
-      });
-    }
+    // if (offer.value) {
+    //   store.commit("nft/addSharedBuyOffer", {
+    //     buyoffer: offer.value,
+    //     walletaddress: walletAddress.value,
+    //     nftID: nft.value.currency,
+    //   });
+    // }
 
     return {
       nft,

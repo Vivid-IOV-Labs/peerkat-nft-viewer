@@ -71,7 +71,9 @@
         </div>
         <div v-else>
           <div
-            v-for="offer in nft.selloffers"
+            v-for="offer in nft.selloffers.sort(
+              (a:any, b:any) => b.saleamount + b.saleamount
+            )"
             :key="offer.nft_offer_index"
             class="mt-4"
           >
@@ -92,7 +94,9 @@
         </div>
         <div v-else>
           <div
-            v-for="offer in nft.buyoffers"
+            v-for="offer in nft.buyoffers.sort(
+              (a:any, b:any) => b.saleamount - b.saleamount
+            )"
             :key="offer.nft_offer_index"
             class="mt-4"
           >
@@ -159,15 +163,11 @@ export default defineComponent({
     const walletAddress = computed(() => store.getters["user/getAddress"]);
     const user = computed(() => store.getters["user/getUser"]);
 
-    const sharedBUyOffers = computed(() => {
-      return store.getters["nft/getSharedBuyOffers"](nft.value.currency);
-    });
     return {
       nft,
       saleamount,
       toggleSellDialog,
       showTab,
-      sharedBUyOffers,
       openSellDialog() {
         toggleSellDialog.value = true;
       },

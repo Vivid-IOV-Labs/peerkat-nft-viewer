@@ -65,33 +65,33 @@ const mutations: MutationTree<NFTState> = {
       DEVNET: [],
     };
   },
-  initSharedBuyOffersStore(state: NFTState, walletaddress) {
-    state.sharedBuyOffers[walletaddress] = {};
-  },
-  addSharedBuyOffer(state: NFTState, { buyoffer, walletaddress, nftID }: any) {
-    if (!state.sharedBuyOffers[walletaddress]) {
-      state.sharedBuyOffers[walletaddress] = {};
-    }
-    if (!state.sharedBuyOffers[walletaddress][nftID]) {
-      state.sharedBuyOffers[walletaddress][nftID] = [buyoffer];
-    } else {
-      const exist =
-        state.sharedBuyOffers[walletaddress][nftID].filter((o: any) => {
-          return o.nft_offer_index == buyoffer.nft_offer_index;
-        }).length > 0;
-      if (!exist) {
-        state.sharedBuyOffers[walletaddress][nftID] = [
-          ...state.sharedBuyOffers[walletaddress][nftID],
-          buyoffer,
-        ];
-      }
-    }
-  },
-  deleteSharedBuyOffer(state: NFTState, { walletaddress, nftID }: any) {
-    if (state.sharedBuyOffers[walletaddress][nftID]) {
-      state.sharedBuyOffers[walletaddress][nftID] = [];
-    }
-  },
+  // initSharedBuyOffersStore(state: NFTState, walletaddress) {
+  //   state.sharedBuyOffers[walletaddress] = {};
+  // },
+  // addSharedBuyOffer(state: NFTState, { buyoffer, walletaddress, nftID }: any) {
+  //   if (!state.sharedBuyOffers[walletaddress]) {
+  //     state.sharedBuyOffers[walletaddress] = {};
+  //   }
+  //   if (!state.sharedBuyOffers[walletaddress][nftID]) {
+  //     state.sharedBuyOffers[walletaddress][nftID] = [buyoffer];
+  //   } else {
+  //     const exist =
+  //       state.sharedBuyOffers[walletaddress][nftID].filter((o: any) => {
+  //         return o.nft_offer_index == buyoffer.nft_offer_index;
+  //       }).length > 0;
+  //     if (!exist) {
+  //       state.sharedBuyOffers[walletaddress][nftID] = [
+  //         ...state.sharedBuyOffers[walletaddress][nftID],
+  //         buyoffer,
+  //       ];
+  //     }
+  //   }
+  // },
+  // deleteSharedBuyOffer(state: NFTState, { walletaddress, nftID }: any) {
+  //   if (state.sharedBuyOffers[walletaddress][nftID]) {
+  //     state.sharedBuyOffers[walletaddress][nftID] = [];
+  //   }
+  // },
   addShared(
     state: NFTState,
     { shared, nodetype, walletaddress, offer, user }: addSharedParams

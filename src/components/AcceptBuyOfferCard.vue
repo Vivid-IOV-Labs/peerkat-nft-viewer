@@ -62,10 +62,6 @@ export default defineComponent({
               User: user.value,
             },
             async () => {
-              await store.commit("nft/deleteSharedBuyOffer", {
-                nodetype: nodetype.value,
-                walletaddress: user.value,
-              });
               await store.commit("nft/deleteCurrent");
               await store.commit("nft/setAllXls20", []);
               await store.commit("nft/setAll", []);
