@@ -54,7 +54,7 @@
           :class="{ active: showTab === 'buy' }"
           href="#"
           @click="showTab = 'buy'"
-          >Buy Offers shared with me
+          >Buy Offers
           <span v-if="nft.buyoffers && nft.buyoffers.length"
             >({{ nft.buyoffers.length }})</span
           >

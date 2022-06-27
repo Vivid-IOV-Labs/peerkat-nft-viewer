@@ -537,10 +537,11 @@ export async function fetchNextXls20WithSellOffer(
               : [],
           buyoffers:
             buyOffersResponse && buyOffersResponse.offers
-              ? buyOffersResponse.offers.filter(
-                  (offer: any) => offer.owner == owner
-                )
-              : [],
+              ? buyOffersResponse.offers
+              : // .filter(
+                //     (offer: any) => offer.owner == owner
+                //   )
+                [],
         };
       })
     );
