@@ -75,7 +75,7 @@ class XummService {
       TransactionType: "NFTokenCreateOffer",
       Account,
       NFTokenID,
-      Amount,
+      // Amount,
       Flags: 1,
     };
     devlog("Sell transactionBlob", transactionBlob);
@@ -97,7 +97,7 @@ class XummService {
       Account,
       Owner,
       NFTokenID,
-      Amount,
+      // Amount,
       Flags: 0,
     };
     devlog("transactionBlob", transactionBlob);
