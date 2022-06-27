@@ -103,6 +103,7 @@
             <accept-buy-offer-card
               v-if="offer"
               :offer="offer"
+              :nft-id="nft.currency"
             ></accept-buy-offer-card>
           </div>
         </div>

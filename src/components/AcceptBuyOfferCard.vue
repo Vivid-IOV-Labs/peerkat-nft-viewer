@@ -38,6 +38,7 @@ export default defineComponent({
   },
   props: {
     offer: { type: Object, required: true },
+    nftId: { type: String, required: true },
   },
   async setup(props) {
     const router = useRouter();
@@ -63,6 +64,11 @@ export default defineComponent({
             },
             async () => {
               await store.commit("nft/resetAll");
+              await store.commit("nft/deleteShared", {
+                currency: props.nftId,
+                nodetype: nodetype.value,
+                walletaddress: user.value,
+              });
               router.push({
                 path: `/wallet?refresh="true"`,
                 replace: true,
