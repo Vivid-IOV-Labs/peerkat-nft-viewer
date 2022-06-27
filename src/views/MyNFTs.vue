@@ -169,6 +169,14 @@ export default defineComponent({
       }
     });
 
+    console.log("route.query.refresh", route.query.refresh);
+    if (route.query.refresh == "true" || route.query.refresh) {
+      await store.commit("nft/setAllXls20", []);
+      await store.commit("nft/setAll", []);
+      await store.commit("nft/setLines", []);
+      console.log("populate again");
+      await populateNFTs();
+    }
     if (lines.value && lines.value.length === 0) {
       await store.dispatch("nft/fetchNftLines", {
         walletAddress: walletAddress.value,
@@ -176,13 +184,6 @@ export default defineComponent({
       });
     }
     if (xls20count.value && xls20count.value.length === 0) {
-      await populateNFTs();
-    }
-    if (route.query.refresh == "true" || route.query.refresh) {
-      await store.commit("nft/setAllXls20", []);
-      await store.commit("nft/setAll", []);
-      await store.commit("nft/setLines", []);
-      console.log("populate again");
       await populateNFTs();
     }
     return {
