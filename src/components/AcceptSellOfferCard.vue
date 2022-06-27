@@ -69,10 +69,7 @@ export default defineComponent({
                 nodetype: nodetype.value,
                 walletaddress: user.value,
               });
-              await store.commit("nft/deleteCurrent");
-              await store.commit("nft/setAllXls20", []);
-              await store.commit("nft/setAll", []);
-              await store.commit("nft/setLines", []);
+              await store.commit("nft/resetAll");
               router.push({
                 path: `/wallet?refresh="true"`,
                 replace: true,

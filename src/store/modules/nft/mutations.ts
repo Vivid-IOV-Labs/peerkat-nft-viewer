@@ -56,6 +56,9 @@ const mutations: MutationTree<NFTState> = {
   resetAll(state: NFTState): void {
     state.lines = [];
     state.all = [];
+    state.allXls20 = [];
+    state.xls20nfts = [];
+    state.currentNFT = null;
   },
   initSharedStore(state: NFTState, walletaddress) {
     state.sharedwithme[walletaddress] = {
