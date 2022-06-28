@@ -265,9 +265,6 @@ router.beforeEach(async (to, from, next) => {
       if (!shared.value) {
         store.commit("nft/initSharedStore", ottdata.value.user);
       }
-      if (!sharedBuyOffers.value) {
-        store.commit("nft/initSharedBuyOffersStore", ottdata.value.account);
-      }
 
       const path = ottdata.value.redirect;
       loggedIn = true;
