@@ -82,17 +82,22 @@ import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import ExternalLink from "@/components/ExternalLink.vue";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
+import { getNetworkCodeFromType } from "../utils/getNetworkTypeFromCode";
+
 export default defineComponent({
   components: {
     ExternalLink,
   },
   props: {
     nft: { type: Object, required: true },
+    shared: { type: Boolean, default: false },
   },
   async setup(props) {
     const store = useStore();
     const network = computed(() => store.getters["user/getNetwork"]);
     const router = useRouter();
+    const nodetype = computed(() => store.getters["user/getNodeType"]);
+    const nodetypecode = computed(() => getNetworkCodeFromType(nodetype.value));
 
     const bihompUrl = computed(() =>
       getInspectorUrl(network.value, props.nft.currency)
@@ -102,7 +107,9 @@ export default defineComponent({
       bihompUrl,
       view() {
         router.push({
-          path: `/wallet/${props.nft.issuer}/view/${props.nft.currency}`,
+          path: props.shared
+            ? `/shared/${props.nft.issuer}/${nodetypecode.value}/view/${props.nft.currency}`
+            : `/wallet/${props.nft.issuer}/view/${props.nft.currency}`,
         });
       },
     };

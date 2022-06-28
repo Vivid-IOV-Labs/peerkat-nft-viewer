@@ -1,6 +1,6 @@
 <template>
   <div v-if="nft">
-    <sell-nft-card v-if="nft" :nft="nft">
+    <sell-nft-card v-if="nft" :nft="nft" :shared="true">
       <template #footer>
         <base-button @click="openSellDialog">Create Buy Offer</base-button>
       </template>
