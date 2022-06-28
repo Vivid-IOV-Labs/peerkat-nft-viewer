@@ -4,7 +4,7 @@
       <div class="d-flex flex-column justify-content-between">
         <div class="d-flex justify-content-between">
           <div class="col-4">
-            <figure style="overflow: hidden; height: 100px">
+            <figure style="overflow: hidden; height: 90px">
               <a
                 class="h-100 d-block"
                 style="overflow: hidden"
@@ -16,7 +16,7 @@
                   :src="nft.url"
                   poster="/thumbnail.jpg"
                   muted
-                  class="img-fluid card-img-top"
+                  class="img-fluid card-img"
                   style="
                     object-fit: cover;
                     height: 100%;
@@ -31,7 +31,7 @@
                     height: 100%;
                     object-position: center top;
                   "
-                  class="img-fluid card-img-top"
+                  class="img-fluid card-img"
                   alt="Card
           image cap"
                 />
@@ -43,7 +43,7 @@
                     height: 100%;
                     object-position: center top;
                   "
-                  class="img-fluid card-img-top"
+                  class="img-fluid card-img"
                   alt="Card
           image cap"
                 />
