@@ -1,6 +1,5 @@
 <template>
   <div v-if="nft">
-    <BackLink />
     <h2 class="text-center">Create Buy Offer</h2>
     <div class="w-80 p-1">
       <base-card v-if="nft">
@@ -77,13 +76,12 @@ import { computed, defineComponent } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import BaseCard from "../components/BaseCard.vue";
-import BackLink from "../components/BackLink.vue";
 import AsyncButton from "../components/AsyncButton.vue";
 
 import { getNetworkTypeFromCode } from "../utils/getNetworkTypeFromCode";
 
 export default defineComponent({
-  components: { BaseCard, AsyncButton, BackLink },
+  components: { BaseCard, AsyncButton },
   async setup() {
     const route = useRoute();
     const store = useStore();
@@ -96,7 +94,6 @@ export default defineComponent({
         currency
       );
     });
-
     return {
       nft,
       async accept() {

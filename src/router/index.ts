@@ -155,13 +155,12 @@ const routes = [
             message: "NFT View Page",
           },
         },
-        children: [
-          {
-            path: "create/:nftAddress/:nodetype/:currency?",
-            name: "CreateBuyOffer",
-            component: () => import("../views/CreateBuyOffer.vue"),
-          },
-        ],
+        children: [],
+      },
+      {
+        path: "create_buy_offer/:nftAddress/:nodetype/:currency?",
+        name: "CreateBuyOffer",
+        component: () => import("../views/CreateBuyOffer.vue"),
       },
       {
         path: "/shared_sell_offers",
