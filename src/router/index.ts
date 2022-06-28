@@ -155,6 +155,13 @@ const routes = [
             message: "NFT View Page",
           },
         },
+        children: [
+          {
+            path: "create/:nftAddress/:nodetype/:currency?",
+            name: "CreateBuyOffer",
+            component: () => import("../views/CreateBuyOffer.vue"),
+          },
+        ],
       },
       {
         path: "/shared_sell_offers",
@@ -230,7 +237,6 @@ const nodetype = computed(() => store.getters["user/getNodeType"]);
 const network = computed(() => store.getters["user/getNetwork"]);
 const isConnected = computed(() => store.getters["nft/getIsConnected"]);
 const shared = computed(() => store.getters["nft/getShared"](nodetype.value));
-const sharedBuyOffers = computed(() => store.getters["nft/getSharedBuyOffers"]);
 const connectXrpClient = async () => {
   await store.dispatch("nft/initXrpClient", {
     network: network.value,

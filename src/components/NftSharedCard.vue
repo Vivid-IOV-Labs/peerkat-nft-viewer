@@ -79,7 +79,6 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { getNetworkCodeFromType } from "../utils/getNetworkTypeFromCode";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
-import { fetchBuyOffers } from "../services/XrpService";
 
 export default defineComponent({
   components: {
