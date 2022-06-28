@@ -4,7 +4,7 @@
       <div class="d-flex flex-column justify-content-between">
         <div class="d-flex justify-content-between">
           <div class="col-4">
-            <figure style="overflow: hidden; height: 100%">
+            <figure style="overflow: hidden; height: 100px">
               <a
                 class="h-100 d-block"
                 style="overflow: hidden"
@@ -52,18 +52,18 @@
           </div>
           <div class="col-8 d-flex flex-column">
             <div class="">
-              <strong class="h7 font-weight-bold">Token ID </strong><br />
-              {{ nft.currency }}
+              <strong class="h6 font-weight-bold">Token Name </strong><br />
+              <span style="font-size: 0.8rem">{{ nft.tokenName }}</span>
             </div>
             <div>
               <strong class="h7 font-weight-bold">Description </strong><br />
-              <div v-html="nft.desc"></div>
+              <div style="font-size: 0.8rem" v-html="nft.desc"></div>
             </div>
           </div>
         </div>
         <div>
-          <strong class="h6 font-weight-bold">Token Name </strong><br />
-          {{ nft.tokenName }}
+          <strong class="h6 font-weight-bold">Token ID </strong><br />
+          <span style="font-size: 0.8rem">{{ nft.currency }}</span>
         </div>
       </div>
     </div>
