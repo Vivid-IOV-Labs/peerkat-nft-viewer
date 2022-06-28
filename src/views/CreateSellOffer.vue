@@ -91,25 +91,21 @@ import { computed, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import BaseCard from "../components/BaseCard.vue";
 import AsyncButton from "../components/AsyncButton.vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import BaseInput from "@/components/BaseInput.vue";
 
 import { devlog } from "../utils/devlog";
 
 import { isInXumm } from "../utils/isInXumm";
 import XummSdk from "../services/XummService";
-import { fetchBuyOffers } from "../services/XrpService";
+import { fetchSellOffers } from "../services/XrpService";
 import { openSignRequest } from "../utils/XummActions";
 export default defineComponent({
   components: { BaseCard, AsyncButton, BaseInput },
   async setup() {
-    const route = useRoute();
     const router = useRouter();
     const store = useStore();
-    const { currency, nftAddress } = route.params;
-    const nft = computed(() => {
-      return store.getters["nft/getByAddress"](nftAddress, currency);
-    });
+    const nft = computed(() => store.getters["nft/getCurrent"]);
 
     const saleamount = ref(0);
 
@@ -136,8 +132,9 @@ export default defineComponent({
 
               await store.commit(
                 "nft/addSellOffer",
-                offers.filter((o) => o.owner == walletAddress.value)
+                offers.filter((o: any) => o.owner == walletAddress.value)
               );
+              router.push({ path: "sell" });
             }
           );
           const { uuid } = created;
@@ -153,7 +150,7 @@ export default defineComponent({
             devlog("CretaPayload", error);
           }
         }
-        toggleSellDialog.value = false;
+        router.push({ path: "sell" });
       },
       back() {
         router.go(-1);

@@ -91,10 +91,9 @@ import { computed, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import BaseCard from "../components/BaseCard.vue";
 import AsyncButton from "../components/AsyncButton.vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import BaseInput from "@/components/BaseInput.vue";
 
-import { getNetworkTypeFromCode } from "../utils/getNetworkTypeFromCode";
 import { devlog } from "../utils/devlog";
 
 import { isInXumm } from "../utils/isInXumm";
@@ -104,18 +103,9 @@ import { openSignRequest } from "../utils/XummActions";
 export default defineComponent({
   components: { BaseCard, AsyncButton, BaseInput },
   async setup() {
-    const route = useRoute();
     const router = useRouter();
     const store = useStore();
-    const nft = computed(() => {
-      const { currency, nftAddress, nodetype } = route.params;
-
-      return store.getters["nft/getSharedByAddress"](
-        nftAddress,
-        getNetworkTypeFromCode(parseInt(nodetype as string)),
-        currency
-      );
-    });
+    const nft = computed(() => store.getters["nft/getCurrent"]);
 
     const saleamount = ref(0);
 
@@ -163,14 +153,14 @@ export default defineComponent({
               Owner: nft.value.owner,
               Amount: saleamount.value,
             });
-            router.go(-1);
+            router.push({ path: "offers/buy" });
           } catch (error) {
             devlog("CretaPayload", error);
           }
         }
       },
       back() {
-        router.go(-1);
+        router.push({ path: "offers/buy" });
       },
     };
   },
