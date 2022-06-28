@@ -176,7 +176,7 @@ export default defineComponent({
       openSellDialog() {
         toggleSellDialog.value = true;
         router.push({
-          path: `offers/buy/create/${nft.value.issuer}/${nodetypecode.value}/${nft.value.currency}`,
+          path: `create/${nft.value.issuer}/${nodetypecode.value}/${nft.value.currency}`,
         });
       },
       async confirmSell() {
