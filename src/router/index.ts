@@ -163,7 +163,7 @@ const routes = [
         component: () => import("../views/CreateBuyOffer.vue"),
       },
       {
-        path: "create_sell_offe",
+        path: "create_sell_offer",
         name: "CreateSellOffer",
         component: () => import("../views/CreateSellOffer.vue"),
       },
