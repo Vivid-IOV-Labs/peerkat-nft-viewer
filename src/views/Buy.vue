@@ -86,10 +86,10 @@
     <ul class="mt-2 p-2">
       <li class="pb-2">
         To view offers for an XLS20 NFT, please select the “Offers” button on
-        one of your XLS20 NFTs in the “My Wallet” or “Shared with me” pages
+        one of your XLS20 NFTs in the “My Wallet” or “Shared with me” page views
       </li>
       <li class="pb-2">
-        If you do not have any XLS20 NFT that are in your wallet or have been
+        If you do not have any XLS20 NFTs in your wallet or that have been
         shared with you, please click here to find out how to get one.
       </li>
     </ul>
