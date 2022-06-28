@@ -141,6 +141,7 @@ import { isInXumm } from "../utils/isInXumm";
 import XummSdk from "../services/XummService";
 import { openSignRequest } from "../utils/XummActions";
 import { fetchSellOffers } from "../services/XrpService";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   components: {
@@ -154,7 +155,7 @@ export default defineComponent({
   },
   async setup() {
     const store = useStore();
-    // const route = useRoute();
+    const router = useRouter();
     // const tokenID = route.params.id.toString();
     const nft = computed(() => store.getters["nft/getCurrent"]);
     const saleamount = ref(0);
@@ -170,7 +171,10 @@ export default defineComponent({
       toggleSellDialog,
       showTab,
       openSellDialog() {
-        toggleSellDialog.value = true;
+        // toggleSellDialog.value = true;
+        router.push({
+          path: `create_sell_offer/${nft.value.issuer}/${nft.value.currency}`,
+        });
       },
       async confirmSell() {
         devlog("isInXumm", isInXumm);

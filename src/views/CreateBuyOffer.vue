@@ -1,4 +1,6 @@
 <template>
+  <a href="#" class="mb-4 btn btn-link w-100" @click.prevent="back">Back </a>
+
   <div v-if="nft">
     <h2 class="text-center">Create Buy Offer</h2>
     <div class="w-80 p-1">
@@ -62,9 +64,22 @@
             <strong class="h7 font-weight-bold">Tokent ID </strong><br />
             <span>{{ nft.currency }}</span>
           </div>
+          <div class="form-group flex justify-between mt-4">
+            <strong class="h7 font-weight-bold">Sale Amount (XRP) </strong
+            ><br />
+            <base-input
+              id="saleamount"
+              v-model="saleamount"
+              :label-hidden="true"
+              label-text="saleamount"
+              type="number"
+            ></base-input>
+          </div>
         </template>
         <template #footer>
-          <async-button :on-click="accept"> Accept </async-button>
+          <async-button class="m-auto w-100" :on-click="confirmSell"
+            >Confirm</async-button
+          >
         </template>
       </base-card>
     </div>
@@ -72,18 +87,25 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
-import { useRoute } from "vue-router";
+import { computed, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import BaseCard from "../components/BaseCard.vue";
 import AsyncButton from "../components/AsyncButton.vue";
+import { useRoute, useRouter } from "vue-router";
+import BaseInput from "@/components/BaseInput.vue";
 
 import { getNetworkTypeFromCode } from "../utils/getNetworkTypeFromCode";
+import { devlog } from "../utils/devlog";
 
+import { isInXumm } from "../utils/isInXumm";
+import XummSdk from "../services/XummService";
+import { fetchBuyOffers } from "../services/XrpService";
+import { openSignRequest } from "../utils/XummActions";
 export default defineComponent({
-  components: { BaseCard, AsyncButton },
+  components: { BaseCard, AsyncButton, BaseInput },
   async setup() {
     const route = useRoute();
+    const router = useRouter();
     const store = useStore();
     const nft = computed(() => {
       const { currency, nftAddress, nodetype } = route.params;
@@ -94,10 +116,61 @@ export default defineComponent({
         currency
       );
     });
+
+    const saleamount = ref(0);
+
+    const walletAddress = computed(() => store.getters["user/getAddress"]);
+    const user = computed(() => store.getters["user/getUser"]);
+    const nodetype = computed(() => store.getters["user/getNodeType"]);
     return {
       nft,
-      async accept() {
-        await store.commit("nft");
+      saleamount,
+      async confirmSell() {
+        devlog("isInXumm", isInXumm);
+
+        if (isInXumm()) {
+          devlog("isInXumm", isInXumm);
+
+          const { created } = await XummSdk.createBuyOffer(
+            {
+              Account: walletAddress.value,
+              NFTokenID: nft.value.currency,
+              Owner: nft.value.owner,
+              Amount: (saleamount.value * 1000000).toString(),
+              User: user.value,
+            },
+            async () => {
+              const { offers } = await fetchBuyOffers(nft.value.currency);
+
+              await store.commit("nft/addBuyOffer", {
+                offers: offers.filter(
+                  (o: any) => o.owner == walletAddress.value
+                ),
+                nodetype: nodetype.value,
+                walletaddress: user.value,
+              });
+              router.go(-1);
+            }
+          );
+          devlog("create buy", created);
+          const { uuid } = created;
+          openSignRequest(uuid);
+        } else {
+          try {
+            await store.dispatch("nft/createBuyOffer", {
+              walletAddress: walletAddress.value,
+              TokenID: nft.value.currency,
+              Owner: nft.value.owner,
+              Amount: saleamount.value,
+            });
+            router.go(-1);
+          } catch (error) {
+            devlog("CretaPayload", error);
+          }
+        }
+      },
+      back() {
+        router.go(-1);
       },
     };
   },

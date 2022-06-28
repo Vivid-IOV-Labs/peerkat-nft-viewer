@@ -163,6 +163,11 @@ const routes = [
         component: () => import("../views/CreateBuyOffer.vue"),
       },
       {
+        path: "create_sell_offer/:nftAddress/:currency",
+        name: "CreateSellOffer",
+        component: () => import("../views/CreateSellOffer.vue"),
+      },
+      {
         path: "/shared_sell_offers",
         name: "SellOfferShared",
         component: () => import("../views/Shared.vue"),

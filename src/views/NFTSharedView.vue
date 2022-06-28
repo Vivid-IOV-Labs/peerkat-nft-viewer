@@ -1,8 +1,7 @@
 <template>
   <div class="w-100 pt-0 p-1 text-center" style="overflow: scroll">
-    <router-link :to="{ path: `/shared` }" class="mb-2 btn btn-link w-100"
-      >Back
-    </router-link>
+    <a href="#" class="mb-4 btn btn-link w-100" @click.prevent="back">Back </a>
+
     <div v-if="nft" class="w-100 p-1">
       <figure class="w-100 p4">
         <video
@@ -36,13 +35,15 @@
 </template>
 <script lang="ts">
 import { defineComponent, computed } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { getNetworkTypeFromCode } from "../utils/getNetworkTypeFromCode";
 export default defineComponent({
   async setup() {
     const route = useRoute();
     const store = useStore();
+    const router = useRouter();
+
     const nft = computed(() => {
       const { currency, nftAddress, nodetype } = route.params;
 
@@ -54,6 +55,9 @@ export default defineComponent({
     });
     return {
       nft,
+      back() {
+        router.go(-1);
+      },
     };
   },
 });
