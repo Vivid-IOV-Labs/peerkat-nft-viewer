@@ -240,7 +240,9 @@ const walletAddress = computed(() => store.getters["user/getAddress"]);
 const nodetype = computed(() => store.getters["user/getNodeType"]);
 const network = computed(() => store.getters["user/getNetwork"]);
 const isConnected = computed(() => store.getters["nft/getIsConnected"]);
-const shared = computed(() => store.getters["nft/getShared"](nodetype.value));
+const shared = computed(() =>
+  store.getters["nft/getShared"](nodetype.value, walletAddress.value)
+);
 const connectXrpClient = async () => {
   await store.dispatch("nft/initXrpClient", {
     network: network.value,

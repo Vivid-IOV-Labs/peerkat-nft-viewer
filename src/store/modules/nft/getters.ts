@@ -12,11 +12,13 @@ export default {
   getIsConnected: (state: NFTState): boolean => state.isConnected,
   getShared:
     (state: NFTState, _getters: any, rootState: any) =>
-    (nodetype: keyof SharedNFTs): Array<NFT> | null => {
+    (nodetype: keyof SharedNFTs, owner?: any): Array<NFT> | null => {
       const useraddress = rootState.user.user;
       return !state.sharedwithme[useraddress]
         ? null
-        : state.sharedwithme[useraddress][nodetype];
+        : state.sharedwithme[useraddress][nodetype].filter(
+            (nft) => nft.owner !== owner
+          );
     },
   getLines: (state: NFTState): Array<NFT> => state.lines,
   getXls20ByTokenId:

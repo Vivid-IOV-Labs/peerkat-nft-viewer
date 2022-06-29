@@ -161,7 +161,13 @@ export default defineComponent({
     const saleamount = ref(0);
     const toggleSellDialog = ref(false);
 
-    const showTab = ref("sell");
+    const currenTab =
+      nft.value.selloffers.length == 0 && nft.value.buyoffers.length == 0
+        ? "sell"
+        : nft.value.selloffers.length == 0 && nft.value.buyoffers.length > 0
+        ? "buy"
+        : "sell";
+    const showTab = ref(currenTab);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
     const user = computed(() => store.getters["user/getUser"]);
 

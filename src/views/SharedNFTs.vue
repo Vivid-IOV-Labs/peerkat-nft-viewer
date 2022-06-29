@@ -44,9 +44,15 @@ export default defineComponent({
     const store = useStore();
     const isInXumm = inject("isInXumm");
     const nodetype = computed(() => store.getters["user/getNodeType"]);
+    const walletAddress = computed(() => store.getters["user/getAddress"]);
+
     const sharedNFTs = computed(() => {
-      return store.getters["nft/getShared"](nodetype.value);
+      return store.getters["nft/getShared"](
+        nodetype.value,
+        walletAddress.value
+      );
     });
+
     return {
       sharedNFTs,
       isInXumm,
