@@ -72,7 +72,7 @@
         <div v-else>
           <div
             v-for="offer in nft.selloffers.sort(
-              (a:any, b:any) => b.saleamount + b.saleamount
+              (a:any, b:any) => b.amount + b.amount
             )"
             :key="offer.nft_offer_index"
             class="mt-4"
@@ -95,7 +95,7 @@
         <div v-else>
           <div
             v-for="offer in nft.buyoffers.sort(
-              (a:any, b:any) => b.saleamount - b.saleamount
+              (a:any, b:any) => b.amount - b.amount
             )"
             :key="offer.nft_offer_index"
             class="mt-4"
