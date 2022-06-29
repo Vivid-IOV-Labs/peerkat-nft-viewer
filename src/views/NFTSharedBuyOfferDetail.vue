@@ -69,9 +69,9 @@
             <strong class="h7 font-weight-bold">Offer ID </strong><br />
             <span>{{ offer.nft_offer_index }}</span>
           </div>
-          <div v-if="offer.saleamount" class="mt-2">
+          <div v-if="offer.amount" class="mt-2">
             <strong class="h7 font-weight-bold">Amount </strong><br />
-            <span>{{ offer.saleamount }} XRP</span>
+            <span>{{ offer.amount }} XRP</span>
           </div>
         </template>
         <template #footer>

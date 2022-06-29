@@ -3,7 +3,7 @@
     <router-link :to="{ path: `/shared` }" class="mb-4 btn btn-link w-100">
       Back
     </router-link>
-    <h2 class="text-center">Sell Offer</h2>
+    <h2 class="text-center">Shared Sell Offer</h2>
     <div v-if="!malformedLink" class="w-80 p-1">
       <base-card v-if="nft">
         <template #picture>
@@ -69,9 +69,9 @@
             <strong class="h7 font-weight-bold">Offer ID </strong><br />
             <span>{{ offer.nft_offer_index }}</span>
           </div>
-          <div v-if="offer.saleamount" class="mt-2">
+          <div v-if="offer.amount" class="mt-2">
             <strong class="h7 font-weight-bold">Amount </strong><br />
-            <span>{{ offer.saleamount }} XRP</span>
+            <span>{{ offer.amount }} XRP</span>
           </div>
         </template>
         <template #footer>
