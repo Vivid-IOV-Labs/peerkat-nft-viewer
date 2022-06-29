@@ -165,7 +165,7 @@ export default defineComponent({
       },
     });
     const shared = computed(() =>
-      store.getters["nft/getShared"](nodetype.value)
+      store.getters["nft/getShared"](nodetype.value, walletAddress.value)
     );
 
     const connectXrpClient = async () => {

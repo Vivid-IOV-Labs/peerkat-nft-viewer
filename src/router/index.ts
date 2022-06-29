@@ -230,10 +230,30 @@ const routes = [
     ],
   },
 ];
+function scrollTOActive(to: any, from: any) {
+  console.log("to", to);
+  console.log("from", from);
+  console.log(document);
+  console.log(to.path.split("/"));
+  // console.log(to.path.split("/")[1]);
+  const active = document.querySelector(
+    "a[href='/" + to.path.split("/")[1] + "']"
+  );
+  const move = active && active.getBoundingClientRect().left;
+  // const navbar = document.getElementById("navbarscroll");
+  if (active) active.scrollIntoView();
+  // console.log("move", move);
+  // console.log("navbarmove", navbar);
+  // if (move && navbar) navbar.scrollLeft -= 20;
+}
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    scrollTOActive(to, from);
+    return { top: 0 };
+  },
 });
 
 const walletAddress = computed(() => store.getters["user/getAddress"]);
@@ -319,6 +339,9 @@ router.beforeEach(async (to, from, next) => {
   }
 });
 
+// router.afterEach((to, from, failure) => {
+//   if (!failure) scrollTOActive(to, from);
+// });
 export default router;
 
 // [

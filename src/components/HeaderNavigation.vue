@@ -20,7 +20,7 @@
         Hi
       </h1> -->
       <div style="overflow: hidden; width: 82%">
-        <div class="overflow-x:scroll; py-2">
+        <div id="navbarscroll" class="overflow-x:scroll; py-2">
           <ul style="display: block" class="nav nav-pills ml-auto p-2">
             <li v-if="!isInXumm" class="nav-item">
               <router-link
