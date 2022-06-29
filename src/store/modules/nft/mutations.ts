@@ -214,6 +214,14 @@ const mutations: MutationTree<NFTState> = {
     state: NFTState,
     { currency, nodetype, walletaddress }: deleteSharedParams
   ): void {
+    console.log("delete shared");
+    console.log("delete shared", { currency, nodetype, walletaddress });
+    console.log(
+      "delete shared",
+      state.sharedwithme[walletaddress][nodetype].filter(
+        (n) => n.currency !== currency
+      )
+    );
     state.sharedwithme[walletaddress][nodetype] = state.sharedwithme[
       walletaddress
     ][nodetype].filter((n) => n.currency !== currency);
