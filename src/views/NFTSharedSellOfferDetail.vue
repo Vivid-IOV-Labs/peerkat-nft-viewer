@@ -71,7 +71,7 @@
           </div>
           <div v-if="offer.amount" class="mt-2">
             <strong class="h7 font-weight-bold">Amount </strong><br />
-            <span>{{ offer.amount }} XRP</span>
+            <span>{{ Number(offer.amount) / 1000000 }} XRP</span>
           </div>
         </template>
         <template #footer>
