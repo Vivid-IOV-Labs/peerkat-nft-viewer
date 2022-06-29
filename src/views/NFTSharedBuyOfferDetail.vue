@@ -3,7 +3,7 @@
     <router-link :to="{ path: `/wallet` }" class="mb-4 btn btn-link w-100">
       Back
     </router-link>
-    <h2 class="text-center">Buy Offer</h2>
+    <h2 class="text-center">Shared Buy Offer</h2>
     <div v-if="!malformedLink" class="w-80 p-1">
       <base-card v-if="nft">
         <template #picture>
