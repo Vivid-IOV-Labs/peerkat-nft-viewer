@@ -164,9 +164,15 @@ export default defineComponent({
     const toggleSellDialog = ref(false);
 
     const currenTab =
-      nft.value.selloffers.length == 0 && nft.value.buyoffers.length == 0
+      nft.value.selloffers &&
+      nft.value.selloffers.length == 0 &&
+      nft.value.buyoffers &&
+      nft.value.buyoffers.length == 0
         ? "buy"
-        : nft.value.selloffers.length > 0 && nft.value.buyoffers.length == 0
+        : nft.value.selloffers &&
+          nft.value.selloffers.length > 0 &&
+          nft.value.buyoffers &&
+          nft.value.buyoffers.length == 0
         ? "sell"
         : "buy";
     const showTab = ref(currenTab);
