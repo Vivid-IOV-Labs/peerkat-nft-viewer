@@ -48,6 +48,7 @@ const mutations: MutationTree<NFTState> = {
     state.xls20nfts = xls20nfts;
   },
   setCurrent(state: NFTState, nft: NFT): void {
+    console.log("setCurrent", nft);
     state.currentNFT = nft;
   },
   deleteCurrent(state: NFTState): void {
