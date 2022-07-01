@@ -56,9 +56,7 @@ import { useStore } from "vuex";
 import { inject } from "vue";
 import useIntersectionObserver from "../composable/useIntersectionObserver";
 import { devlog } from "../utils/devlog";
-import store from "../store";
 import { delay } from "../utils/delay";
-import { useRoute } from "vue-router";
 
 export default defineComponent({
   components: {
