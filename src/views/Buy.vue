@@ -61,7 +61,6 @@
         </div>
       </div>
       <div v-if="showTab === 'buy'">
-        {{ nft.buyoffers }}
         <div
           v-if="!nft.buyoffers || (nft.buyoffers && nft.buyoffers.length == 0)"
         >
@@ -173,22 +172,17 @@ export default defineComponent({
 
     const currenTab =
       nft.value.selloffers &&
-      nft.value.selloffers.length == 0 &&
-      nft.value.buyoffers &&
-      nft.value.buyoffers.length == 0
-        ? "buy"
-        : nft.value.selloffers &&
-          nft.value.selloffers.length > 0 &&
-          nft.value.buyoffers &&
-          nft.value.buyoffers.length == 0
+      nft.value.selloffers.length > 1 &&
+      ((nft.value.buyoffers && nft.value.buyoffers.length == 0) ||
+        !nft.value.buyoffers)
         ? "sell"
         : "buy";
+
     const showTab = ref(currenTab);
 
     const walletAddress = computed(() => store.getters["user/getAddress"]);
     const user = computed(() => store.getters["user/getUser"]);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
-    const nodetypecode = computed(() => getNetworkCodeFromType(nodetype.value));
     return {
       nft,
       saleamount,
