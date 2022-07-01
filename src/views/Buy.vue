@@ -172,7 +172,7 @@ export default defineComponent({
 
     const currenTab =
       nft.value.selloffers &&
-      nft.value.selloffers.length > 1 &&
+      nft.value.selloffers.length > 0 &&
       ((nft.value.buyoffers && nft.value.buyoffers.length == 0) ||
         !nft.value.buyoffers)
         ? "sell"
