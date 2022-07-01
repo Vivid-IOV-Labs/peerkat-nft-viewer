@@ -33,7 +33,6 @@
     </ul>
     <div>
       <div v-if="showTab === 'sell' && nft.selloffers">
-        {{ nft.selloffers }}
         <div
           v-if="
             !nft.selloffers || (nft.selloffers && nft.selloffers.length == 0)
