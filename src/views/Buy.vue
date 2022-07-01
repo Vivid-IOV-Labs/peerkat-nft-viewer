@@ -55,8 +55,10 @@
           </div>
         </div>
       </div>
-      <div v-if="showTab === 'buy' && nft.buyoffers">
-        <div v-if="nft.buyoffers.length == 0">
+      <div v-if="showTab === 'buy'">
+        <div
+          v-if="nft.buyoffers || (nft.buyoffers && nft.buyoffers.length == 0)"
+        >
           <p>
             Peerkat is not able to find any buy offers, shared with this wallet
             for this NFT
