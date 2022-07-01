@@ -33,7 +33,8 @@
     </ul>
     <div>
       <div v-if="showTab === 'sell' && nft.selloffers">
-        <div v-if="nft.selloffers.length == 0">
+        {{ nft.selloffers }}
+        <div v-if="!nft.selloffers || nft.selloffers.length == 0">
           <p>
             Peerkat is not able to find any sell offers, created by this wallet
             for this NFT
@@ -56,8 +57,9 @@
         </div>
       </div>
       <div v-if="showTab === 'buy'">
+        {{ nft.buyoffers }}
         <div
-          v-if="nft.buyoffers || (nft.buyoffers && nft.buyoffers.length == 0)"
+          v-if="!nft.buyoffers || (nft.buyoffers && nft.buyoffers.length == 0)"
         >
           <p>
             Peerkat is not able to find any buy offers, shared with this wallet
