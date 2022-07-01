@@ -34,13 +34,17 @@
     <div>
       <div v-if="showTab === 'sell' && nft.selloffers">
         {{ nft.selloffers }}
-        <div v-if="!nft.selloffers || nft.selloffers.length == 0">
+        <div
+          v-if="
+            !nft.selloffers || (nft.selloffers && nft.selloffers.length == 0)
+          "
+        >
           <p>
             Peerkat is not able to find any sell offers, created by this wallet
             for this NFT
           </p>
         </div>
-        <div v-else>
+        <div v-if="nft.selloffers && nft.selloffers.length > 0">
           <div
             v-for="offer in nft.selloffers.sort(
               (a:any, b:any) => b.amount - b.amount
