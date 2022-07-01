@@ -64,7 +64,7 @@
             for this NFT
           </p>
         </div>
-        <div v-else>
+        <div v-if="nft.buyoffers && nft.buyoffers.length > 0">
           <div
             v-for="(offer, index) in nft.buyoffers.sort(
               (a:any, b:any) => b.amount + b.amount
