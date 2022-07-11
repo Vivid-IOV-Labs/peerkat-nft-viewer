@@ -125,7 +125,7 @@ export default defineComponent({
 
     function shareUrl(nodetypecode: number | undefined) {
       const xummSandbox = import.meta.env.VITE_XUMM_DEEPLINK;
-      return `${xummSandbox}?redirect=/redirect=/shared/${passNFTIssuerOrXUMMowner}/${nodetypecode}/${props.nft.currency}`;
+      return `${xummSandbox}?redirect=/shared/${passNFTIssuerOrXUMMowner}/${nodetypecode}/${props.nft.currency}`;
     }
 
     const countSellOffer =
