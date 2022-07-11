@@ -59,13 +59,10 @@ export default defineComponent({
     );
 
     function shareUrl() {
-      const xummSandbox = import.meta.env.VITE_XUMM_SANDBOX;
-      return xummSandbox === "test"
-        ? `https://xumm.app/detect/xapp:peerkat.sandbox.test?redirect=/shared_buy_offers/${props.offer.nft_offer_index}/${props.token}/${props.owner}`
-        : xummSandbox === "dev"
-        ? `https://xumm.app/detect/xapp:peerkat.dev?redirect=/shared_buy_offers/${props.offer.nft_offer_index}/${props.token}/${props.owner}`
-        : `https://xumm.app/detect/xapp:peerkat.viewer?redirect=/shared_buy_offers/${props.offer.nft_offer_index}/${props.token}/${props.owner}`;
+      const xummSandbox = import.meta.env.VITE_XUMM_DEEPLINK;
+      return `${xummSandbox}?redirect=/shared_buy_offers/${props.offer.nft_offer_index}/${props.token}/${props.owner}`;
     }
+
     return {
       bihompUrl,
 

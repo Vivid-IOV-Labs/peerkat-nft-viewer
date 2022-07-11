@@ -122,14 +122,12 @@ export default defineComponent({
       props.nft.standard && props.nft.standard === "XLS20"
         ? user.value
         : walletAddress.value;
+
     function shareUrl(nodetypecode: number | undefined) {
-      const xummSandbox = import.meta.env.VITE_XUMM_SANDBOX;
-      return xummSandbox === "test"
-        ? `https://xumm.app/detect/xapp:peerkat.sandbox.test?redirect=/shared/${passNFTIssuerOrXUMMowner}/${nodetypecode}/${props.nft.currency}`
-        : xummSandbox === "dev"
-        ? `https://xumm.app/detect/xapp:peerkat.dev?redirect=/shared/${passNFTIssuerOrXUMMowner}/${nodetypecode}/${props.nft.currency}`
-        : `https://xumm.app/detect/xapp:peerkat.viewer?redirect=/shared/${passNFTIssuerOrXUMMowner}/${nodetypecode}/${props.nft.currency}`;
+      const xummSandbox = import.meta.env.VITE_XUMM_DEEPLINK;
+      return `${xummSandbox}?redirect=/redirect=/shared/${passNFTIssuerOrXUMMowner}/${nodetypecode}/${props.nft.currency}`;
     }
+
     const countSellOffer =
       props.nft.selloffers && props.nft.selloffers.length
         ? props.nft.selloffers.length
