@@ -33,6 +33,10 @@ export function getInspectorUrl(network: keyof urlMap, issuer: string): string {
     "wss://hooks-testnet-v2.xrpl-labs.com": ["https://hooks.bithomp.com/"],
   };
   console.log("getInspectorUrl", urlMap[network]);
+  console.log(
+    "getInspectorUrl",
+    urlMap[network] && urlMap[network][0] + issuer
+  );
 
   return urlMap[network] ? urlMap[network][0] + issuer : "";
 }
