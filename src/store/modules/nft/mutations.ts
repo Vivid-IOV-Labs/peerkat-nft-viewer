@@ -118,10 +118,12 @@ const mutations: MutationTree<NFTState> = {
       ];
       console.log("addShared", state.sharedwithme[user][nodetype]);
     }
+    debugger;
     if (exist && offer) {
       if (!exist.selloffers) {
         exist.selloffers = [];
       }
+      debugger;
       const offerExists =
         exist.selloffers.filter((o: any) => {
           return o.nft_offer_index == offer.nft_offer_index;
@@ -131,6 +133,7 @@ const mutations: MutationTree<NFTState> = {
           o.nft_offer_index == offer.nft_offer_index;
         }).length
       );
+      debugger;
       console.log("offer", offer);
       console.log("selloffers", exist.selloffers);
       console.log("offerExists", offerExists);
