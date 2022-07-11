@@ -16,9 +16,10 @@ export default {
       const useraddress = rootState.user.user;
       return !state.sharedwithme[useraddress]
         ? null
-        : state.sharedwithme[useraddress][nodetype].filter(
-            (nft) => nft.owner !== owner
-          );
+        : state.sharedwithme[useraddress][nodetype];
+      // .filter(
+      //     (nft) => nft.owner !== owner
+      //   );
     },
   getLines: (state: NFTState): Array<NFT> => state.lines,
   getXls20ByTokenId:
