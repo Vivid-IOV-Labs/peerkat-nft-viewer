@@ -32,5 +32,7 @@ export function getInspectorUrl(network: keyof urlMap, issuer: string): string {
     "xls20-sandbox.rippletest.net:51233": ["https://xls20.bithomp.com/"],
     "wss://hooks-testnet-v2.xrpl-labs.com": ["https://hooks.bithomp.com/"],
   };
+  console.log("getInspectorUrl", urlMap[network][0]);
+
   return urlMap[network] ? urlMap[network][0] + issuer : "";
 }

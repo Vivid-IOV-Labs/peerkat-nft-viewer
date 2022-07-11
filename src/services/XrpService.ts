@@ -456,13 +456,15 @@ export async function fetchOneXls20(
   const {
     result: { account_nfts },
   } = await getTokens(walletAddress);
-  console.log("walletAddress", walletAddress);
+  debugger;
   const nftXLS20 = account_nfts.find((n: any) => {
     console.log("n.NFTokenID", n.NFTokenID);
     console.log("NFTokenID", NFTokenID);
     return n.NFTokenID == NFTokenID;
   });
+  debugger;
   if (nftXLS20) {
+    debugger;
     return getOneXls(nftXLS20);
   } else {
     throw new Error("Not an XLS20");
@@ -475,11 +477,23 @@ export async function getOneXls(nft: any) {
       ipfsGateway + "/" + hexToString(URI).split("//")[1] + "/base.json";
     const res = await fetch(url);
     const details = await res.json();
+
     const { description, image, name, schema } = details;
     //const schemaUrl = ipfsPublicGateway + "/" + schema.split("//")[1]+"/$SchemaFile.json";
+    debugger;
     const imageUrl = ipfsPublicGateway + "/" + image.split("//")[1];
     // const result = await fetch(schemaUrl).then((res) => res.json());
     const media_type = "image/jpeg";
+    console.log({
+      issuer: Issuer,
+      currency: NFTokenID,
+      tokenName: name,
+      url: imageUrl,
+      media_type,
+      desc: description,
+      issuerTruncated: truncate(Issuer),
+      standard: "XLS-20",
+    });
     return {
       issuer: Issuer,
       currency: NFTokenID,
@@ -492,6 +506,7 @@ export async function getOneXls(nft: any) {
     };
   } catch (error) {
     devlog(error);
+    debugger;
   }
 }
 
