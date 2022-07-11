@@ -49,7 +49,7 @@ export default defineComponent({
   async setup(props) {
     const store = useStore();
 
-    function shareUrl(nodetypecode: number | undefined) {
+    function shareUrl() {
       const xummSandbox = import.meta.env.VITE_XUMM_DEEPLINK;
       return `${xummSandbox}?redirect=/redirect=/shared_sell_offers/${props.offer.nft_offer_index}/${props.token}/${props.offer.owner}`;
     }
