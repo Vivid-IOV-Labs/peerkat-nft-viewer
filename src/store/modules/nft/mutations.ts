@@ -106,6 +106,8 @@ const mutations: MutationTree<NFTState> = {
       }
     );
     shared.owner = walletaddress;
+    console.log("addShared", exist);
+    console.log("addShared", walletaddress);
     if (!exist) {
       if (offer) {
         shared.selloffers = [offer];
@@ -114,6 +116,7 @@ const mutations: MutationTree<NFTState> = {
         ...state.sharedwithme[user][nodetype],
         shared,
       ];
+      console.log("addShared", state.sharedwithme[user][nodetype]);
     }
     if (exist && offer) {
       if (!exist.selloffers) {
