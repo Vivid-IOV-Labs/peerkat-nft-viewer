@@ -19,6 +19,7 @@ interface urlMap {
   [id: string]: string[];
 }
 export function getInspectorUrl(network: keyof urlMap, issuer: string): string {
+  console.log("getInspectorUrl", network);
   const urlMap: urlMap = {
     /*test */
     "wss://s.altnet.rippletest.net:51233": ["https://test.bithomp.com/"],
@@ -28,7 +29,8 @@ export function getInspectorUrl(network: keyof urlMap, issuer: string): string {
     "wss://xrpl.link": ["https://bithomp.com/"],
     "wss://xrplcluster.com": ["https://bithomp.com/"],
     /*custom */
-    "wss://xls20-sandbox.rippletest.net:51233": ["https://xls20.bithomp.com/"],
+    "xls20-sandbox.rippletest.net:51233": ["https://xls20.bithomp.com/"],
+    "wss://hooks-testnet-v2.xrpl-labs.com": ["https://hooks.bithomp.com/"],
   };
   return urlMap[network] ? urlMap[network][0] + issuer : "";
 }

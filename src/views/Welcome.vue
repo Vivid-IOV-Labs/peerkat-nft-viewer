@@ -115,6 +115,10 @@ export default defineComponent({
         label: "wss://xls20-sandbox.rippletest.net:51233",
         value: "wss://xls20-sandbox.rippletest.net:51233",
       },
+      {
+        label: "wss://hooks-testnet-v2.xrpl-labs.com",
+        value: "wss://hooks-testnet-v2.xrpl-labs.com",
+      },
     ];
     const dev_networks = [
       {
@@ -122,6 +126,7 @@ export default defineComponent({
         value: "wss://s.devnet.rippletest.net:51233",
       },
     ];
+
     const networks = computed(() => {
       return nodetype.value == "TESTNET"
         ? test_networks
@@ -165,15 +170,13 @@ export default defineComponent({
       },
     });
     const shared = computed(() =>
-      store.getters["nft/getShared"](nodetype.value, walletAddress.value)
+      store.getters["nft/getShared"](nodetype.value)
     );
-
     const connectXrpClient = async () => {
       try {
         if (!shared.value) {
           store.commit("nft/initSharedStore", user.value);
         }
-
         store.commit("nft/resetAll");
         await store.dispatch("nft/initXrpClient", {
           network: network.value,
