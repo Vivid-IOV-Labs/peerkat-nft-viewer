@@ -83,22 +83,10 @@
         </template>
       </base-card>
       <div v-else class="p-2">
-        <h5 class="text-center mt-2">
-          It appears that this link to an NFT is for the {{ nodetypefromlink }}.
-          Please switch to the {{ nodetypefromlink }} in your Xumm app.
-        </h5>
+        <h5 class="text-center mt-2">NFT not fount</h5>
         <ul class="mt-2 p-2">
           <li class="pb-2">
-            You can switch to the
-            {{ nodetypefromlink }} in the Xumm app by clicking “Quit xApp”
-          </li>
-          <li class="pb-2">
-            In the Xumm app: click “Settings”, then “Advanced”, then “Node” and
-            select a Node listed in the “{{ nodetypefromlink }}” section
-          </li>
-          <li class="pb-2">
-            Return to Xumm home, open the Peerkat xApp to view the NFT in
-            {{ nodetypefromlink }}
+            Unable to find an nft for this owner. The link may be out to date.
           </li>
         </ul>
       </div>
@@ -169,29 +157,34 @@ export default defineComponent({
     const account_nfts = await fetchXls20(owner);
     const currentNft = account_nfts.find((n: any) => n.NFTokenID == nftId);
     const { URI, Issuer, NFTokenID } = currentNft;
-    nft.value = await getOneXls({ URI, Issuer, NFTokenID });
-    console.log("nft", nft);
-    const { offers } = sellOffers;
-    console.log("sellOffers", sellOffers);
-    console.log("offers", offers);
 
-    if (offers) {
-      offer.value = offers.find((o: any) => o.nft_offer_index === offerId);
-    }
-    if (offer.value && nft.value) {
-      // store.commit("nft/addSharedSellOffers", {
-      //   selloffer: { nft: nft.value, offer: offer.value },
-      //   walletaddress: walletAddress.value,
-      // });
-      console.log("addShared", offer.value);
+    try {
+      nft.value = await getOneXls({ URI, Issuer, NFTokenID });
+      devlog("nft", nft);
+      const { offers } = sellOffers;
+      devlog("sellOffers", sellOffers);
+      devlog("offers", offers);
 
-      store.commit("nft/addShared", {
-        shared: nft.value,
-        nodetype: nodetype.value,
-        walletaddress: route.params.owner.toString(),
-        user: user.value,
-        offer: offer.value,
-      });
+      if (offers) {
+        offer.value = offers.find((o: any) => o.nft_offer_index === offerId);
+      }
+      if (offer.value && nft.value) {
+        // store.commit("nft/addSharedSellOffers", {
+        //   selloffer: { nft: nft.value, offer: offer.value },
+        //   walletaddress: walletAddress.value,
+        // });
+        devlog("addShared", offer.value);
+
+        store.commit("nft/addShared", {
+          shared: nft.value,
+          nodetype: nodetype.value,
+          walletaddress: route.params.owner.toString(),
+          user: user.value,
+          offer: offer.value,
+        });
+      }
+    } catch (error) {
+      devlog("get nft error", error);
     }
 
     return {
