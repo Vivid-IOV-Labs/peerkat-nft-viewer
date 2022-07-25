@@ -97,7 +97,17 @@ export default defineComponent({
     const lines = computed(() => store.getters["nft/getLines"]);
     const xls20count = computed(() => store.getters["nft/getXls20"]);
     const allXls20 = computed(() => store.getters["nft/getAllXls20"]);
+    const allXls14 = computed(() => store.getters["nft/getAll"]);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
+
+    if (
+      lines.value &&
+      xls20count.value &&
+      NFTMedia.value.length != 0 &&
+      lines.value.length + xls20count.value.length == NFTMedia.value.length
+    ) {
+      endload.value = true;
+    }
     const poupulateXls20NFTs = async () => {
       await store.dispatch("nft/fetchXls20", {
         walletAddress: walletAddress.value,
@@ -178,7 +188,9 @@ export default defineComponent({
     if (xls20count.value && xls20count.value.length === 0) {
       await populateNFTs();
     } else {
-      await populateXls14NFTs();
+      if (lines.value.length > allXls14.value.length) {
+        await populateXls14NFTs();
+      }
     }
     return {
       sentinel,
