@@ -80,34 +80,31 @@
         </template>
       </base-card>
       <div v-else class="p-2">
-        <h5 class="text-center mt-2">
-          It appears that this link to an NFT is for the {{ nodetypefromlink }}.
-          Please switch to the {{ nodetypefromlink }} in your Xumm app.
-        </h5>
+        <h5 class="text-center mt-2">NFT not fount</h5>
         <ul class="mt-2 p-2">
           <li class="pb-2">
-            You can switch to the
-            {{ nodetypefromlink }} in the Xumm app by clicking “Quit xApp”
-          </li>
-          <li class="pb-2">
-            In the Xumm app: click “Settings”, then “Advanced”, then “Node” and
-            select a Node listed in the “{{ nodetypefromlink }}” section
-          </li>
-          <li class="pb-2">
-            Return to Xumm home, open the Peerkat xApp to view the NFT in
-            {{ nodetypefromlink }}
+            Unable to find an nft for this owner. The link may be out to date.
           </li>
         </ul>
       </div>
     </div>
     <div v-if="malformedLink" style="margin-top: 13%">
       <h5 class="text-center mt-2">
-        Peerkat is not able to find an NFT from the link that you have followed
+        It appears that this link to an NFT is for the {{ nodetypefromlink }}.
+        Please switch to the {{ nodetypefromlink }} in your Xumm app.
       </h5>
       <ul class="mt-2 p-2">
         <li class="pb-2">
-          To view another user’s XRPL-issued NFT please ensure that you have
-          followed the correct link shared by the NFT owner
+          You can switch to the
+          {{ nodetypefromlink }} in the Xumm app by clicking “Quit xApp”
+        </li>
+        <li class="pb-2">
+          In the Xumm app: click “Settings”, then “Advanced”, then “Node” and
+          select a Node listed in the “{{ nodetypefromlink }}” section
+        </li>
+        <li class="pb-2">
+          Return to Xumm home, open the Peerkat xApp to view the NFT in
+          {{ nodetypefromlink }}
         </li>
       </ul>
     </div>
@@ -141,7 +138,6 @@ export default defineComponent({
     const client = computed(() => store.getters["nft/getXrpClient"]);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const user = computed(() => store.getters["user/getUser"]);
-    const walletAddress = computed(() => store.getters["user/getAddress"]);
 
     const malformedLink = ref(false);
     const network = computed(() => store.getters["user/getNetwork"]);
