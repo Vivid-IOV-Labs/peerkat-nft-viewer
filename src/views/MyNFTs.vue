@@ -88,7 +88,7 @@ export default defineComponent({
     const isInXumm = inject("isInXumm");
 
     const isConnected = computed(() => store.getters["nft/getIsConnected"]);
-    const endload = ref(false);
+    const endload = ref(true);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const NFTMedia = computed(() =>
       store.getters["nft/getAll"].filter((a: any) => a)
@@ -101,12 +101,10 @@ export default defineComponent({
     const walletAddress = computed(() => store.getters["user/getAddress"]);
 
     if (
-      lines.value &&
-      xls20count.value &&
-      NFTMedia.value.length != 0 &&
-      lines.value.length + xls20count.value.length == NFTMedia.value.length
+      NFTMedia.value.length == 0 ||
+      lines.value.length + xls20count.value.length > NFTMedia.value.length
     ) {
-      endload.value = true;
+      endload.value = false;
     }
     const poupulateXls20NFTs = async () => {
       await store.dispatch("nft/fetchXls20", {
