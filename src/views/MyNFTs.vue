@@ -164,10 +164,7 @@ export default defineComponent({
       { deep: false }
     );
     watch(NFTMedia, async (newNfts) => {
-      if (
-        lines.value &&
-        lines.value.length + xls20count.value.length == newNfts.length
-      ) {
+      if (lines.value.length + xls20count.value.length == newNfts.length) {
         unobserve();
         endload.value = true;
         await store.dispatch("nft/disconnect");
