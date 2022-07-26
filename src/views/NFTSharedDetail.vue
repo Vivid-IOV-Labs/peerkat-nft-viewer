@@ -80,10 +80,18 @@
         </template>
       </base-card>
       <div v-else class="p-2">
-        <h5 class="text-center mt-2">NFT not fount</h5>
+        <h5 class="text-center mt-2">
+          Peerkat is not able to find an NFT from the link that you have
+          followed.
+        </h5>
         <ul class="mt-2 p-2">
           <li class="pb-2">
-            Unable to find an nft for this owner. The link may be out to date.
+            The owner of the NFT may have changed or the link may be out to
+            date.
+          </li>
+          <li class="pb-2">
+            To view another user's XRPL-issued NFT please ensure that you have
+            followed the correct link shared by the NFT owner
           </li>
         </ul>
       </div>
