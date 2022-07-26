@@ -88,6 +88,7 @@
           followed.
         </h5>
         <ul class="mt-2 p-2">
+          <li class="pb-2">There could be an error in the link</li>
           <li class="pb-2">
             The owner of the NFT may have changed or the link may be out to
             date.

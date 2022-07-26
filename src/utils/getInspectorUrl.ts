@@ -15,6 +15,9 @@
 //   "https://hooks.bithomp.com/",
 //   "https://beta.bithomp.com/",
 // ];
+
+//NFT-DEVNET : wss://xls20-sandbox.rippletest.net:51233
+//HOOKS-TESTNET: wss://hooks-testnet-v2.xrpl-labs.com
 interface urlMap {
   [id: string]: string[];
 }

@@ -1,3 +1,6 @@
+//NFT-DEVNET : wss://xls20-sandbox.rippletest.net:51233
+//HOOKS-TESTNET: wss://hooks-testnet-v2.xrpl-labs.com
+
 export function getNetworkTypeFromCode(code: number): string | undefined {
   if (code == 0) {
     return "MAINNET";
