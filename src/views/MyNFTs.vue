@@ -100,9 +100,13 @@ export default defineComponent({
     const allXls14 = computed(() => store.getters["nft/getAll"]);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
 
-    if (lines.value.length + xls20count.value.length > NFTMedia.value.length) {
+    if (
+      lines.value.length + xls20count.value.length > NFTMedia.value.length ||
+      NFTMedia.value.length == 0
+    ) {
       endload.value = false;
     }
+
     const poupulateXls20NFTs = async () => {
       await store.dispatch("nft/fetchXls20", {
         walletAddress: walletAddress.value,
