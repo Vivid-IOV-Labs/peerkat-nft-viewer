@@ -163,7 +163,7 @@ export default defineComponent({
           user: user.value,
         });
       } catch (error) {
-        malformedLink.value = true;
+        // malformedLink.value = true;
         devlog(error);
       }
     }
