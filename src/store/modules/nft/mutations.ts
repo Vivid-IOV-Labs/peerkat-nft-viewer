@@ -38,6 +38,9 @@ const mutations: MutationTree<NFTState> = {
   setAllXls20(state: NFTState, allXls20: Array<any>): void {
     state.allXls20 = [...state.allXls20, ...allXls20];
   },
+  setAllXls14(state: NFTState, allXls14: Array<any>): void {
+    state.allXls14 = [...state.allXls14, ...allXls14];
+  },
   setSellOffers(state: NFTState, sellOffers: Array<any>): void {
     state.sellOffers = [...state.sellOffers, ...sellOffers];
   },
@@ -106,8 +109,6 @@ const mutations: MutationTree<NFTState> = {
       }
     );
     shared.owner = walletaddress;
-    console.log("addShared", exist);
-    console.log("addShared", walletaddress);
     if (!exist) {
       if (offer) {
         shared.selloffers = [offer];
@@ -116,28 +117,15 @@ const mutations: MutationTree<NFTState> = {
         ...state.sharedwithme[user][nodetype],
         shared,
       ];
-      console.log("addShared", state.sharedwithme[user][nodetype]);
     }
-    debugger;
     if (exist && offer) {
       if (!exist.selloffers) {
         exist.selloffers = [];
       }
-      debugger;
       const offerExists =
         exist.selloffers.filter((o: any) => {
           return o.nft_offer_index == offer.nft_offer_index;
         }).length > 0;
-      console.log(
-        exist.selloffers.filter((o: any) => {
-          o.nft_offer_index == offer.nft_offer_index;
-        }).length
-      );
-      debugger;
-      console.log("offer", offer);
-      console.log("selloffers", exist.selloffers);
-      console.log("offerExists", offerExists);
-
       if (!offerExists) {
         exist.selloffers = [...exist.selloffers, offer];
       }
@@ -221,14 +209,6 @@ const mutations: MutationTree<NFTState> = {
     state: NFTState,
     { currency, nodetype, walletaddress }: deleteSharedParams
   ): void {
-    console.log("delete shared");
-    console.log("delete shared", { currency, nodetype, walletaddress });
-    console.log(
-      "delete shared",
-      state.sharedwithme[walletaddress][nodetype].filter(
-        (n) => n.currency !== currency
-      )
-    );
     state.sharedwithme[walletaddress][nodetype] = state.sharedwithme[
       walletaddress
     ][nodetype].filter((n) => n.currency !== currency);

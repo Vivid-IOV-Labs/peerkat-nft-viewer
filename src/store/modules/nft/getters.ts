@@ -6,6 +6,7 @@ interface NFT {
 }
 export default {
   getAll: (state: NFTState): Array<NFT> => state.all,
+  getAllXls14: (state: NFTState): Array<NFT> => state.allXls14,
   getAllXls20: (state: NFTState): Array<NFT> => state.allXls20,
   getCurrent: (state: NFTState): NFT | null => state.currentNFT,
   getXrpClient: (state: NFTState): typeof XrplClient | null => state.xrpClient,

@@ -89,7 +89,6 @@ export default defineComponent({
 
     const isConnected = computed(() => store.getters["nft/getIsConnected"]);
     const endload = ref(true);
-    const loading = ref(false);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const NFTMedia = computed(() =>
       store.getters["nft/getAll"].filter((a: any) => a)
@@ -98,13 +97,12 @@ export default defineComponent({
     const lines = computed(() => store.getters["nft/getLines"]);
     const xls20count = computed(() => store.getters["nft/getXls20"]);
     const allXls20 = computed(() => store.getters["nft/getAllXls20"]);
-    const allXls14 = computed(() => store.getters["nft/getAll"]);
+    const allXls14 = computed(() => store.getters["nft/getAllXls14"]);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
 
     if (
-      !loading.value &&
-      (lines.value.length + xls20count.value.length > NFTMedia.value.length ||
-        NFTMedia.value.length == 0)
+      lines.value.length + xls20count.value.length > NFTMedia.value.length ||
+      NFTMedia.value.length == 0
     ) {
       endload.value = false;
     }
@@ -146,21 +144,14 @@ export default defineComponent({
     );
     async function fetchNext() {
       unobserve();
-      loading.value = true;
-      console.log("nft/fetchNext");
       await delay(3000);
       await store.dispatch("nft/fetchNext", nodetype.value);
-      loading.value = false;
       observe();
     }
     async function fetchNextXls20() {
       unobserve();
-      console.log("nft/fetchNextXls20");
-      loading.value = true;
       await delay(3000);
       await store.dispatch("nft/fetchNextXls20");
-      loading.value = false;
-
       observe();
     }
     watch(
@@ -170,10 +161,7 @@ export default defineComponent({
           if (xls20count.value.length > allXls20.value.length) {
             await fetchNextXls20();
           } else {
-            if (
-              lines.value.length > allXls14.value.length ||
-              allXls14.value.length == 0
-            ) {
+            if (lines.value.length > allXls14.value.length) {
               await fetchNext();
             }
           }
