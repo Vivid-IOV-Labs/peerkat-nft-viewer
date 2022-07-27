@@ -104,23 +104,24 @@ export default defineComponent({
     };
 
     const populateXls14NFTs = async () => {
-      try {
-        store.commit("ui/setIsloading", true);
-        await store.dispatch("nft/fetchNftLines", {
-          walletAddress: walletAddress.value,
-          nodetype: nodetype.value,
-        });
-        await store.dispatch("nft/fetchNext", nodetype.value);
-        store.commit("ui/setIsloading", false);
-      } catch (error) {
-        devlog("ON POPULATE", error);
+      if (!loading.value && lines.value.length > allXls14.value.length) {
+        try {
+          store.commit("ui/setIsloading", true);
+          await store.dispatch("nft/fetchNftLines", {
+            walletAddress: walletAddress.value,
+            nodetype: nodetype.value,
+          });
+          await store.dispatch("nft/fetchNext", nodetype.value);
+          store.commit("ui/setIsloading", false);
+        } catch (error) {
+          devlog("ON POPULATE", error);
+        }
       }
     };
 
     const populateNFTs = async () => {
       try {
         store.commit("ui/setIsloading", true);
-
         await poupulateXls20NFTs();
         if (allXls20.value.length == 0) {
           await populateXls14NFTs();
@@ -188,9 +189,7 @@ export default defineComponent({
     if (xls20count.value && xls20count.value.length === 0) {
       await populateNFTs();
     } else {
-      // if (lines.value.length > allXls14.value.length) {
-      //   await populateXls14NFTs();
-      // }
+      await populateXls14NFTs();
     }
     return {
       sentinel,
