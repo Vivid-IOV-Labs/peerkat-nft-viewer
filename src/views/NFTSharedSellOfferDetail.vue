@@ -94,8 +94,9 @@
             date.
           </li>
           <li class="pb-2">
-            To view another user's XRPL-issued NFT please ensure that you have
-            followed the correct link shared by the NFT owner
+            Please check with the NFT owner to ensure that you have followed the
+            correct link. If the owner of the NFT has changed recently, you will
+            not be able to use the same share link to access the NFT.
           </li>
         </ul>
       </div>

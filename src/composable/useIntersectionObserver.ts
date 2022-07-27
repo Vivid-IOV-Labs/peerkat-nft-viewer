@@ -33,9 +33,11 @@ export default function useIntersectionObserver(
   });
 
   function unobserve() {
+    console.log("UNOBSERVE");
     if (!observer) return;
 
     if (target.value) {
+      debugger;
       observer.unobserve(target.value);
     }
   }

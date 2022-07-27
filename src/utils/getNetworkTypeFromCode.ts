@@ -14,6 +14,12 @@ export function getNetworkTypeFromCode(code: number): string | undefined {
   if (code == 3) {
     return "CUSTOM";
   }
+  if (code == 4) {
+    return "NFT-DEVNET";
+  }
+  if (code == 5) {
+    return "HOOKS-TESTNET";
+  }
 }
 
 export function getNetworkCodeFromType(type: string): number | undefined {
@@ -28,5 +34,11 @@ export function getNetworkCodeFromType(type: string): number | undefined {
   }
   if (type == "MAINNET") {
     return 0;
+  }
+  if (type == "NFT-DEVNET") {
+    return 4;
+  }
+  if (type == "NFT-DEVNET") {
+    return 5;
   }
 }
