@@ -147,6 +147,7 @@ export default defineComponent({
     async function fetchNext() {
       unobserve();
       loading.value = true;
+      console.log("nft/fetchNext");
       await delay(3000);
       await store.dispatch("nft/fetchNext", nodetype.value);
       loading.value = false;
@@ -154,6 +155,7 @@ export default defineComponent({
     }
     async function fetchNextXls20() {
       unobserve();
+      console.log("nft/fetchNextXls20");
       loading.value = true;
       await delay(3000);
       await store.dispatch("nft/fetchNextXls20");
@@ -168,7 +170,9 @@ export default defineComponent({
           if (xls20count.value.length > allXls20.value.length) {
             await fetchNextXls20();
           } else {
-            await fetchNext();
+            if (lines.value.length > allXls14.value.length) {
+              await fetchNext();
+            }
           }
         }
       },
