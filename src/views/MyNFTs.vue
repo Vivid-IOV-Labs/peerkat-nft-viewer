@@ -89,6 +89,7 @@ export default defineComponent({
 
     const isConnected = computed(() => store.getters["nft/getIsConnected"]);
     const endload = ref(true);
+    const loading = ref(false);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const NFTMedia = computed(() =>
       store.getters["nft/getAll"].filter((a: any) => a)
@@ -101,8 +102,9 @@ export default defineComponent({
     const walletAddress = computed(() => store.getters["user/getAddress"]);
 
     if (
-      lines.value.length + xls20count.value.length > NFTMedia.value.length ||
-      NFTMedia.value.length == 0
+      !loading.value &&
+      (lines.value.length + xls20count.value.length > NFTMedia.value.length ||
+        NFTMedia.value.length == 0)
     ) {
       endload.value = false;
     }
@@ -144,14 +146,19 @@ export default defineComponent({
     );
     async function fetchNext() {
       unobserve();
+      loading.value = true;
       await delay(3000);
       await store.dispatch("nft/fetchNext", nodetype.value);
+      loading.value = false;
       observe();
     }
     async function fetchNextXls20() {
       unobserve();
+      loading.value = true;
       await delay(3000);
       await store.dispatch("nft/fetchNextXls20");
+      loading.value = false;
+
       observe();
     }
     watch(
