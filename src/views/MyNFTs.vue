@@ -170,7 +170,10 @@ export default defineComponent({
           if (xls20count.value.length > allXls20.value.length) {
             await fetchNextXls20();
           } else {
-            if (lines.value.length > allXls14.value.length) {
+            if (
+              lines.value.length > allXls14.value.length ||
+              allXls14.value.length == 0
+            ) {
               await fetchNext();
             }
           }
