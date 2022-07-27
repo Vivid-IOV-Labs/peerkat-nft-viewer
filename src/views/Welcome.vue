@@ -50,7 +50,7 @@
       </div>
     </base-button>
   </div>
-  <base-dialog
+  <!-- <base-dialog
     :show="showError"
     title="An Error occurs"
     @close="showError = false"
@@ -64,7 +64,7 @@
         >Ok
       </base-button>
     </template>
-  </base-dialog>
+  </base-dialog> -->
 </template>
 
 <script lang="ts">

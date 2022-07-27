@@ -62,25 +62,6 @@ export default defineComponent({
   components: {
     NftCard,
   },
-  // async beforeRouteEnter(from, to, next) {
-  //   const isConnected = store.getters["nft/getIsConnected"];
-  //   const all = store.getters["nft/getAll"];
-  //   const lines = store.getters["nft/getAll"];
-
-  //   const allLoaded = all.length == lines.length;
-  //   if (!isConnected && !allLoaded) {
-  //     await store.dispatch("nft/connect");
-  //   }
-  //   next();
-  // },
-  // beforeRouteLeave(from, to, next) {
-  //   const isConnected = store.getters["nft/getIsConnected"];
-  //   if (isConnected) {
-  //     store.dispatch("nft/disconnect");
-  //     next();
-  //   }
-  //   next();
-  // },
   async setup() {
     const store = useStore();
     const sentinel = ref<HTMLElement | null>(null);
@@ -89,7 +70,7 @@ export default defineComponent({
 
     const isConnected = computed(() => store.getters["nft/getIsConnected"]);
     const endload = ref(true);
-    const loading = ref(false);
+    const loading = computed(() => store.getters["ui/getIsloading"]);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const NFTMedia = computed(() =>
       store.getters["nft/getAll"].filter((a: any) => a)
@@ -100,7 +81,11 @@ export default defineComponent({
     const allXls20 = computed(() => store.getters["nft/getAllXls20"]);
     const allXls14 = computed(() => store.getters["nft/getAllXls14"]);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
-
+    const { unobserve, observe, isIntersecting } = useIntersectionObserver(
+      scroller,
+      sentinel
+    );
+    unobserve();
     if (
       lines.value.length + xls20count.value.length > NFTMedia.value.length ||
       NFTMedia.value.length == 0
@@ -109,21 +94,24 @@ export default defineComponent({
     }
 
     const poupulateXls20NFTs = async () => {
+      store.commit("ui/setIsloading", true);
+
       await store.dispatch("nft/fetchXls20", {
         walletAddress: walletAddress.value,
       });
       await store.dispatch("nft/fetchNextXls20");
+      store.commit("ui/setIsloading", false);
     };
 
     const populateXls14NFTs = async () => {
       try {
-        loading.value = true;
+        store.commit("ui/setIsloading", true);
         await store.dispatch("nft/fetchNftLines", {
           walletAddress: walletAddress.value,
           nodetype: nodetype.value,
         });
         await store.dispatch("nft/fetchNext", nodetype.value);
-        loading.value = false;
+        store.commit("ui/setIsloading", false);
       } catch (error) {
         devlog("ON POPULATE", error);
       }
@@ -131,40 +119,36 @@ export default defineComponent({
 
     const populateNFTs = async () => {
       try {
-        loading.value = true;
+        store.commit("ui/setIsloading", true);
 
         await poupulateXls20NFTs();
         if (allXls20.value.length == 0) {
           await populateXls14NFTs();
         }
-        loading.value = false;
+        store.commit("ui/setIsloading", false);
       } catch (error) {
         devlog(error);
         await populateXls14NFTs();
       }
     };
 
-    const { unobserve, observe, isIntersecting } = useIntersectionObserver(
-      scroller,
-      sentinel
-    );
     async function fetchNext() {
       unobserve();
-      loading.value = true;
+      store.commit("ui/setIsloading", true);
 
       await delay(3000);
       await store.dispatch("nft/fetchNext", nodetype.value);
-      loading.value = false;
+      store.commit("ui/setIsloading", false);
 
       observe();
     }
     async function fetchNextXls20() {
       unobserve();
-      loading.value = true;
+      store.commit("ui/setIsloading", true);
 
       await delay(3000);
       await store.dispatch("nft/fetchNextXls20");
-      loading.value = false;
+      store.commit("ui/setIsloading", false);
 
       observe();
     }
@@ -176,6 +160,10 @@ export default defineComponent({
             await fetchNextXls20();
           } else {
             if (lines.value.length > allXls14.value.length) {
+              console.log(lines.value.length);
+              console.log(allXls14.value.length);
+              console.log(allXls14.value);
+              console.log(loading.value);
               await fetchNext();
             }
           }
@@ -187,7 +175,7 @@ export default defineComponent({
       if (lines.value.length + xls20count.value.length == newNfts.length) {
         unobserve();
         endload.value = true;
-        await store.dispatch("nft/disconnect");
+        //    await store.dispatch("nft/disconnect");
       }
     });
 
@@ -200,9 +188,9 @@ export default defineComponent({
     if (xls20count.value && xls20count.value.length === 0) {
       await populateNFTs();
     } else {
-      if (lines.value.length > allXls14.value.length) {
-        await populateXls14NFTs();
-      }
+      // if (lines.value.length > allXls14.value.length) {
+      //   await populateXls14NFTs();
+      // }
     }
     return {
       sentinel,
@@ -211,6 +199,7 @@ export default defineComponent({
       lines,
       isConnected,
       NFTMedia,
+      loading,
       isInXumm,
       xls20count,
       async connect() {

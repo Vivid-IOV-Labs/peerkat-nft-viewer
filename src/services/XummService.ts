@@ -16,7 +16,6 @@ class XummService {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const urlParams = new URLSearchParams(document.location.href);
       const jwtToke = urlParams.get("xAppToken");
-      console.log("Sdk jwtToke", jwtToke);
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { XummSdkJwt } = require("xumm-sdk");
       Sdk = new XummSdkJwt(xummApiKey);
@@ -40,21 +39,17 @@ class XummService {
         txjson: newPayload,
       },
       (event: any) => {
-        // console.log("event", event);
-        // console.log("event.data", event.data);
         if (typeof event.data.message !== "undefined") {
           const payloadEventId = event.data.message.split(" ")[1];
-          console.log("payloadEventId", payloadEventId);
         }
         if (event.data.expires_in_seconds === 0) {
-          console.log("expired");
+          devlog("expired");
         }
         if (event.data.signed === true) {
-          console.log("signed");
           onSigned();
         }
         if (event.data.signed === false) {
-          console.log("not signed");
+          devlog("not signed");
         }
       }
     );

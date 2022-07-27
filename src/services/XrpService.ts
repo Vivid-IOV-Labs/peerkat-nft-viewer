@@ -457,8 +457,6 @@ export async function fetchOneXls20(
     result: { account_nfts },
   } = await getTokens(walletAddress);
   const nftXLS20 = account_nfts.find((n: any) => {
-    console.log("n.NFTokenID", n.NFTokenID);
-    console.log("NFTokenID", NFTokenID);
     return n.NFTokenID == NFTokenID;
   });
   if (nftXLS20) {
@@ -480,16 +478,7 @@ export async function getOneXls(nft: any) {
     const imageUrl = ipfsPublicGateway + "/" + image.split("//")[1];
     // const result = await fetch(schemaUrl).then((res) => res.json());
     const media_type = "image/jpeg";
-    console.log({
-      issuer: Issuer,
-      currency: NFTokenID,
-      tokenName: name,
-      url: imageUrl,
-      media_type,
-      desc: description,
-      issuerTruncated: truncate(Issuer),
-      standard: "XLS-20",
-    });
+
     return {
       issuer: Issuer,
       currency: NFTokenID,
@@ -535,7 +524,6 @@ export async function fetchNextXls20WithSellOffer(
       const schema = await getOneXls(nft);
       const sellOffersResponse = await fetchSellOffers(NFTokenID);
       const buyOffersResponse = await fetchBuyOffers(NFTokenID);
-      console.log("buyOffersResponse", buyOffersResponse);
       return {
         ...schema,
         selloffers:
@@ -602,15 +590,6 @@ export async function acceptOffer({ OfferID }: any): Promise<any> {
       method: "account_nfts",
       account: wallet.classicAddress,
     });
-    console.log(JSON.stringify(nfts, null, 2));
-    console.log(
-      "Transaction result:",
-      JSON.stringify(tx.result.meta.TransactionResult, null, 2)
-    );
-    console.log(
-      "Balance changes:",
-      JSON.stringify(xrpl.getBalanceChanges(tx.result.meta), null, 2)
-    );
   } catch (error) {
     devlog(error);
   }
@@ -629,15 +608,6 @@ export async function acceptBuyOffer({ OfferID }: any): Promise<any> {
       method: "account_nfts",
       account: wallet.classicAddress,
     });
-    console.log(JSON.stringify(nfts, null, 2));
-    console.log(
-      "Transaction result:",
-      JSON.stringify(tx.result.meta.TransactionResult, null, 2)
-    );
-    console.log(
-      "Balance changes:",
-      JSON.stringify(xrpl.getBalanceChanges(tx.result.meta), null, 2)
-    );
   } catch (error) {
     devlog(error);
   }
@@ -722,7 +692,6 @@ export async function fetchBuyOffers(TokenID: string): Promise<any> {
       method: "nft_buy_offers",
       nft_id: TokenID,
     });
-    console.log("nft_buy_offers", result);
     return result;
   } catch (err) {
     devlog("No buy offers.");

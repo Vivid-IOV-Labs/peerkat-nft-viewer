@@ -166,16 +166,10 @@ export default defineComponent({
     );
     const nft = ref<any | null>(null);
     const offer = ref<any | null>(null);
-    console.log("owner", owner);
 
     const buyOffers = await fetchBuyOffers(nftId);
     const account_nfts = await fetchXls20(owner);
-    console.log("owner", owner);
-    console.log("account_nfts", account_nfts);
-    console.log("nftId", nftId);
-
     const currentNft = account_nfts.find((n: any) => n.NFTokenID == nftId);
-    console.log("currentNft", currentNft);
     const { URI, Issuer, NFTokenID } = currentNft;
     nft.value = await getOneXls({ URI, Issuer, NFTokenID });
 

@@ -63,14 +63,11 @@ export default defineComponent({
               TokenIDs: [props.offer.nft_offer_index],
             },
             async () => {
-              console.log("deleteSellOffer", props.offer.nft_offer_index);
-
               await store.commit("nft/deleteSellOffer", {
                 offerID: props.offer.nft_offer_index,
               });
             }
           );
-          devlog("cancell", created);
           const { uuid } = created;
           openSignRequest(uuid);
         } else {
