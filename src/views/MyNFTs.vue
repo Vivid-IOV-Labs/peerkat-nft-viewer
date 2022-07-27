@@ -89,6 +89,7 @@ export default defineComponent({
 
     const isConnected = computed(() => store.getters["nft/getIsConnected"]);
     const endload = ref(true);
+    const loading = ref(false);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const NFTMedia = computed(() =>
       store.getters["nft/getAll"].filter((a: any) => a)
@@ -116,11 +117,13 @@ export default defineComponent({
 
     const populateXls14NFTs = async () => {
       try {
+        loading.value = true;
         await store.dispatch("nft/fetchNftLines", {
           walletAddress: walletAddress.value,
           nodetype: nodetype.value,
         });
         await store.dispatch("nft/fetchNext", nodetype.value);
+        loading.value = false;
       } catch (error) {
         devlog("ON POPULATE", error);
       }
@@ -128,10 +131,13 @@ export default defineComponent({
 
     const populateNFTs = async () => {
       try {
+        loading.value = true;
+
         await poupulateXls20NFTs();
         if (allXls20.value.length == 0) {
           await populateXls14NFTs();
         }
+        loading.value = false;
       } catch (error) {
         devlog(error);
         await populateXls14NFTs();
@@ -144,20 +150,28 @@ export default defineComponent({
     );
     async function fetchNext() {
       unobserve();
+      loading.value = true;
+
       await delay(3000);
       await store.dispatch("nft/fetchNext", nodetype.value);
+      loading.value = false;
+
       observe();
     }
     async function fetchNextXls20() {
       unobserve();
+      loading.value = true;
+
       await delay(3000);
       await store.dispatch("nft/fetchNextXls20");
+      loading.value = false;
+
       observe();
     }
     watch(
       isIntersecting,
       async (val) => {
-        if (val) {
+        if (val && !loading.value) {
           if (xls20count.value.length > allXls20.value.length) {
             await fetchNextXls20();
           } else {
