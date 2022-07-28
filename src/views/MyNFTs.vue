@@ -108,7 +108,7 @@ export default defineComponent({
       console.log(loading.value);
       console.log(lines.value.length);
       console.log(allXls14.value.length);
-      if (lines.value.length > allXls14.value.length) {
+      if (!loading.value && lines.value.length > allXls14.value.length) {
         try {
           store.commit("ui/setIsloading", true);
           await store.dispatch("nft/fetchNftLines", {
@@ -143,7 +143,7 @@ export default defineComponent({
       unobserve();
       store.commit("ui/setIsloading", true);
 
-      await delay(3000);
+      await delay(1000);
       await store.dispatch("nft/fetchNext", nodetype.value);
       store.commit("ui/setIsloading", false);
 
@@ -153,7 +153,7 @@ export default defineComponent({
       unobserve();
       store.commit("ui/setIsloading", true);
 
-      await delay(3000);
+      await delay(1000);
       await store.dispatch("nft/fetchNextXls20");
       store.commit("ui/setIsloading", false);
 
