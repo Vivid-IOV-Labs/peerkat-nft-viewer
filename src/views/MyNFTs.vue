@@ -186,9 +186,15 @@ export default defineComponent({
         nodetype: nodetype.value,
       });
     }
-    if (xls20count.value && xls20count.value.length === 0) {
+    if (
+      xls20count.value &&
+      xls20count.value.length === 0 &&
+      allXls14.value.length !== 0
+    ) {
+      debugger;
       await populateNFTs();
     } else {
+      debugger;
       await populateXls14NFTs();
     }
     return {
