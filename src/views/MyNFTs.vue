@@ -104,6 +104,7 @@ export default defineComponent({
     };
 
     const populateXls14NFTs = async () => {
+      console.log("populateXls14NFTs");
       if (!loading.value && lines.value.length > allXls14.value.length) {
         try {
           store.commit("ui/setIsloading", true);
@@ -111,6 +112,8 @@ export default defineComponent({
             walletAddress: walletAddress.value,
             nodetype: nodetype.value,
           });
+          console.log("nft/fetchNext");
+
           await store.dispatch("nft/fetchNext", nodetype.value);
           store.commit("ui/setIsloading", false);
         } catch (error) {
@@ -161,10 +164,6 @@ export default defineComponent({
             await fetchNextXls20();
           } else {
             if (lines.value.length > allXls14.value.length) {
-              console.log(lines.value.length);
-              console.log(allXls14.value.length);
-              console.log(allXls14.value);
-              console.log(loading.value);
               await fetchNext();
             }
           }
