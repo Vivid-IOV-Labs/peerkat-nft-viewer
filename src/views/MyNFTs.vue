@@ -108,7 +108,7 @@ export default defineComponent({
       console.log(loading.value);
       console.log(lines.value.length);
       console.log(allXls14.value.length);
-      if (!loading.value && lines.value.length > allXls14.value.length) {
+      if (lines.value.length > allXls14.value.length) {
         try {
           store.commit("ui/setIsloading", true);
           await store.dispatch("nft/fetchNftLines", {
