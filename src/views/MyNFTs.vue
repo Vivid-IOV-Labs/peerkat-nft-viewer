@@ -120,6 +120,8 @@ export default defineComponent({
           await store.dispatch("nft/fetchNext", nodetype.value);
           store.commit("ui/setIsloading", false);
         } catch (error) {
+          store.commit("ui/setIsloading", false);
+
           devlog("ON POPULATE", error);
         }
       }
@@ -133,6 +135,8 @@ export default defineComponent({
         }
       } catch (error) {
         devlog(error);
+        store.commit("ui/setIsloading", false);
+
         await populateXls14NFTs();
       }
     };
@@ -141,7 +145,7 @@ export default defineComponent({
       unobserve();
       store.commit("ui/setIsloading", true);
 
-      //await delay(1000);
+      await delay(1000);
       await store.dispatch("nft/fetchNext", nodetype.value);
       store.commit("ui/setIsloading", false);
 
@@ -151,7 +155,7 @@ export default defineComponent({
       unobserve();
       store.commit("ui/setIsloading", true);
 
-      //await delay(1000);
+      await delay(1000);
       await store.dispatch("nft/fetchNextXls20");
       store.commit("ui/setIsloading", false);
 
