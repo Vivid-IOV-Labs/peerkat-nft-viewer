@@ -69,6 +69,8 @@ const mutations: MutationTree<NFTState> = {
       MAINNET: [],
       CUSTOM: [],
       DEVNET: [],
+      "NFT-DEVNET": [],
+      "HOOKS-TESTNET": [],
     };
   },
   // initSharedBuyOffersStore(state: NFTState, walletaddress) {

@@ -2,10 +2,7 @@ import { XrplClient } from "xrpl-client";
 import { NFT } from "../../../models/NFT";
 
 export interface SharedNFTs {
-  TESTNET: Array<NFT>;
-  MAINNET: Array<NFT>;
-  DEVNET: Array<NFT>;
-  CUSTOM: Array<NFT>;
+  [id: string]: Array<NFT>;
 }
 export interface SharedNFTsByWallet {
   [walletaddress: string]: SharedNFTs;

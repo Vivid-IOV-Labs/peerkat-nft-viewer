@@ -2,6 +2,7 @@ import { computed } from "vue";
 import { createWebHistory, createRouter } from "vue-router";
 import store from "../store";
 import { devlog } from "../utils/devlog";
+import { getNodeTypeFromNetwork } from "../utils/getNetworkTypeFromCode";
 import { isInXumm } from "../utils/isInXumm";
 
 const routes = [
@@ -268,8 +269,10 @@ router.beforeEach(async (to, from, next) => {
       await store.dispatch("xumm/getOttData");
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
       await store.commit("user/setAddress", ottdata.value.account);
-      await store.commit("user/setNodeType", ottdata.value.nodetype);
       await store.commit("user/setNetwork", ottdata.value.nodewss);
+      const nodetype = getNodeTypeFromNetwork(ottdata.value.nodewss);
+      console.log("NODETYPE", nodetype);
+      await store.commit("user/setNodeType", nodetype);
       await store.commit("user/setUser", ottdata.value.user);
 
       try {

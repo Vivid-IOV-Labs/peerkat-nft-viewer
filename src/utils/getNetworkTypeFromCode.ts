@@ -2,22 +2,23 @@
 //HOOKS-TESTNET: wss://hooks-testnet-v2.xrpl-labs.com
 
 interface urlMap {
-  [id: string]: string[];
+  [id: string]: string;
 }
 export function getNodeTypeFromNetwork(network: keyof urlMap) {
   const urlMap: urlMap = {
     /*test */
-    "wss://s.altnet.rippletest.net:51233": ["https://test.bithomp.com/"],
-    "wss://testnet.xrpl-labs.com": ["https://test.bithomp.com/"],
+    "wss://s.altnet.rippletest.net:51233": "TESTNET",
+    "wss://testnet.xrpl-labs.com": "TESTNET",
     /*main */
-    "wss://s2.ripple.com": ["https://bithomp.com/"],
-    "wss://xrpl.link": ["https://bithomp.com/"],
-    "wss://xrplcluster.com": ["https://bithomp.com/"],
+    "wss://s2.ripple.com": "MAINNET",
+    "wss://xrpl.link": "MAINNET",
+    "wss://xrplcluster.com": "MAINNET",
+    "wss://s.devnet.rippletest.net:51233": "DEVNET",
     /*custom */
-    "wss://xls20-sandbox.rippletest.net:51233": ["https://xls20.bithomp.com/"],
-    "wss://hooks-testnet-v2.xrpl-labs.com": ["https://hooks.bithomp.com/"],
+    "wss://xls20-sandbox.rippletest.net:51233": "NFT-DEVNET",
+    "wss://hooks-testnet-v2.xrpl-labs.com": "HOOKS-TESTNET",
   };
-  return urlMap[network] ? urlMap[network][0] + issuer : "";
+  return urlMap[network];
 }
 
 export function getNetworkTypeFromCode(code: number): string | undefined {
