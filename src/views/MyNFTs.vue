@@ -127,12 +127,10 @@ export default defineComponent({
 
     const populateNFTs = async () => {
       try {
-        store.commit("ui/setIsloading", true);
         await poupulateXls20NFTs();
         if (allXls20.value.length == 0) {
           await populateXls14NFTs();
         }
-        store.commit("ui/setIsloading", false);
       } catch (error) {
         devlog(error);
         await populateXls14NFTs();
