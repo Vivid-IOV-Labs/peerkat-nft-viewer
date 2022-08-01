@@ -98,6 +98,7 @@
         </ul>
       </div>
     </div>
+    {{ nodetypefromlink }}
     <div v-if="nodetypefromlink && !nft" style="margin-top: 13%">
       <div v-if="isCustomNode(nodetypefromlink)">
         <h5 class="text-center mt-2">
