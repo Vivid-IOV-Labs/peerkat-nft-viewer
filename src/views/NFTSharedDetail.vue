@@ -98,10 +98,11 @@
         </ul>
       </div>
     </div>
-    <div v-if="nodetypefromlink" style="margin-top: 13%">
+    <div v-if="nodetypefromlink && !nft" style="margin-top: 13%">
       <div v-if="isCustomNode(nodetypefromlink)">
         <h5 class="text-center mt-2">
-          New wording for bullet point on the wrong node error page :-
+          It appears that this link to an NFT is for the {{ network }}. Please
+          switch to the {{ network }} in your Xumm app.
         </h5>
         <ul class="mt-2 p-2">
           <li class="pb-2">
