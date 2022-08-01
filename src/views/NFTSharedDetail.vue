@@ -98,7 +98,7 @@
         </ul>
       </div>
     </div>
-    <div v-if="malformedLink" style="margin-top: 13%">
+    <div v-if="malformedLink && nodetypefromlink" style="margin-top: 13%">
       <h5 class="text-center mt-2">
         It appears that this link to an NFT is for the {{ nodetypefromlink }}.
         Please switch to the {{ nodetypefromlink }} in your Xumm app.
@@ -115,6 +115,22 @@
         <li class="pb-2">
           Return to Xumm home, open the Peerkat xApp to view the NFT in
           {{ nodetypefromlink }}
+        </li>
+      </ul>
+    </div>
+    <div v-else>
+      <h5 class="text-center mt-2">
+        Peerkat is not able to find an NFT from the link that you have followed.
+      </h5>
+      <ul class="mt-2 p-2">
+        <li class="pb-2">There could be an error in the link</li>
+        <li class="pb-2">
+          The owner of the NFT may have changed or the link may be out to date.
+        </li>
+        <li class="pb-2">
+          Please check with the NFT owner to ensure that you have followed the
+          correct link. If the owner of the NFT has changed recently, you will
+          not be able to use the same share link to access the NFT.
         </li>
       </ul>
     </div>
