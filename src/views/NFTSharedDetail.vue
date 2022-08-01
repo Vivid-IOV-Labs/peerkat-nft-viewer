@@ -116,7 +116,7 @@
           </li>
         </ul>
       </div>
-      <div v-else>
+      <div v-if="!nodetypefromlink && !nft">
         <h5 class="text-center mt-2">
           It appears that this link to an NFT is for the {{ nodetypefromlink }}.
           Please switch to the {{ nodetypefromlink }} in your Xumm app.
