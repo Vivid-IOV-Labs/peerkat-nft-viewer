@@ -99,24 +99,42 @@
       </div>
     </div>
     <div v-if="malformedLink && nodetypefromlink" style="margin-top: 13%">
-      <h5 class="text-center mt-2">
-        It appears that this link to an NFT is for the {{ nodetypefromlink }}.
-        Please switch to the {{ nodetypefromlink }} in your Xumm app.
-      </h5>
-      <ul class="mt-2 p-2">
-        <li class="pb-2">
-          You can switch to the
-          {{ nodetypefromlink }} in the Xumm app by clicking “Quit xApp”
-        </li>
-        <li class="pb-2">
-          In the Xumm app: click “Settings”, then “Advanced”, then “Node” and
-          select a Node listed in the “{{ nodetypefromlink }}” section
-        </li>
-        <li class="pb-2">
-          Return to Xumm home, open the Peerkat xApp to view the NFT in
-          {{ nodetypefromlink }}
-        </li>
-      </ul>
+      <div v-if="isCustomNode(nodetypefromlink)">
+        <h5 class="text-center mt-2">
+          New wording for bullet point on the wrong node error page :-
+        </h5>
+        <ul class="mt-2 p-2">
+          <li class="pb-2">
+            In the Xumm app: click “Settings”, then “Advanced”, then “Node” and
+            select the {{ network }} Node, under the CUSTOM section.
+          </li>
+          <li class="pb-2">
+            If you do not see this node under the CUSTOM section; please contact
+            the administrator of the network you are trying to connect to, for
+            information on how to access it via Xumm.
+          </li>
+        </ul>
+      </div>
+      <div v-else>
+        <h5 class="text-center mt-2">
+          It appears that this link to an NFT is for the {{ nodetypefromlink }}.
+          Please switch to the {{ nodetypefromlink }} in your Xumm app.
+        </h5>
+        <ul class="mt-2 p-2">
+          <li class="pb-2">
+            You can switch to the
+            {{ nodetypefromlink }} in the Xumm app by clicking “Quit xApp”
+          </li>
+          <li class="pb-2">
+            In the Xumm app: click “Settings”, then “Advanced”, then “Node” and
+            select a Node listed in the “{{ nodetypefromlink }}” section
+          </li>
+          <li class="pb-2">
+            Return to Xumm home, open the Peerkat xApp to view the NFT in
+            {{ nodetypefromlink }}
+          </li>
+        </ul>
+      </div>
     </div>
     <div v-else>
       <h5 class="text-center mt-2">
@@ -146,6 +164,7 @@ import BaseCard from "../components/BaseCard.vue";
 import {
   getNetworkCodeFromType,
   getNetworkTypeFromCode,
+  isCustomNode,
 } from "../utils/getNetworkTypeFromCode";
 import { NFT } from "../models/NFT";
 import { devlog } from "../utils/devlog";
@@ -220,9 +239,11 @@ export default defineComponent({
     return {
       nft,
       nodetype,
+      network,
       nodetypefromlink,
       bihompUrl,
       malformedLink,
+      isCustomNode,
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },

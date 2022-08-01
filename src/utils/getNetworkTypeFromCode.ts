@@ -4,7 +4,9 @@
 interface urlMap {
   [id: string]: string;
 }
-export function getNodeTypeFromNetwork(network: keyof urlMap) {
+export function getNodeTypeFromNetwork(
+  network: keyof urlMap
+): string | undefined {
   const urlMap: urlMap = {
     /*test */
     "wss://s.altnet.rippletest.net:51233": "TESTNET",
@@ -61,4 +63,8 @@ export function getNetworkCodeFromType(type: string): number | undefined {
   if (type == "HOOKS-TESTNET") {
     return 5;
   }
+}
+
+export function isCustomNode(type: string): boolean {
+  return type == "NFT-DEVNET" || type == "HOOKS-TESTNET";
 }
