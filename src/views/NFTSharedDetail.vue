@@ -4,7 +4,7 @@
       >Back
     </router-link>
 
-    <div v-if="!malformedLink" class="w-100 p-1">
+    <div class="w-100 p-1">
       <base-card v-if="nft && !nodetypefromlink">
         <template #picture>
           <figure style="overflow: hidden">
@@ -98,7 +98,7 @@
         </ul>
       </div>
     </div>
-    <div v-else>
+    <div class="w-100 p-1">
       <div v-if="nodetypefromlink && !nft" style="margin-top: 13%">
         <div v-if="isCustomNode(nodetypefromlink)">
           <h5 class="text-center mt-2">
