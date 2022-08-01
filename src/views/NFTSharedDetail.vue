@@ -5,7 +5,7 @@
     </router-link>
 
     <div v-if="!malformedLink" class="w-100 p-1">
-      <base-card v-if="nft">
+      <base-card v-if="nft && !nodetypefromlink">
         <template #picture>
           <figure style="overflow: hidden">
             <a
@@ -137,7 +137,7 @@
         </ul>
       </div>
     </div>
-    <div v-else>
+    <div v-if="!nodetypefromlink && !nft">
       <h5 class="text-center mt-2">
         Peerkat is not able to find an NFT from the link that you have followed.
       </h5>
