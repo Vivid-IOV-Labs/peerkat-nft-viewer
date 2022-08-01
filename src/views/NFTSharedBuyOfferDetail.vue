@@ -4,8 +4,8 @@
       Back
     </router-link>
     <h2 class="text-center">Shared Buy Offer</h2>
-    <div v-if="!malformedLink" class="w-80 p-1">
-      <base-card v-if="nft">
+    <div class="w-80 p-1">
+      <base-card v-if="nft && !nodetypefromlink">
         <template #picture>
           <figure style="overflow: hidden">
             <a href="#" @click.prevent="view">
@@ -82,7 +82,7 @@
           </external-link>
         </template>
       </base-card>
-      <div v-else class="p-2">
+      <div v-if="!nft && !nodetypefromlink" class="p-2">
         <h5 class="text-center mt-2">
           It appears that this link to an NFT is for the {{ nodetypefromlink }}.
           Please switch to the {{ nodetypefromlink }} in your Xumm app.
@@ -103,10 +103,11 @@
         </ul>
       </div>
     </div>
-    <div v-if="malformedLink && nodetypefromlink" style="margin-top: 13%">
+    <div v-if="nodetypefromlink && !nft" style="margin-top: 13%">
       <div v-if="isCustomNode(nodetypefromlink)">
         <h5 class="text-center mt-2">
-          New wording for bullet point on the wrong node error page :-
+          It appears that this link to an NFT is for the {{ network }}. Please
+          switch to the {{ network }} in your Xumm app.
         </h5>
         <ul class="mt-2 p-2">
           <li class="pb-2">
@@ -120,10 +121,11 @@
           </li>
         </ul>
       </div>
-      <div v-else>
+      <div v-if="!nodetypefromlink && !nft">
         <h5 class="text-center mt-2">
-          It appears that this link to an NFT is for the {{ nodetypefromlink }}.
-          Please switch to the {{ nodetypefromlink }} in your Xumm app.
+          It appears that this link to an NFT is for the
+          {{ nodetypefromlink }}. Please switch to the {{ nodetypefromlink }} in
+          your Xumm app.
         </h5>
         <ul class="mt-2 p-2">
           <li class="pb-2">
@@ -141,7 +143,7 @@
         </ul>
       </div>
     </div>
-    <div v-else>
+    <div v-if="!nodetypefromlink && nft">
       <h5 class="text-center mt-2">
         Peerkat is not able to find an NFT from the link that you have followed.
       </h5>
