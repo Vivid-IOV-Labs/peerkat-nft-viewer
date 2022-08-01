@@ -79,7 +79,7 @@
           >
         </template>
       </base-card>
-      <div v-else class="p-2">
+      <div v-if="!nft && !malformedLink" class="p-2">
         <h5 class="text-center mt-2">
           Peerkat is not able to find an NFT from the link that you have
           followed.
