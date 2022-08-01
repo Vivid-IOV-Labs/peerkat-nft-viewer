@@ -79,7 +79,7 @@
           >
         </template>
       </base-card>
-      <div v-if="!nft && !malformedLink" class="p-2">
+      <div v-if="!nft" class="p-2">
         <h5 class="text-center mt-2">
           Peerkat is not able to find an NFT from the link that you have
           followed.
@@ -98,7 +98,7 @@
         </ul>
       </div>
     </div>
-    <div v-if="malformedLink && nodetypefromlink" style="margin-top: 13%">
+    <div v-if="nodetypefromlink" style="margin-top: 13%">
       <div v-if="isCustomNode(nodetypefromlink)">
         <h5 class="text-center mt-2">
           New wording for bullet point on the wrong node error page :-
