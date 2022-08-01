@@ -98,65 +98,61 @@
         </ul>
       </div>
     </div>
-    <div class="w-100 p-1">
-      <div v-if="nodetypefromlink && !nft" style="margin-top: 13%">
-        <div v-if="isCustomNode(nodetypefromlink)">
-          <h5 class="text-center mt-2">
-            It appears that this link to an NFT is for the {{ network }}. Please
-            switch to the {{ network }} in your Xumm app.
-          </h5>
-          <ul class="mt-2 p-2">
-            <li class="pb-2">
-              In the Xumm app: click “Settings”, then “Advanced”, then “Node”
-              and select the {{ network }} Node, under the CUSTOM section.
-            </li>
-            <li class="pb-2">
-              If you do not see this node under the CUSTOM section; please
-              contact the administrator of the network you are trying to connect
-              to, for information on how to access it via Xumm.
-            </li>
-          </ul>
-        </div>
-        <div v-if="!nodetypefromlink && !nft">
-          <h5 class="text-center mt-2">
-            It appears that this link to an NFT is for the
-            {{ nodetypefromlink }}. Please switch to the
-            {{ nodetypefromlink }} in your Xumm app.
-          </h5>
-          <ul class="mt-2 p-2">
-            <li class="pb-2">
-              You can switch to the
-              {{ nodetypefromlink }} in the Xumm app by clicking “Quit xApp”
-            </li>
-            <li class="pb-2">
-              In the Xumm app: click “Settings”, then “Advanced”, then “Node”
-              and select a Node listed in the “{{ nodetypefromlink }}” section
-            </li>
-            <li class="pb-2">
-              Return to Xumm home, open the Peerkat xApp to view the NFT in
-              {{ nodetypefromlink }}
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div v-if="!nodetypefromlink && !nft">
+    <div v-if="nodetypefromlink && !nft" style="margin-top: 13%">
+      <div v-if="isCustomNode(nodetypefromlink)">
         <h5 class="text-center mt-2">
-          Peerkat is not able to find an NFT from the link that you have
-          followed.
+          It appears that this link to an NFT is for the {{ network }}. Please
+          switch to the {{ network }} in your Xumm app.
         </h5>
         <ul class="mt-2 p-2">
-          <li class="pb-2">There could be an error in the link</li>
           <li class="pb-2">
-            The owner of the NFT may have changed or the link may be out to
-            date.
+            In the Xumm app: click “Settings”, then “Advanced”, then “Node” and
+            select the {{ network }} Node, under the CUSTOM section.
           </li>
           <li class="pb-2">
-            Please check with the NFT owner to ensure that you have followed the
-            correct link. If the owner of the NFT has changed recently, you will
-            not be able to use the same share link to access the NFT.
+            If you do not see this node under the CUSTOM section; please contact
+            the administrator of the network you are trying to connect to, for
+            information on how to access it via Xumm.
           </li>
         </ul>
       </div>
+      <div v-if="!nodetypefromlink && !nft">
+        <h5 class="text-center mt-2">
+          It appears that this link to an NFT is for the
+          {{ nodetypefromlink }}. Please switch to the {{ nodetypefromlink }} in
+          your Xumm app.
+        </h5>
+        <ul class="mt-2 p-2">
+          <li class="pb-2">
+            You can switch to the
+            {{ nodetypefromlink }} in the Xumm app by clicking “Quit xApp”
+          </li>
+          <li class="pb-2">
+            In the Xumm app: click “Settings”, then “Advanced”, then “Node” and
+            select a Node listed in the “{{ nodetypefromlink }}” section
+          </li>
+          <li class="pb-2">
+            Return to Xumm home, open the Peerkat xApp to view the NFT in
+            {{ nodetypefromlink }}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div v-if="!nodetypefromlink && nft">
+      <h5 class="text-center mt-2">
+        Peerkat is not able to find an NFT from the link that you have followed.
+      </h5>
+      <ul class="mt-2 p-2">
+        <li class="pb-2">There could be an error in the link</li>
+        <li class="pb-2">
+          The owner of the NFT may have changed or the link may be out to date.
+        </li>
+        <li class="pb-2">
+          Please check with the NFT owner to ensure that you have followed the
+          correct link. If the owner of the NFT has changed recently, you will
+          not be able to use the same share link to access the NFT.
+        </li>
+      </ul>
     </div>
   </div>
 </template>
