@@ -98,7 +98,7 @@
               </li>
             </ul>
           </div>
-          <div v-if="!nodetypefromlink && !nft">
+          <div v-if="!isCustomNode(nodetypefromlink)">
             <h5 class="text-center mt-2">
               It appears that this link to an NFT is for the
               {{ nodetypefromlink }}. Please switch to the
