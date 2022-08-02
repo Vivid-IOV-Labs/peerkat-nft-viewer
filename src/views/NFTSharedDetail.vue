@@ -5,7 +5,7 @@
     </router-link>
 
     <div class="w-100 p-1">
-      <base-card v-if="nft && !nodetypefromlink">
+      <base-card v-if="nft">
         <template #picture>
           <figure style="overflow: hidden">
             <a
@@ -79,7 +79,7 @@
           >
         </template>
       </base-card>
-      <div v-if="!nft && !nodetypefromlink" class="p-2">
+      <div v-if="!nft" class="p-2">
         <h5 class="text-center mt-2">
           Peerkat is not able to find an NFT from the link that you have
           followed.
@@ -98,7 +98,7 @@
         </ul>
       </div>
     </div>
-    <div v-if="nodetypefromlink && !nft" style="margin-top: 13%">
+    <div v-if="nodetypefromlink">
       <div v-if="isCustomNode(nodetypefromlink)">
         <h5 class="text-center mt-2">
           It appears that this link to an NFT is for the {{ network }}. Please
@@ -138,7 +138,7 @@
         </ul>
       </div>
     </div>
-    <div v-if="!nodetypefromlink && nft">
+    <div v-if="!nodetypefromlink">
       <h5 class="text-center mt-2">
         Peerkat is not able to find an NFT from the link that you have followed.
       </h5>
