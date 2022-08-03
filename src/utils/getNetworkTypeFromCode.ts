@@ -78,12 +78,3 @@ export function getNetworkCodeFromType(type: string): number | undefined {
 export function isCustomNode(type: string): boolean {
   return type == "NFT-DEVNET" || type == "HOOKS-TESTNET";
 }
-
-export function isCustomNode(type: string): boolean {
-  if (type == "NFT-DEVNET") {
-    return 4;
-  }
-  if (type == "HOOKS-TESTNET") {
-    return 5;
-  }
-}
