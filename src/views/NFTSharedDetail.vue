@@ -236,6 +236,7 @@ export default defineComponent({
       bihompUrl,
       malformedLink,
       isCustomNode,
+      getNetworkFromNodeType,
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
