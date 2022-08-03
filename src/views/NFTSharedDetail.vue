@@ -95,8 +95,8 @@
               <li class="pb-2">
                 In the Xumm app: click “Settings”, then “Advanced”, then “Node”
                 and select the “
-                {{ getNetworkFromNodeType(nodetypefromlink) }}“ under the CUSTOM
-                section.
+                {{ getNetworkFromNodeType(nodetypefromlink) }}“ node, under the
+                CUSTOM section.
               </li>
               <li class="pb-2">
                 If you do not see this node under the CUSTOM section; please
