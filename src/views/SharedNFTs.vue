@@ -26,7 +26,7 @@
         <strong
           >Please note that we currently support XLS14 and XLS14/SOLO NFTs on
           XRPL only</strong
-        >. We will support XLS20 native NFTs on XRPL
+        >. We will support XLS-20 native NFTs on XRPL
       </li>
     </ul>
   </div>

@@ -49,7 +49,7 @@
         </li>
         <li class="pb-2">
           <strong> What features are being added next?</strong>
-          <br />XLS20 support, one click XLS14 > 20 upgrader & NFT Analytics.
+          <br />XLS-20 support, one click XLS14 > 20 upgrader & NFT Analytics.
           Please suggest any other features you would like to see by getting in
           contact with us.
         </li>

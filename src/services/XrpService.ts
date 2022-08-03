@@ -457,11 +457,11 @@ export async function fetchOneXls20(
   const {
     result: { account_nfts },
   } = await getTokens(walletAddress);
-  const nftXLS-20 = account_nfts.find((n: any) => {
+  const nftXLS20 = account_nfts.find((n: any) => {
     return n.NFTokenID == NFTokenID;
   });
-  if (nftXLS-20) {
-    return getOneXls(nftXLS-20);
+  if (nftXLS20) {
+    return getOneXls(nftXLS20);
   } else {
     throw new Error("Not an XLS-20");
   }

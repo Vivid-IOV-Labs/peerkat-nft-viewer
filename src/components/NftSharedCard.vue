@@ -58,7 +58,7 @@
     <template #footer>
       <div>
         <base-button
-          v-if="nft.standard && nft.standard === `XLS20`"
+          v-if="nft.standard && nft.standard === `XLS-20`"
           class="mr-2"
           @click="goToOffer"
           >Offers
@@ -99,7 +99,7 @@ export default defineComponent({
     const nodetypecode = computed(() => getNetworkCodeFromType(nodetype.value));
     const network = computed(() => store.getters["user/getNetwork"]);
     const bithomID =
-      props.nft.standard && props.nft.standard === "XLS20"
+      props.nft.standard && props.nft.standard === "XLS-20"
         ? props.nft.currency
         : props.nft.issuer;
 

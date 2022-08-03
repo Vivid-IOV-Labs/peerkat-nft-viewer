@@ -217,13 +217,13 @@ export default defineComponent({
     }
     async function fetchShared() {
       try {
-        const nftXLS-20 = await fetchOneXls20(
+        const nftXLS20 = await fetchOneXls20(
           route.params.nftAddress.toString(),
           route.params.currency.toString()
         );
 
-        if (nftXLS-20) {
-          nft.value = nftXLS-20;
+        if (nftXLS20) {
+          nft.value = nftXLS20;
           store.commit("nft/addShared", {
             shared: nft.value,
             nodetype: nodetype.value,

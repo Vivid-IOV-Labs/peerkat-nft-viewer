@@ -100,7 +100,7 @@ export default defineComponent({
     const nodetypecode = computed(() => getNetworkCodeFromType(nodetype.value));
 
     const bithomID =
-      props.nft.standard && props.nft.standard === "XLS20"
+      props.nft.standard && props.nft.standard === "XLS-20"
         ? props.nft.currency
         : props.nft.issuer;
 
