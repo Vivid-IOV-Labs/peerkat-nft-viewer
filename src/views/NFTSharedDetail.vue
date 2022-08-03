@@ -89,6 +89,10 @@
             </h5>
             <ul class="mt-2 p-2">
               <li class="pb-2">
+                You can switch to the
+                {{ nodetypefromlink }} in the Xumm app by clicking “Quit xApp”
+              </li>
+              <li class="pb-2">
                 In the Xumm app: click “Settings”, then “Advanced”, then “Node”
                 and select the “
                 {{ getNetworkFromNodeType(nodetypefromlink) }}“ under the CUSTOM
