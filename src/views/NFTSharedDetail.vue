@@ -80,7 +80,6 @@
         </template>
       </base-card>
 
-      {{ nft }}
       <div v-if="!nft" class="p-2">
         <div v-if="nodetypefromlink && nodetypefromlink !== nodetype">
           <div v-if="isCustomNode(nodetypefromlink)">
@@ -195,7 +194,6 @@ export default defineComponent({
 
     async function fetchOneXls14() {
       try {
-        debugger;
         nft.value = await client.value.fetchOne(
           route.params.nftAddress.toString(),
           route.params.currency.toString()
@@ -217,7 +215,6 @@ export default defineComponent({
           route.params.nftAddress.toString(),
           route.params.currency.toString()
         );
-        console.log("fetchOneXls20");
 
         if (nftXLS20) {
           nft.value = nftXLS20;
@@ -231,7 +228,6 @@ export default defineComponent({
           throw new Error("Not an XLS20");
         }
       } catch (error) {
-        console.log("fetchOneXls14");
         await fetchOneXls14();
       }
     }

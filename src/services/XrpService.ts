@@ -1,4 +1,3 @@
-import { waitForDebugger } from "inspector";
 import { NFT } from "../models/NFT";
 import { devlog } from "../utils/devlog";
 // import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
@@ -179,12 +178,9 @@ async function getOne(
   limitFormatted?: string
 ) {
   const { Domain } = account_data;
-  debugger;
-  console.log("account_data", account_data);
   const source = is_hexadecimal(hexToString(Domain))
     ? hexToString(hexToString(Domain))
     : hexToString(Domain);
-  debugger;
   let url;
   let media_type;
   let desc;
@@ -408,7 +404,7 @@ async function fetchOne(
   });
   const { result, error, error_code, error_message } = allReps;
   const { account_data } = result;
-  debugger;
+
   if (currency) {
     return getOne(
       account_data,
