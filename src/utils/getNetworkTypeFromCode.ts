@@ -27,8 +27,8 @@ export function getNetworkFromNodeType(
 ): string | undefined {
   const urlMap: urlMap = {
     /*custom */
-    "NFT-DEVNET": "wss://xls20-sandbox.rippletest.net:51233",
-    "HOOKS-TESTNET": "wss://hooks-testnet-v2.xrpl-labs.com",
+    "NFT-DEVNET": "xls20-sandbox.rippletest.net:51233",
+    "HOOKS-TESTNET": "hooks-testnet-v2.xrpl-labs.com",
   };
   return urlMap[network];
 }

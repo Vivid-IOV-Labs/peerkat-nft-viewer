@@ -90,14 +90,14 @@
             <ul class="mt-2 p-2">
               <li class="pb-2">
                 In the Xumm app: click “Settings”, then “Advanced”, then “Node”
-                and select the
-                {{ getNetworkFromNodeType(nodetypefromlink) }} Node, under the
-                CUSTOM section.
+                and select the “<span class="font-italic">
+                  {{ getNetworkFromNodeType(nodetypefromlink) }} </span
+                >“ under the CUSTOM section.
               </li>
               <li class="pb-2">
                 If you do not see this node under the CUSTOM section; please
                 contact the administrator of the network you are trying to
-                connect to, for information on how to access it via Xumm.
+                connect to, for more information.
               </li>
             </ul>
           </div>
