@@ -117,7 +117,6 @@ export default defineComponent({
       props.nft.standard && props.nft.standard === "XLS-20"
         ? props.nft.currency
         : props.nft.issuer;
-    debugger;
 
     const bihompUrl = computed(() => getInspectorUrl(network.value, bithomID));
 

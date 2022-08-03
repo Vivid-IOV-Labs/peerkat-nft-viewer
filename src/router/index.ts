@@ -271,7 +271,6 @@ router.beforeEach(async (to, from, next) => {
       await store.commit("user/setAddress", ottdata.value.account);
       await store.commit("user/setNetwork", ottdata.value.nodewss);
       const nodetype = getNodeTypeFromNetwork(ottdata.value.nodewss);
-      console.log("NODETYPE", nodetype);
       await store.commit("user/setNodeType", nodetype);
       await store.commit("user/setUser", ottdata.value.user);
 

@@ -426,7 +426,6 @@ async function fetchOne(
   }
 }
 async function fetchNext(nextLines: line[]): Promise<NFT[]> {
-  console.log("xrpservice fetchNext");
   const nextNfts: NFT[] = await Promise.all(
     nextLines.map(async (line: line) => {
       const { account, currency, balanceFormatted, limitFormatted } = line;

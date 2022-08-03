@@ -21,7 +21,6 @@ export default defineComponent({
     return {
       isInXumm: inject("isInXumm"),
       openLink() {
-        console.log("EXTERNAL LINK");
         openBrowser(props.url);
       },
     };

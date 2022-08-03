@@ -104,10 +104,6 @@ export default defineComponent({
     };
 
     const populateXls14NFTs = async () => {
-      console.log("populateXls14NFTs");
-      console.log(loading.value);
-      console.log(lines.value.length);
-      console.log(allXls14.value.length);
       if (!loading.value && lines.value.length > allXls14.value.length) {
         try {
           store.commit("ui/setIsloading", true);
@@ -115,7 +111,6 @@ export default defineComponent({
             walletAddress: walletAddress.value,
             nodetype: nodetype.value,
           });
-          console.log("nft/fetchNext");
 
           await store.dispatch("nft/fetchNext", nodetype.value);
           store.commit("ui/setIsloading", false);

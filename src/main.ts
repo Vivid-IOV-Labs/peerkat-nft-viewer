@@ -1,8 +1,3 @@
-if (!("indexedDB" in window)) {
-  console.log("This browser doesn't support IndexedDB");
-} else {
-  console.log("index db supported");
-}
 const xummSandbox = import.meta.env.VITE_XUMM_SANBDOX;
 
 if (!isInXumm && xummSandbox === "main") {
