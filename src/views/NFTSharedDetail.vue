@@ -90,9 +90,9 @@
             <ul class="mt-2 p-2">
               <li class="pb-2">
                 In the Xumm app: click “Settings”, then “Advanced”, then “Node”
-                and select the “<span class="font-italic">
-                  {{ getNetworkFromNodeType(nodetypefromlink) }} </span
-                >“ under the CUSTOM section.
+                and select the “
+                {{ getNetworkFromNodeType(nodetypefromlink) }}“ under the CUSTOM
+                section.
               </li>
               <li class="pb-2">
                 If you do not see this node under the CUSTOM section; please
