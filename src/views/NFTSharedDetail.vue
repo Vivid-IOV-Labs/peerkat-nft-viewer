@@ -83,13 +83,16 @@
         <div v-if="nodetypefromlink">
           <div v-if="isCustomNode(nodetypefromlink)">
             <h5 class="text-center mt-2">
-              It appears that this link to an NFT is for the {{ network }}.
-              Please switch to the {{ network }} in your Xumm app.
+              It appears that this link to an NFT is for the
+              {{ nodetypefromlink }}. Please switch to the
+              {{ nodetypefromlink }} in your Xumm app.
             </h5>
             <ul class="mt-2 p-2">
               <li class="pb-2">
                 In the Xumm app: click “Settings”, then “Advanced”, then “Node”
-                and select the {{ network }} Node, under the CUSTOM section.
+                and select the
+                {{ getNetworkFromNodeType(nodetypefromlink) }} Node, under the
+                CUSTOM section.
               </li>
               <li class="pb-2">
                 If you do not see this node under the CUSTOM section; please
@@ -152,6 +155,7 @@ import BaseCard from "../components/BaseCard.vue";
 import {
   getNetworkCodeFromType,
   getNetworkTypeFromCode,
+  getNetworkFromNodeType,
   isCustomNode,
 } from "../utils/getNetworkTypeFromCode";
 import { NFT } from "../models/NFT";

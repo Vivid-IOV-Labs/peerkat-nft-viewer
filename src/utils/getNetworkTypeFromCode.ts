@@ -22,6 +22,16 @@ export function getNodeTypeFromNetwork(
   };
   return urlMap[network];
 }
+export function getNetworkFromNodeType(
+  network: keyof urlMap
+): string | undefined {
+  const urlMap: urlMap = {
+    /*custom */
+    "NFT-DEVNET": "wss://xls20-sandbox.rippletest.net:51233",
+    "HOOKS-TESTNET": "wss://hooks-testnet-v2.xrpl-labs.com",
+  };
+  return urlMap[network];
+}
 
 export function getNetworkTypeFromCode(code: number): string | undefined {
   if (code == 0) {
@@ -67,4 +77,13 @@ export function getNetworkCodeFromType(type: string): number | undefined {
 
 export function isCustomNode(type: string): boolean {
   return type == "NFT-DEVNET" || type == "HOOKS-TESTNET";
+}
+
+export function isCustomNode(type: string): boolean {
+  if (type == "NFT-DEVNET") {
+    return 4;
+  }
+  if (type == "HOOKS-TESTNET") {
+    return 5;
+  }
 }
