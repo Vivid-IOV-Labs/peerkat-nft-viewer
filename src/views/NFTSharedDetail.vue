@@ -190,7 +190,7 @@ export default defineComponent({
 
     const nft = ref<any | null>(null);
     const bithomID = computed(() =>
-      nft.value.standard && nft.value.standard === "XLS20"
+      nft.value.standard && nft.value.standard === "XLS-20"
         ? nft.value.currency
         : nft.value.issuer
     );
@@ -217,13 +217,13 @@ export default defineComponent({
     }
     async function fetchShared() {
       try {
-        const nftXLS20 = await fetchOneXls20(
+        const nftXLS-20 = await fetchOneXls20(
           route.params.nftAddress.toString(),
           route.params.currency.toString()
         );
 
-        if (nftXLS20) {
-          nft.value = nftXLS20;
+        if (nftXLS-20) {
+          nft.value = nftXLS-20;
           store.commit("nft/addShared", {
             shared: nft.value,
             nodetype: nodetype.value,
@@ -231,7 +231,7 @@ export default defineComponent({
             user: user.value,
           });
         } else {
-          throw new Error("Not an XLS20");
+          throw new Error("Not an XLS-20");
         }
       } catch (error) {
         await fetchOneXls14();
