@@ -103,6 +103,10 @@
                 contact the administrator of the network you are trying to
                 connect to, for more information.
               </li>
+              <li class="pb-2">
+                Return to Xumm home, open the Peerkat xApp to view the NFT in
+                {{ nodetypefromlink }}
+              </li>
             </ul>
           </div>
           <div v-if="!isCustomNode(nodetypefromlink)">
