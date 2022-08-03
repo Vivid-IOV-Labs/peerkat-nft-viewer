@@ -5,7 +5,7 @@ function command(message: any) {
     window.ReactNativeWebView.postMessage(JSON.stringify(message));
   }
   // else {
-  //   window.open(message, "_blank").focus();
+  //   window && window.open(message, "_blank").focus();
   // }
 }
 
