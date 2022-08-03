@@ -113,9 +113,12 @@ export default defineComponent({
     const user = computed(() => store.getters["user/getUser"]);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
 
-    const bihompUrl = computed(() =>
-      getInspectorUrl(network.value, props.nft.currency)
-    );
+    const bithomID =
+      props.nft.standard && props.nft.standard === "XLS20"
+        ? props.nft.currency
+        : props.nft.issuer;
+
+    const bihompUrl = computed(() => getInspectorUrl(network.value, bithomID));
 
     const passNFTIssuerOrXUMMowner =
       props.nft.standard && props.nft.standard === "XLS20"

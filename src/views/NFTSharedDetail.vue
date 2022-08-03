@@ -187,11 +187,17 @@ export default defineComponent({
 
     const malformedLink = ref(false);
     const network = computed(() => store.getters["user/getNetwork"]);
-    const bihompUrl = computed(() =>
-      getInspectorUrl(network.value, route.params.currency.toString())
-    );
-    const nft = ref<NFT | null>(null);
 
+    const nft = ref<any | null>(null);
+    const bithomID = computed(() =>
+      nft.value.standard && nft.value.standard === "XLS20"
+        ? nft.value.currency
+        : nft.value.issuer
+    );
+
+    const bihompUrl = computed(() =>
+      getInspectorUrl(network.value, bithomID.value)
+    );
     async function fetchOneXls14() {
       try {
         nft.value = await client.value.fetchOne(

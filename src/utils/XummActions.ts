@@ -8,6 +8,8 @@ function command(message: any) {
     console.log("command postMessage");
 
     window.ReactNativeWebView.postMessage(JSON.stringify(message));
+  } else {
+    window.open(message, "_blank").focus();
   }
 }
 

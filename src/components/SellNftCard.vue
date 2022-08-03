@@ -99,10 +99,12 @@ export default defineComponent({
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const nodetypecode = computed(() => getNetworkCodeFromType(nodetype.value));
 
-    const bihompUrl = computed(() =>
-      getInspectorUrl(network.value, props.nft.currency)
-    );
+    const bithomID =
+      props.nft.standard && props.nft.standard === "XLS20"
+        ? props.nft.currency
+        : props.nft.issuer;
 
+    const bihompUrl = computed(() => getInspectorUrl(network.value, bithomID));
     return {
       bihompUrl,
       view() {

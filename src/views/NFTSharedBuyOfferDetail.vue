@@ -11,7 +11,7 @@
             <a href="#" @click.prevent="view">
               <video
                 v-if="nft.media_type?.includes('video')"
-                :src="`${nft.url}#t=0.5`"
+                :src="nft.url"
                 muted
                 class="img-fluid card-img"
                 style="
