@@ -195,6 +195,7 @@ export default defineComponent({
 
     async function fetchOneXls14() {
       try {
+        debugger;
         nft.value = await client.value.fetchOne(
           route.params.nftAddress.toString(),
           route.params.currency.toString()
