@@ -65,6 +65,7 @@
           <span v-if="countOffers">({{ countOffers }})</span></base-button
         >
         <base-button class="mr-2" @click="deleteShared">Delete</base-button>
+        {{ bihompUrl }}
         <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl">
           Inspect</external-link
         >
