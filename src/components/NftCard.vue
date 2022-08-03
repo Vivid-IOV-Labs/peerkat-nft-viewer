@@ -121,7 +121,7 @@ export default defineComponent({
     const passNFTIssuerOrXUMMowner =
       props.nft.standard && props.nft.standard === "XLS20"
         ? user.value
-        : walletAddress.value;
+        : props.nft.issuer;
 
     function shareUrl(nodetypecode: number | undefined) {
       const xummSandbox = import.meta.env.VITE_XUMM_DEEPLINK;
