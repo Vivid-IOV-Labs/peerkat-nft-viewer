@@ -11,7 +11,6 @@
           <video
             v-if="nft.media_type?.includes('video')"
             :src="nft.url"
-            poster="/thumbnail.jpg"
             muted
             class="img-fluid card-img-top"
             style="object-fit: cover; height: 100%; object-position: center top"
@@ -58,7 +57,10 @@
     </template>
     <template #footer>
       <div>
-        <base-button class="mr-2" @click="goToOffer"
+        <base-button
+          v-if="nft.standard && nft.standard === `XLS20`"
+          class="mr-2"
+          @click="goToOffer"
           >Offers
           <span v-if="countOffers">({{ countOffers }})</span></base-button
         >
