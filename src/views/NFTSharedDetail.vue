@@ -79,8 +79,10 @@
           >
         </template>
       </base-card>
+
+      {{ nft }}
       <div v-if="!nft" class="p-2">
-        <div v-if="nodetypefromlink">
+        <div v-if="nodetypefromlink && nodetypefromlink !== nodetype">
           <div v-if="isCustomNode(nodetypefromlink)">
             <h5 class="text-center mt-2">
               It appears that this link to an NFT is for the
