@@ -75,6 +75,17 @@
               type="number"
             ></base-input>
           </div>
+          <div class="form-group flex justify-between mt-4">
+            <strong class="h7 font-weight-bold">Insert the address </strong
+            ><br />
+            <base-input
+              id="buyerAddress"
+              v-model="buyerAddress"
+              :label-hidden="true"
+              label-text="buyerAddress"
+              type="text"
+            ></base-input>
+          </div>
         </template>
         <template #footer>
           <async-button class="m-auto w-100" :on-click="confirmSell"
@@ -108,12 +119,14 @@ export default defineComponent({
     const nft = computed(() => store.getters["nft/getCurrent"]);
 
     const saleamount = ref(0);
+    const buyerAddress = ref("");
 
     const walletAddress = computed(() => store.getters["user/getAddress"]);
     const user = computed(() => store.getters["user/getUser"]);
     return {
       nft,
       saleamount,
+      buyerAddress,
       async confirmSell() {
         devlog("isInXumm", isInXumm);
 
