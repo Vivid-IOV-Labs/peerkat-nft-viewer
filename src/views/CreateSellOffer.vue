@@ -76,13 +76,13 @@
             ></base-input>
           </div>
           <div class="form-group flex justify-between mt-4">
-            <strong class="h7 font-weight-bold">Insert the address </strong
+            <strong class="h7 font-weight-bold">Destination XRP Address </strong
             ><br />
             <base-input
-              id="buyerAddress"
-              v-model="buyerAddress"
+              id="destinationAddress"
+              v-model="destinationAddress"
               :label-hidden="true"
-              label-text="buyerAddress"
+              label-text="destinationAddress"
               type="text"
             ></base-input>
           </div>
@@ -119,14 +119,14 @@ export default defineComponent({
     const nft = computed(() => store.getters["nft/getCurrent"]);
 
     const saleamount = ref(0);
-    const buyerAddress = ref("");
+    const destinationAddress = ref("");
 
     const walletAddress = computed(() => store.getters["user/getAddress"]);
     const user = computed(() => store.getters["user/getUser"]);
     return {
       nft,
       saleamount,
-      buyerAddress,
+      destinationAddress,
       async confirmSell() {
         devlog("isInXumm", isInXumm);
 
@@ -138,6 +138,7 @@ export default defineComponent({
               Account: walletAddress.value,
               NFTokenID: nft.value.currency,
               Amount: (saleamount.value * 1000000).toString(),
+              Destination: destinationAddress.value,
               User: user.value,
             },
             async () => {
