@@ -14,6 +14,10 @@
         </div>
         <strong class="h7 font-weight-bold">Flags </strong><br />
         <span class="mr-3">{{ offer.flags }} </span>
+        <div v-if="offer.destination" class="mt-2">
+          <strong class="h7 font-weight-bold">Destination </strong><br />
+          <span class="mr-3">{{ offer.destination }} </span>
+        </div>
       </div>
     </div>
     <div class="card-footer mt-auto d-flex justify-content-between pb-4">
