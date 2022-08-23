@@ -196,7 +196,6 @@ export default defineComponent({
         ? nft.value.currency
         : nft.value.issuer
     );
-    debugger;
     const bihompUrl = computed(() =>
       getInspectorUrl(network.value, bithomID.value)
     );
@@ -206,7 +205,6 @@ export default defineComponent({
           route.params.nftAddress.toString(),
           route.params.currency.toString()
         );
-        debugger;
         store.commit("nft/addShared", {
           shared: nft.value,
           nodetype: nodetype.value,
@@ -229,8 +227,6 @@ export default defineComponent({
           route.params.currency.toString()
         );
 
-        debugger;
-
         if (nftXLS20) {
           nft.value = nftXLS20;
           store.commit("nft/addShared", {
@@ -243,13 +239,10 @@ export default defineComponent({
           throw new Error("Not an XLS-20");
         }
       } catch (error) {
-        debugger;
-
         await fetchOneXls14();
       }
     }
     if (nodetypefromlink == nodetype.value) {
-      debugger;
       await fetchShared();
     } else {
       malformedLink.value = true;

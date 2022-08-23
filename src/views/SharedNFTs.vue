@@ -35,6 +35,7 @@
 import { computed, defineComponent, inject } from "vue";
 import { useStore } from "vuex";
 import NftSharedCard from "@/components/NftSharedCard.vue";
+import { getNodeTypeFromNetwork } from "../utils/getNetworkTypeFromCode";
 
 export default defineComponent({
   components: {
@@ -43,7 +44,9 @@ export default defineComponent({
   async setup() {
     const store = useStore();
     const isInXumm = inject("isInXumm");
-    const nodetype = computed(() => store.getters["user/getNodeType"]);
+    const network = computed(() => store.getters["user/getNetwork"]);
+    const nodetype = computed(() => getNodeTypeFromNetwork(network.value));
+
     const walletAddress = computed(() => store.getters["user/getAddress"]);
 
     const sharedNFTs = computed(() => {

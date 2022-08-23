@@ -93,7 +93,10 @@ import ExternalLink from "@/components/ExternalLink.vue";
 import { useRouter } from "vue-router";
 import { copyText } from "../utils/copytext";
 import { useStore } from "vuex";
-import { getNetworkCodeFromType } from "../utils/getNetworkTypeFromCode";
+import {
+  getNetworkCodeFromType,
+  getNodeTypeFromNetwork,
+} from "../utils/getNetworkTypeFromCode";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
 
 export default defineComponent({
@@ -108,9 +111,11 @@ export default defineComponent({
   async setup(props) {
     const router = useRouter();
     const store = useStore();
-    const nodetype = computed(() => store.getters["user/getNodeType"]);
     const network = computed(() => store.getters["user/getNetwork"]);
-    const user = computed(() => store.getters["user/getUser"]);
+    const nodetype = computed(() => getNodeTypeFromNetwork(network.value));
+    const networkCodeFromType = computed(() =>
+      getNetworkCodeFromType(nodetype.value)
+    );
     const walletAddress = computed(() => store.getters["user/getAddress"]);
 
     const bithomID =
