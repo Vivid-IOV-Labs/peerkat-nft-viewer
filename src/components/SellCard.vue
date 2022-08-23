@@ -6,8 +6,8 @@
         {{ offer.nft_offer_index }}
       </div>
       <div class="card-text">
-        <strong class="h7 font-weight-bold">Owner </strong><br />
-        <span>{{ offer.owner }}</span>
+        <!-- <strong class="h7 font-weight-bold">Owner </strong><br />
+        <span>{{ offer.owner }}</span> -->
         <div v-if="offer.amount" class="mt-2">
           <strong class="h7 font-weight-bold">Sale Amount </strong><br />
           <span class="mr-3">{{ Number(offer.amount) / 1000000 }} </span>
@@ -50,7 +50,6 @@ export default defineComponent({
   },
   async setup(props) {
     const store = useStore();
-    console.log("offer", props.offer);
     function shareUrl() {
       const xummSandbox = import.meta.env.VITE_XUMM_DEEPLINK;
       return `${xummSandbox}?redirect=/shared_sell_offers/${props.offer.nft_offer_index}/${props.token}/${props.offer.owner}`;
