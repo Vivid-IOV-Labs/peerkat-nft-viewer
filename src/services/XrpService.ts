@@ -478,7 +478,6 @@ export async function getOneXls(nft: any) {
     const imageUrl = ipfsPublicGateway + "/" + image.split("//")[1];
     // const result = await fetch(schemaUrl).then((res) => res.json());
     const media_type = "image/jpeg";
-
     return {
       issuer: Issuer,
       currency: NFTokenID,

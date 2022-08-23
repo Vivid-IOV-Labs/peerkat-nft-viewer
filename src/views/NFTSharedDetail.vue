@@ -166,11 +166,11 @@ import {
   getNetworkTypeFromCode,
   getNetworkFromNodeType,
   isCustomNode,
+  getNodeTypeFromNetwork,
 } from "../utils/getNetworkTypeFromCode";
-import { NFT } from "../models/NFT";
 import { devlog } from "../utils/devlog";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
-import { fetchOneXls20, fetchXls20 } from "../services/XrpService";
+import { fetchOneXls20 } from "../services/XrpService";
 
 export default defineComponent({
   components: { BaseCard, ExternalLink },
@@ -182,19 +182,21 @@ export default defineComponent({
       parseInt(route.params.nodetype as string)
     );
     const client = computed(() => store.getters["nft/getXrpClient"]);
-    const nodetype = computed(() => store.getters["user/getNodeType"]);
     const user = computed(() => store.getters["user/getUser"]);
 
     const malformedLink = ref(false);
     const network = computed(() => store.getters["user/getNetwork"]);
-
+    const nodetype = computed(() => getNodeTypeFromNetwork(network.value));
+    const networkCodeFromType = computed(() =>
+      getNetworkCodeFromType(nodetype.value)
+    );
     const nft = ref<any | null>(null);
     const bithomID = computed(() =>
       nft.value.standard && nft.value.standard === "XLS-20"
         ? nft.value.currency
         : nft.value.issuer
     );
-
+    debugger;
     const bihompUrl = computed(() =>
       getInspectorUrl(network.value, bithomID.value)
     );
@@ -204,6 +206,7 @@ export default defineComponent({
           route.params.nftAddress.toString(),
           route.params.currency.toString()
         );
+        debugger;
         store.commit("nft/addShared", {
           shared: nft.value,
           nodetype: nodetype.value,
@@ -216,11 +219,17 @@ export default defineComponent({
       }
     }
     async function fetchShared() {
+      console.log(
+        route.params.nftAddress.toString(),
+        route.params.currency.toString()
+      );
       try {
         const nftXLS20 = await fetchOneXls20(
           route.params.nftAddress.toString(),
           route.params.currency.toString()
         );
+
+        debugger;
 
         if (nftXLS20) {
           nft.value = nftXLS20;
@@ -234,10 +243,13 @@ export default defineComponent({
           throw new Error("Not an XLS-20");
         }
       } catch (error) {
+        debugger;
+
         await fetchOneXls14();
       }
     }
     if (nodetypefromlink == nodetype.value) {
+      debugger;
       await fetchShared();
     } else {
       malformedLink.value = true;
@@ -258,9 +270,7 @@ export default defineComponent({
       view() {
         if (nft.value) {
           router.push({
-            path: `/shared/${nft.value.issuer}/${getNetworkCodeFromType(
-              nodetype.value
-            )}/view`,
+            path: `/shared/${nft.value.issuer}/${networkCodeFromType.value}/view`,
           });
         }
       },

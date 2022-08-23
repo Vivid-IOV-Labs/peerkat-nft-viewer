@@ -54,7 +54,9 @@ export function getNetworkTypeFromCode(code: number): string | undefined {
   }
 }
 
-export function getNetworkCodeFromType(type: string): number | undefined {
+export function getNetworkCodeFromType(
+  type: string | undefined
+): number | undefined {
   if (type == "CUSTOM") {
     return 3;
   }

@@ -122,7 +122,7 @@ export default defineComponent({
 
     const passNFTIssuerOrXUMMowner =
       props.nft.standard && props.nft.standard === "XLS-20"
-        ? user.value
+        ? props.nft.owner || walletAddress.value
         : props.nft.issuer;
 
     function shareUrl(nodetypecode: number | undefined) {
