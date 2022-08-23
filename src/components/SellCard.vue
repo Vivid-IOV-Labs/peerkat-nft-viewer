@@ -12,8 +12,8 @@
           <strong class="h7 font-weight-bold">Sale Amount </strong><br />
           <span class="mr-3">{{ Number(offer.amount) / 1000000 }} </span>
         </div>
-        <strong class="h7 font-weight-bold">Flags </strong><br />
-        <span class="mr-3">{{ offer.flags }} </span>
+        <!-- <strong class="h7 font-weight-bold">Flags </strong><br />
+        <span class="mr-3">{{ offer.flags }} </span> -->
         <div v-if="offer.destination" class="mt-2">
           <strong class="h7 font-weight-bold">Destination </strong><br />
           <span class="mr-3">{{ offer.destination }} </span>
@@ -35,11 +35,9 @@ import AsyncButton from "@/components/AsyncButton.vue";
 
 import { copyText } from "../utils/copytext";
 import { isInXumm } from "../utils/isInXumm";
-import { devlog } from "../utils/devlog";
 import XummSdk from "../services/XummService";
 import { useStore } from "vuex";
 import { openSignRequest } from "../utils/XummActions";
-import { fetchSellOffers } from "../services/XrpService";
 
 export default defineComponent({
   components: {
@@ -52,7 +50,7 @@ export default defineComponent({
   },
   async setup(props) {
     const store = useStore();
-
+    console.log("offer", props.offer);
     function shareUrl() {
       const xummSandbox = import.meta.env.VITE_XUMM_DEEPLINK;
       return `${xummSandbox}?redirect=/shared_sell_offers/${props.offer.nft_offer_index}/${props.token}/${props.offer.owner}`;
