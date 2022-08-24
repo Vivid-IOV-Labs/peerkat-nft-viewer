@@ -17,7 +17,10 @@ class XummService {
       const urlParams = new URLSearchParams(document.location.href);
       const jwtToke = urlParams.get("xAppToken");
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { XummSdkJwt } = require("xumm-sdk");
+      const XummSdk = require("xumm-sdk");
+      const { XummSdkJwt } = XummSdk;
+      console.log("XummSdk", XummSdk);
+      console.log("XummSdkJwt", XummSdkJwt);
       Sdk = new XummSdkJwt(xummApiKey);
     }
   }
