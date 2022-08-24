@@ -272,7 +272,7 @@ async function getOne(
     issuer: account,
     issuerTruncated: truncate(account),
     currency,
-    tokenName,
+    tokenName: tokenName.replace(/[^\w\s]/gi, ""),
     url,
     media_type,
     balanceFormatted,
@@ -481,7 +481,7 @@ export async function getOneXls(nft: any) {
     return {
       issuer: Issuer,
       currency: NFTokenID,
-      tokenName: name,
+      tokenName: name.replace(/[^\w\s]/gi, ""),
       url: imageUrl,
       media_type,
       desc: description,
