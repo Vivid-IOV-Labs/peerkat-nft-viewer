@@ -9,11 +9,11 @@
         <strong class="h7 font-weight-bold">Owner </strong><br />
         <span>{{ offer.owner }}</span>
         <div v-if="offer.amount" class="mt-2">
-          <strong class="h7 font-weight-bold">Sale Amount </strong><br />
+          <strong class="h7 font-weight-bold">Sale Amount (XRP)</strong><br />
           <span class="mr-3">{{ Number(offer.amount) / 1000000 }} </span>
         </div>
-        <strong class="h7 font-weight-bold">Flags </strong><br />
-        <span class="mr-3">{{ offer.flags }} </span>
+        <!-- <strong class="h7 font-weight-bold">Flags </strong><br />
+        <span class="mr-3">{{ offer.flags }} </span> -->
       </div>
     </div>
     <div class="card-footer mt-auto d-flex justify-content-between pb-4">

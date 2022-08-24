@@ -65,8 +65,7 @@
             <span>{{ nft.currency }}</span>
           </div>
           <div class="form-group flex justify-between mt-4">
-            <strong class="h7 font-weight-bold">Sale Amount (XRP) </strong
-            ><br />
+            <strong class="h7 font-weight-bold">Sale Amount (XRP)</strong><br />
             <base-input
               id="saleamount"
               v-model="saleamount"
