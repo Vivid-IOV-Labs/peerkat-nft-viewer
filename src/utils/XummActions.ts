@@ -1,4 +1,6 @@
 import { devlog } from "./devlog";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const xAppSdk = require("xumm-sdk");
 const xapp = new xAppSdk();
 
 function command(message: any) {
@@ -42,3 +44,23 @@ export function openSignRequest(uuid: string): void {
   // });
   // devlog("Opensinge request uuid", uuid);
 }
+
+// function command(message: any) {
+//   if (typeof window.ReactNativeWebView !== "undefined") {
+//     window.ReactNativeWebView.postMessage(JSON.stringify(message));
+//   }
+// }
+
+// export function openBrowser(url: string): void {
+//   command({
+//     command: "openBrowser",
+//     url,
+//   });
+// }
+
+// export function openSignRequest(uuid: string): void {
+//   command({
+//     command: "openSignRequest",
+//     uuid,
+//   });
+// }
