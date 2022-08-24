@@ -22,6 +22,9 @@ class XummService {
       console.log("XummSdk", XummSdk);
       console.log("XummSdkJwt", XummSdkJwt);
       Sdk = new XummSdkJwt(xummApiKey);
+      const xapp = new XummSdk();
+      console.log("xapp", xapp);
+      console.log("Sdk", Sdk);
     }
   }
   async getOttData(): Promise<xAppOttData> {
