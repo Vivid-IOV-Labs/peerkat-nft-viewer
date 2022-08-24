@@ -75,7 +75,7 @@
             ></base-input>
           </div>
           <div class="form-group flex justify-between mt-4">
-            <strong class="h7 font-weight-bold">Destination XRP Address </strong
+            <strong class="h7 font-weight-bold">Destination (Optional) </strong
             ><br />
             <base-input
               id="destinationAddress"
@@ -83,6 +83,7 @@
               :label-hidden="true"
               label-text="destinationAddress"
               type="text"
+              placeholder="XRP Address"
             ></base-input>
           </div>
         </template>
