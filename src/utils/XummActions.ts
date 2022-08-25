@@ -1,5 +1,5 @@
 // import { devlog } from "./devlog";
-// const xapp = new xAppSdk();
+//const xapp = new xAppSdk();
 
 // function command(message: any) {
 //   if (typeof window.ReactNativeWebView !== "undefined") {
