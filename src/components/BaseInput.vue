@@ -16,11 +16,19 @@
         @input="handleChange"
       />
     </label>
+    <base-alert
+      v-if="errors.length"
+      :id="`alert-${id}`"
+      :messages="errors"
+      class="mr-2"
+      >Share</base-alert
+    >
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed } from "vue";
+import BaseAlert from "@/components/BaseAlert.vue";
 
 const getValue = (event: Event): string | number | undefined => {
   const value =
@@ -31,6 +39,9 @@ const getValue = (event: Event): string | number | undefined => {
 };
 
 export default defineComponent({
+  components: {
+    BaseAlert,
+  },
   props: {
     id: {
       type: String,

@@ -78,12 +78,15 @@
             <strong class="h7 font-weight-bold">Destination (Optional) </strong
             ><br />
             <base-input
-              id="destinationAddress"
-              v-model="destinationAddress"
+              id="destination"
+              v-model="formData.destination"
               :label-hidden="true"
-              label-text="destinationAddress"
+              label-text="destination"
               type="text"
               placeholder="XRP Address"
+              :is-required="'required' in v$.destination"
+              :is-invalid="v$.destination?.$dirty && v$.destination.$invalid"
+              :errors="formatVuelidateErrors(v$.destination.$errors)"
             ></base-input>
           </div>
         </template>
@@ -98,7 +101,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, reactive, ref } from "vue";
 import { useStore } from "vuex";
 import BaseCard from "../components/BaseCard.vue";
 import AsyncButton from "../components/AsyncButton.vue";
@@ -111,6 +114,9 @@ import { isInXumm } from "../utils/isInXumm";
 import XummSdk from "../services/XummService";
 import { fetchSellOffers } from "../services/XrpService";
 import { openSignRequest } from "../utils/XummActions";
+import { isRippleAddress } from "../utils/validators";
+import useValidator from "../composable/useValidator";
+
 export default defineComponent({
   components: { BaseCard, AsyncButton, BaseInput },
   async setup() {
@@ -119,17 +125,34 @@ export default defineComponent({
     const nft = computed(() => store.getters["nft/getCurrent"]);
 
     const saleamount = ref(0);
-    const destinationAddress = ref("");
+    const destination = ref("");
 
     const walletAddress = computed(() => store.getters["user/getAddress"]);
     const user = computed(() => store.getters["user/getUser"]);
+
+    const inputsData = reactive<{ destination: string }>({
+      destination: "",
+    });
+    const rules: Record<string, any> = computed(() => ({
+      destination: { valid_address: isRippleAddress },
+    }));
+    const { formData, v$, formatVuelidateErrors, validate } = useValidator(
+      inputsData,
+      rules
+    );
     return {
       nft,
       saleamount,
-      destinationAddress,
+      destination,
+      formData,
+      v$,
+      formatVuelidateErrors,
       async confirmSell() {
-        devlog("isInXumm", isInXumm);
-
+        const isValid = await validate();
+        if (!isValid) {
+          console.log("loggingin");
+          return;
+        }
         if (isInXumm()) {
           devlog("isInXumm", isInXumm);
 
@@ -138,7 +161,7 @@ export default defineComponent({
               Account: walletAddress.value,
               NFTokenID: nft.value.currency,
               Amount: (saleamount.value * 1000000).toString(),
-              Destination: destinationAddress.value,
+              Destination: destination.value,
               User: user.value,
             },
             async () => {
