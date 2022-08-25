@@ -6,7 +6,7 @@ import { devlog } from "../utils/devlog";
 import { isInXumm } from "../utils/isInXumm";
 
 let Sdk: any = null;
-let xapp: any = null;
+const xapp: any = null;
 
 class XummService {
   constructor() {
@@ -22,11 +22,11 @@ class XummService {
       console.log("XummSdk", XummSdk);
       console.log("XummSdkJwt", XummSdkJwt);
       Sdk = new XummSdkJwt(xummApiKey);
-      xapp = new XummSdk(xummApiKey);
+      //xapp = new XummSdk(xummApiKey);
       // const xapp = new XummSdk();
       //console.log("xapp", xapp);
       console.log("Sdk", Sdk);
-      console.log("Sdk", xapp);
+      //console.log("Sdk", xapp);
     }
   }
   async getOttData(): Promise<xAppOttData> {
