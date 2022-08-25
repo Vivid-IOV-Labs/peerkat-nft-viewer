@@ -155,6 +155,18 @@ class XummService {
       devlog("Accept offer error", error);
     }
   }
+
+  async openBrowser(url) {
+    Sdk.openBrowser({ url })
+      .then((d) => {
+        // d (returned value) can be Error or return data:
+        console.log(
+          "openBrowser response:",
+          d instanceof Error ? d.message : d
+        );
+      })
+      .catch((e) => console.log("Error:", e.message));
+  }
 }
 
 const XummSDK = new XummService();
