@@ -2,11 +2,9 @@ import { isInXumm } from "../utils/isInXumm";
 let xapp: any;
 if (isInXumm()) {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const xAppSdk = require("xumm-xapp-sdk");
   import("xumm-xapp-sdk").then((something) => {
     console.log("isInXumm", isInXumm);
-    console.log("xAppSdk", xAppSdk);
-    xapp = new xAppSdk();
+    console.log("xAppSdk", something);
   });
 }
 
