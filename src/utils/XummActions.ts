@@ -2,14 +2,16 @@ import { isInXumm } from "../utils/isInXumm";
 let xapp: any;
 if (isInXumm()) {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  import("xumm-xapp-sdk").then((something) => {
-    console.log("isInXumm", isInXumm);
-    console.log("something", something);
-    const { xApp } = something;
-    console.log("xAppSdk", xApp);
+  import("xumm-xapp-sdk")
+    .then((something) => {
+      console.log("isInXumm", isInXumm);
+      console.log("something", something);
+      const { xApp } = something;
+      console.log("xAppSdk", xApp);
 
-    xapp = new xApp();
-  });
+      xapp = new xApp();
+    })
+    .catch(console.log);
 }
 
 export function openBrowser(url: string): void {
