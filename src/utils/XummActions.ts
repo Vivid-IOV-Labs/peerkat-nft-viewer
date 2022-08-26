@@ -1,5 +1,5 @@
 import { isInXumm } from "../utils/isInXumm";
-import { xApp } from "xumm-xapp-sdk";
+console.log(window.xapp);
 // let xapp: any;
 // if (isInXumm()) {
 //   // eslint-disable-next-line @typescript-eslint/no-var-requires
