@@ -154,22 +154,24 @@ class XummService {
       devlog("Accept offer error", error);
     }
   }
-   openBrowser(url: string): void {
+  openBrowser(url: string): void {
     // command({
     //   command: "openBrowser",
     //   url,
     // });
-  
+
     xapp
       .openBrowser({ url })
       .then((d: any) => {
         // d (returned value) can be Error or return data:
-        console.log("openBrowser response:", d instanceof Error ? d.message : d);
+        console.log(
+          "openBrowser response:",
+          d instanceof Error ? d.message : d
+        );
       })
       .catch((e: any) => console.log("Error:", e.message));
   }
-  
-   openSignRequest(uuid: string): void {
+  openSignRequest(uuid: string): void {
     xapp
       .openSignRequest({ uuid })
       .then((d: any) => {
@@ -185,6 +187,7 @@ class XummService {
     //   uuid,
     // });
     // d
+  }
 }
 
 const XummSDK = new XummService();
