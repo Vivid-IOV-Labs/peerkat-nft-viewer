@@ -1,8 +1,11 @@
 import { isInXumm } from "../utils/isInXumm";
 console.log("window.xAppSdk");
+console.log(window);
 
-const { xAppSdk } = window as any;
-const xapp = xAppSdk();
+// const { xAppSdk } = window as any;
+const xapp = window.xAppSdk();
+console.log("xapp", xapp);
+
 // if (isInXumm()) {
 //   // eslint-disable-next-line @typescript-eslint/no-var-requires
 //   import("xumm-xapp-sdk")
