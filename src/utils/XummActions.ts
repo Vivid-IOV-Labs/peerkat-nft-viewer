@@ -1,5 +1,6 @@
 import { isInXumm } from "../utils/isInXumm";
-console.log(window.xapp);
+console.log("window.xAppSdk");
+console.log(window.xAppSdk);
 console.log(window);
 let xapp: any;
 // if (isInXumm()) {
