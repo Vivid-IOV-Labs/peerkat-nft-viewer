@@ -5,6 +5,8 @@ if (isInXumm()) {
   import("xumm-xapp-sdk").then((something) => {
     console.log("isInXumm", isInXumm);
     console.log("xAppSdk", something);
+    const { xApp } = something;
+    xapp = new xApp();
   });
 }
 
