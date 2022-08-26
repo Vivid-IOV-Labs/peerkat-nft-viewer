@@ -6,8 +6,6 @@ import { devlog } from "../utils/devlog";
 import { isInXumm } from "../utils/isInXumm";
 
 let Sdk: any = null;
-const xapp: any = null;
-
 class XummService {
   constructor() {
     if (Sdk) {
@@ -15,18 +13,8 @@ class XummService {
     }
     if (isInXumm()) {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const urlParams = new URLSearchParams(document.location.href);
-      const jwtToke = urlParams.get("xAppToken");
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { XummSdkJwt, XummSdk } = require("xumm-sdk");
-      console.log("XummSdk", XummSdk);
-      console.log("XummSdkJwt", XummSdkJwt);
+      const { XummSdkJwt } = require("xumm-sdk");
       Sdk = new XummSdkJwt(xummApiKey);
-      //xapp = new XummSdk(xummApiKey);
-      // const xapp = new XummSdk();
-      //console.log("xapp", xapp);
-      console.log("Sdk", Sdk);
-      //console.log("Sdk", xapp);
     }
   }
   async getOttData(): Promise<xAppOttData> {
@@ -156,18 +144,6 @@ class XummService {
     } catch (error) {
       devlog("Accept offer error", error);
     }
-  }
-
-  async openBrowser(url) {
-    Sdk.openBrowser({ url })
-      .then((d) => {
-        // d (returned value) can be Error or return data:
-        console.log(
-          "openBrowser response:",
-          d instanceof Error ? d.message : d
-        );
-      })
-      .catch((e) => console.log("Error:", e.message));
   }
 }
 
