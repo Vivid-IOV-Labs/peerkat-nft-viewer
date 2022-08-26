@@ -1,5 +1,9 @@
-import { xApp } from "xumm-xapp-sdk";
-const xapp = new xApp();
+import { isInXumm } from "../utils/isInXumm";
+let xapp: any;
+if (isInXumm()) {
+  const { xApp } = require("xumm-xapp-sdk");
+  xapp = new xApp();
+}
 
 export function openBrowser(url: string): void {
   // command({
@@ -9,24 +13,24 @@ export function openBrowser(url: string): void {
 
   xapp
     .openBrowser({ url })
-    .then((d) => {
+    .then((d: any) => {
       // d (returned value) can be Error or return data:
       console.log("openBrowser response:", d instanceof Error ? d.message : d);
     })
-    .catch((e) => console.log("Error:", e.message));
+    .catch((e: any) => console.log("Error:", e.message));
 }
 
 export function openSignRequest(uuid: string): void {
   xapp
     .openSignRequest({ uuid })
-    .then((d) => {
+    .then((d: any) => {
       // d (returned value) can be Error or return data:
       console.log(
         "openSignRequest response:",
         d instanceof Error ? d.message : d
       );
     })
-    .catch((e) => console.log("Error:", e.message));
+    .catch((e: any) => console.log("Error:", e.message));
   // command({
   //   command: "openSignRequest",
   //   uuid,
