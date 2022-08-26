@@ -3,8 +3,12 @@ console.log("window.xAppSdk");
 console.log(window);
 
 // const { xAppSdk } = window as any;
-const xapp = window.xAppSdk();
+document.addEventListener("readystatechange", (event) => {
+  console.log("window", window);
+});
+const xapp = xAppSdk();
 console.log("xapp", xapp);
+debugger;
 
 // if (isInXumm()) {
 //   // eslint-disable-next-line @typescript-eslint/no-var-requires

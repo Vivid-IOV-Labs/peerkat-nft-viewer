@@ -4,7 +4,16 @@ import type { XummTypes } from "xumm-sdk";
 import { xAppOttData } from "xumm-sdk/dist/src/types";
 import { devlog } from "../utils/devlog";
 import { isInXumm } from "../utils/isInXumm";
+console.log("window.xAppSdk");
+console.log(window);
 
+// const { xAppSdk } = window as any;
+document.addEventListener("readystatechange", (event) => {
+  console.log("window", window);
+});
+const xapp = new xAppSdk();
+console.log("xapp", xapp);
+debugger;
 let Sdk: any = null;
 class XummService {
   constructor() {
@@ -145,6 +154,37 @@ class XummService {
       devlog("Accept offer error", error);
     }
   }
+   openBrowser(url: string): void {
+    // command({
+    //   command: "openBrowser",
+    //   url,
+    // });
+  
+    xapp
+      .openBrowser({ url })
+      .then((d: any) => {
+        // d (returned value) can be Error or return data:
+        console.log("openBrowser response:", d instanceof Error ? d.message : d);
+      })
+      .catch((e: any) => console.log("Error:", e.message));
+  }
+  
+   openSignRequest(uuid: string): void {
+    xapp
+      .openSignRequest({ uuid })
+      .then((d: any) => {
+        // d (returned value) can be Error or return data:
+        console.log(
+          "openSignRequest response:",
+          d instanceof Error ? d.message : d
+        );
+      })
+      .catch((e: any) => console.log("Error:", e.message));
+    // command({
+    //   command: "openSignRequest",
+    //   uuid,
+    // });
+    // d
 }
 
 const XummSDK = new XummService();
