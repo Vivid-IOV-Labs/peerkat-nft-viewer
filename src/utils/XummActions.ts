@@ -2,8 +2,8 @@ import { isInXumm } from "../utils/isInXumm";
 let xapp: any;
 if (isInXumm()) {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { xApp } = require("xumm-xapp-sdk");
-  xapp = new xApp();
+  const xAppSdk = require("xumm-xapp-sdk");
+  xapp = new xAppSdk();
 }
 
 export function openBrowser(url: string): void {
