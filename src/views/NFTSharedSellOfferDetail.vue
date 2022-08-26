@@ -181,7 +181,6 @@ import {
 import { isInXumm } from "../utils/isInXumm";
 import { devlog } from "../utils/devlog";
 import XummSdk from "../services/XummService";
-import { openSignRequest } from "../utils/XummActions";
 export default defineComponent({
   components: { BaseCard, ExternalLink, AsyncButton },
   async setup() {
@@ -279,7 +278,7 @@ export default defineComponent({
             }
           );
           const { uuid } = created;
-          openSignRequest(uuid);
+          XummSdk.openSignRequest(uuid);
         } else {
           await acceptOffer({
             OfferID: offerId,

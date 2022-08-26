@@ -98,7 +98,6 @@ import { devlog } from "../utils/devlog";
 import { isInXumm } from "../utils/isInXumm";
 import XummSdk from "../services/XummService";
 import { fetchBuyOffers } from "../services/XrpService";
-import { openSignRequest } from "../utils/XummActions";
 export default defineComponent({
   components: { BaseCard, AsyncButton, BaseInput },
   async setup() {
@@ -143,7 +142,7 @@ export default defineComponent({
           );
           devlog("create buy", created);
           const { uuid } = created;
-          openSignRequest(uuid);
+          XummSdk.openSignRequest(uuid);
         } else {
           try {
             await store.dispatch("nft/createBuyOffer", {

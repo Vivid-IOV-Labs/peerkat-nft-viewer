@@ -148,7 +148,6 @@ import { devlog } from "../utils/devlog";
 import { isInXumm } from "../utils/isInXumm";
 import XummSdk from "../services/XummService";
 import { fetchBuyOffers } from "../services/XrpService";
-import { openSignRequest } from "../utils/XummActions";
 import { useRouter } from "vue-router";
 import { getNetworkCodeFromType } from "../utils/getNetworkTypeFromCode";
 
@@ -223,7 +222,7 @@ export default defineComponent({
           );
           devlog("create buy", created);
           const { uuid } = created;
-          openSignRequest(uuid);
+          XummSdk.openSignRequest(uuid);
         } else {
           try {
             await store.dispatch("nft/createBuyOffer", {

@@ -35,7 +35,6 @@ import { useStore } from "vuex";
 
 import { isInXumm } from "../utils/isInXumm";
 import XummSdk from "../services/XummService";
-import { openSignRequest } from "../utils/XummActions";
 
 export default defineComponent({
   components: {
@@ -84,7 +83,7 @@ export default defineComponent({
             }
           );
           const { uuid } = created;
-          openSignRequest(uuid);
+          XummSdk.openSignRequest(uuid);
         } else {
           await store.dispatch("nft/cancelBuyOffer", {
             TokenID: props.token,

@@ -31,7 +31,6 @@ import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { acceptBuyOffer } from "../services/XrpService";
 import XummSdk from "../services/XummService";
-import { openSignRequest } from "../utils/XummActions";
 export default defineComponent({
   components: {
     AsyncButton,
@@ -76,7 +75,7 @@ export default defineComponent({
             }
           );
           const { uuid } = created;
-          openSignRequest(uuid);
+          XummSdk.openSignRequest(uuid);
         } else {
           await acceptBuyOffer({
             OfferID: props.offer.nft_offer_index,

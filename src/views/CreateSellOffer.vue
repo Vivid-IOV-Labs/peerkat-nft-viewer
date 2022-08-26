@@ -113,7 +113,6 @@ import { devlog } from "../utils/devlog";
 import { isInXumm } from "../utils/isInXumm";
 import XummSdk from "../services/XummService";
 import { fetchSellOffers } from "../services/XrpService";
-import { openSignRequest } from "../utils/XummActions";
 import { isRippleAddress } from "../utils/validators";
 import useValidator from "../composable/useValidator";
 
@@ -175,7 +174,7 @@ export default defineComponent({
             }
           );
           const { uuid } = created;
-          openSignRequest(uuid);
+          XummSdk.openSignRequest(uuid);
         } else {
           try {
             await store.dispatch("nft/createSellOffer", {

@@ -115,7 +115,8 @@
     <ul class="mt-2 p-2">
       <li class="pb-2">
         To view offers for an XLS-20 NFT, please select the “Offers” button on
-        one of your XLS-20 NFTs in the “My Wallet” or “Shared with me” page views
+        one of your XLS-20 NFTs in the “My Wallet” or “Shared with me” page
+        views
       </li>
       <li class="pb-2">
         If you do not have any XLS-20 NFTs in your wallet or that have been
@@ -139,7 +140,6 @@ import { devlog } from "../utils/devlog";
 
 import { isInXumm } from "../utils/isInXumm";
 import XummSdk from "../services/XummService";
-import { openSignRequest } from "../utils/XummActions";
 import { fetchSellOffers } from "../services/XrpService";
 import { useRouter } from "vue-router";
 
@@ -205,7 +205,7 @@ export default defineComponent({
             }
           );
           const { uuid } = created;
-          openSignRequest(uuid);
+          XummSdk.openSignRequest(uuid);
         } else {
           try {
             await store.dispatch("nft/createSellOffer", {

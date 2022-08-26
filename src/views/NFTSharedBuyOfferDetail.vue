@@ -182,7 +182,6 @@ import {
 import { isInXumm } from "../utils/isInXumm";
 import { devlog } from "../utils/devlog";
 import XummSdk from "../services/XummService";
-import { openSignRequest } from "../utils/XummActions";
 
 export default defineComponent({
   components: { BaseCard, ExternalLink, AsyncButton },
@@ -259,7 +258,7 @@ export default defineComponent({
           );
           devlog("acceptOffer", created);
           const { uuid } = created;
-          openSignRequest(uuid);
+          XummSdk.openSignRequest(uuid);
         } else {
           await acceptOffer({
             OfferID: offer.value.nft_offer_index,
