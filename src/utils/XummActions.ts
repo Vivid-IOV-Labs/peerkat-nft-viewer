@@ -4,8 +4,10 @@ if (isInXumm()) {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   import("xumm-xapp-sdk").then((something) => {
     console.log("isInXumm", isInXumm);
-    console.log("xAppSdk", something);
+    console.log("something", something);
     const { xApp } = something;
+    console.log("xAppSdk", xApp);
+
     xapp = new xApp();
   });
 }
