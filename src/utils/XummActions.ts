@@ -3,6 +3,8 @@ let xapp: any;
 if (isInXumm()) {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const xAppSdk = require("xumm-xapp-sdk");
+  console.log("isInXumm", isInXumm);
+  console.log("xAppSdk", xAppSdk);
   xapp = new xAppSdk();
 }
 
