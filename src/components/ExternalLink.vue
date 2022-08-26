@@ -8,8 +8,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, inject } from "vue";
-//import { openBrowser } from "../utils/XummActions";
-import XummSdk from "../services/XummService";
+import { openBrowser } from "../utils/XummActions";
 
 import BaseButton from "./BaseButton.vue";
 export default defineComponent({
@@ -23,7 +22,7 @@ export default defineComponent({
     return {
       isInXumm: inject("isInXumm"),
       openLink() {
-        XummSdk.openBrowser(props.url);
+        openBrowser(props.url);
       },
     };
   },
