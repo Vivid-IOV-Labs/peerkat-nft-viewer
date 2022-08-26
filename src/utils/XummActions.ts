@@ -43,13 +43,14 @@
 //   // devlog("Opensinge request uuid", uuid);
 // }
 function command(message: any) {
-  if (typeof window.ReactNativeWebView !== "undefined") {
-    console.log(" ReactNativeWebView", message);
+  // if (typeof window.ReactNativeWebView !== "undefined") {
+  //   console.log(" ReactNativeWebView", message);
 
     window.ReactNativeWebView.postMessage(JSON.stringify(message));
-  }
-  console.log("NO ReactNativeWebView");
-}
+//   } else {
+//     console.log("NO ReactNativeWebView");
+//   }
+// }
 
 export function openBrowser(url: string): void {
   console.log("openBrowser", url);
