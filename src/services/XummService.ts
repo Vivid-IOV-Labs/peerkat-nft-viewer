@@ -6,8 +6,8 @@ import { devlog } from "../utils/devlog";
 import { isInXumm } from "../utils/isInXumm";
 
 const { xAppSdk } = window as any;
-const xapp = new xAppSdk();
 let Sdk: any = null;
+let xapp: any = null;
 class XummService {
   constructor() {
     if (Sdk) {
@@ -16,6 +16,10 @@ class XummService {
     if (isInXumm()) {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { XummSdkJwt } = require("xumm-sdk");
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const xAppSdk = require("xumm-xapp-sdk");
+      xapp = new xAppSdk();
+
       Sdk = new XummSdkJwt(xummApiKey);
     }
   }
