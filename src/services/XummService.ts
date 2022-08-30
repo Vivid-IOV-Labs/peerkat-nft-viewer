@@ -148,10 +148,28 @@ class XummService {
     }
   }
   async openBrowser(url: string): Promise<void> {
-    await xapp.openBrowser({ url });
+    xapp
+      .openBrowser({ url })
+      .then((d) => {
+        // d (returned value) can be Error or return data:
+        console.log(
+          "openBrowser response:",
+          d instanceof Error ? d.message : d
+        );
+      })
+      .catch((e) => console.log("Error:", e.message));
   }
   async openSignRequest(uuid: string): Promise<void> {
-    await xapp.openSignRequest({ uuid });
+    xapp
+      .openSignRequest({ uuid })
+      .then((d) => {
+        // d (returned value) can be Error or return data:
+        console.log(
+          "openSignRequest response:",
+          d instanceof Error ? d.message : d
+        );
+      })
+      .catch((e) => console.log("Error:", e.message));
   }
 }
 
