@@ -16,9 +16,7 @@ class XummService {
     if (isInXumm()) {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { XummSdkJwt } = require("xumm-sdk");
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
       xapp = new xAppSdk();
-
       Sdk = new XummSdkJwt(xummApiKey);
     }
   }
@@ -154,7 +152,6 @@ class XummService {
     xapp
       .openBrowser({ url })
       .then((d) => {
-        // d (returned value) can be Error or return data:
         console.log(
           "openBrowser response:",
           d instanceof Error ? d.message : d
@@ -166,7 +163,6 @@ class XummService {
     xapp
       .openSignRequest({ uuid })
       .then((d) => {
-        // d (returned value) can be Error or return data:
         console.log(
           "openSignRequest response:",
           d instanceof Error ? d.message : d
