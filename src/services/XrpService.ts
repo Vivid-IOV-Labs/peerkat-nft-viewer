@@ -16,8 +16,10 @@ const PDFJS = window["pdfjs-dist/build/pdf"];
 // PDFJS.GlobalWorkerOptions.workerSrc =
 //   "//mozilla.github.io/pdf.js/build/pdf.worker.js";
 PDFJS.disableWorker = true;
-const ipfsPublicGateway = import.meta.env.VITE_PUBLIC_IPFS_GATEWAY;
-const ipfsGateway = import.meta.env.VITE_IPFS_GATEWAY;
+// const ipfsPublicGateway = import.meta.env.VITE_PUBLIC_IPFS_GATEWAY;
+// const ipfsGateway = import.meta.env.VITE_IPFS_GATEWAY;
+let ipfsPublicGateway: string;
+let ipfsGateway: string;
 const walletSecret = import.meta.env.VITE_WALLET_SECRET;
 const walletSecretAlice = import.meta.env.VITE_WALLET_SECRET_ALICE;
 
@@ -697,6 +699,25 @@ export async function fetchBuyOffers(TokenID: string): Promise<any> {
   }
 }
 
+async function getIpfsGatewayAvailable() {
+  const ipfsGatewayList = [
+    "https://dweb.link",
+    "https://ipfs.io",
+    "https://cloudflare-ipfs.com",
+    "https://cf-ipfs.com",
+    "https://nftstorage.link",
+  ];
+  const pomises = ipfsGatewayList.map((u: string) => fetch(u));
+  const results = await Promise.allSettled(pomises);
+  console.log(results);
+  const ipfsGatewayAvailable = results
+    .filter((i) => i.status == "fulfilled")
+    .map((i: any) => i.value.url);
+
+  ipfsPublicGateway = ipfsGateway = ipfsGatewayAvailable[1];
+  return ipfsGatewayAvailable;
+}
+
 export async function init(network: string): Promise<any> {
   devlog("network", network);
   client = new xrpl.Client(network);
@@ -718,7 +739,7 @@ export async function init(network: string): Promise<any> {
   });
 
   await client.connect();
-
+  await getIpfsGatewayAvailable();
   return {
     connect,
     disconnect,
