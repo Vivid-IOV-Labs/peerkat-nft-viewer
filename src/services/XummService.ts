@@ -22,7 +22,9 @@ class XummService {
       // xapp = new xApp();
 
       import("xumm-xapp-sdk").then(({ xApp }) => {
+        console.log("xApp", xApp);
         xapp = new xApp();
+        console.log(xapp);
       });
 
       Sdk = new XummSdkJwt(xummApiKey);
