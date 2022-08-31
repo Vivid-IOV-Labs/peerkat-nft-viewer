@@ -698,7 +698,7 @@ export async function fetchBuyOffers(TokenID: string): Promise<any> {
     devlog("No buy offers.");
   }
 }
-let ipfsGatewayList: string[];
+let ipfsGatewayAvailable: string[];
 async function getIpfsGatewayAvailable() {
   const ipfsGatewayList = [
     "https://dweb.link",
@@ -711,7 +711,7 @@ async function getIpfsGatewayAvailable() {
   const results = await Promise.allSettled(pomises);
   console.log(results);
   ipfsGatewayAvailable = results
-    .filter((i) => i.status == "fulfilled")
+    .filter((i) => i.status == "fulfilled" && i.valu.status == 200)
     .map((i: any) => i.value.url);
 
   ipfsPublicGateway = ipfsGateway = ipfsGatewayAvailable[1] + "/ipfs/";
