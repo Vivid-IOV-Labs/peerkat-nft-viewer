@@ -17,8 +17,13 @@ class XummService {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { XummSdkJwt } = require("xumm-sdk");
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const xAppSdk = require("xumm-xapp-sdk");
-      xapp = new xAppSdk();
+      const { xApp } = require("xumm-xapp-sdk");
+      console.log(xApp);
+      xapp = new xApp();
+
+      // import("xumm-xapp-sdk").then(({ xApp }) => {
+      //   xapp = new xApp();
+      // });
 
       Sdk = new XummSdkJwt(xummApiKey);
     }
