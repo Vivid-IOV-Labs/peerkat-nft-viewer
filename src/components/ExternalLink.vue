@@ -24,7 +24,7 @@ export default defineComponent({
       isInXumm: inject("isInXumm"),
       openLink() {
         console.log("OPEN LINK", props.url);
-        XummService.openBrowser(props.url);
+        // XummService.openBrowser(props.url);
         openBrowser(props.url);
       },
     };
