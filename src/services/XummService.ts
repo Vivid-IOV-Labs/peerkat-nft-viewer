@@ -18,14 +18,20 @@ class XummService {
       const { XummSdkJwt } = require("xumm-sdk");
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       // const { xApp } = require("xumm-xapp-sdk");
+      // const {
+      //   xApp,
+      // } = require("../../node_modules/xumm-xapp-sdk/dist/index.js");
+
       // console.log(xApp);
       // xapp = new xApp();
 
-      import("xumm-xapp-sdk").then(({ xApp }) => {
-        console.log("xApp", xApp);
-        xapp = new xApp();
-        console.log(xapp);
-      });
+      import("../../node_modules/xumm-xapp-sdk/dist/index.js").then(
+        ({ xApp }) => {
+          console.log("xApp", xApp);
+          xapp = new xApp();
+          console.log(xapp);
+        }
+      );
 
       Sdk = new XummSdkJwt(xummApiKey);
     }
