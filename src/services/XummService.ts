@@ -2,6 +2,7 @@ const xummApiKey = import.meta.env.VITE_XUMM_API_KEY as string;
 import { xAppOttData } from "xumm-sdk/dist/src/types";
 import { devlog } from "../utils/devlog";
 import { isInXumm } from "../utils/isInXumm";
+import { openBrowser, openSignRequest } from "../utils/XummActions";
 
 const { xAppSdk } = window as any;
 let Sdk: any = null;
@@ -150,32 +151,29 @@ class XummService {
   async openBrowser(url: string): Promise<void> {
     xapp
       .openBrowser({ url })
-      .then((d) => {
-        console.log(d);
-
-        console.log(
-          "openBrowser response:",
-          d instanceof Error ? d.message : d
-        );
+      .then((d: any) => {
+        if (d instanceof Error) {
+          devlog("Error:", d.message);
+          openBrowser(url);
+        }
       })
-      .catch((e) => {
-        console.log(e);
-        console.log("Error:", e.message);
+      .catch((e: any) => {
+        devlog("Error:", e.message);
+        openBrowser(url);
       });
   }
   async openSignRequest(uuid: string): Promise<void> {
     xapp
       .openSignRequest({ uuid })
-      .then((d) => {
-        console.log(d);
-        console.log(
-          "openSignRequest response:",
-          d instanceof Error ? d.message : d
-        );
+      .then((d: any) => {
+        if (d instanceof Error) {
+          devlog("Error:", d.message);
+          openSignRequest(uuid);
+        }
       })
-      .catch((e) => {
-        console.log(e);
-        console.log("Error:", e.message);
+      .catch((e: any) => {
+        devlog("Error:", e.message);
+        openSignRequest(uuid);
       });
   }
 }
