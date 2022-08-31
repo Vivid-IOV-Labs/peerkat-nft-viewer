@@ -1,11 +1,12 @@
 function command(message: any) {
-  // if (typeof window.ReactNativeWebView !== "undefined") {
-  //   console.log(" ReactNativeWebView", message);
+  if (typeof window.ReactNativeWebView !== "undefined") {
+    console.log(" ReactNativeWebView", message);
 
-  window.ReactNativeWebView.postMessage(JSON.stringify(message));
-  //   } else {
-  //     console.log("NO ReactNativeWebView");
-  //   }
+    window.ReactNativeWebView.postMessage(JSON.stringify(message));
+  } else {
+    window.parent.postMessage(JSON.stringify(message), "*");
+    console.log("NO ReactNativeWebView");
+  }
 }
 
 export function openBrowser(url: string): void {

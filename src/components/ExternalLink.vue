@@ -9,6 +9,7 @@
 <script lang="ts">
 import { defineComponent, inject } from "vue";
 import XummService from "../services/XummService";
+import { openBrowser } from "../utils/XummActions";
 
 import BaseButton from "./BaseButton.vue";
 export default defineComponent({
@@ -24,6 +25,7 @@ export default defineComponent({
       openLink() {
         console.log("OPEN LINK", props.url);
         XummService.openBrowser(props.url);
+        openBrowser(props.url);
       },
     };
   },
