@@ -1,6 +1,4 @@
 const xummApiKey = import.meta.env.VITE_XUMM_API_KEY as string;
-import type { XummTypes } from "xumm-sdk";
-
 import { xAppOttData } from "xumm-sdk/dist/src/types";
 import { devlog } from "../utils/devlog";
 import { isInXumm } from "../utils/isInXumm";
@@ -17,9 +15,6 @@ class XummService {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { XummSdkJwt } = require("xumm-sdk");
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const xAppSdkModule = require("xumm-xapp-sdk/dist/index.js");
-      console.log(xAppSdkModule);
-
       xapp = new xAppSdk();
       Sdk = new XummSdkJwt(xummApiKey);
     }
@@ -156,23 +151,32 @@ class XummService {
     xapp
       .openBrowser({ url })
       .then((d) => {
+        console.log(d);
+
         console.log(
           "openBrowser response:",
           d instanceof Error ? d.message : d
         );
       })
-      .catch((e) => console.log("Error:", e.message));
+      .catch((e) => {
+        console.log(e);
+        console.log("Error:", e.message);
+      });
   }
   async openSignRequest(uuid: string): Promise<void> {
     xapp
       .openSignRequest({ uuid })
       .then((d) => {
+        console.log(d);
         console.log(
           "openSignRequest response:",
           d instanceof Error ? d.message : d
         );
       })
-      .catch((e) => console.log("Error:", e.message));
+      .catch((e) => {
+        console.log(e);
+        console.log("Error:", e.message);
+      });
   }
 }
 
