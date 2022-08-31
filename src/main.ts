@@ -37,5 +37,3 @@ if (process.env.NODE_ENV === "development") {
     .provide("isInXumm", isInXumm())
     .mount("#app");
 }
-
-const jwtToke = new URLSearchParams(document.location.href).get("xAppToken");
