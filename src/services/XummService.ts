@@ -19,14 +19,6 @@ class XummService {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       xapp = new xAppSdk();
 
-      import("../../node_modules/xumm-xapp-sdk/dist/index.js").then(
-        ({ xApp }) => {
-          console.log("xApp", xApp);
-          // xapp = new xApp();
-          //  console.log(xapp);
-        }
-      );
-
       Sdk = new XummSdkJwt(xummApiKey);
     }
   }
