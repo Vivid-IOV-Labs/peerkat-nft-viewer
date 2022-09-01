@@ -72,10 +72,9 @@ export default defineComponent({
     const endload = ref(true);
     const loading = computed(() => store.getters["ui/getIsloading"]);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
-    const NFTMedia = computed(() =>
-      store.getters["nft/getAll"].filter((a: any) => a)
+    const NFTMedia = computed(
+      () => store.getters["nft/getAll"] //.filter((a: any) => a)
     );
-
     const lines = computed(() => store.getters["nft/getLines"]);
     const xls20count = computed(() => store.getters["nft/getXls20"]);
     const allXls20 = computed(() => store.getters["nft/getAllXls20"]);
@@ -177,6 +176,8 @@ export default defineComponent({
         endload.value = true;
         //    await store.dispatch("nft/disconnect");
       }
+      console.log(newNfts);
+      console.log(NFTMedia.value);
     });
 
     if (lines.value && lines.value.length === 0) {

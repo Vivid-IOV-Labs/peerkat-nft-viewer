@@ -77,7 +77,6 @@ async function getMediaType(url: string) {
   try {
     const res = await fetch(url);
     const contentType = res.headers.get("Content-Type");
-
     return contentType;
   } catch (err) {
     return "";
@@ -113,9 +112,9 @@ function getTokenName(currency: string): string {
   const proposedHex = hexToString(first14char);
   const isNotWord = /[^\w\\_\-\\,\\(\\)\\.\\@\\#\s]/gm.test(proposedHex);
   if (isNotWord) {
-    return hexToString(removeFirst02.substring(14));
+    return hexToString(removeFirst02.substring(14)).replace(/[^\w\s]/gi, "");
   } else {
-    return hexToString(removeFirst02);
+    return hexToString(removeFirst02).replace(/[^\w\s]/gi, "");
   }
 }
 function getCtiHex(currency: string): string {
@@ -224,9 +223,9 @@ async function getOne(
 
   if (isXls14Solo(currency)) {
     const metadataUrl = ipfsPublicGateway + "/" + source.split("//")[1];
-
     try {
-      const collection = await fetch(metadataUrl).then((res) => res.json());
+      const promise = await fetch(metadataUrl);
+      const collection = await promise.json();
       const { nfts } = collection;
       const nft = nfts.find((n: any) => n.currency == currency);
       const { content_type, metadata } = nft;
@@ -241,9 +240,8 @@ async function getOne(
       url = mediaUrl;
       standard = "XLS-14d/SOLO";
     } catch (error) {
-      await geXls14();
-
       devlog(error);
+      await geXls14();
     }
   } else if (
     ledgerIndexDecimal.toString().length >= 8 &&
@@ -274,7 +272,7 @@ async function getOne(
     issuer: account,
     issuerTruncated: truncate(account),
     currency,
-    tokenName: tokenName.replace(/[^\w\s]/gi, ""),
+    tokenName: tokenName,
     url,
     media_type,
     balanceFormatted,
@@ -702,10 +700,10 @@ let ipfsGatewayAvailable: string[];
 async function getIpfsGatewayAvailable() {
   const ipfsGatewayList = [
     "https://dweb.link/",
+    "https://nftstorage.link/",
     "https://ipfs.io/",
     "https://cloudflare-ipfs.com/",
     "https://cf-ipfs.com/",
-    "https://nftstorage.link/",
   ];
   const pomises = ipfsGatewayList.map((u: string) => fetch(u));
   const results = await Promise.allSettled(pomises);
@@ -718,8 +716,8 @@ async function getIpfsGatewayAvailable() {
         : i.value.url
     );
   const firts2 = getFirst2(ipfsGatewayAvailable, ipfsGatewayList);
-  ipfsGateway = firts2[0] + "ipfs/";
-  ipfsPublicGateway = firts2[1] + "ipfs/";
+  ipfsGateway = firts2[0] + "ipfs";
+  ipfsPublicGateway = firts2[1] + "ipfs";
   return ipfsGatewayAvailable;
 }
 function getFirst2(ipfsGatewayAvailable: string[], ipfsGatewayList: string[]) {
