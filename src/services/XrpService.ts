@@ -700,10 +700,10 @@ let ipfsGatewayAvailable: string[];
 async function getIpfsGatewayAvailable() {
   const ipfsGatewayList = [
     "https://dweb.link/",
-    "https://nftstorage.link/",
     "https://ipfs.io/",
     "https://cloudflare-ipfs.com/",
     "https://cf-ipfs.com/",
+    "https://nftstorage.link/",
   ];
   const pomises = ipfsGatewayList.map((u: string) => fetch(u));
   const results = await Promise.allSettled(pomises);
