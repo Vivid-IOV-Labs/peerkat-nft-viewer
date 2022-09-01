@@ -701,21 +701,36 @@ export async function fetchBuyOffers(TokenID: string): Promise<any> {
 let ipfsGatewayAvailable: string[];
 async function getIpfsGatewayAvailable() {
   const ipfsGatewayList = [
-    "https://dweb.link",
-    "https://ipfs.io",
-    "https://cloudflare-ipfs.com",
-    "https://cf-ipfs.com",
-    "https://nftstorage.link",
+    "https://dweb.link/",
+    "https://ipfs.io/",
+    "https://cloudflare-ipfs.com/",
+    "https://cf-ipfs.com/",
+    "https://nftstorage.link/",
   ];
   const pomises = ipfsGatewayList.map((u: string) => fetch(u));
   const results = await Promise.allSettled(pomises);
   console.log(results);
   ipfsGatewayAvailable = results
-    .filter((i) => i.status == "fulfilled" && i.valu.status == 200)
-    .map((i: any) => i.value.url);
-
-  ipfsPublicGateway = ipfsGateway = ipfsGatewayAvailable[1] + "/ipfs/";
+    .filter((i: any) => i.status == "fulfilled" && i.value.status == 200)
+    .map((i: any) =>
+      i.value.url == "https://docs.ipfs.io/how-to/address-ipfs-on-web/"
+        ? "https://dweb.link/"
+        : i.value.url
+    );
+  const firts2 = getFirst2(ipfsGatewayAvailable, ipfsGatewayList);
+  ipfsGateway = firts2[0] + "ipfs/";
+  ipfsPublicGateway = firts2[1] + "ipfs/";
   return ipfsGatewayAvailable;
+}
+function getFirst2(ipfsGatewayAvailable: string[], ipfsGatewayList: string[]) {
+  if (ipfsGatewayAvailable.length == 2) {
+    return ipfsGatewayAvailable;
+  } else {
+    const intersection = ipfsGatewayAvailable.filter((x) =>
+      ipfsGatewayList.includes(x)
+    );
+    return intersection;
+  }
 }
 
 export async function init(network: string): Promise<any> {
@@ -737,9 +752,9 @@ export async function init(network: string): Promise<any> {
   client.on("error", async (error: any) => {
     devlog("Connection Errors", error);
   });
+  await getIpfsGatewayAvailable();
 
   await client.connect();
-  await getIpfsGatewayAvailable();
   return {
     connect,
     disconnect,
