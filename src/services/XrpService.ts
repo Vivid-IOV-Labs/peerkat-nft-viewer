@@ -406,7 +406,7 @@ async function fetchOne(
   const { account_data } = result;
 
   if (currency) {
-    return getOne(
+    return await getOne(
       account_data,
       account,
       currency,
@@ -416,7 +416,7 @@ async function fetchOne(
   } else {
     const issuerCurrency = await fetchIssuerCurrencies(account);
 
-    return getOne(
+    return await getOne(
       account_data,
       account,
       issuerCurrency,
