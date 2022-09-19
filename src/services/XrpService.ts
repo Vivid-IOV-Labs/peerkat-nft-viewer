@@ -229,18 +229,25 @@ async function getOne(
       const promise = await fetch(metadataUrl);
       const collection = await promise.json();
       const { nfts } = collection;
+      debugger;
       const nft = nfts.find((n: any) => n.currency == currency);
+      debugger;
       const { content_type, metadata } = nft;
       const { url: metadaNftUrl } = await getIpfsMedia(metadata.split("//")[1]);
+      debugger;
       const res = await fetch(metadaNftUrl).then((res) => res.json());
+      debugger;
       desc = decodeHtmlEntity(res.description);
       tokenName = res.name;
       sololimitFormatted = collection.collection_item_count;
       const fil_ext = content_type.split("/")[1];
-      const mediaUrl = metadaNftUrl.replace("metadata.json", `data.${fil_ext}`);
+      const { url: mediaUrl } = await getIpfsMedia(
+        metadata.split("//")[1].replace("metadata.json", `data.${fil_ext}`)
+      );
       media_type = content_type;
       url = mediaUrl;
       standard = "XLS-14d/SOLO";
+      debugger;
     } catch (error) {
       devlog(error);
       await geXls14();
