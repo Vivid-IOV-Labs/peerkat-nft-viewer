@@ -1,3 +1,4 @@
+import axios from "axios";
 import { NFT } from "../models/NFT";
 import { devlog } from "../utils/devlog";
 // import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
@@ -18,8 +19,6 @@ const PDFJS = window["pdfjs-dist/build/pdf"];
 PDFJS.disableWorker = true;
 // const ipfsPublicGateway = import.meta.env.VITE_PUBLIC_IPFS_GATEWAY;
 // const ipfsGateway = import.meta.env.VITE_IPFS_GATEWAY;
-let ipfsPublicGateway: string;
-let ipfsGateway: string;
 const walletSecret = import.meta.env.VITE_WALLET_SECRET;
 const walletSecretAlice = import.meta.env.VITE_WALLET_SECRET_ALICE;
 
@@ -91,17 +90,18 @@ function getXLSProtocol(source: string): string {
     return "";
   }
 }
-function getMediaByXLSProtocol(
+async function getMediaByXLSProtocol(
   source: string,
   xlsProtocol: string,
   tokenName?: string
-): string {
+): Promise<string> {
   if (xlsProtocol == "xls-14") {
     const protocol = source.split("//")[0];
     return protocol + "//" + tokenName;
   } else if (xlsProtocol == "xls-16-peerkat") {
     const cid = source.split(":")[1];
-    return ipfsPublicGateway + "/" + cid;
+    const { url } = await getIpfsMedia(cid);
+    return url;
   } else {
     return "";
   }
@@ -202,19 +202,21 @@ async function getOne(
   async function geXls14() {
     const xlsProtocol = getXLSProtocol(source);
     if (xlsProtocol) {
-      url = getMediaByXLSProtocol(source, xlsProtocol, tokenName);
+      url = await getMediaByXLSProtocol(source, xlsProtocol, tokenName);
       media_type = await getMediaType(url);
       if (media_type == "application/json") {
         const { image } = await fetch(url).then((res) => res.json());
         if (image) {
-          url = getMediaByXLSProtocol(image, "xls-16-peerkat");
+          url = await getMediaByXLSProtocol(image, "xls-16-peerkat");
           media_type = await getMediaType(url);
         }
       } else if (media_type?.includes("text/html")) {
-        const metadataUrl = ipfsPublicGateway + "/" + source.split("ipfs/")[1];
-
+        const { url: metadataUrl } = await getIpfsMedia(
+          source.split("ipfs/")[1]
+        );
         const data = await getPdfContent(metadataUrl);
-        url = ipfsPublicGateway + "/" + data["Image IPFS CID"];
+        const res = await getIpfsMedia(data["Image IPFS CID"]);
+        url = res.url;
         media_type = await getMediaType(url);
         author = data["Design"];
       }
@@ -222,14 +224,14 @@ async function getOne(
   }
 
   if (isXls14Solo(currency)) {
-    const metadataUrl = ipfsPublicGateway + "/" + source.split("//")[1];
+    const { url: metadataUrl } = await getIpfsMedia(source.split("//")[1]);
     try {
       const promise = await fetch(metadataUrl);
       const collection = await promise.json();
       const { nfts } = collection;
       const nft = nfts.find((n: any) => n.currency == currency);
       const { content_type, metadata } = nft;
-      const metadaNftUrl = ipfsPublicGateway + "/" + metadata.split("//")[1];
+      const { url: metadaNftUrl } = await getIpfsMedia(metadata.split("//")[1]);
       const res = await fetch(metadaNftUrl).then((res) => res.json());
       desc = decodeHtmlEntity(res.description);
       tokenName = res.name;
@@ -260,7 +262,8 @@ async function getOne(
           .replace("Â", "")
       );
       author = metadata.find((m: any) => m.type == "Author").data;
-      url = ipfsPublicGateway + "/" + uri.split("//")[1];
+      const res = await getIpfsMedia(uri.split("//")[1]);
+      url = res.url;
       media_type = await getMediaType(url);
     } else {
       await geXls14();
@@ -268,6 +271,7 @@ async function getOne(
   } else {
     await geXls14();
   }
+  console.log(url);
   return {
     issuer: account,
     issuerTruncated: truncate(account),
@@ -468,15 +472,12 @@ export async function fetchOneXls20(
 export async function getOneXls(nft: any) {
   try {
     const { Issuer, NFTokenID, URI } = nft;
-    const url =
-      ipfsGateway + "/" + hexToString(URI).split("//")[1] + "/base.json";
-    const res = await fetch(url);
+    const url = hexToString(URI).split("//")[1] + "/base.json";
+    const res = await getIpfsMedia(url);
     const details = await res.json();
-
     const { description, image, name, schema } = details;
-    //const schemaUrl = ipfsPublicGateway + "/" + schema.split("//")[1]+"/$SchemaFile.json";
-    const imageUrl = ipfsPublicGateway + "/" + image.split("//")[1];
-    // const result = await fetch(schemaUrl).then((res) => res.json());
+    const { url: imageUrl } = await getIpfsMedia(image.split("//")[1]);
+
     const media_type = "image/jpeg";
     return {
       issuer: Issuer,
@@ -696,39 +697,25 @@ export async function fetchBuyOffers(TokenID: string): Promise<any> {
     devlog("No buy offers.");
   }
 }
-let ipfsGatewayAvailable: string[];
-async function getIpfsGatewayAvailable() {
+
+async function getIpfsMedia(url: string) {
   const ipfsGatewayList = [
     "https://dweb.link/",
+    "https://nftstorage.link/",
     "https://ipfs.io/",
     "https://cloudflare-ipfs.com/",
     "https://cf-ipfs.com/",
-    "https://nftstorage.link/",
-  ];
+  ].map((u) => u + "ipfs/" + url);
   const pomises = ipfsGatewayList.map((u: string) => fetch(u));
-  const results = await Promise.allSettled(pomises);
-  console.log(results);
-  ipfsGatewayAvailable = results
-    .filter((i: any) => i.status == "fulfilled" && i.value.status == 200)
-    .map((i: any) =>
-      i.value.url == "https://docs.ipfs.io/how-to/address-ipfs-on-web/"
-        ? "https://dweb.link/"
-        : i.value.url
-    );
-  const firts2 = getFirst2(ipfsGatewayAvailable, ipfsGatewayList);
-  ipfsGateway = firts2[0] + "ipfs";
-  ipfsPublicGateway = firts2[1] + "ipfs";
-  return ipfsGatewayAvailable;
-}
-function getFirst2(ipfsGatewayAvailable: string[], ipfsGatewayList: string[]) {
-  if (ipfsGatewayAvailable.length == 2) {
-    return ipfsGatewayAvailable;
-  } else {
-    const intersection = ipfsGatewayAvailable.filter((x) =>
-      ipfsGatewayList.includes(x)
-    );
-    return intersection;
-  }
+  const result = await Promise.any(pomises);
+  // const available = result
+  //   .filter((i: any) => i.status == "fulfilled" && i.value.status == 200)
+  //   .map((i: any) =>
+  //     i.value.url == "https://docs.ipfs.io/how-to/address-ipfs-on-web/"
+  //       ? "https://dweb.link/"
+  //       : i.value.url
+  //   );
+  return result;
 }
 
 export async function init(network: string): Promise<any> {
@@ -750,7 +737,6 @@ export async function init(network: string): Promise<any> {
   client.on("error", async (error: any) => {
     devlog("Connection Errors", error);
   });
-  await getIpfsGatewayAvailable();
 
   await client.connect();
   return {
