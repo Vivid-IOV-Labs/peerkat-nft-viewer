@@ -35,37 +35,47 @@
       </figure>
     </template>
 
-    <template #title>
-      <strong class="h6 font-weight-bold">Token Name </strong><br />
-      {{ nft.tokenName }}
-    </template>
     <template #text>
-      <strong class="h7 font-weight-bold">Issuer </strong><br />
-      <span>{{ nft.issuer }}</span
-      ><br />
-      <div v-if="nft.balanceFormatted || nft.limitFormatted" class="mt-2">
-        <strong v-if="nft.balanceFormatted" class="h7 font-weight-bold"
-          >Balance
-        </strong>
-        <span v-if="nft.balanceFormatted" class="mr-3"
-          >{{ nft.balanceFormatted }}
-        </span>
-        <strong v-if="nft.limitFormatted" class="h7 font-weight-bold"
-          >Total Supply
-        </strong>
-        <span v-if="nft.limitFormatted">{{ nft.limitFormatted }}</span>
+      <div v-if="nft.error_code" class="alert alert-warning">
+        <span class="h6 font-weight-bold alert-heading">Missing Data</span
+        ><br />
+        {{ nft.error_message }}
       </div>
-      <div v-if="nft.author" class="mt-2">
-        <strong class="h7 font-weight-bold">Author </strong><br />
-        <span class="mr-3">{{ nft.author }} </span>
+      <div v-if="!nft.error_code">
+        <strong class="h5 font-weight-bold">Token Name </strong><br />
+        {{ nft.tokenName }}
+        <hr />
       </div>
-      <div v-if="nft.desc" class="mt-2">
-        <strong class="h7 font-weight-bold">Description </strong><br />
-        <div v-html="nft.desc"></div>
+      <div>
+        <strong class="h7 font-weight-bold">Issuer </strong><br />
+        <span>{{ nft.issuer }}</span
+        ><br />
       </div>
-      <div v-if="nft.standard" class="mt-2">
-        <strong class="h7 font-weight-bold">Standard </strong><br />
-        <span>{{ nft.standard }}</span>
+      <div v-if="!nft.error_code">
+        <div v-if="nft.balanceFormatted || nft.limitFormatted" class="mt-2">
+          <strong v-if="nft.balanceFormatted" class="h7 font-weight-bold"
+            >Balance
+          </strong>
+          <span v-if="nft.balanceFormatted" class="mr-3"
+            >{{ nft.balanceFormatted }}
+          </span>
+          <strong v-if="nft.limitFormatted" class="h7 font-weight-bold"
+            >Total Supply
+          </strong>
+          <span v-if="nft.limitFormatted">{{ nft.limitFormatted }}</span>
+        </div>
+        <div v-if="nft.author" class="mt-2">
+          <strong class="h7 font-weight-bold">Author </strong><br />
+          <span class="mr-3">{{ nft.author }} </span>
+        </div>
+        <div v-if="nft.desc" class="mt-2">
+          <strong class="h7 font-weight-bold">Description </strong><br />
+          <div v-html="nft.desc"></div>
+        </div>
+        <div v-if="nft.standard" class="mt-2">
+          <strong class="h7 font-weight-bold">Standard </strong><br />
+          <span>{{ nft.standard }}</span>
+        </div>
       </div>
     </template>
     <template #footer>

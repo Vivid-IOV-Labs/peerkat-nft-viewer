@@ -189,6 +189,8 @@ async function getOne(
   let tokenName = "";
   let sololimitFormatted;
   let standard;
+  let error_code = "";
+  let error_message = "";
 
   const ctiHex = getCtiHex(currency);
   const ctiDecimal = hexToDec(ctiHex);
@@ -229,25 +231,27 @@ async function getOne(
       const promise = await fetch(metadataUrl);
       const collection = await promise.json();
       const { nfts } = collection;
-      debugger;
-      const nft = nfts.find((n: any) => n.currency == currency);
-      debugger;
-      const { content_type, metadata } = nft;
-      const { url: metadaNftUrl } = await getIpfsMedia(metadata.split("//")[1]);
-      debugger;
-      const res = await fetch(metadaNftUrl).then((res) => res.json());
-      debugger;
-      desc = decodeHtmlEntity(res.description);
-      tokenName = res.name;
-      sololimitFormatted = collection.collection_item_count;
-      const fil_ext = content_type.split("/")[1];
-      const { url: mediaUrl } = await getIpfsMedia(
-        metadata.split("//")[1].replace("metadata.json", `data.${fil_ext}`)
-      );
-      media_type = content_type;
-      url = mediaUrl;
-      standard = "XLS-14d/SOLO";
-      debugger;
+      if (nfts) {
+        const nft = nfts.find((n: any) => n.currency == currency);
+        const { content_type, metadata } = nft;
+        const { url: metadaNftUrl } = await getIpfsMedia(
+          metadata.split("//")[1]
+        );
+        const res = await fetch(metadaNftUrl).then((res) => res.json());
+        desc = decodeHtmlEntity(res.description);
+        tokenName = res.name;
+        sololimitFormatted = collection.collection_item_count;
+        const fil_ext = content_type.split("/")[1];
+        const { url: mediaUrl } = await getIpfsMedia(
+          metadata.split("//")[1].replace("metadata.json", `data.${fil_ext}`)
+        );
+        media_type = content_type;
+        url = mediaUrl;
+        standard = "XLS-14d/SOLO";
+      } else {
+        error_code = "no_nfts_in_collection";
+        error_message = "Individual metadata for XLS14/SOLO NFT not found";
+      }
     } catch (error) {
       devlog(error);
       await geXls14();
@@ -291,6 +295,8 @@ async function getOne(
     desc,
     standard,
     author,
+    error_code,
+    error_message,
   };
 }
 let client: any;

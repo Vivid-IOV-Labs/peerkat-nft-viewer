@@ -34,11 +34,10 @@
         </a>
       </figure>
     </template>
-    <template #title>
-      <strong class="h6 font-weight-bold">Token Name </strong><br />
-      {{ nft.tokenName }}
-    </template>
     <template #text>
+      <strong class="h5 font-weight-bold">Token Name </strong><br />
+      {{ nft.tokenName }}
+      <hr />
       <strong class="h7 font-weight-bold">Issuer </strong><br />
       <span>{{ nft.issuer }}</span
       ><br />
