@@ -56,13 +56,13 @@
     </template>
     <template #footer>
       <div>
-        <base-button
+        <!-- <base-button
           v-if="nft.standard && nft.standard === `XLS-20`"
           class="mr-2"
           @click="goToOffer"
           >Offers
           <span v-if="countOffers">({{ countOffers }})</span></base-button
-        >
+        > -->
         <base-button class="mr-2" @click="deleteShared">Delete</base-button>
         <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl">
           Inspect</external-link
