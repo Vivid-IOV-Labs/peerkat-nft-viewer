@@ -41,9 +41,8 @@
         nft-devnet.
       </li>
       <li class="pb-2">
-        To receive an XRPL-issued XLS14 or XLS14/SOLO NFT please please ensure
-        that you have correctly signed the corresponding trustline
-        transaction.<br />
+        To receive an XRPL-issued XLS14 or XLS14/SOLO NFT please ensure that you
+        have correctly signed the corresponding trustline transaction.<br />
         Please note that no user interaction with trustlines is required for
         XLS20
       </li>
