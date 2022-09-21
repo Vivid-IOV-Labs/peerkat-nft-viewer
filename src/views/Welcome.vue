@@ -50,7 +50,7 @@
       </div>
     </base-button>
   </div>
-  <base-dialog
+  <!-- <base-dialog
     :show="showError"
     title="An Error occurs"
     @close="showError = false"
@@ -64,7 +64,7 @@
         >Ok
       </base-button>
     </template>
-  </base-dialog>
+  </base-dialog> -->
 </template>
 
 <script lang="ts">
@@ -115,6 +115,10 @@ export default defineComponent({
         label: "wss://xls20-sandbox.rippletest.net:51233",
         value: "wss://xls20-sandbox.rippletest.net:51233",
       },
+      {
+        label: "wss://hooks-testnet-v2.xrpl-labs.com",
+        value: "wss://hooks-testnet-v2.xrpl-labs.com",
+      },
     ];
     const dev_networks = [
       {
@@ -122,6 +126,7 @@ export default defineComponent({
         value: "wss://s.devnet.rippletest.net:51233",
       },
     ];
+
     const networks = computed(() => {
       return nodetype.value == "TESTNET"
         ? test_networks

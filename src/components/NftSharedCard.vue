@@ -11,7 +11,6 @@
           <video
             v-if="nft.media_type?.includes('video')"
             :src="`${nft.url}#t=0.5`"
-            poster="/thumbnail.jpg"
             muted
             class="img-fluid card-img-top"
             style="object-fit: cover; height: 100%; object-position: center top"
@@ -35,11 +34,10 @@
         </a>
       </figure>
     </template>
-    <template #title>
-      <strong class="h6 font-weight-bold">Token Name </strong><br />
-      {{ nft.tokenName }}
-    </template>
     <template #text>
+      <strong class="h5 font-weight-bold">Token Name </strong><br />
+      {{ nft.tokenName }}
+      <hr />
       <strong class="h7 font-weight-bold">Issuer </strong><br />
       <span>{{ nft.issuer }}</span
       ><br />
@@ -58,6 +56,13 @@
     </template>
     <template #footer>
       <div>
+        <!-- <base-button
+          v-if="nft.standard && nft.standard === `XLS-20`"
+          class="mr-2"
+          @click="goToOffer"
+          >Offers
+          <span v-if="countOffers">({{ countOffers }})</span></base-button
+        > -->
         <base-button class="mr-2" @click="deleteShared">Delete</base-button>
         <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl">
           Inspect</external-link
@@ -92,17 +97,37 @@ export default defineComponent({
     const user = computed(() => store.getters["user/getUser"]);
     const nodetypecode = computed(() => getNetworkCodeFromType(nodetype.value));
     const network = computed(() => store.getters["user/getNetwork"]);
-    const bihompUrl = computed(() =>
-      getInspectorUrl(network.value, props.nft.issuer)
-    );
+    const bithomID =
+      props.nft.standard && props.nft.standard === "XLS-20"
+        ? props.nft.currency
+        : props.nft.issuer;
+
+    const bihompUrl = computed(() => getInspectorUrl(network.value, bithomID));
+    const countSellOffer =
+      props.nft.selloffers && props.nft.selloffers.length
+        ? props.nft.selloffers.length
+        : 0;
+    const countBuyOffer =
+      props.nft.buyoffers && props.nft.buyoffers.length
+        ? props.nft.buyoffers.length
+        : 0;
+
+    const countOffers = countSellOffer + countBuyOffer;
     return {
       bihompUrl,
+      countOffers,
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
       view() {
         router.push({
           path: `/shared/${props.nft.issuer}/${nodetypecode.value}/view/${props.nft.currency}`,
+        });
+      },
+      async goToOffer() {
+        await store.commit("nft/setCurrent", props.nft);
+        router.push({
+          path: `/offers/buy`,
         });
       },
       deleteShared() {

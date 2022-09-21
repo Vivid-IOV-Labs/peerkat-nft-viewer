@@ -1,7 +1,16 @@
-import { init } from "../../../services/XrpService";
+import {
+  fetchXls20,
+  init,
+  fetchNextXls20WithSellOffer,
+  createSellOffer,
+  cancelOffer,
+  createBuyOffer,
+  cancelBuyOffer,
+} from "../../../services/XrpService";
 import { ActionTree } from "vuex";
 import { NFT } from "../../../models/NFT";
 import { NFTState } from "./state";
+import { devlog } from "../../../utils/devlog";
 type line = {
   balance: string;
   limit: string;
@@ -47,9 +56,77 @@ const actions: ActionTree<NFT, NFTState> = {
   async fetchNext({ commit, getters }): Promise<void> {
     const client = getters.getXrpClient;
     const count = getters.getAll.length;
-    const nextLines = getters.getLines.slice(count, count + 3);
+    const nextLines =
+      getters.getLines.length > 4
+        ? getters.getLines.slice(count, count + 4)
+        : getters.getLines;
     const nextNfts: NFT[] = await client.fetchNext(nextLines);
+    commit("setAllXls14", nextNfts);
     commit("setAll", nextNfts);
+  },
+  async fetchXls20({ commit }, { walletAddress }: FetchParams): Promise<void> {
+    const Xls20 = await fetchXls20(walletAddress);
+    commit("setXls20", Xls20);
+  },
+  async fetchNextXls20({ commit, getters, rootGetters }): Promise<void> {
+    const count = getters.getAll.length;
+    const nextXls20 = getters.getXls20.slice(count, count + 4);
+    const owner = rootGetters["user/getAddress"];
+
+    const nextNfts = await fetchNextXls20WithSellOffer(nextXls20, owner);
+    commit("setAllXls20", nextNfts);
+    commit("setAll", nextNfts);
+  },
+
+  async fetchNextSellOffers({
+    commit,
+    getters,
+    dispatch,
+    rootGetters,
+  }): Promise<void> {
+    const count = getters.getSellOffers.length;
+    const nextXls20 = getters.getXls20.slice(count, count + 4);
+    const owner = rootGetters["user/getAddress"];
+
+    const nfts_sells = await fetchNextXls20WithSellOffer(nextXls20, owner);
+    commit("setSellOffers", nfts_sells);
+    if (nfts_sells.every((a: any) => !a) && count < getters.getXls20.length) {
+      await dispatch("fetchNextSellOffers");
+    }
+  },
+  async createSellOffer(
+    { commit },
+    { walletAddress, TokenID, amount }
+  ): Promise<void> {
+    const sellOffer = await createSellOffer({
+      walletAddress,
+      TokenID,
+      amount,
+    });
+    commit("addSellOffer", sellOffer);
+  },
+  async cancelOffer({ commit }, { TokenID, OfferID }): Promise<void> {
+    const sellOffer = await cancelOffer({ TokenID, OfferID });
+    const newSellOffers = sellOffer ? sellOffer : [];
+    commit("addSellOffer", newSellOffers);
+  },
+  async cancelBuyOffer({ commit }, { TokenID, OfferID }): Promise<void> {
+    const sellOffer = await cancelBuyOffer({ TokenID, OfferID });
+    const newSellOffers = sellOffer ? sellOffer : [];
+    commit("addBuyOffer", newSellOffers);
+  },
+  async createBuyOffer(
+    { commit },
+    { walletAddress, TokenID, Amount, Owner }
+  ): Promise<void> {
+    const buyOffer = await createBuyOffer({
+      walletAddress,
+      TokenID,
+      Amount,
+      Owner,
+    });
+    const newBuyOffers = buyOffer ? buyOffer : [];
+    commit("addBuyOffer", newBuyOffers);
   },
 };
 export default actions;

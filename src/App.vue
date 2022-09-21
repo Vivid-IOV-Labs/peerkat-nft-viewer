@@ -1,7 +1,7 @@
 <template>
   <VueAnnouncer />
   <notifications :duration="1000" position="bottom center" />
-  <div
+  <!-- <div
     v-if="isLoading"
     style="
       height: 100%;
@@ -20,12 +20,12 @@
     >
       <span class="sr-only">Loading...</span>
     </div>
-  </div>
+  </div> -->
   <div style="height: 100%">
     <auth-layout>
       <RouterView v-slot="{ Component }">
         <template v-if="Component">
-          <Transition mode="out-in">
+          <Transition>
             <KeepAlive>
               <Suspense>
                 <template #default>

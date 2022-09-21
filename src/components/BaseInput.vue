@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label class="col-form-label w-100" :for="id">
+    <label class="col-form-label" :for="id">
       <span v-if="!labelHidden"> {{ labelText }}</span>
       <input
         :id="id"
@@ -16,21 +16,19 @@
         @input="handleChange"
       />
     </label>
-
     <base-alert
       v-if="errors.length"
       :id="`alert-${id}`"
       :messages="errors"
-      role="alert"
-      status="danger"
+      class="mr-2"
+      >Share</base-alert
     >
-    </base-alert>
   </div>
 </template>
 
 <script lang="ts">
-import BaseAlert from "@/components/BaseAlert.vue";
 import { defineComponent, computed } from "vue";
+import BaseAlert from "@/components/BaseAlert.vue";
 
 const getValue = (event: Event): string | number | undefined => {
   const value =
@@ -63,7 +61,7 @@ export default defineComponent({
     },
     placeholder: {
       type: String,
-      required: true,
+      default: "",
     },
     errors: {
       type: Array,

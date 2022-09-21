@@ -2,6 +2,8 @@ import { computed } from "vue";
 import { createWebHistory, createRouter } from "vue-router";
 import store from "../store";
 import { devlog } from "../utils/devlog";
+import { getNodeTypeFromNetwork } from "../utils/getNetworkTypeFromCode";
+import { isInXumm } from "../utils/isInXumm";
 
 const routes = [
   { path: "/", redirect: "/wallet" },
@@ -108,19 +110,150 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/offers",
+    name: "Offers",
+    component: () => import("../views/Offers.vue"),
+    beforeEnter: (to: any, from: any, next: any) => {
+      if (to.path === "/offers/sell") {
+        localStorage.setItem("offerpage", "/offers/sell");
+        next();
+        return;
+      }
+      if (to.path === "/offers/buy") {
+        localStorage.setItem("offerpage", "/offers/buy");
+        next();
+        return;
+      }
+      const offerpage = localStorage.getItem("offerpage");
+      if (offerpage && to.path === "/offers") {
+        next({ path: offerpage });
+        return;
+      } else {
+        next();
+        return;
+      }
+    },
+    meta: {
+      withAuth: true,
+      title: "Home Wallet Page",
+      announcer: {
+        message: "Home Wallet Page",
+      },
+    },
+    children: [
+      {
+        path: "sell",
+        name: "Sell",
+        component: () => import("../views/Sell.vue"),
+      },
+      {
+        path: "buy",
+        name: "Buy",
+        component: () => import("../views/Buy.vue"),
+        meta: {
+          announcer: {
+            message: "NFT View Page",
+          },
+        },
+        children: [],
+      },
+      {
+        path: "create_buy_offer",
+        name: "CreateBuyOffer",
+        component: () => import("../views/CreateBuyOffer.vue"),
+      },
+      {
+        path: "create_sell_offer",
+        name: "CreateSellOffer",
+        component: () => import("../views/CreateSellOffer.vue"),
+      },
+      {
+        path: "/shared_sell_offers",
+        name: "SellOfferShared",
+        component: () => import("../views/Shared.vue"),
+        meta: {
+          announcer: {
+            message: "NFT View Page",
+          },
+        },
+        children: [
+          {
+            path: "",
+            name: "SellOfferSharedList",
+            component: () => import("../views/OfferShared.vue"),
+            meta: {
+              withAuth: true,
+              title: "Home Wallet Page",
+            },
+          },
+          {
+            path: ":offerId/:nftId/:owner",
+            name: "NFTSharedSellOfferDetail",
+            component: () => import("../views/NFTSharedSellOfferDetail.vue"),
+            meta: {
+              withAuth: true,
+              title: "Home Wallet Page",
+            },
+          },
+        ],
+      },
+      {
+        path: "/shared_buy_offers",
+        name: "SharedBuyOffers",
+        component: () => import("../views/Shared.vue"),
+        meta: {
+          announcer: {
+            message: "NFT View Page",
+          },
+        },
+        children: [
+          {
+            path: "",
+            name: "SharedBuyOffersList",
+            component: () => import("../views/OfferShared.vue"),
+            meta: {
+              withAuth: true,
+              title: "Home Wallet Page",
+            },
+          },
+          {
+            path: ":offerId/:nftId/:owner",
+            name: "NFTSharedBuyOfferDetail",
+            component: () => import("../views/NFTSharedBuyOfferDetail.vue"),
+            meta: {
+              withAuth: true,
+              title: "Home Wallet Page",
+            },
+          },
+        ],
+      },
+    ],
+  },
 ];
+function scrollToActive(to: any) {
+  const active = document.querySelector(
+    "a[href='/" + to.path.split("/")[1] + "']"
+  );
+  if (active) active.scrollIntoView();
+}
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior(to) {
+    scrollToActive(to);
+    return { top: 0 };
+  },
 });
 
-const isInXumm = /xumm/.test(navigator.userAgent);
 const walletAddress = computed(() => store.getters["user/getAddress"]);
 const nodetype = computed(() => store.getters["user/getNodeType"]);
 const network = computed(() => store.getters["user/getNetwork"]);
 const isConnected = computed(() => store.getters["nft/getIsConnected"]);
-const shared = computed(() => store.getters["nft/getShared"](nodetype.value));
+const shared = computed(() =>
+  store.getters["nft/getShared"](nodetype.value, walletAddress.value)
+);
 const connectXrpClient = async () => {
   await store.dispatch("nft/initXrpClient", {
     network: network.value,
@@ -129,15 +262,16 @@ const connectXrpClient = async () => {
 let loggedIn = false;
 
 router.beforeEach(async (to, from, next) => {
-  if (isInXumm) {
+  if (isInXumm()) {
     if (!loggedIn) {
       store.commit("ui/setIsloading", true);
 
       await store.dispatch("xumm/getOttData");
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
       await store.commit("user/setAddress", ottdata.value.account);
-      await store.commit("user/setNodeType", ottdata.value.nodetype);
       await store.commit("user/setNetwork", ottdata.value.nodewss);
+      const nodetype = getNodeTypeFromNetwork(ottdata.value.nodewss);
+      await store.commit("user/setNodeType", nodetype);
       await store.commit("user/setUser", ottdata.value.user);
 
       try {
@@ -197,6 +331,9 @@ router.beforeEach(async (to, from, next) => {
   }
 });
 
+// router.afterEach((to, from, failure) => {
+//   if (!failure) scrollToActive(to, from);
+// });
 export default router;
 
 // [

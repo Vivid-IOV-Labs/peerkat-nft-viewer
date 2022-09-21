@@ -5,8 +5,11 @@ export interface NFT {
   desc?: string;
   standard?: string;
   author?: string;
+  owner?: string;
   currency: string;
   tokenName: string;
   url?: string;
   media_type?: string | null;
+  selloffers?: any[];
+  buyoffers?: any[];
 }

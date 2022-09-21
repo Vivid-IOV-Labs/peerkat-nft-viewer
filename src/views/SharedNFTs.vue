@@ -15,18 +15,22 @@
     </h5>
     <ul class="mt-2 p-2">
       <li class="pb-2">
+        <strong
+          >Please note that we currently support XLS14 and XLS14/SOLO NFTs on
+          XRPL mainnet, testnet and devnet</strong
+        >
+      </li>
+      <li class="pb-2">
+        We also support XLS20 NFTs (with XLS24 metadata only) on XRPL
+        nft-devnet.
+      </li>
+      <li class="pb-2">
         To view another user’s XRPL-issued NFT please ensure that you have
         followed the correct link shared by the NFT owner
       </li>
       <li class="pb-2">
         You can view the NFT in fullscreen mode and inspect the transaction
         history of an NFT via the Bithomp explorer
-      </li>
-      <li class="pb-2">
-        <strong
-          >Please note that we currently support XLS14 and XLS14/SOLO NFTs on
-          XRPL only</strong
-        >. We will support XLS20 native NFTs on XRPL
       </li>
     </ul>
   </div>
@@ -35,6 +39,7 @@
 import { computed, defineComponent, inject } from "vue";
 import { useStore } from "vuex";
 import NftSharedCard from "@/components/NftSharedCard.vue";
+import { getNodeTypeFromNetwork } from "../utils/getNetworkTypeFromCode";
 
 export default defineComponent({
   components: {
@@ -43,10 +48,18 @@ export default defineComponent({
   async setup() {
     const store = useStore();
     const isInXumm = inject("isInXumm");
-    const nodetype = computed(() => store.getters["user/getNodeType"]);
+    const network = computed(() => store.getters["user/getNetwork"]);
+    const nodetype = computed(() => getNodeTypeFromNetwork(network.value));
+
+    const walletAddress = computed(() => store.getters["user/getAddress"]);
+
     const sharedNFTs = computed(() => {
-      return store.getters["nft/getShared"](nodetype.value);
+      return store.getters["nft/getShared"](
+        nodetype.value,
+        walletAddress.value
+      );
     });
+
     return {
       sharedNFTs,
       isInXumm,

@@ -6,8 +6,8 @@
     class="d-flex h-100 flex-row flex-nowrap overflow-auto pb-4"
     style="padding-bottom: 2rem"
   >
-    <div v-for="nft in NFTMedia" :key="nft.issuer" class="col-11">
-      <nft-card :nft="nft"></nft-card>
+    <div v-for="(nft, index) in NFTMedia" :key="index" class="col-11">
+      <nft-card v-if="nft" :nft="nft"></nft-card>
     </div>
     <div
       v-if="!endload"
@@ -31,19 +31,25 @@
     </h5>
     <ul class="mt-2 p-2">
       <li class="pb-2">
-        To receive an XRPL-issued NFT please ensure that you have correctly
-        signed the corresponding trustline transaction
+        <strong
+          >Please note that we currently support XLS14 and XLS14/SOLO NFTs on
+          XRPL mainnet, testnet and devnet</strong
+        >
+      </li>
+      <li class="pb-2">
+        We also support XLS20 NFTs (with XLS24 metadata only) on XRPL
+        nft-devnet.
+      </li>
+      <li class="pb-2">
+        To receive an XRPL-issued XLS14 or XLS14/SOLO NFT please ensure that you
+        have correctly signed the corresponding trustline transaction.<br />
+        Please note that no user interaction with trustlines is required for
+        XLS20
       </li>
       <li class="pb-2">
         You can view an NFT in fullscreen mode, inspect the transaction history
         of an NFT via the Bithomp explorer and share your NFTs with another user
         to enable them to view the NFTs too
-      </li>
-      <li class="pb-2">
-        <strong
-          >Please note that we currently support XLS14 and XLS14/SOLO NFTs on
-          XRPL only</strong
-        >. We will support XLS20 native NFTs on XRPL
       </li>
     </ul>
   </div>
@@ -56,30 +62,11 @@ import { useStore } from "vuex";
 import { inject } from "vue";
 import useIntersectionObserver from "../composable/useIntersectionObserver";
 import { devlog } from "../utils/devlog";
-import store from "../store";
+import { delay } from "../utils/delay";
 
 export default defineComponent({
   components: {
     NftCard,
-  },
-  async beforeRouteEnter(from, to, next) {
-    const isConnected = store.getters["nft/getIsConnected"];
-    const all = store.getters["nft/getAll"];
-    const lines = store.getters["nft/getAll"];
-
-    const allLoaded = all.length == lines.length;
-    if (!isConnected && !allLoaded) {
-      await store.dispatch("nft/connect");
-    }
-    next();
-  },
-  beforeRouteLeave(from, to, next) {
-    const isConnected = store.getters["nft/getIsConnected"];
-    if (isConnected) {
-      store.dispatch("nft/disconnect");
-      next();
-    }
-    next();
   },
   async setup() {
     const store = useStore();
@@ -88,49 +75,130 @@ export default defineComponent({
     const isInXumm = inject("isInXumm");
 
     const isConnected = computed(() => store.getters["nft/getIsConnected"]);
-    const endload = ref(false);
+    const endload = ref(true);
+    const loading = computed(() => store.getters["ui/getIsloading"]);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
-    const NFTMedia = computed(() => store.getters["nft/getAll"]);
+    const NFTMedia = computed(
+      () => store.getters["nft/getAll"] //.filter((a: any) => a)
+    );
     const lines = computed(() => store.getters["nft/getLines"]);
+    const xls20count = computed(() => store.getters["nft/getXls20"]);
+    const allXls20 = computed(() => store.getters["nft/getAllXls20"]);
+    const allXls14 = computed(() => store.getters["nft/getAllXls14"]);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
-
-    const populateNFTs = async () => {
-      try {
-        await store.dispatch("nft/fetchNftLines", {
-          walletAddress: walletAddress.value,
-          nodetype: nodetype.value,
-        });
-        await store.dispatch("nft/fetchNext", nodetype.value);
-      } catch (error) {
-        devlog("ON POPULATE", error);
-      }
-    };
-
     const { unobserve, observe, isIntersecting } = useIntersectionObserver(
       scroller,
       sentinel
     );
-    async function fetchNext() {
-      unobserve();
-      await store.dispatch("nft/fetchNext", nodetype.value);
-      observe();
-    }
-    watch(isIntersecting, async () => {
-      if (!endload.value) {
-        await fetchNext();
-      }
-    });
-    watch(NFTMedia, async (newNfts) => {
-      if (lines.value && lines.value.length == newNfts.length) {
-        unobserve();
-        endload.value = true;
-        await store.dispatch("nft/disconnect");
-      }
-    });
-    if (lines.value && lines.value.length === 0) {
-      await populateNFTs();
+    unobserve();
+    if (
+      lines.value.length + xls20count.value.length > NFTMedia.value.length ||
+      NFTMedia.value.length == 0
+    ) {
+      endload.value = false;
     }
 
+    const poupulateXls20NFTs = async () => {
+      store.commit("ui/setIsloading", true);
+
+      await store.dispatch("nft/fetchXls20", {
+        walletAddress: walletAddress.value,
+      });
+      await store.dispatch("nft/fetchNextXls20");
+      store.commit("ui/setIsloading", false);
+    };
+
+    const populateXls14NFTs = async () => {
+      if (!loading.value && lines.value.length > allXls14.value.length) {
+        try {
+          store.commit("ui/setIsloading", true);
+          await store.dispatch("nft/fetchNftLines", {
+            walletAddress: walletAddress.value,
+            nodetype: nodetype.value,
+          });
+
+          await store.dispatch("nft/fetchNext", nodetype.value);
+          store.commit("ui/setIsloading", false);
+        } catch (error) {
+          store.commit("ui/setIsloading", false);
+
+          devlog("ON POPULATE", error);
+        }
+      }
+    };
+
+    const populateNFTs = async () => {
+      try {
+        await poupulateXls20NFTs();
+        if (allXls20.value.length == 0) {
+          await populateXls14NFTs();
+        }
+      } catch (error) {
+        devlog(error);
+        store.commit("ui/setIsloading", false);
+
+        await populateXls14NFTs();
+      }
+    };
+
+    async function fetchNext() {
+      unobserve();
+      store.commit("ui/setIsloading", true);
+
+      await delay(1000);
+      await store.dispatch("nft/fetchNext", nodetype.value);
+      store.commit("ui/setIsloading", false);
+
+      observe();
+    }
+    async function fetchNextXls20() {
+      unobserve();
+      store.commit("ui/setIsloading", true);
+
+      await delay(1000);
+      await store.dispatch("nft/fetchNextXls20");
+      store.commit("ui/setIsloading", false);
+
+      observe();
+    }
+    watch(
+      isIntersecting,
+      async (val) => {
+        if (val && !loading.value) {
+          if (xls20count.value.length > allXls20.value.length) {
+            await fetchNextXls20();
+          } else {
+            if (lines.value.length > allXls14.value.length) {
+              await fetchNext();
+            }
+          }
+        }
+      },
+      { deep: false }
+    );
+    watch(NFTMedia, async (newNfts) => {
+      if (lines.value.length + xls20count.value.length == newNfts.length) {
+        unobserve();
+        endload.value = true;
+        //    await store.dispatch("nft/disconnect");
+      }
+    });
+
+    if (lines.value && lines.value.length === 0) {
+      await store.dispatch("nft/fetchNftLines", {
+        walletAddress: walletAddress.value,
+        nodetype: nodetype.value,
+      });
+    }
+    if (
+      xls20count.value &&
+      xls20count.value.length === 0 &&
+      allXls14.value.length == 0
+    ) {
+      await populateNFTs();
+    } else {
+      await populateXls14NFTs();
+    }
     return {
       sentinel,
       endload,
@@ -138,7 +206,9 @@ export default defineComponent({
       lines,
       isConnected,
       NFTMedia,
+      loading,
       isInXumm,
+      xls20count,
       async connect() {
         await store.dispatch("nft/connect", nodetype.value);
       },
