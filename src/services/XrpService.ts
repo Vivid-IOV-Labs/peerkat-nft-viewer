@@ -251,7 +251,7 @@ async function getOne(
         standard = "XLS-14d/SOLO";
       } else {
         error_code = "no_nfts_in_collection";
-        error_message = "Individual metadata for XLS14/SOLO NFT not found";
+        error_message = "Individual metadata for this XLS14/SOLO NFT not found";
       }
     } catch (error) {
       devlog(error);
