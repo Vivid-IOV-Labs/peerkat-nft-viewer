@@ -47,12 +47,11 @@
             </a>
           </figure>
         </template>
-        <template #title>
-          <strong class="h6 font-weight-bold">Token Name </strong><br />
-          {{ nft.tokenName }}
-        </template>
 
         <template #text>
+          <strong class="h5 font-weight-bold">Token Name </strong><br />
+          {{ nft.tokenName }}
+          <hr />
           <div v-if="nft.author" class="mt-2">
             <strong class="h7 font-weight-bold">Author </strong><br />
             <span class="mr-3">{{ nft.author }} </span>

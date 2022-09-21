@@ -231,6 +231,7 @@ async function getOne(
       const promise = await fetch(metadataUrl);
       const collection = await promise.json();
       const { nfts } = collection;
+      debugger;
       if (nfts) {
         const nft = nfts.find((n: any) => n.currency == currency);
         const { content_type, metadata } = nft;
@@ -251,6 +252,7 @@ async function getOne(
       } else {
         error_code = "no_nfts_in_collection";
         error_message = "Individual metadata for XLS14/SOLO NFT not found";
+        debugger;
       }
     } catch (error) {
       devlog(error);
@@ -712,6 +714,12 @@ export async function fetchBuyOffers(TokenID: string): Promise<any> {
 }
 
 async function getIpfsMedia(url: string) {
+  return await checkFromIpfsList(url);
+}
+async function getIpfs(url: string) {
+  return await checkFromIpfsList(url);
+}
+async function checkFromIpfsList(url: string) {
   const ipfsGatewayList = [
     "https://dweb.link/",
     "https://nftstorage.link/",
@@ -721,13 +729,6 @@ async function getIpfsMedia(url: string) {
   ].map((u) => u + "ipfs/" + url);
   const pomises = ipfsGatewayList.map((u: string) => fetch(u));
   const result = await Promise.any(pomises);
-  // const available = result
-  //   .filter((i: any) => i.status == "fulfilled" && i.value.status == 200)
-  //   .map((i: any) =>
-  //     i.value.url == "https://docs.ipfs.io/how-to/address-ipfs-on-web/"
-  //       ? "https://dweb.link/"
-  //       : i.value.url
-  //   );
   return result;
 }
 
