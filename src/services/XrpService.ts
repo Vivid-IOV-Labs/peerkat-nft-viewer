@@ -226,12 +226,12 @@ async function getOne(
   }
 
   if (isXls14Solo(currency)) {
-    const { url: metadataUrl } = await getIpfsMedia(source.split("//")[1]);
+    //const { url: metadataUrl } = await getIpfsMedia(source.split("//")[1]);
     try {
-      const promise = await fetch(metadataUrl);
-      const collection = await promise.json();
+      // const promise = await fetch(metadataUrl);
+      // const collection = await promise.json();
+      const collection = await getIpfsJson(source.split("//")[1]);
       const { nfts } = collection;
-      debugger;
       if (nfts) {
         const nft = nfts.find((n: any) => n.currency == currency);
         const { content_type, metadata } = nft;
@@ -252,7 +252,6 @@ async function getOne(
       } else {
         error_code = "no_nfts_in_collection";
         error_message = "Individual metadata for XLS14/SOLO NFT not found";
-        debugger;
       }
     } catch (error) {
       devlog(error);
@@ -284,7 +283,6 @@ async function getOne(
   } else {
     await geXls14();
   }
-  console.log(url);
   return {
     issuer: account,
     issuerTruncated: truncate(account),
@@ -488,8 +486,8 @@ export async function getOneXls(nft: any) {
   try {
     const { Issuer, NFTokenID, URI } = nft;
     const url = hexToString(URI).split("//")[1] + "/base.json";
-    const res = await getIpfsMedia(url);
-    const details = await res.json();
+    //  const res = await getIpfsMedia(url);
+    const details = await getIpfsJson(url);
     const { description, image, name, schema } = details;
     const { url: imageUrl } = await getIpfsMedia(image.split("//")[1]);
 
@@ -713,13 +711,24 @@ export async function fetchBuyOffers(TokenID: string): Promise<any> {
   }
 }
 
+// async function getIpfsMedia(url: string) {
+//   return await checkFromIpfsList(url);
+// }
+async function getIpfsJson(url: string) {
+  const ipfsGatewayList = [
+    "https://dweb.link/",
+    "https://nftstorage.link/",
+    "https://ipfs.io/",
+    "https://cloudflare-ipfs.com/",
+    "https://cf-ipfs.com/",
+  ].map((u) => u + "ipfs/" + url);
+  const pomises = ipfsGatewayList.map((u: string) =>
+    fetch(u).then((r) => r.json())
+  );
+  const result = await Promise.any(pomises);
+  return result;
+}
 async function getIpfsMedia(url: string) {
-  return await checkFromIpfsList(url);
-}
-async function getIpfs(url: string) {
-  return await checkFromIpfsList(url);
-}
-async function checkFromIpfsList(url: string) {
   const ipfsGatewayList = [
     "https://dweb.link/",
     "https://nftstorage.link/",
@@ -733,24 +742,23 @@ async function checkFromIpfsList(url: string) {
 }
 
 export async function init(network: string): Promise<any> {
-  devlog("network", network);
   client = new xrpl.Client(network);
 
-  client.on("disconnected", async (msg: any) => {
-    devlog("Disconnected");
-  });
-  client.on("connected", async (msg: any) => {
-    devlog("Connected", client);
-  });
-  client.on("peerStatusChange", async (msg: any) => {
-    devlog("peerStatusChange", msg);
-  });
-  client.on("ledgerClosed", async (msg: any) => {
-    devlog("ledgerClosed", msg);
-  });
-  client.on("error", async (error: any) => {
-    devlog("Connection Errors", error);
-  });
+  // client.on("disconnected", async (msg: any) => {
+  //   devlog("Disconnected");
+  // });
+  // client.on("connected", async (msg: any) => {
+  //   devlog("Connected", client);
+  // });
+  // client.on("peerStatusChange", async (msg: any) => {
+  //   devlog("peerStatusChange", msg);
+  // });
+  // client.on("ledgerClosed", async (msg: any) => {
+  //   devlog("ledgerClosed", msg);
+  // });
+  // client.on("error", async (error: any) => {
+  //   devlog("Connection Errors", error);
+  // });
 
   await client.connect();
   return {

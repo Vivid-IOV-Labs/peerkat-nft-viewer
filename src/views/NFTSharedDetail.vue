@@ -216,10 +216,7 @@ export default defineComponent({
       }
     }
     async function fetchShared() {
-      console.log(
-        route.params.nftAddress.toString(),
-        route.params.currency.toString()
-      );
+
       try {
         const nftXLS20 = await fetchOneXls20(
           route.params.nftAddress.toString(),

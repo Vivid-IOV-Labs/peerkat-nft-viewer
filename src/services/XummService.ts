@@ -30,7 +30,6 @@ class XummService {
     onSigned: any
   ): Promise<any> {
     const pong = await Sdk.ping();
-    devlog("ping pong", pong.application);
 
     const created = await Sdk.payload.createAndSubscribe(
       {
@@ -73,7 +72,6 @@ class XummService {
       Destination,
       Flags: 1,
     };
-    devlog("Sell transactionBlob", transactionBlob);
 
     try {
       const created = await this.createPayload(transactionBlob, User, onSigned);

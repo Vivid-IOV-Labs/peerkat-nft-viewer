@@ -186,8 +186,6 @@ export default defineComponent({
         devlog("isInXumm", isInXumm);
 
         if (isInXumm()) {
-          devlog("isInXumm", isInXumm);
-
           const { created } = await XummSdk.createSellOffer(
             {
               Account: walletAddress.value,

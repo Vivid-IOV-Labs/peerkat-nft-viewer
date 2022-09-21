@@ -176,8 +176,6 @@ export default defineComponent({
         endload.value = true;
         //    await store.dispatch("nft/disconnect");
       }
-      console.log(newNfts);
-      console.log(NFTMedia.value);
     });
 
     if (lines.value && lines.value.length === 0) {
