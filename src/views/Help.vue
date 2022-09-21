@@ -44,14 +44,16 @@
           <strong>
             Will you support XLS14/SOLO and other NFT variations?</strong
           >
-          <br />We have added support for XLS14/SOLO. We may also add support
-          for other NFT variations we discover where it is feasible to do so.
+          <br />We have added support for XLS14/SOLO. <br />
+          We have also added support for XLS20 NFTs (with XLS24 metadata only)
+          on XRPL NFT-devnet.
+          <br />We may also add support for other NFT variations we discover
+          where it is feasible to do so.
         </li>
         <li class="pb-2">
           <strong> What features are being added next?</strong>
-          <br />XLS-20 support, one click XLS14 > 20 upgrader & NFT Analytics.
-          Please suggest any other features you would like to see by getting in
-          contact with us.
+          <br />NFT Analytics are next on our roadmap. Please suggest any other
+          features you would like to see by getting in contact with us.
         </li>
       </ul>
     </div>

@@ -31,19 +31,26 @@
     </h5>
     <ul class="mt-2 p-2">
       <li class="pb-2">
-        To receive an XRPL-issued NFT please ensure that you have correctly
-        signed the corresponding trustline transaction
+        <strong
+          >Please note that we currently support XLS14 and XLS14/SOLO NFTs on
+          XRPL mainnet, testnet and devnet</strong
+        >
+      </li>
+      <li class="pb-2">
+        We also support XLS20 NFTs (with XLS24 metadata only) on XRPL
+        nft-devnet.
+      </li>
+      <li class="pb-2">
+        To receive an XRPL-issued XLS14 or XLS14/SOLO NFT please please ensure
+        that you have correctly signed the corresponding trustline
+        transaction.<br />
+        Please note that no user interaction with trustlines is required for
+        XLS20
       </li>
       <li class="pb-2">
         You can view an NFT in fullscreen mode, inspect the transaction history
         of an NFT via the Bithomp explorer and share your NFTs with another user
         to enable them to view the NFTs too
-      </li>
-      <li class="pb-2">
-        <strong
-          >Please note that we currently support XLS14 and XLS14/SOLO NFTs on
-          XRPL only</strong
-        >. We will support XLS-20 native NFTs on XRPL
       </li>
     </ul>
   </div>
