@@ -18,8 +18,12 @@
         style="font-weight: bold; font-size: 1.2rem"
       >
         Hi
-      </h1> -->
-      <div style="overflow: hidden; width: 82%">
+      </h1> 
+          <div style="overflow: hidden; width: 82%">
+
+    -->
+
+      <div>
         <div id="navbarscroll" class="overflow-x:scroll; py-2">
           <ul style="display: block" class="nav nav-pills ml-auto p-2">
             <li v-if="!isInXumm" class="nav-item">
