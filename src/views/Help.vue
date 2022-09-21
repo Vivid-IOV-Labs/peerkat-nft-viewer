@@ -69,7 +69,7 @@
       </nav>
       <div class="mt-4 pb-2 text-center">
         <p>© Peerkat 2022</p>
-        <p>Peerkat is a Vivid IoV Labs company</p>
+        <p>Peerkat is a Vivid IoV Labs product</p>
         <p>
           Vivid IoV Labs, Innovation Labs, England, IP14 1RD.<br />
           Vivid IoV Labs Ltd is a company registered in England and Wales with
