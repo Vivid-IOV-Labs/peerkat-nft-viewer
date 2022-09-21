@@ -46,7 +46,7 @@
           >
           <br />We have added support for XLS14/SOLO. <br />
           We have also added support for XLS20 NFTs (with XLS24 metadata only)
-          on XRPL NFT-devnet.
+          on XRPL nft-devnet.
           <br />We may also add support for other NFT variations we discover
           where it is feasible to do so.
         </li>
