@@ -23,13 +23,7 @@
             /></svg
         ></base-button>
       </h4>
-      <h5 class="mt-4 text-center bold">
-        FAQs
-        <small
-          ><br />
-          updated 13 April 2022
-        </small>
-      </h5>
+      <h5 class="mt-4 text-center bold">FAQs</h5>
       <ul class="mt-2 mb-4 p-2">
         <li class="pb-2">
           <strong>Why is my NFT's artwork not being displayed? </strong><br />
