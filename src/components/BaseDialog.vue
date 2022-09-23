@@ -76,3 +76,14 @@ export default defineComponent({
   },
 });
 </script>
+<style>
+.modal-dialog {
+  height: 100vh !important;
+  display: flex;
+}
+
+.modal-content {
+  margin: auto !important;
+  height: fit-content !important;
+}
+</style>
