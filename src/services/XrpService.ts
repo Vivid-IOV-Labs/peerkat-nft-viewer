@@ -716,11 +716,9 @@ export async function fetchBuyOffers(TokenID: string): Promise<any> {
 // }
 async function getIpfsJson(url: string) {
   const ipfsGatewayList = [
-    "https://dweb.link/",
-    "https://nftstorage.link/",
     "https://ipfs.io/",
+    "https://nftstorage.link/",
     "https://cloudflare-ipfs.com/",
-    "https://cf-ipfs.com/",
   ].map((u) => u + "ipfs/" + url);
   const pomises = ipfsGatewayList.map((u: string) =>
     fetch(u).then((r) => r.json())
@@ -731,10 +729,8 @@ async function getIpfsJson(url: string) {
 async function getIpfsMedia(url: string) {
   const ipfsGatewayList = [
     "https://dweb.link/",
-    "https://nftstorage.link/",
-    "https://ipfs.io/",
-    "https://cloudflare-ipfs.com/",
     "https://cf-ipfs.com/",
+    "https://gateway.ipfs.io/",
   ].map((u) => u + "ipfs/" + url);
   const pomises = ipfsGatewayList.map((u: string) => fetch(u));
   const result = await Promise.any(pomises);
