@@ -85,8 +85,10 @@
     </template>
     <template #footer>
       <div>
-        <base-button @click="isConfirmDeleteOpen = false">No</base-button>
-        <async-button class="mr-2" :on-click="deleteShared">Yes</async-button>
+        <base-button class="mr-2" @click="isConfirmDeleteOpen = false"
+          >No</base-button
+        >
+        <base-button @click="deleteShared">Yes</base-button>
       </div>
     </template>
   </base-dialog>
