@@ -63,18 +63,39 @@
           >Offers
           <span v-if="countOffers">({{ countOffers }})</span></base-button
         > -->
-        <base-button class="mr-2" @click="deleteShared">Delete</base-button>
+        <base-button class="mr-2" @click="openConfirmDeleteDialog"
+          >Delete</base-button
+        >
         <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl">
           Inspect</external-link
         >
       </div>
     </template>
   </base-card>
+  <base-dialog
+    v-model="isConfirmDeleteOpen"
+    :cancellable="true"
+    title="Delete Shared NFT"
+  >
+    <template #body>
+      <p>
+        Are you sure you want to remove this NFT from your 'Shared with me' list
+        ?
+      </p>
+    </template>
+    <template #footer>
+      <div>
+        <base-button @click="isConfirmDeleteOpen = false">No</base-button>
+        <async-button class="mr-2" :on-click="deleteShared">Yes</async-button>
+      </div>
+    </template>
+  </base-dialog>
 </template>
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
+import AsyncButton from "@/components/AsyncButton.vue";
 import ExternalLink from "@/components/ExternalLink.vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -85,6 +106,7 @@ export default defineComponent({
   components: {
     BaseCard,
     BaseButton,
+    AsyncButton,
     ExternalLink,
   },
   props: {
@@ -93,6 +115,8 @@ export default defineComponent({
   async setup(props) {
     const router = useRouter();
     const store = useStore();
+    const isConfirmDeleteOpen = ref(false);
+
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     const user = computed(() => store.getters["user/getUser"]);
     const nodetypecode = computed(() => getNetworkCodeFromType(nodetype.value));
@@ -116,6 +140,7 @@ export default defineComponent({
     return {
       bihompUrl,
       countOffers,
+      isConfirmDeleteOpen,
       fallbackImg(event: Event): void {
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
@@ -130,8 +155,11 @@ export default defineComponent({
           path: `/offers/buy`,
         });
       },
-      deleteShared() {
-        store.commit("nft/deleteShared", {
+      openConfirmDeleteDialog() {
+        isConfirmDeleteOpen.value = true;
+      },
+      async deleteShared() {
+        await store.commit("nft/deleteShared", {
           currency: props.nft.currency,
           nodetype: nodetype.value,
           walletaddress: user.value,
