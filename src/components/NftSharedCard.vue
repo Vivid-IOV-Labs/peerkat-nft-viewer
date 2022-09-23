@@ -94,6 +94,7 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from "vue";
 import BaseCard from "@/components/BaseCard.vue";
+import BaseDialog from "@/components/BaseDialog.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import AsyncButton from "@/components/AsyncButton.vue";
 import ExternalLink from "@/components/ExternalLink.vue";
@@ -105,6 +106,7 @@ import { getInspectorUrl } from "../utils/getInspectorUrl";
 export default defineComponent({
   components: {
     BaseCard,
+    BaseDialog,
     BaseButton,
     AsyncButton,
     ExternalLink,
