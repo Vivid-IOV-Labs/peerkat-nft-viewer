@@ -75,7 +75,7 @@
   <base-dialog
     v-model="isConfirmDeleteOpen"
     :cancellable="true"
-    title="Delete Shared NFT"
+    title="Delete NFT shared with me"
   >
     <template #body>
       <p>
@@ -85,10 +85,12 @@
     </template>
     <template #footer>
       <div>
-        <base-button class="mr-2" @click="isConfirmDeleteOpen = false"
-          >No</base-button
+        <base-button class="mr-2" @click="deleteShared"
+          >Yes, remove it</base-button
         >
-        <base-button @click="deleteShared">Yes</base-button>
+        <base-button @click="isConfirmDeleteOpen = false"
+          >No, keep it</base-button
+        >
       </div>
     </template>
   </base-dialog>
