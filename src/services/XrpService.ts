@@ -485,7 +485,11 @@ export async function fetchOneXls20(
 export async function getOneXls(nft: any) {
   try {
     const { Issuer, NFTokenID, URI } = nft;
-    const url = hexToString(URI).split("//")[1] + "/base.json";
+    const uri = hexToString(URI);
+    const url =
+      uri.split("//")[0] === "ipfs"
+        ? uri.split("//")[1] + "/base.json"
+        : uri + "/base.json";
     //  const res = await getIpfsMedia(url);
     const details = await getIpfsJson(url);
     const { description, image, name, schema, video } = details;
