@@ -499,10 +499,10 @@ export async function getOneXls(nft: any) {
     }
     if (video) {
       const { url: videoUrl } = await getIpfsMedia(video.split("//")[1]);
-
       mediaUrl = videoUrl;
       media_type = "video";
     }
+
     return {
       issuer: Issuer,
       currency: NFTokenID,
