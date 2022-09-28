@@ -488,15 +488,26 @@ export async function getOneXls(nft: any) {
     const url = hexToString(URI).split("//")[1] + "/base.json";
     //  const res = await getIpfsMedia(url);
     const details = await getIpfsJson(url);
-    const { description, image, name, schema } = details;
-    const { url: imageUrl } = await getIpfsMedia(image.split("//")[1]);
+    const { description, image, name, schema, video } = details;
+    let mediaUrl;
+    let media_type;
+    if (image) {
+      const { url: imageUrl } = await getIpfsMedia(image.split("//")[1]);
 
-    const media_type = "image/jpeg";
+      mediaUrl = imageUrl;
+      media_type = "image";
+    }
+    if (video) {
+      const { url: videoUrl } = await getIpfsMedia(video.split("//")[1]);
+
+      mediaUrl = videoUrl;
+      media_type = "video";
+    }
     return {
       issuer: Issuer,
       currency: NFTokenID,
       tokenName: name.replace(/[^\w\s]/gi, ""),
-      url: imageUrl,
+      url: mediaUrl,
       media_type,
       desc: description,
       issuerTruncated: truncate(Issuer),
