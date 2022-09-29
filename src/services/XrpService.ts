@@ -496,13 +496,18 @@ export async function getOneXls(nft: any) {
     let mediaUrl;
     let media_type;
     if (image) {
-      const { url: imageUrl } = await getIpfsMedia(image.split("//")[1]);
+      const imageuri =
+        image.split("//")[0] === "ipfs" ? image.split("//")[1] : image;
+      const { url: imageUrl } = await getIpfsMedia(imageuri);
 
       mediaUrl = imageUrl;
       media_type = "image";
     }
     if (video) {
-      const { url: videoUrl } = await getIpfsMedia(video.split("//")[1]);
+      const videouri =
+        video.split("//")[0] === "ipfs" ? video.split("//")[1] : video;
+
+      const { url: videoUrl } = await getIpfsMedia(videouri);
       mediaUrl = videoUrl;
       media_type = "video";
     }
