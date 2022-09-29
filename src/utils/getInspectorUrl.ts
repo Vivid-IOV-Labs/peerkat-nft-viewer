@@ -33,6 +33,8 @@ export function getInspectorUrl(network: keyof urlMap, issuer: string): string {
     /*custom */
     "wss://xls20-sandbox.rippletest.net:51233": ["https://xls20.bithomp.com/"],
     "wss://hooks-testnet-v2.xrpl-labs.com": ["https://hooks.bithomp.com/"],
+    /*devnet */
+    "wss://s.devnet.rippletest.net:51233": ["https://dev.bithomp.com/"],
   };
   return urlMap[network] ? urlMap[network][0] + issuer : "";
 }
