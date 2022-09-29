@@ -385,21 +385,22 @@ async function recurseFetchNftLines(
 }
 
 async function fetchNftLines(walletAddress: string): Promise<any> {
-  try {
-    const accLines = await recurseFetchNftLines(walletAddress, []);
-    const nftLines = accLines.filter(isNFT).map(function (line: line) {
-      return {
-        ...line,
-        balanceFormatted: formatXrpCurrency(line.balance),
-        limitFormatted: formatXrpCurrency(line.limit),
-      };
-    });
-    return nftLines;
-    // }
-  } catch (error) {
-    devlog("fetchNftLines Error ", error);
-  }
+  const accLines = await recurseFetchNftLines(walletAddress, []);
+  const nftLines = accLines.filter(isNFT).map(function (line: line) {
+    return {
+      ...line,
+      balanceFormatted: formatXrpCurrency(line.balance),
+      limitFormatted: formatXrpCurrency(line.limit),
+    };
+  });
+  return nftLines;
+  // }
+
+  // catch (error) {
+  //   devlog("fetchNftLines Error ", error);
+  // }
 }
+
 async function fetchIssuerCurrencies(issuer: string): Promise<any> {
   const { result } = await client.request({
     command: "account_currencies",

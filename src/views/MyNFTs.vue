@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="NFTMedia && NFTMedia.length"
+    v-if="NFTMedia.length"
     id="scroller"
     ref="scroller"
     class="d-flex h-100 flex-row flex-nowrap overflow-auto pb-4"
@@ -25,10 +25,7 @@
       <h5>Loading Next NFTs...</h5>
     </div>
   </div>
-  <div
-    v-if="!NFTMedia || (NFTMedia && !NFTMedia.length)"
-    style="margin-top: 13%"
-  >
+  <div v-if="!NFTMedia.length" style="margin-top: 13%">
     <h5 class="text-center mt-2">
       Peerkat is not able to find any NFTs in this wallet
     </h5>
@@ -188,10 +185,16 @@ export default defineComponent({
     });
 
     if (lines.value && lines.value.length === 0) {
-      await store.dispatch("nft/fetchNftLines", {
-        walletAddress: walletAddress.value,
-        nodetype: nodetype.value,
-      });
+      try {
+        await store.dispatch("nft/fetchNftLines", {
+          walletAddress: walletAddress.value,
+          nodetype: nodetype.value,
+        });
+      } catch (error) {
+        store.commit("ui/setIsloading", false);
+
+        devlog("ON POPULATE", error);
+      }
     }
     if (
       xls20count.value &&
