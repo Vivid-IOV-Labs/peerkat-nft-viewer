@@ -486,18 +486,20 @@ export async function getOneXls(nft: any) {
   try {
     const { Issuer, NFTokenID, URI } = nft;
     const uri = hexToString(URI);
+    console.log(uri.split("//")[0]);
+    console.log(uri.split("//")[1]);
     const url =
-      uri.split("//")[0] === "ipfs"
+      uri.split("//")[0] === "ipfs:"
         ? uri.split("//")[1] + "/base.json"
         : uri + "/base.json";
-    //  const res = await getIpfsMedia(url);
+
     const details = await getIpfsJson(url);
     const { description, image, name, schema, video } = details;
     let mediaUrl;
     let media_type;
     if (image) {
       const imageuri =
-        image.split("//")[0] === "ipfs" ? image.split("//")[1] : image;
+        image.split("//")[0] === "ipfs:" ? image.split("//")[1] : image;
       const { url: imageUrl } = await getIpfsMedia(imageuri);
 
       mediaUrl = imageUrl;
@@ -505,7 +507,7 @@ export async function getOneXls(nft: any) {
     }
     if (video) {
       const videouri =
-        video.split("//")[0] === "ipfs" ? video.split("//")[1] : video;
+        video.split("//")[0] === "ipfs:" ? video.split("//")[1] : video;
 
       const { url: videoUrl } = await getIpfsMedia(videouri);
       mediaUrl = videoUrl;
