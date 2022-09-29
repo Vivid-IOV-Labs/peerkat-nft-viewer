@@ -100,11 +100,13 @@ import { computed, defineComponent, ref } from "vue";
 import BaseCard from "@/components/BaseCard.vue";
 import BaseDialog from "@/components/BaseDialog.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import AsyncButton from "@/components/AsyncButton.vue";
 import ExternalLink from "@/components/ExternalLink.vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { getNetworkCodeFromType } from "../utils/getNetworkTypeFromCode";
+import {
+  getNetworkCodeFromType,
+  getNodeTypeFromNetwork,
+} from "../utils/getNetworkTypeFromCode";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
 
 export default defineComponent({
@@ -112,7 +114,6 @@ export default defineComponent({
     BaseCard,
     BaseDialog,
     BaseButton,
-    AsyncButton,
     ExternalLink,
   },
   props: {
@@ -123,10 +124,12 @@ export default defineComponent({
     const store = useStore();
     const isConfirmDeleteOpen = ref(false);
 
-    const nodetype = computed(() => store.getters["user/getNodeType"]);
+    // const nodetype = computed(() => store.getters["user/getNodeType"]);
     const user = computed(() => store.getters["user/getUser"]);
     const nodetypecode = computed(() => getNetworkCodeFromType(nodetype.value));
     const network = computed(() => store.getters["user/getNetwork"]);
+    const nodetype = computed(() => getNodeTypeFromNetwork(network.value));
+
     const bithomID =
       props.nft.standard && props.nft.standard === "XLS-20"
         ? props.nft.currency
