@@ -486,14 +486,15 @@ export async function getOneXls(nft: any) {
   try {
     const { Issuer, NFTokenID, URI } = nft;
     const uri = hexToString(URI);
-    console.log(uri.split("//")[0]);
-    console.log(uri.split("//")[1]);
+
     const url =
       uri.split("//")[0] === "ipfs:"
         ? uri.split("//")[1] + "/base.json"
         : uri + "/base.json";
-
-    const details = await getIpfsJson(url);
+    const details =
+      uri.split("//")[0] === "ipfs:"
+        ? await getIpfsJson(url)
+        : await fetch(url).then((r) => r.json());
     const { description, image, name, schema, video } = details;
     let mediaUrl;
     let media_type;
@@ -553,6 +554,7 @@ export async function fetchNextXls20WithSellOffer(
   nextXls20: any[],
   owner: string
 ): Promise<any> {
+  debugger;
   const nextNfts = await Promise.all(
     nextXls20.map(async (nft: any) => {
       const { NFTokenID } = nft;
@@ -577,6 +579,7 @@ export async function fetchNextXls20WithSellOffer(
       };
     })
   );
+  debugger;
   return nextNfts;
 }
 export async function cancelOffer({ TokenID, OfferID }: any): Promise<any> {
