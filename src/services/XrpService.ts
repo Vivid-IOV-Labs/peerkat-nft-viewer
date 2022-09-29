@@ -496,7 +496,7 @@ export async function getOneXls(nft: any) {
         ? await getIpfsJson(url)
         : await fetch(url).then((r) => r.json());
 
-    const { description, image, name, schema, video } = details;
+    const { description, image, name, schema, video, animate_url } = details;
     // const schmeaUri =
     //   schema.split("//")[0] === "ipfs:"
     //     ? schema.split("//")[1] + "/$Schema.json"
@@ -523,12 +523,13 @@ export async function getOneXls(nft: any) {
       }
       media_type = "image";
     }
-    if (video) {
-      if (video.split("//")[0] === "ipfs:") {
-        const { url: videoUrl } = await getIpfsMedia(video.split("//")[1]);
+    if (video || animate_url) {
+      const media = animate_url || video;
+      if (media.split("//")[0] === "ipfs:") {
+        const { url: videoUrl } = await getIpfsMedia(media.split("//")[1]);
         mediaUrl = videoUrl;
       } else {
-        mediaUrl = video;
+        mediaUrl = media;
       }
       media_type = "video";
     }
