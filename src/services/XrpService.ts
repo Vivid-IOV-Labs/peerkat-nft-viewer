@@ -495,23 +495,41 @@ export async function getOneXls(nft: any) {
       uri.split("//")[0] === "ipfs:"
         ? await getIpfsJson(url)
         : await fetch(url).then((r) => r.json());
+
     const { description, image, name, schema, video } = details;
+    // const schmeaUri =
+    //   schema.split("//")[0] === "ipfs:"
+    //     ? schema.split("//")[1] + "/$Schema.json"
+    //     : schema + "/%24Schema.json ";
+
+    // try {
+    //   const res =
+    //     schema.split("//")[0] === "ipfs:"
+    //       ? await getIpfsJson(schmeaUri)
+    //       : await fetch(url).then((r) => r.json());
+    //   console.log(res);
+    // } catch (error) {
+    //   console.log(error);
+    // }
+
     let mediaUrl;
     let media_type;
     if (image) {
-      const imageuri =
-        image.split("//")[0] === "ipfs:" ? image.split("//")[1] : image;
-      const { url: imageUrl } = await getIpfsMedia(imageuri);
-
-      mediaUrl = imageUrl;
+      if (image.split("//")[0] === "ipfs:") {
+        const { url: imageUrl } = await getIpfsMedia(image.split("//")[1]);
+        mediaUrl = imageUrl;
+      } else {
+        mediaUrl = image;
+      }
       media_type = "image";
     }
     if (video) {
-      const videouri =
-        video.split("//")[0] === "ipfs:" ? video.split("//")[1] : video;
-
-      const { url: videoUrl } = await getIpfsMedia(videouri);
-      mediaUrl = videoUrl;
+      if (video.split("//")[0] === "ipfs:") {
+        const { url: videoUrl } = await getIpfsMedia(video.split("//")[1]);
+        mediaUrl = videoUrl;
+      } else {
+        mediaUrl = video;
+      }
       media_type = "video";
     }
 
