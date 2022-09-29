@@ -554,7 +554,6 @@ export async function fetchNextXls20WithSellOffer(
   nextXls20: any[],
   owner: string
 ): Promise<any> {
-  debugger;
   const nextNfts = await Promise.all(
     nextXls20.map(async (nft: any) => {
       const { NFTokenID } = nft;
@@ -579,7 +578,6 @@ export async function fetchNextXls20WithSellOffer(
       };
     })
   );
-  debugger;
   return nextNfts;
 }
 export async function cancelOffer({ TokenID, OfferID }: any): Promise<any> {
