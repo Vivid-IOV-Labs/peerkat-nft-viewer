@@ -216,7 +216,6 @@ export default defineComponent({
       }
     }
     async function fetchShared() {
-
       try {
         const nftXLS20 = await fetchOneXls20(
           route.params.nftAddress.toString(),
@@ -259,7 +258,7 @@ export default defineComponent({
       view() {
         if (nft.value) {
           router.push({
-            path: `/shared/${nft.value.issuer}/${networkCodeFromType.value}/view`,
+            path: `/shared/${nft.value.issuer}/${networkCodeFromType.value}/view/${nft.value.currency}`,
           });
         }
       },
