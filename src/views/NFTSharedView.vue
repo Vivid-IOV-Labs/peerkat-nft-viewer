@@ -7,6 +7,7 @@
         <video
           v-if="nft.media_type?.includes('video')"
           :src="`${nft.url}`"
+          poster="\loading.gif"
           muted
           autoplay
           loop

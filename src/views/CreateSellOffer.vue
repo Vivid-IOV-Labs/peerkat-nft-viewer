@@ -12,6 +12,7 @@
                 v-if="nft.media_type?.includes('video')"
                 :src="nft.url"
                 muted
+                poster="\loading.gif"
                 class="img-fluid card-img"
                 style="
                   object-fit: cover;
