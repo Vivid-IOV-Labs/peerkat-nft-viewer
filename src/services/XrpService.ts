@@ -765,7 +765,6 @@ async function getIpfsJson(url: string) {
   ].map((u) => u + "ipfs/" + url);
   const controller = new AbortController();
   const { signal } = controller;
-
   const pomises = ipfsGatewayList.map((u: string) =>
     fetch(u, { signal }).then((r) => r.json())
   );
