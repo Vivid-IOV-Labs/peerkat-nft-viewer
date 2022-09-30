@@ -763,10 +763,14 @@ async function getIpfsJson(url: string) {
     "https://nftstorage.link/",
     //"https://cloudflare-ipfs.com/",
   ].map((u) => u + "ipfs/" + url);
+  const controller = new AbortController();
+  const { signal } = controller;
+
   const pomises = ipfsGatewayList.map((u: string) =>
-    fetch(u).then((r) => r.json())
+    fetch(u, { signal }).then((r) => r.json())
   );
   const result = await Promise.any(pomises);
+  controller.abort();
   return result;
 }
 async function getIpfsMedia(url: string) {
@@ -775,8 +779,11 @@ async function getIpfsMedia(url: string) {
     "https://cf-ipfs.com/",
     // "https://gateway.ipfs.io/",
   ].map((u) => u + "ipfs/" + url);
-  const pomises = ipfsGatewayList.map((u: string) => fetch(u));
+  const controller = new AbortController();
+  const { signal } = controller;
+  const pomises = ipfsGatewayList.map((u: string) => fetch(u, { signal }));
   const result = await Promise.any(pomises);
+  controller.abort();
   return result;
 }
 
