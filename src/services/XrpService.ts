@@ -484,22 +484,28 @@ export async function fetchOneXls20(
   }
 }
 export async function getOneXls(nft: any) {
+  let mediaUrl;
+  let media_type;
+  let error_code;
+  let error_message;
+  let tokenName;
+  let description;
+  const { Issuer, NFTokenID, URI, NFTokenTaxon } = nft;
+  const uri = hexToString(URI);
+  const end = uri.includes(".json")
+    ? ""
+    : Number.isInteger(NFTokenTaxon)
+    ? `/${NFTokenTaxon}.json`
+    : "/base.json";
+
+  const url =
+    uri.split("//")[0] === "ipfs:" ? uri.split("//")[1] + end : uri + end;
   try {
-    const { Issuer, NFTokenID, URI, NFTokenTaxon } = nft;
-    const uri = hexToString(URI);
-    const end = uri.includes(".json")
-      ? ""
-      : Number.isInteger(NFTokenTaxon)
-      ? `/${NFTokenTaxon}.json`
-      : "/base.json";
-    const url =
-      uri.split("//")[0] === "ipfs:" ? uri.split("//")[1] + end : uri + end;
     const details =
       uri.split("//")[0] === "ipfs:"
         ? await getIpfsJson(url)
         : await fetch(url).then((r) => r.json());
 
-    const { description, image, name, schema, video, animate_url } = details;
     // const schmeaUri =
     //   schema.split("//")[0] === "ipfs:"
     //     ? schema.split("//")[1] + "/$Schema.json"
@@ -514,20 +520,21 @@ export async function getOneXls(nft: any) {
     // } catch (error) {
     //   console.log(error);
     // }
-
-    let mediaUrl;
-    let media_type;
-    if (image) {
-      if (image.split("//")[0] === "ipfs:") {
-        const { url: imageUrl } = await getIpfsMedia(image.split("//")[1]);
+    tokenName = details.name.replace(/[^\w\s]/gi, "");
+    description = details.description;
+    if (details.image) {
+      if (details.image.split("//")[0] === "ipfs:") {
+        const { url: imageUrl } = await getIpfsMedia(
+          details.image.split("//")[1]
+        );
         mediaUrl = imageUrl;
       } else {
-        mediaUrl = image;
+        mediaUrl = details.image;
       }
       media_type = "image";
     }
-    if (video || animate_url) {
-      const media = animate_url || video;
+    if (details.video || details.animation_url) {
+      const media = details.animation_url || details.video;
       if (media.split("//")[0] === "ipfs:") {
         const { url: videoUrl } = await getIpfsMedia(media.split("//")[1]);
         mediaUrl = videoUrl;
@@ -536,20 +543,24 @@ export async function getOneXls(nft: any) {
       }
       media_type = "video";
     }
-
-    return {
-      issuer: Issuer,
-      currency: NFTokenID,
-      tokenName: name.replace(/[^\w\s]/gi, ""),
-      url: mediaUrl,
-      media_type,
-      desc: description,
-      issuerTruncated: truncate(Issuer),
-      standard: "XLS-20",
-    };
   } catch (error) {
-    devlog(error);
+    error_code = "no_nfts_in_collection";
+    error_message = "Individual metadata for this XLS20 NFT not found";
   }
+
+  return {
+    tokenTaxon: NFTokenTaxon,
+    issuer: Issuer,
+    currency: NFTokenID,
+    tokenName,
+    url: mediaUrl,
+    media_type,
+    desc: description,
+    issuerTruncated: truncate(Issuer),
+    standard: "XLS-20",
+    error_code,
+    error_message,
+  };
 }
 
 export async function fetchXls20(walletAddress: string): Promise<any> {
