@@ -485,7 +485,7 @@ export async function fetchOneXls20(
 }
 export async function getOneXls(nft: any) {
   try {
-    const { Issuer, NFTokenID, URI } = nft;
+    const { Issuer, NFTokenID, URI, NFTokenTaxon } = nft;
     const uri = hexToString(URI);
     const end = uri.includes(".json")
       ? ""
