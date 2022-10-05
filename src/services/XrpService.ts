@@ -500,6 +500,10 @@ export async function getOneXls(nft: any) {
   const url =
     uri.split("//")[0] === "ipfs:" ? uri.split("//")[1] + end : uri + end;
   try {
+    const details =
+      uri.split("//")[0] === "ipfs:"
+        ? await getIpfsJson(url)
+        : await fetch(url).then((r) => r.json());
     const { description, image, name, schema, video, animate_url } = details;
     // const schmeaUri =
     //   schema.split("//")[0] === "ipfs:"
@@ -541,10 +545,6 @@ export async function getOneXls(nft: any) {
     error_code = "no_nfts_in_collection";
     error_message = "Individual metadata for this XLS20 NFT not found";
   }
-  const details =
-    uri.split("//")[0] === "ipfs:"
-      ? await getIpfsJson(url)
-      : await fetch(url).then((r) => r.json());
 
   return {
     tokenTaxon: NFTokenTaxon,
