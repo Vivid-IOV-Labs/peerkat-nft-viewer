@@ -50,6 +50,10 @@
         <strong class="h7 font-weight-bold">Description </strong><br />
         <span>{{ nft.desc }}</span>
       </div>
+      <div v-if="nft.tokenTaxon !== undefined" class="mt-2">
+        <strong class="h7 font-weight-bold">Token Taxon </strong><br />
+        <div v-html="nft.tokenTaxon"></div>
+      </div>
       <div v-if="nft.standard" class="mt-2">
         <strong class="h7 font-weight-bold">Standard </strong><br />
         <span>{{ nft.standard }}</span>

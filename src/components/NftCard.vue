@@ -52,7 +52,7 @@
         <span>{{ nft.issuer }}</span
         ><br />
       </div>
-      <div v-if="!nft.error_code">
+      <div>
         <div v-if="nft.balanceFormatted || nft.limitFormatted" class="mt-2">
           <strong v-if="nft.balanceFormatted" class="h7 font-weight-bold"
             >Balance
@@ -72,6 +72,10 @@
         <div v-if="nft.desc" class="mt-2">
           <strong class="h7 font-weight-bold">Description </strong><br />
           <div v-html="nft.desc"></div>
+        </div>
+        <div v-if="nft.tokenTaxon !== undefined" class="mt-2">
+          <strong class="h7 font-weight-bold">Token Taxon </strong><br />
+          <div v-html="nft.tokenTaxon"></div>
         </div>
         <div v-if="nft.standard" class="mt-2">
           <strong class="h7 font-weight-bold">Standard </strong><br />
