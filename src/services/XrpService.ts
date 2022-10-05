@@ -206,8 +206,10 @@ async function getOne(
     if (xlsProtocol) {
       url = await getMediaByXLSProtocol(source, xlsProtocol, tokenName);
       media_type = await getMediaType(url);
+      standard = "XLS-14";
+
       if (media_type == "application/json") {
-        const { image } = await fetch(url).then((res) => res.json());
+        const { image } = await getIpfsJson(url);
         if (image) {
           url = await getMediaByXLSProtocol(image, "xls-16-peerkat");
           media_type = await getMediaType(url);
@@ -235,26 +237,30 @@ async function getOne(
       if (nfts) {
         const nft = nfts.find((n: any) => n.currency == currency);
         const { content_type, metadata } = nft;
-        const { url: metadaNftUrl } = await getIpfsMedia(
-          metadata.split("//")[1]
-        );
-        const res = await fetch(metadaNftUrl).then((res) => res.json());
+        // const { url: metadaNftUrl } = await getIpfsMedia(
+        //   metadata.split("//")[1]
+        // );
+        const res = await getIpfsJson(metadata.split("//")[1]);
         desc = decodeHtmlEntity(res.description);
         tokenName = res.name;
         sololimitFormatted = collection.collection_item_count;
         const fil_ext = content_type.split("/")[1];
-        const { url: mediaUrl } = await getIpfsMedia(
-          metadata.split("//")[1].replace("metadata.json", `data.${fil_ext}`)
-        );
+        // const { url: mediaUrl } = await getIpfsMedia(
+        //   metadata.split("//")[1].replace("metadata.json", `data.${fil_ext}`)
+        // );
         media_type = content_type;
-        url = mediaUrl;
+        url = metadata
+          .split("//")[1]
+          .replace("metadata.json", `data.${fil_ext}`);
         standard = "XLS-14d/SOLO";
       } else {
         error_code = "no_nfts_in_collection";
         error_message = "Individual metadata for this XLS14/SOLO NFT not found";
       }
-    } catch (error) {
+    } catch (error: any) {
       devlog(error);
+      error_code = "no_nfts_in_collection";
+      error_message = "Something went wrong" + error;
       await geXls14();
     }
   } else if (
@@ -277,7 +283,9 @@ async function getOne(
       const res = await getIpfsMedia(uri.split("//")[1]);
       url = res.url;
       media_type = await getMediaType(url);
+      standard = "XLS-16";
     } else {
+      devlog("No metadata");
       await geXls14();
     }
   } else {
@@ -394,13 +402,7 @@ async function fetchNftLines(walletAddress: string): Promise<any> {
     };
   });
   return nftLines;
-  // }
-
-  // catch (error) {
-  //   devlog("fetchNftLines Error ", error);
-  // }
 }
-
 async function fetchIssuerCurrencies(issuer: string): Promise<any> {
   const { result } = await client.request({
     command: "account_currencies",
@@ -484,20 +486,28 @@ export async function fetchOneXls20(
   }
 }
 export async function getOneXls(nft: any) {
-  try {
-    const { Issuer, NFTokenID, URI } = nft;
-    const uri = hexToString(URI);
+  let mediaUrl;
+  let media_type;
+  let error_code;
+  let error_message;
+  let tokenName;
+  let description;
+  const { Issuer, NFTokenID, URI, NFTokenTaxon } = nft;
+  const uri = hexToString(URI);
+  const end = uri.includes(".json")
+    ? ""
+    : Number.isInteger(NFTokenTaxon)
+    ? `/${NFTokenTaxon}.json`
+    : "/base.json";
 
-    const url =
-      uri.split("//")[0] === "ipfs:"
-        ? uri.split("//")[1] + "/base.json"
-        : uri + "/base.json";
+  const url =
+    uri.split("//")[0] === "ipfs:" ? uri.split("//")[1] + end : uri + end;
+  try {
     const details =
       uri.split("//")[0] === "ipfs:"
         ? await getIpfsJson(url)
         : await fetch(url).then((r) => r.json());
 
-    const { description, image, name, schema, video, animate_url } = details;
     // const schmeaUri =
     //   schema.split("//")[0] === "ipfs:"
     //     ? schema.split("//")[1] + "/$Schema.json"
@@ -512,20 +522,21 @@ export async function getOneXls(nft: any) {
     // } catch (error) {
     //   console.log(error);
     // }
-
-    let mediaUrl;
-    let media_type;
-    if (image) {
-      if (image.split("//")[0] === "ipfs:") {
-        const { url: imageUrl } = await getIpfsMedia(image.split("//")[1]);
+    tokenName = details.name.replace(/[^\w\s]/gi, "");
+    description = details.description;
+    if (details.image) {
+      if (details.image.split("//")[0] === "ipfs:") {
+        const { url: imageUrl } = await getIpfsMedia(
+          details.image.split("//")[1]
+        );
         mediaUrl = imageUrl;
       } else {
-        mediaUrl = image;
+        mediaUrl = details.image;
       }
       media_type = "image";
     }
-    if (video || animate_url) {
-      const media = animate_url || video;
+    if (details.video || details.animation_url) {
+      const media = details.animation_url || details.video;
       if (media.split("//")[0] === "ipfs:") {
         const { url: videoUrl } = await getIpfsMedia(media.split("//")[1]);
         mediaUrl = videoUrl;
@@ -534,20 +545,24 @@ export async function getOneXls(nft: any) {
       }
       media_type = "video";
     }
-
-    return {
-      issuer: Issuer,
-      currency: NFTokenID,
-      tokenName: name.replace(/[^\w\s]/gi, ""),
-      url: mediaUrl,
-      media_type,
-      desc: description,
-      issuerTruncated: truncate(Issuer),
-      standard: "XLS-20",
-    };
   } catch (error) {
-    devlog(error);
+    error_code = "no_nfts_in_collection";
+    error_message = "Individual metadata for this XLS20 NFT not found";
   }
+
+  return {
+    tokenTaxon: NFTokenTaxon,
+    issuer: Issuer,
+    currency: NFTokenID,
+    tokenName,
+    url: mediaUrl,
+    media_type,
+    desc: description,
+    issuerTruncated: truncate(Issuer),
+    standard: "XLS-20",
+    error_code,
+    error_message,
+  };
 }
 
 export async function fetchXls20(walletAddress: string): Promise<any> {
@@ -757,38 +772,133 @@ export async function fetchBuyOffers(TokenID: string): Promise<any> {
 // async function getIpfsMedia(url: string) {
 //   return await checkFromIpfsList(url);
 // }
-async function getIpfsJson(url: string) {
-  const ipfsGatewayList = [
-    "https://ipfs.io/",
-    "https://nftstorage.link/",
-    "https://cloudflare-ipfs.com/",
-  ].map((u) => u + "ipfs/" + url);
-  const controller = new AbortController();
-  const { signal } = controller;
-  const pomises = ipfsGatewayList.map((u: string) =>
-    fetch(u, { signal }).then((r) => r.json())
+interface list {
+  [name: string]: any | undefined;
+}
+const ipfsGatewayLisWithObfuscateTime: any[] = [
+  { domain: "https://cf-ipfs.com/", obfuscateTime: null },
+  { domain: "https://cloudflare-ipfs.com/", obfuscateTime: null },
+  { domain: "https://nftstorage.link/", obfuscateTime: null },
+  { domain: "https://gateway.ipfs.io/", obfuscateTime: null },
+  { domain: "https://ipfs.io/", obfuscateTime: null },
+];
+
+function initIpfsGatewayLisWithObfuscateTime() {
+  if (!getIpfsGatewayLisWithObfuscateTime()) {
+    localStorage.setItem(
+      "ipfsGatewayLisWithObfuscateTime",
+      JSON.stringify(ipfsGatewayLisWithObfuscateTime)
+    );
+  }
+}
+function setIpfsGatewayLisWithObfuscateTime(newList: any) {
+  localStorage.setItem(
+    "ipfsGatewayLisWithObfuscateTime",
+    JSON.stringify(newList)
   );
-  const result = await Promise.any(pomises);
-  controller.abort();
+}
+function getIpfsGatewayLisWithObfuscateTime() {
+  const item = localStorage.getItem("ipfsGatewayLisWithObfuscateTime");
+  return item ? JSON.parse(item) : null;
+}
+function getAvailableIpfsGateway() {
+  const oneMinuteAgo = new Date(Date.now() - 1000 * 60);
+  const availableIpfsGateway = getIpfsGatewayLisWithObfuscateTime().filter(
+    ({ obfuscateTime }: any) => {
+      return (
+        obfuscateTime == null ||
+        (obfuscateTime && obfuscateTime <= oneMinuteAgo)
+      );
+    }
+  );
+  devlog("all ipfs", availableIpfsGateway);
+  return availableIpfsGateway.slice(0, 2);
+}
+function obfuscateIpfsFromList(domain: string) {
+  const list = getIpfsGatewayLisWithObfuscateTime();
+  const ipfs = list.find((ipfs: any) => ipfs.domain == domain);
+  if (ipfs) {
+    ipfs.obfuscateTime = Date.now();
+  }
+  setIpfsGatewayLisWithObfuscateTime(list);
+}
+async function recursiveIpfsFetch(url: string): Promise<any> {
+  // return the promise
+  const controller = new AbortController();
+  const signal = controller.signal;
+  const availableIpfsGateway = getAvailableIpfsGateway();
+  devlog(availableIpfsGateway);
+  if (availableIpfsGateway.length) {
+    const pomises = availableIpfsGateway.map((u: any) =>
+      fetch(u.domain + "ipfs/" + url, { signal })
+        .then(async (response) => {
+          const { status, ok } = response;
+          console.log(response, [429, 504, 408].includes(status));
+          if (!ok && [429, 504, 408].includes(status)) {
+            debugger;
+            if (availableIpfsGateway.length) {
+              const ipfs = availableIpfsGateway.find((ipfs: any) => {
+                return ipfs && response.url.includes(ipfs.domain);
+              });
+              debugger;
+
+              if (ipfs) {
+                obfuscateIpfsFromList(ipfs.domain);
+                controller.abort();
+
+                return await recursiveIpfsFetch(url);
+              } else {
+                devlog("No ipfs available");
+                controller.abort();
+                debugger;
+
+                throw new Error("No ipfs available");
+              }
+            } else {
+              devlog("No ipfs available");
+              controller.abort();
+              debugger;
+
+              throw new Error("No ipfs available");
+            }
+          }
+          if (!response.ok && ![429, 504, 408].includes(status)) {
+            debugger;
+            throw new Error(`Error! status: ${response.url}`);
+          }
+          const result = response.json();
+          return result;
+        })
+        .catch((e) => {
+          debugger;
+          throw new Error(e);
+        })
+    );
+    const res = await Promise.race(pomises);
+    controller.abort();
+    return res;
+  } else {
+    devlog("No ipfs available");
+    throw new Error("No ipfs available");
+  }
+}
+async function getIpfsJson(url: string) {
+  const result = await recursiveIpfsFetch(url);
   return result;
 }
 async function getIpfsMedia(url: string) {
   const ipfsGatewayList = [
     "https://dweb.link/",
-    "https://cf-ipfs.com/",
     "https://gateway.ipfs.io/",
   ].map((u) => u + "ipfs/" + url);
-  const controller = new AbortController();
-  const { signal } = controller;
-  const pomises = ipfsGatewayList.map((u: string) => fetch(u, { signal }));
+  const pomises = ipfsGatewayList.map((u: string) => fetch(u));
   const result = await Promise.any(pomises);
-  controller.abort();
   return result;
 }
 
 export async function init(network: string): Promise<any> {
   client = new xrpl.Client(network);
-
+  initIpfsGatewayLisWithObfuscateTime();
   // client.on("disconnected", async (msg: any) => {
   //   devlog("Disconnected");
   // });

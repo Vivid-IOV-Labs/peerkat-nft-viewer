@@ -16,7 +16,7 @@
             >
               <video
                 v-if="nft.media_type?.includes('video')"
-                :src="`${nft.url}#t=0.5`"
+                :src="`${mediaUrl}#t=0.5`"
                 muted
                 poster="\loading.gif"
                 class="img-fluid card-img"
@@ -28,7 +28,7 @@
               ></video>
               <img
                 v-else-if="nft.media_type?.includes('image')"
-                v-lazy="nft.url"
+                v-lazy="mediaUrl"
                 style="
                   object-fit: cover;
                   height: 100%;
@@ -243,8 +243,15 @@ export default defineComponent({
     } else {
       malformedLink.value = true;
     }
-
+    const mediaUrl = computed(() => {
+      return ["XLS-14", "XLS-16"].includes(nft.value.standard) ||
+        (["XLS-20"].includes(nft.value.standard) &&
+          nft.value.url.split("//")[0] == "https:")
+        ? nft.value.url
+        : "https://dweb.link/ipfs/" + nft.value.url;
+    });
     return {
+      mediaUrl,
       nft,
       nodetype,
       network,

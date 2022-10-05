@@ -6,7 +6,7 @@
       <figure class="w-100 p4">
         <video
           v-if="nft.media_type?.includes('video')"
-          :src="`${nft.url}`"
+          :src="`${mediaUrl}`"
           poster="\loading.gif"
           muted
           autoplay
@@ -16,7 +16,7 @@
         ></video>
         <img
           v-else-if="nft.media_type?.includes('image')"
-          v-lazy="nft.url"
+          v-lazy="mediaUrl"
           style="object-fit: cover; height: 100%; object-position: center top"
           class="img-fluid card-img"
           alt="Card
@@ -54,7 +54,15 @@ export default defineComponent({
         currency
       );
     });
+    const mediaUrl = computed(() => {
+      return ["XLS-14", "XLS-16"].includes(nft.value.standard) ||
+        (["XLS-20"].includes(nft.value.standard) &&
+          nft.value.url.split("//")[0] == "https:")
+        ? nft.value.url
+        : "https://dweb.link/ipfs/" + nft.value.url;
+    });
     return {
+      mediaUrl,
       nft,
       back() {
         router.go(-1);
