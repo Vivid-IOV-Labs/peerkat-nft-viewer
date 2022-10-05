@@ -252,7 +252,9 @@ export default defineComponent({
         (["XLS-20"].includes(nft.value.standard) &&
           nft.value.url.split("//")[0] == "https:")
         ? nft.value.url
-        : "https://dweb.link/ipfs/" + nft.value.url;
+        : nft.value.url
+        ? "https://dweb.link/ipfs/" + nft.value.url
+        : "";
     });
     return {
       mediaUrl,

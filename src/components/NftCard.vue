@@ -160,11 +160,14 @@ export default defineComponent({
         : 0;
     const countOffers = countSellOffer + countBuyOffer;
     const mediaUrl =
-      ["XLS-14", "XLS-16"].includes(props.nft.standard) ||
-      (["XLS-20"].includes(props.nft.standard) &&
-        props.nft.url.split("//")[0] == "https:")
+      props.nft.url &&
+      (["XLS-14", "XLS-16"].includes(props.nft.standard) ||
+        (["XLS-20"].includes(props.nft.standard) &&
+          props.nft.url.split("//")[0] == "https:"))
         ? props.nft.url
-        : "https://dweb.link/ipfs/" + props.nft.url;
+        : props.nft.url
+        ? "https://dweb.link/ipfs/" + props.nft.url
+        : "";
     return {
       mediaUrl,
       async goToOffer() {
