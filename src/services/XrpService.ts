@@ -538,6 +538,7 @@ export async function getOneXls(nft: any) {
     }
 
     return {
+      tokenTaxon: NFTokenTaxon,
       issuer: Issuer,
       currency: NFTokenID,
       tokenName: name.replace(/[^\w\s]/gi, ""),
