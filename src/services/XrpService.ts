@@ -829,9 +829,9 @@ async function recursiveIpfsFetch(url: string): Promise<any> {
   const availableIpfsGateway = getAvailableIpfsGateway();
   devlog(availableIpfsGateway);
   if (availableIpfsGateway.length) {
-    const pomises = availableIpfsGateway.map((u: any) =>
-      fetch(u.domain + "ipfs/" + url, { signal })
-        .then(async (response) => {
+    const pomises = availableIpfsGateway.map(
+      (u: any) =>
+        fetch(u.domain + "ipfs/" + url, { signal }).then(async (response) => {
           const { status, ok } = response;
           console.log(response, [429, 504, 408].includes(status));
           if (!ok && [429, 504, 408].includes(status)) {
@@ -869,10 +869,10 @@ async function recursiveIpfsFetch(url: string): Promise<any> {
           const result = response.json();
           return result;
         })
-        .catch((e) => {
-          debugger;
-          throw new Error(e);
-        })
+      // .catch((e) => {
+      //   debugger;
+      //   throw new Error(e);
+      // })
     );
     const res = await Promise.race(pomises);
     controller.abort();
