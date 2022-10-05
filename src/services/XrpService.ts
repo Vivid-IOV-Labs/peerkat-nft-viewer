@@ -484,21 +484,22 @@ export async function fetchOneXls20(
   }
 }
 export async function getOneXls(nft: any) {
+  let mediaUrl;
+  let media_type;
+  let error_code;
+  let error_message;
+  let tokenName;
+  let desc;
+  const { Issuer, NFTokenID, URI, NFTokenTaxon } = nft;
+  const uri = hexToString(URI);
+  const end = uri.includes(".json")
+    ? ""
+    : Number.isInteger(NFTokenTaxon)
+    ? `/${NFTokenTaxon}.json`
+    : "/base.json";
+  const url =
+    uri.split("//")[0] === "ipfs:" ? uri.split("//")[1] + end : uri + end;
   try {
-    const { Issuer, NFTokenID, URI, NFTokenTaxon } = nft;
-    const uri = hexToString(URI);
-    const end = uri.includes(".json")
-      ? ""
-      : Number.isInteger(NFTokenTaxon)
-      ? `/${NFTokenTaxon}.json`
-      : "/base.json";
-    const url =
-      uri.split("//")[0] === "ipfs:" ? uri.split("//")[1] + end : uri + end;
-    const details =
-      uri.split("//")[0] === "ipfs:"
-        ? await getIpfsJson(url)
-        : await fetch(url).then((r) => r.json());
-
     const { description, image, name, schema, video, animate_url } = details;
     // const schmeaUri =
     //   schema.split("//")[0] === "ipfs:"
@@ -515,8 +516,8 @@ export async function getOneXls(nft: any) {
     //   console.log(error);
     // }
 
-    let mediaUrl;
-    let media_type;
+    tokenName = name.replace(/[^\w\s]/gi, "");
+    desc = description;
     if (image) {
       if (image.split("//")[0] === "ipfs:") {
         const { url: imageUrl } = await getIpfsMedia(image.split("//")[1]);
@@ -536,21 +537,28 @@ export async function getOneXls(nft: any) {
       }
       media_type = "video";
     }
-
-    return {
-      tokenTaxon: NFTokenTaxon,
-      issuer: Issuer,
-      currency: NFTokenID,
-      tokenName: name.replace(/[^\w\s]/gi, ""),
-      url: mediaUrl,
-      media_type,
-      desc: description,
-      issuerTruncated: truncate(Issuer),
-      standard: "XLS-20",
-    };
   } catch (error) {
-    devlog(error);
+    error_code = "no_nfts_in_collection";
+    error_message = "Individual metadata for this XLS20 NFT not found";
   }
+  const details =
+    uri.split("//")[0] === "ipfs:"
+      ? await getIpfsJson(url)
+      : await fetch(url).then((r) => r.json());
+
+  return {
+    tokenTaxon: NFTokenTaxon,
+    issuer: Issuer,
+    currency: NFTokenID,
+    tokenName,
+    url: mediaUrl,
+    media_type,
+    desc,
+    issuerTruncated: truncate(Issuer),
+    standard: "XLS-20",
+    error_code,
+    error_message,
+  };
 }
 
 export async function fetchXls20(walletAddress: string): Promise<any> {
