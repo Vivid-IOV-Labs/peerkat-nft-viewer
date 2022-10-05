@@ -58,7 +58,7 @@ const actions: ActionTree<NFT, NFTState> = {
     const count = getters.getAll.length;
     const nextLines =
       getters.getLines.length > 4
-        ? getters.getLines.slice(count, count + 4)
+        ? getters.getLines.slice(count, count + 3)
         : getters.getLines;
     const nextNfts: NFT[] = await client.fetchNext(nextLines);
     commit("setAllXls14", nextNfts);
