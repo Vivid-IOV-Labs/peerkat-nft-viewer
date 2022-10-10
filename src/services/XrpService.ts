@@ -245,20 +245,20 @@ async function getOne(
         tokenName = res.name;
         sololimitFormatted = collection.collection_item_count;
         const fil_ext = content_type.split("/")[1];
-        // const { url: mediaUrl } = await getIpfsMedia(
-        //   metadata.split("//")[1].replace("metadata.json", `data.${fil_ext}`)
-        // );
+        const { url: mediaUrl } = await getIpfsMedia(
+          metadata.split("//")[1].replace("metadata.json", `data.${fil_ext}`)
+        );
         media_type = content_type;
-        url = metadata
-          .split("//")[1]
-          .replace("metadata.json", `data.${fil_ext}`);
+        // url = metadata
+        //   .split("//")[1]
+        //   .replace("metadata.json", `data.${fil_ext}`);
+        url = mediaUrl;
         standard = "XLS-14d/SOLO";
       } else {
         error_code = "no_nfts_in_collection";
         error_message = "Individual metadata for this XLS14/SOLO NFT not found";
       }
     } catch (error: any) {
-      devlog(error);
       error_code = "no_nfts_in_collection";
       error_message = "Something went wrong" + error;
       await geXls14();
@@ -525,24 +525,24 @@ export async function getOneXls(nft: any) {
     tokenName = details.name.replace(/[^\w\s]/gi, "");
     description = details.description;
     if (details.image) {
-      if (details.image.split("//")[0] === "ipfs:") {
-        const { url: imageUrl } = await getIpfsMedia(
-          details.image.split("//")[1]
-        );
-        mediaUrl = imageUrl;
-      } else {
-        mediaUrl = details.image;
-      }
+      // if (details.image.split("//")[0] === "ipfs:") {
+      const { url: imageUrl } = await getIpfsMedia(
+        details.image.split("//")[1]
+      );
+      mediaUrl = imageUrl;
+      // } else {
+      //   mediaUrl = details.image;
+      // }
       media_type = "image";
     }
     if (details.video || details.animation_url) {
       const media = details.animation_url || details.video;
-      if (media.split("//")[0] === "ipfs:") {
-        const { url: videoUrl } = await getIpfsMedia(media.split("//")[1]);
-        mediaUrl = videoUrl;
-      } else {
-        mediaUrl = media;
-      }
+      // if (media.split("//")[0] === "ipfs:") {
+      const { url: videoUrl } = await getIpfsMedia(media.split("//")[1]);
+      mediaUrl = videoUrl;
+      // } else {
+      //   mediaUrl = media;
+      // }
       media_type = "video";
     }
   } catch (error) {
@@ -779,7 +779,6 @@ const ipfsGatewayLisWithObfuscateTime: any[] = [
   { domain: "https://cf-ipfs.com/", obfuscateTime: null },
   { domain: "https://cloudflare-ipfs.com/", obfuscateTime: null },
   { domain: "https://nftstorage.link/", obfuscateTime: null },
-  { domain: "https://gateway.ipfs.io/", obfuscateTime: null },
   { domain: "https://ipfs.io/", obfuscateTime: null },
 ];
 
@@ -811,7 +810,6 @@ function getAvailableIpfsGateway() {
       );
     }
   );
-  devlog("all ipfs", availableIpfsGateway);
   return availableIpfsGateway.slice(0, 2);
 }
 function obfuscateIpfsFromList(domain: string) {
@@ -827,7 +825,6 @@ async function recursiveIpfsFetch(url: string): Promise<any> {
   const controller = new AbortController();
   const signal = controller.signal;
   const availableIpfsGateway = getAvailableIpfsGateway();
-  devlog(availableIpfsGateway);
   if (availableIpfsGateway.length) {
     const pomises = availableIpfsGateway.map((u: any) =>
       fetch(u.domain + "ipfs/" + url, { signal, cache: "force-cache" }).then(
@@ -881,15 +878,19 @@ async function getIpfsJson(url: string) {
   const result = await recursiveIpfsFetch(url);
   return result;
 }
-async function getIpfsMedia(url: string) {
+
+export async function getIpfsMedia(url: string) {
   const ipfsGatewayList = [
     "https://dweb.link/",
     "https://gateway.ipfs.io/",
   ].map((u) => u + "ipfs/" + url);
+  const controller = new AbortController();
+  const signal = controller.signal;
   const pomises = ipfsGatewayList.map((u: string) =>
-    fetch(u, { cache: "force-cache" })
+    fetch(u, { signal, cache: "force-cache", method: "HEAD" })
   );
   const result = await Promise.any(pomises);
+  controller.abort();
   return result;
 }
 

@@ -10,7 +10,7 @@
         >
           <video
             v-if="nft.media_type?.includes('video')"
-            :src="`${mediaUrl}#t=0.5`"
+            :src="`${nft.url}#t=0.5`"
             poster="\loading.gif"
             muted
             class="img-fluid card-img-top"
@@ -18,7 +18,7 @@
           ></video>
           <img
             v-else-if="nft.media_type?.includes('image')"
-            v-lazy="mediaUrl"
+            v-lazy="nft.url"
             style="object-fit: cover; height: 100%; object-position: center top"
             class="img-fluid card-img-top"
             alt="Card
@@ -159,17 +159,16 @@ export default defineComponent({
         ? props.nft.buyoffers.length
         : 0;
     const countOffers = countSellOffer + countBuyOffer;
-    const mediaUrl =
-      props.nft.url &&
-      (["XLS-14", "XLS-16"].includes(props.nft.standard) ||
-        (["XLS-20"].includes(props.nft.standard) &&
-          props.nft.url.split("//")[0] == "https:"))
-        ? props.nft.url
-        : props.nft.url
-        ? "https://dweb.link/ipfs/" + props.nft.url
-        : "";
+    // const mediaUrl = props.nft.ur;
+    // props.nft.url &&
+    // (["XLS-14", "XLS-16"].includes(props.nft.standard) ||
+    //   (["XLS-20"].includes(props.nft.standard) &&
+    //     props.nft.url.split("//")[0] == "https:"))
+    //   ? props.nft.url
+    //   : props.nft.url
+    //   ? "https://dweb.link/ipfs/" + props.nft.url
+    //   : "";
     return {
-      mediaUrl,
       async goToOffer() {
         await store.commit("nft/setCurrent", props.nft);
         router.push({
