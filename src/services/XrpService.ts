@@ -829,54 +829,49 @@ async function recursiveIpfsFetch(url: string): Promise<any> {
   const availableIpfsGateway = getAvailableIpfsGateway();
   devlog(availableIpfsGateway);
   if (availableIpfsGateway.length) {
-    const pomises = availableIpfsGateway.map(
-      (u: any) =>
-        fetch(u.domain + "ipfs/" + url, { signal }).then(async (response) => {
-          const { status, ok } = response;
-          console.log(response, [429, 504, 408].includes(status));
-          if (!ok && [429, 504, 408].includes(status)) {
-            debugger;
-            if (availableIpfsGateway.length) {
-              const ipfs = availableIpfsGateway.find((ipfs: any) => {
-                return ipfs && response.url.includes(ipfs.domain);
-              });
-              debugger;
-
-              if (ipfs) {
-                obfuscateIpfsFromList(ipfs.domain);
-                controller.abort();
-
-                return await recursiveIpfsFetch(url);
-              } else {
-                devlog("No ipfs available");
-                controller.abort();
-                debugger;
-
-                throw new Error("No ipfs available");
-              }
-            } else {
-              devlog("No ipfs available");
-              controller.abort();
-              debugger;
-
-              throw new Error("No ipfs available");
-            }
-          }
-          if (!response.ok && ![429, 504, 408].includes(status)) {
-            debugger;
-            throw new Error(`Error! status: ${response.url}`);
+    const pomises = availableIpfsGateway.map((u: any) =>
+      fetch(u.domain + "ipfs/" + url, { signal, cache: "force-cache" }).then(
+        async (response) => {
+          if (!response.ok) {
+            throw new Error(
+              `Error! status: ${response.url} ${response.status}`
+            );
           }
           const result = response.json();
           return result;
-        })
-      // .catch((e) => {
-      //   debugger;
-      //   throw new Error(e);
-      // })
+        }
+      )
     );
-    const res = await Promise.race(pomises);
-    controller.abort();
-    return res;
+    try {
+      const res = await Promise.race(pomises);
+      controller.abort();
+      return res;
+    } catch (error: any) {
+      const errorCodesInMessage = ["429", "504", "408", "524"].some((el) =>
+        error.message.includes(el)
+      );
+      if (availableIpfsGateway.length) {
+        const ipfs = availableIpfsGateway.find((i: any) => {
+          return error.message.includes(i.domain.replace("https://", ""));
+        });
+        if (
+          (errorCodesInMessage && ipfs) ||
+          ["https://cf-ipfs.com/", "https://cloudflare-ipfs.com/"].includes(
+            ipfs.domain
+          )
+        ) {
+          obfuscateIpfsFromList(ipfs.domain);
+          controller.abort();
+          return await recursiveIpfsFetch(url);
+        } else {
+          controller.abort();
+          throw new Error("No ipfs available");
+        }
+      } else {
+        controller.abort();
+        throw new Error("No ipfs available");
+      }
+    }
   } else {
     devlog("No ipfs available");
     throw new Error("No ipfs available");
@@ -891,7 +886,9 @@ async function getIpfsMedia(url: string) {
     "https://dweb.link/",
     "https://gateway.ipfs.io/",
   ].map((u) => u + "ipfs/" + url);
-  const pomises = ipfsGatewayList.map((u: string) => fetch(u));
+  const pomises = ipfsGatewayList.map((u: string) =>
+    fetch(u, { cache: "force-cache" })
+  );
   const result = await Promise.any(pomises);
   return result;
 }
