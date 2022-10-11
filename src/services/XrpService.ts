@@ -777,7 +777,9 @@ async function getIpfsJson(url: string) {
   const controller = new AbortController();
   const { signal } = controller;
   const pomises = ipfsGatewayList.map((u: string) =>
-    fetch(u, { signal }).then((r) => r.json())
+    fetch(u, { signal, cache: "force-cache", method: "GET" }).then((r) =>
+      r.json()
+    )
   );
   const result = await Promise.any(pomises);
   controller.abort();
@@ -791,7 +793,9 @@ async function getIpfsMedia(url: string) {
   ].map((u) => u + "ipfs/" + url);
   const controller = new AbortController();
   const { signal } = controller;
-  const pomises = ipfsGatewayList.map((u: string) => fetch(u, { signal }));
+  const pomises = ipfsGatewayList.map((u: string) =>
+    fetch(u, { signal, cache: "force-cache", method: "HEAD" })
+  );
   const result = await Promise.any(pomises);
   controller.abort();
   return result;
