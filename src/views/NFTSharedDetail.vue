@@ -255,7 +255,7 @@ export default defineComponent({
     //     : nft.value.url
     //     ? "https://dweb.link/ipfs/" + nft.value.url
     //     : "";
-    });
+    //});
     return {
       nft,
       nodetype,
