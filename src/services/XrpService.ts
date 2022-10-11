@@ -783,12 +783,12 @@ const ipfsGatewayLisWithObfuscateTime: any[] = [
 ];
 
 function initIpfsGatewayLisWithObfuscateTime() {
-  if (!getIpfsGatewayLisWithObfuscateTime()) {
-    localStorage.setItem(
-      "ipfsGatewayLisWithObfuscateTime",
-      JSON.stringify(ipfsGatewayLisWithObfuscateTime)
-    );
-  }
+  //if (!getIpfsGatewayLisWithObfuscateTime()) {
+  localStorage.setItem(
+    "ipfsGatewayLisWithObfuscateTime",
+    JSON.stringify(ipfsGatewayLisWithObfuscateTime)
+  );
+  //}
 }
 function setIpfsGatewayLisWithObfuscateTime(newList: any) {
   localStorage.setItem(
@@ -882,7 +882,7 @@ async function getIpfsJson(url: string) {
 export async function getIpfsMedia(url: string) {
   const ipfsGatewayList = [
     "https://dweb.link/",
-    "https://gateway.ipfs.io/",
+    "https://gateway.pinata.cloud/",
   ].map((u) => u + "ipfs/" + url);
   const controller = new AbortController();
   const signal = controller.signal;

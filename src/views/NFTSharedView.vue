@@ -8,6 +8,7 @@
           v-if="nft.media_type?.includes('video') && !loadingMedia"
           :src="`${mediaUrl}#t=0.5`"
           poster="\loading.gif"
+          autoplay
           muted
           class="img-fluid card-img-top"
           style="object-fit: cover; height: 100%; object-position: center top"

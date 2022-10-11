@@ -19,6 +19,7 @@
                 :src="`${mediaUrl}#t=0.5`"
                 poster="\loading.gif"
                 muted
+                autoplay
                 class="img-fluid card-img-top"
                 style="
                   object-fit: cover;
