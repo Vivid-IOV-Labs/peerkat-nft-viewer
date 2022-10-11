@@ -778,6 +778,7 @@ interface list {
 const ipfsGatewayLisWithObfuscateTime: any[] = [
   { domain: "https://cf-ipfs.com/", obfuscateTime: null },
   { domain: "https://cloudflare-ipfs.com/", obfuscateTime: null },
+  { domain: "https://gateway.ipfs.io/", obfuscateTime: null },
   { domain: "https://nftstorage.link/", obfuscateTime: null },
   { domain: "https://ipfs.io/", obfuscateTime: null },
 ];
