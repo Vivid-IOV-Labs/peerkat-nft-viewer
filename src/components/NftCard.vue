@@ -9,7 +9,7 @@
           @click.prevent="view"
         >
           <video
-            v-if="nft.media_type?.includes('video') && mediaUrl"
+            v-if="nft.media_type?.includes('video') && !loadingMedia"
             :src="`${mediaUrl}#t=0.5`"
             poster="\loading.gif"
             muted
@@ -17,7 +17,7 @@
             style="object-fit: cover; height: 100%; object-position: center top"
           ></video>
           <img
-            v-else-if="nft.media_type?.includes('image') && mediaUrl"
+            v-else-if="nft.media_type?.includes('image') && !loadingMedia"
             v-lazy="mediaUrl"
             style="object-fit: cover; height: 100%; object-position: center top"
             class="img-fluid card-img-top"
@@ -25,7 +25,7 @@
           image cap"
           />
           <img
-            v-else-if="mediaUrl"
+            v-else-if="loadingMedia"
             :src="'/loading.gif'"
             style="object-fit: cover; height: 100%; object-position: center top"
             class="img-fluid card-img-top"
@@ -59,6 +59,7 @@
         <strong class="h7 font-weight-bold">Issuer </strong><br />
         <span>{{ nft.issuer }}</span
         ><br />
+        {{ mediaUrl }}
       </div>
       <div>
         <div v-if="nft.balanceFormatted || nft.limitFormatted" class="mt-2">
@@ -132,15 +133,14 @@ export default defineComponent({
   props: {
     nft: { type: Object, required: true },
   },
-  async setup(props) {
+  setup(props) {
     const router = useRouter();
     const store = useStore();
     const mediaUrl = ref("");
+    const loadingMedia = ref(false);
     const network = computed(() => store.getters["user/getNetwork"]);
     const nodetype = computed(() => getNodeTypeFromNetwork(network.value));
-    const networkCodeFromType = computed(() =>
-      getNetworkCodeFromType(nodetype.value)
-    );
+
     const walletAddress = computed(() => store.getters["user/getAddress"]);
 
     const bithomID =
@@ -169,20 +169,36 @@ export default defineComponent({
         ? props.nft.buyoffers.length
         : 0;
     const countOffers = countSellOffer + countBuyOffer;
-    // const mediaUrl = props.nft.ur;
+    if (props.nft.url) {
+      if (
+        ["XLS-14", "XLS-16"].includes(props.nft.standard) ||
+        (["XLS-20"].includes(props.nft.standard) &&
+          props.nft.url.split("//")[0] == "https:")
+      ) {
+        mediaUrl.value = props.nft.url || "";
+      } else {
+        loadingMedia.value = true;
+        getIpfsMedia(props.nft.url).then((resp: any) => {
+          loadingMedia.value = false;
+          mediaUrl.value = resp.url;
+        });
+      }
+    }
+
     // props.nft.url &&
-    // (["XLS-14", "XLS-16"].includes(props.nft.standard) ||
-    //   (["XLS-20"].includes(props.nft.standard) &&
-    //     props.nft.url.split("//")[0] == "https:"))
+
     //   ? props.nft.url
     //   : props.nft.url
     //   ? "https://dweb.link/ipfs/" + props.nft.url
     //   : "";
-    getIpfsMedia(props.nft.url).then((resp: any) => {
-      mediaUrl.value = resp.url;
-    });
+
+    // .then((resp: any) => {
+    //   mediaUrl.value = resp.url;
+    //   debugger;
+    // });
     return {
       mediaUrl,
+      loadingMedia,
       async goToOffer() {
         await store.commit("nft/setCurrent", props.nft);
         router.push({

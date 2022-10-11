@@ -15,11 +15,23 @@
               @click.prevent="view"
             >
               <video
-                v-if="nft.media_type?.includes('video')"
-                :src="`${nft.url}#t=0.5`"
-                muted
+                v-if="nft.media_type?.includes('video') && !loadingMedia"
+                :src="`${mediaUrl}#t=0.5`"
                 poster="\loading.gif"
-                class="img-fluid card-img"
+                muted
+                class="img-fluid card-img-top"
+                style="
+                  object-fit: cover;
+                  height: 100%;
+                  object-position: center top;
+                "
+              ></video>
+              <video
+                v-if="nft.media_type?.includes('video') && !loadingMedia"
+                :src="`${mediaUrl}#t=0.5`"
+                poster="\loading.gif"
+                muted
+                class="img-fluid card-img-top"
                 style="
                   object-fit: cover;
                   height: 100%;
@@ -27,14 +39,26 @@
                 "
               ></video>
               <img
-                v-else-if="nft.media_type?.includes('image')"
-                v-lazy="nft.url"
+                v-else-if="nft.media_type?.includes('image') && !loadingMedia"
+                v-lazy="mediaUrl"
                 style="
                   object-fit: cover;
                   height: 100%;
                   object-position: center top;
                 "
-                class="img-fluid card-img"
+                class="img-fluid card-img-top"
+                alt="Card
+          image cap"
+              />
+              <img
+                v-else-if="loadingMedia && !mediaUrl"
+                :src="'/loading.gif'"
+                style="
+                  object-fit: cover;
+                  height: 100%;
+                  object-position: center top;
+                "
+                class="img-fluid card-img-top"
                 alt="Card
           image cap"
               />
@@ -46,7 +70,7 @@
                   height: 100%;
                   object-position: center top;
                 "
-                class="img-fluid card-img"
+                class="img-fluid card-img-top"
                 alt="Card
           image cap"
               />
@@ -160,7 +184,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, ref, onMounted, watch } from "vue";
 import ExternalLink from "@/components/ExternalLink.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -174,7 +198,7 @@ import {
 } from "../utils/getNetworkTypeFromCode";
 import { devlog } from "../utils/devlog";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
-import { fetchOneXls20 } from "../services/XrpService";
+import { fetchOneXls20, getIpfsMedia } from "../services/XrpService";
 
 export default defineComponent({
   components: { BaseCard, ExternalLink },
@@ -182,6 +206,8 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
+    const mediaUrl = ref("");
+    const loadingMedia = ref(false);
     const nodetypefromlink = getNetworkTypeFromCode(
       parseInt(route.params.nodetype as string)
     );
@@ -242,11 +268,35 @@ export default defineComponent({
         await fetchOneXls14();
       }
     }
+
+    watch(
+      nft,
+      async (newNft: any) => {
+        if (newNft) {
+          if (newNft.url) {
+            if (
+              ["XLS-14", "XLS-16"].includes(newNft.standard) ||
+              (["XLS-20"].includes(newNft.standard) &&
+                newNft.url.split("//")[0] == "https:")
+            ) {
+              mediaUrl.value = newNft.url;
+              loadingMedia.value = false;
+            } else {
+              const resp = await getIpfsMedia(newNft.url);
+              mediaUrl.value = resp.url;
+              loadingMedia.value = false;
+            }
+          }
+        }
+      },
+      { immediate: true }
+    );
     if (nodetypefromlink == nodetype.value) {
       await fetchShared();
     } else {
       malformedLink.value = true;
     }
+
     // const mediaUrl = computed(() => {
     //   return ["XLS-14", "XLS-16"].includes(nft.value.standard) ||
     //     (["XLS-20"].includes(nft.value.standard) &&
@@ -255,8 +305,11 @@ export default defineComponent({
     //     : nft.value.url
     //     ? "https://dweb.link/ipfs/" + nft.value.url
     //     : "";
-    //});
+    // });
+
     return {
+      mediaUrl,
+      loadingMedia,
       nft,
       nodetype,
       network,

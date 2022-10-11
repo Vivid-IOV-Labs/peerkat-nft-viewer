@@ -5,20 +5,26 @@
     <div v-if="nft" class="w-100 p-1">
       <figure class="w-100 p4">
         <video
-          v-if="nft.media_type?.includes('video')"
-          :src="`${nft.url}`"
+          v-if="nft.media_type?.includes('video') && !loadingMedia"
+          :src="`${mediaUrl}#t=0.5`"
           poster="\loading.gif"
           muted
-          autoplay
-          loop
-          class="img-fluid card-img"
+          class="img-fluid card-img-top"
           style="object-fit: cover; height: 100%; object-position: center top"
         ></video>
         <img
-          v-else-if="nft.media_type?.includes('image')"
-          v-lazy="nft.url"
+          v-else-if="nft.media_type?.includes('image') && !loadingMedia"
+          v-lazy="mediaUrl"
           style="object-fit: cover; height: 100%; object-position: center top"
-          class="img-fluid card-img"
+          class="img-fluid card-img-top"
+          alt="Card
+          image cap"
+        />
+        <img
+          v-else-if="loadingMedia && !mediaUrl"
+          :src="'/loading.gif'"
+          style="object-fit: cover; height: 100%; object-position: center top"
+          class="img-fluid card-img-top"
           alt="Card
           image cap"
         />
@@ -26,7 +32,7 @@
           v-else
           :src="'/thumbnail.jpg'"
           style="object-fit: cover; height: 100%; object-position: center top"
-          class="img-fluid card-img"
+          class="img-fluid card-img-top"
           alt="Card
           image cap"
         />
@@ -35,16 +41,18 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, computed } from "vue";
+import { defineComponent, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { getIpfsMedia } from "../services/XrpService";
 import { getNetworkTypeFromCode } from "../utils/getNetworkTypeFromCode";
 export default defineComponent({
   async setup() {
     const route = useRoute();
     const store = useStore();
     const router = useRouter();
-
+    const mediaUrl = ref("");
+    const loadingMedia = ref(true);
     const nft = computed(() => {
       const { currency, nftAddress, nodetype } = route.params;
 
@@ -54,6 +62,28 @@ export default defineComponent({
         currency
       );
     });
+    watch(
+      nft,
+      async (newNft: any) => {
+        if (newNft) {
+          if (newNft.url) {
+            if (
+              ["XLS-14", "XLS-16"].includes(newNft.standard) ||
+              (["XLS-20"].includes(newNft.standard) &&
+                newNft.url.split("//")[0] == "https:")
+            ) {
+              mediaUrl.value = newNft.url;
+              loadingMedia.value = false;
+            } else {
+              const resp = await getIpfsMedia(newNft.url);
+              mediaUrl.value = resp.url;
+              loadingMedia.value = false;
+            }
+          }
+        }
+      },
+      { immediate: true }
+    );
     // const mediaUrl = computed(() => {
     //   return ["XLS-14", "XLS-16"].includes(nft.value.standard) ||
     //     (["XLS-20"].includes(nft.value.standard) &&
@@ -65,6 +95,8 @@ export default defineComponent({
     // });
     return {
       nft,
+      mediaUrl,
+      loadingMedia,
       back() {
         router.go(-1);
       },

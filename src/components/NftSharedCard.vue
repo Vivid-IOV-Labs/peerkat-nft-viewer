@@ -9,16 +9,24 @@
           @click.prevent="view"
         >
           <video
-            v-if="nft.media_type?.includes('video')"
-            :src="`${nft.url}#t=0.5`"
-            muted
+            v-if="nft.media_type?.includes('video') && !loadingMedia"
+            :src="`${mediaUrl}#t=0.5`"
             poster="\loading.gif"
+            muted
             class="img-fluid card-img-top"
             style="object-fit: cover; height: 100%; object-position: center top"
           ></video>
           <img
-            v-else-if="nft.media_type?.includes('image')"
-            v-lazy="nft.url"
+            v-else-if="nft.media_type?.includes('image') && !loadingMedia"
+            v-lazy="mediaUrl"
+            style="object-fit: cover; height: 100%; object-position: center top"
+            class="img-fluid card-img-top"
+            alt="Card
+          image cap"
+          />
+          <img
+            v-else-if="loadingMedia"
+            :src="'/loading.gif'"
             style="object-fit: cover; height: 100%; object-position: center top"
             class="img-fluid card-img-top"
             alt="Card
@@ -127,6 +135,8 @@ export default defineComponent({
   async setup(props) {
     const router = useRouter();
     const store = useStore();
+    const mediaUrl = ref("");
+    const loadingMedia = ref(false);
     const isConfirmDeleteOpen = ref(false);
 
     // const nodetype = computed(() => store.getters["user/getNodeType"]);
@@ -151,6 +161,21 @@ export default defineComponent({
         : 0;
 
     const countOffers = countSellOffer + countBuyOffer;
+    if (props.nft.url) {
+      if (
+        ["XLS-14", "XLS-16"].includes(props.nft.standard) ||
+        (["XLS-20"].includes(props.nft.standard) &&
+          props.nft.url.split("//")[0] == "https:")
+      ) {
+        mediaUrl.value = props.nft.url || "";
+      } else {
+        loadingMedia.value = true;
+        getIpfsMedia(props.nft.url).then((resp: any) => {
+          loadingMedia.value = false;
+          mediaUrl.value = resp.url;
+        });
+      }
+    }
     // const mediaUrl =
     //   props.nft.url &&
     //   (["XLS-14", "XLS-16"].includes(props.nft.standard) ||
@@ -161,6 +186,8 @@ export default defineComponent({
     //     ? "https://dweb.link/ipfs/" + props.nft.url
     //     : "";
     return {
+      mediaUrl,
+      loadingMedia,
       bihompUrl,
       countOffers,
       isConfirmDeleteOpen,
