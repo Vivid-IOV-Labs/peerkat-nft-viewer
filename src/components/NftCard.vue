@@ -9,16 +9,24 @@
           @click.prevent="view"
         >
           <video
-            v-if="nft.media_type?.includes('video')"
-            :src="`${nft.url}#t=0.5`"
+            v-if="nft.media_type?.includes('video') && mediaUrl"
+            :src="`${mediaUrl}#t=0.5`"
             poster="\loading.gif"
             muted
             class="img-fluid card-img-top"
             style="object-fit: cover; height: 100%; object-position: center top"
           ></video>
           <img
-            v-else-if="nft.media_type?.includes('image')"
-            v-lazy="nft.url"
+            v-else-if="nft.media_type?.includes('image') && mediaUrl"
+            v-lazy="mediaUrl"
+            style="object-fit: cover; height: 100%; object-position: center top"
+            class="img-fluid card-img-top"
+            alt="Card
+          image cap"
+          />
+          <img
+            v-else-if="mediaUrl"
+            :src="'/loading.gif'"
             style="object-fit: cover; height: 100%; object-position: center top"
             class="img-fluid card-img-top"
             alt="Card
@@ -113,6 +121,7 @@ import {
   getNodeTypeFromNetwork,
 } from "../utils/getNetworkTypeFromCode";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
+import { getIpfsMedia } from "../services/XrpService";
 
 export default defineComponent({
   components: {
@@ -126,6 +135,7 @@ export default defineComponent({
   async setup(props) {
     const router = useRouter();
     const store = useStore();
+    const mediaUrl = ref("");
     const network = computed(() => store.getters["user/getNetwork"]);
     const nodetype = computed(() => getNodeTypeFromNetwork(network.value));
     const networkCodeFromType = computed(() =>
@@ -168,7 +178,11 @@ export default defineComponent({
     //   : props.nft.url
     //   ? "https://dweb.link/ipfs/" + props.nft.url
     //   : "";
+    getIpfsMedia(props.nft.url).then((resp: any) => {
+      mediaUrl.value = resp.url;
+    });
     return {
+      mediaUrl,
       async goToOffer() {
         await store.commit("nft/setCurrent", props.nft);
         router.push({
