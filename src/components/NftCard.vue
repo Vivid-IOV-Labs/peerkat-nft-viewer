@@ -177,7 +177,7 @@ export default defineComponent({
       ) {
         mediaUrl.value = props.nft.url || "";
       } else {
-        loadingMedia.value = true;
+        // loadingMedia.value = true;
         // getIpfsMedia(props.nft.url).then((resp: any) => {
         //   loadingMedia.value = false;
         //   mediaUrl.value = resp.url;
