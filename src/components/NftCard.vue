@@ -182,7 +182,7 @@ export default defineComponent({
         //   loadingMedia.value = false;
         //   mediaUrl.value = resp.url;
         // });
-        mediaUrl.value = "https://dweb.link/ipfs" + props.nft.url;
+        mediaUrl.value = "https://dweb.link/ipfs/" + props.nft.url;
       }
     }
 
