@@ -179,9 +179,6 @@ async function getOne(
   limitFormatted?: string
 ) {
   const { Domain } = account_data;
-  const source = is_hexadecimal(hexToString(Domain))
-    ? hexToString(hexToString(Domain))
-    : hexToString(Domain);
   let url;
   let media_type;
   let desc;
@@ -191,106 +188,117 @@ async function getOne(
   let standard;
   let error_code = "";
   let error_message = "";
+  if (Domain) {
+    const source = is_hexadecimal(hexToString(Domain))
+      ? hexToString(hexToString(Domain))
+      : hexToString(Domain);
 
-  const ctiHex = getCtiHex(currency);
-  const ctiDecimal = hexToDec(ctiHex);
-  const ctiDecimalString = ctiDecimal.toString();
-  const ctiBigInt = BigInt(ctiDecimalString);
-  const ledgerIndex = cti_ledger_index(ctiBigInt);
-  const ledgerIndexDecimal = Number(ledgerIndex);
-  const transactionIndex = cti_transaction_index(ctiBigInt);
-  const transactionIndexDecimal = Number(transactionIndex);
-  tokenName = getTokenName(currency);
-  async function geXls14() {
-    const xlsProtocol = getXLSProtocol(source);
-    if (xlsProtocol) {
-      url = await getMediaByXLSProtocol(source, xlsProtocol, tokenName);
-      media_type = await getMediaType(url);
-      standard = "XLS-14";
+    const ctiHex = getCtiHex(currency);
+    const ctiDecimal = hexToDec(ctiHex);
+    const ctiDecimalString = ctiDecimal.toString();
+    const ctiBigInt = BigInt(ctiDecimalString);
+    const ledgerIndex = cti_ledger_index(ctiBigInt);
+    const ledgerIndexDecimal = Number(ledgerIndex);
+    const transactionIndex = cti_transaction_index(ctiBigInt);
+    const transactionIndexDecimal = Number(transactionIndex);
+    tokenName = getTokenName(currency);
+    // eslint-disable-next-line no-inner-declarations
+    async function geXls14() {
+      const xlsProtocol = getXLSProtocol(source);
+      if (xlsProtocol) {
+        url = await getMediaByXLSProtocol(source, xlsProtocol, tokenName);
+        media_type = await getMediaType(url);
+        standard = "XLS-14";
 
-      if (media_type == "application/json") {
-        const { image } = await getIpfsJson(url);
-        if (image) {
-          url = await getMediaByXLSProtocol(image, "xls-16-peerkat");
+        if (media_type == "application/json") {
+          const { image } = await getIpfsJson(url);
+          if (image) {
+            url = await getMediaByXLSProtocol(image, "xls-16-peerkat");
+            media_type = await getMediaType(url);
+          }
+        } else if (media_type?.includes("text/html")) {
+          const { url: metadataUrl } = await getIpfsMedia(
+            source.split("ipfs/")[1]
+          );
+          const data = await getPdfContent(metadataUrl);
+          const res = await getIpfsMedia(data["Image IPFS CID"]);
+          url = res.url;
           media_type = await getMediaType(url);
+          author = data["Design"];
         }
-      } else if (media_type?.includes("text/html")) {
-        const { url: metadataUrl } = await getIpfsMedia(
-          source.split("ipfs/")[1]
+      }
+    }
+
+    if (isXls14Solo(currency)) {
+      //const { url: metadataUrl } = await getIpfsMedia(source.split("//")[1]);
+      try {
+        // const promise = await fetch(metadataUrl);
+        // const collection = await promise.json();
+        const collection = await getIpfsJson(source.split("//")[1]);
+        const { nfts } = collection;
+        if (nfts) {
+          const nft = nfts.find((n: any) => n.currency == currency);
+          const { content_type, metadata } = nft;
+          // const { url: metadaNftUrl } = await getIpfsMedia(
+          //   metadata.split("//")[1]
+          // );
+          const res = await getIpfsJson(metadata.split("//")[1]);
+          desc = decodeHtmlEntity(res.description);
+          tokenName = res.name;
+          sololimitFormatted = collection.collection_item_count;
+          const fil_ext = content_type.split("/")[1];
+          // const { url: mediaUrl } = await getIpfsMedia(
+          //   metadata.split("//")[1].replace("metadata.json", `data.${fil_ext}`)
+          // );
+          media_type = content_type;
+          url = metadata
+            .split("//")[1]
+            .replace("metadata.json", `data.${fil_ext}`);
+          //url = mediaUrl;
+          standard = "XLS-14d/SOLO";
+        } else {
+          error_code = "no_nfts_in_collection";
+          error_message =
+            "Individual metadata for this XLS14/SOLO NFT not found";
+        }
+      } catch (error: any) {
+        error_code = "no_nfts_in_collection";
+        error_message = "Something went wrong" + error;
+        await geXls14();
+      }
+    } else if (
+      ledgerIndexDecimal.toString().length >= 8 &&
+      ledgerIndexDecimal.toString().length <= 9
+    ) {
+      const metadata = await getMetadata(
+        ledgerIndexDecimal,
+        transactionIndexDecimal
+      );
+      if (metadata) {
+        const uri = metadata.find((m: any) => m.type == "PrimaryUri").data;
+        desc = decodeHtmlEntity(
+          metadata
+            .find((m: any) => m.type == "Description")
+            .data.replace("â", "")
+            .replace("Â", "")
         );
-        const data = await getPdfContent(metadataUrl);
-        const res = await getIpfsMedia(data["Image IPFS CID"]);
+        author = metadata.find((m: any) => m.type == "Author").data;
+        const res = await getIpfsMedia(uri.split("//")[1]);
         url = res.url;
         media_type = await getMediaType(url);
-        author = data["Design"];
-      }
-    }
-  }
-
-  if (isXls14Solo(currency)) {
-    //const { url: metadataUrl } = await getIpfsMedia(source.split("//")[1]);
-    try {
-      // const promise = await fetch(metadataUrl);
-      // const collection = await promise.json();
-      const collection = await getIpfsJson(source.split("//")[1]);
-      const { nfts } = collection;
-      if (nfts) {
-        const nft = nfts.find((n: any) => n.currency == currency);
-        const { content_type, metadata } = nft;
-        // const { url: metadaNftUrl } = await getIpfsMedia(
-        //   metadata.split("//")[1]
-        // );
-        const res = await getIpfsJson(metadata.split("//")[1]);
-        desc = decodeHtmlEntity(res.description);
-        tokenName = res.name;
-        sololimitFormatted = collection.collection_item_count;
-        const fil_ext = content_type.split("/")[1];
-        // const { url: mediaUrl } = await getIpfsMedia(
-        //   metadata.split("//")[1].replace("metadata.json", `data.${fil_ext}`)
-        // );
-        media_type = content_type;
-        url = metadata
-          .split("//")[1]
-          .replace("metadata.json", `data.${fil_ext}`);
-        //url = mediaUrl;
-        standard = "XLS-14d/SOLO";
+        standard = "XLS-16";
       } else {
-        error_code = "no_nfts_in_collection";
-        error_message = "Individual metadata for this XLS14/SOLO NFT not found";
+        devlog("No metadata");
+        await geXls14();
       }
-    } catch (error: any) {
-      error_code = "no_nfts_in_collection";
-      error_message = "Something went wrong" + error;
-      await geXls14();
-    }
-  } else if (
-    ledgerIndexDecimal.toString().length >= 8 &&
-    ledgerIndexDecimal.toString().length <= 9
-  ) {
-    const metadata = await getMetadata(
-      ledgerIndexDecimal,
-      transactionIndexDecimal
-    );
-    if (metadata) {
-      const uri = metadata.find((m: any) => m.type == "PrimaryUri").data;
-      desc = decodeHtmlEntity(
-        metadata
-          .find((m: any) => m.type == "Description")
-          .data.replace("â", "")
-          .replace("Â", "")
-      );
-      author = metadata.find((m: any) => m.type == "Author").data;
-      const res = await getIpfsMedia(uri.split("//")[1]);
-      url = res.url;
-      media_type = await getMediaType(url);
-      standard = "XLS-16";
     } else {
-      devlog("No metadata");
       await geXls14();
     }
   } else {
-    await geXls14();
+    error_code = "no_nfts_in_collection";
+    error_message = "No 'Domain' found for this NFT";
   }
+
   return {
     issuer: account,
     issuerTruncated: truncate(account),
