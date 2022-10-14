@@ -842,25 +842,25 @@ async function recursiveIpfsFetch(url: string): Promise<any> {
   const availableIpfsGateway = getAvailableIpfsGateway();
   if (availableIpfsGateway.length) {
     const pomises = availableIpfsGateway.map((u: any) =>
-      fetch(u.domain + "ipfs/" + url, { signal, cache: "force-cache" }).then(
-        async (response) => {
-          if (!response.ok) {
-            throw new Error(
-              `Error! status: ${response.url} ${response.status}`
-            );
-          }
-          const result = response.json();
-          return result;
+      fetch(u.domain + "ipfs/" + url, {
+        signal,
+        cache: "force-cache",
+        mode: "cors",
+      }).then(async (response) => {
+        if (!response.ok) {
+          throw new Error(`Error! status: ${response.url} ${response.status}`);
         }
-      )
+        const result = response.json();
+        return result;
+      })
     );
     try {
       const res = await Promise.race(pomises);
       controller.abort();
       return res;
     } catch (error: any) {
-      const errorCodesInMessage = ["429", "504", "408", "524"].some((el) =>
-        error.message.includes(el)
+      const errorCodesInMessage = ["429", "504", "408", "524", "403"].some(
+        (el) => error.message.includes(el)
       );
       if (availableIpfsGateway.length) {
         const ipfs = availableIpfsGateway.find((i: any) => {
