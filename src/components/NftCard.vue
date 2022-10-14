@@ -178,10 +178,11 @@ export default defineComponent({
         mediaUrl.value = props.nft.url || "";
       } else {
         loadingMedia.value = true;
-        getIpfsMedia(props.nft.url).then((resp: any) => {
-          loadingMedia.value = false;
-          mediaUrl.value = resp.url;
-        });
+        // getIpfsMedia(props.nft.url).then((resp: any) => {
+        //   loadingMedia.value = false;
+        //   mediaUrl.value = resp.url;
+        // });
+        mediaUrl.value = "https://dweb.link/ipfs" + props.nft.url;
       }
     }
 
