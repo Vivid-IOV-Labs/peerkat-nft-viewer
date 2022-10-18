@@ -818,7 +818,7 @@ function getIpfsGatewayLisWithObfuscateTime() {
   return item ? JSON.parse(item) : null;
 }
 function getAvailableIpfsGateway() {
-  const oneMinuteAgo = new Date(Date.now() - 1000 * 60);
+  const oneMinuteAgo = new Date(Date.now() - 3600);
   const availableIpfsGateway = getIpfsGatewayLisWithObfuscateTime().filter(
     ({ obfuscateTime }: any) => {
       return (
