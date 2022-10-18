@@ -796,7 +796,7 @@ const ipfsGatewayLisWithObfuscateTime: any[] = [
   { domain: "https://gateway.ipfs.io/", obfuscateTime: null },
   // { domain: "https://nftstorage.link/", obfuscateTime: null },
 
-  // { domain: "https://ipfs.io/", obfuscateTime: null },
+  { domain: "https://jorropo.net/", obfuscateTime: null },
 ];
 
 function initIpfsGatewayLisWithObfuscateTime() {
