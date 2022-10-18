@@ -784,19 +784,19 @@ interface list {
   [name: string]: any | undefined;
 }
 const ipfsGatewayLisWithObfuscateTime: any[] = [
-  {
-    domain: "https://cf-ipfs.com/",
-    obfuscateTime: null,
-  },
+  // {
+  //   domain: "https://cf-ipfs.com/",
+  //   obfuscateTime: null,
+  // },
   {
     domain: "https://cloudflare-ipfs.com/",
     obfuscateTime: null,
   },
-  { domain: "https://dweb.link/", obfuscateTime: null },
-  { domain: "https://gateway.ipfs.io/", obfuscateTime: null },
-  { domain: "https://nftstorage.link/", obfuscateTime: null },
+  // { domain: "https://dweb.link/", obfuscateTime: null },
+  // { domain: "https://gateway.ipfs.io/", obfuscateTime: null },
+  // { domain: "https://nftstorage.link/", obfuscateTime: null },
 
-  { domain: "https://ipfs.io/", obfuscateTime: null },
+  // { domain: "https://ipfs.io/", obfuscateTime: null },
 ];
 
 function initIpfsGatewayLisWithObfuscateTime() {
@@ -898,8 +898,11 @@ async function getIpfsJson(url: string) {
 
 export async function getIpfsMedia(url: string) {
   const ipfsGatewayList = [
+    "https://cf-ipfs.com/",
     "https://dweb.link/",
-    "https://gateway.pinata.cloud/",
+    "https://ipfs.io/",
+    "https://nftstorage.link/",
+    "https://hardbin.com/",
   ].map((u) => u + "ipfs/" + url);
   const controller = new AbortController();
   const signal = controller.signal;
