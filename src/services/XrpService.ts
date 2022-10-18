@@ -784,14 +784,14 @@ interface list {
   [name: string]: any | undefined;
 }
 const ipfsGatewayLisWithObfuscateTime: any[] = [
-  // {
-  //   domain: "https://cf-ipfs.com/",
-  //   obfuscateTime: null,
-  // },
   {
-    domain: "https://cloudflare-ipfs.com/",
+    domain: "https://cf-ipfs.com/",
     obfuscateTime: null,
   },
+  // {
+  //   domain: "https://cloudflare-ipfs.com/",
+  //   obfuscateTime: null,
+  // },
   // { domain: "https://dweb.link/", obfuscateTime: null },
   // { domain: "https://gateway.ipfs.io/", obfuscateTime: null },
   // { domain: "https://nftstorage.link/", obfuscateTime: null },
@@ -898,7 +898,7 @@ async function getIpfsJson(url: string) {
 
 export async function getIpfsMedia(url: string) {
   const ipfsGatewayList = [
-    "https://cf-ipfs.com/",
+    "https://cloudflare-ipfs.com/",
     "https://dweb.link/",
     "https://ipfs.io/",
     "https://nftstorage.link/",
