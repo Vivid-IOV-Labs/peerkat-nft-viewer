@@ -182,7 +182,7 @@ export default defineComponent({
         //   loadingMedia.value = false;
         //   mediaUrl.value = resp.url;
         // });
-        mediaUrl.value = "https://cloudflare-ipfs.com/ipfs/" + props.nft.url;
+        mediaUrl.value = "https://cf-ipfs.com/ipfs/" + props.nft.url;
         // mediaUrl.value = "https://peerkat.mypinata.cloud/ipfs/" + props.nft.url;
       }
     }
