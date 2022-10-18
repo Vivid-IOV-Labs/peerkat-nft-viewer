@@ -789,7 +789,7 @@ const ipfsGatewayLisWithObfuscateTime: any[] = [
     obfuscateTime: null,
   },
   {
-    domain: "https://cors-anywhere.herokuapp.com/https://cloudflare-ipfs.com/",
+    domain: "https://cloudflare-ipfs.com/",
     obfuscateTime: null,
   },
   { domain: "https://dweb.link/", obfuscateTime: null },
