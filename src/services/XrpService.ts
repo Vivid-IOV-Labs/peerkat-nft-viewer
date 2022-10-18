@@ -789,7 +789,7 @@ const ipfsGatewayLisWithObfuscateTime: any[] = [
     obfuscateTime: null,
   },
   {
-    domain: "https://cloudflare-ipfs.com/",
+    domain: "https://cors-anywhere.herokuapp.com/https://cloudflare-ipfs.com/",
     obfuscateTime: null,
   },
   { domain: "https://dweb.link/", obfuscateTime: null },
@@ -818,7 +818,7 @@ function getIpfsGatewayLisWithObfuscateTime() {
   return item ? JSON.parse(item) : null;
 }
 function getAvailableIpfsGateway() {
-  const oneMinuteAgo = new Date(Date.now() - 3600);
+  const oneMinuteAgo = new Date(Date.now() - 1000 * 4);
   const availableIpfsGateway = getIpfsGatewayLisWithObfuscateTime().filter(
     ({ obfuscateTime }: any) => {
       return (
