@@ -793,7 +793,7 @@ const ipfsGatewayLisWithObfuscateTime: any[] = [
   //   obfuscateTime: null,
   // },
   { domain: "https://dweb.link/", obfuscateTime: null },
-  // { domain: "https://gateway.ipfs.io/", obfuscateTime: null },
+  { domain: "https://gateway.ipfs.io/", obfuscateTime: null },
   // { domain: "https://nftstorage.link/", obfuscateTime: null },
 
   // { domain: "https://ipfs.io/", obfuscateTime: null },
@@ -895,7 +895,59 @@ async function getIpfsJson(url: string) {
   const result = await recursiveIpfsFetch(url);
   return result;
 }
-
+// async function recursiveIpfsFetchMedia(url: string): Promise<any> {
+//   // return the promise
+//   const controller = new AbortController();
+//   const signal = controller.signal;
+//   const availableIpfsGateway = getAvailableIpfsGateway();
+//   if (availableIpfsGateway.length) {
+//     const pomises = availableIpfsGateway.map((u: any) =>
+//       fetch(u.domain + "ipfs/" + url, {
+//         cache: "force-cache",
+//         method: "HEAD",
+//       }).then(async (response) => {
+//         if (!response.ok) {
+//           throw new Error(`Error! status: ${response.url} ${response.status}`);
+//         }
+//         const result = response.json();
+//         return result;
+//       })
+//     );
+//     try {
+//       const res = await Promise.race(pomises);
+//       controller.abort();
+//       return res;
+//     } catch (error: any) {
+//       const errorCodesInMessage = ["429", "504", "408", "524", "403"].some(
+//         (el) => error.message.includes(el)
+//       );
+//       if (availableIpfsGateway.length) {
+//         const ipfs = availableIpfsGateway.find((i: any) => {
+//           return error.message.includes(i.domain.replace("https://", ""));
+//         });
+//         if (
+//           (errorCodesInMessage && ipfs) ||
+//           ["https://cf-ipfs.com/", "https://cloudflare-ipfs.com/"].includes(
+//             ipfs.domain
+//           )
+//         ) {
+//           obfuscateIpfsFromList(ipfs.domain);
+//           controller.abort();
+//           return await recursiveIpfsFetch(url);
+//         } else {
+//           controller.abort();
+//           throw new Error("No ipfs available");
+//         }
+//       } else {
+//         controller.abort();
+//         throw new Error("No ipfs available");
+//       }
+//     }
+//   } else {
+//     devlog("No ipfs available");
+//     throw new Error("No ipfs available");
+//   }
+// }
 export async function getIpfsMedia(url: string) {
   const ipfsGatewayList = [
     "https://cloudflare-ipfs.com/",
