@@ -121,6 +121,7 @@ import {
   getNodeTypeFromNetwork,
 } from "../utils/getNetworkTypeFromCode";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
+import { getIpfsMedia } from "../services/XrpService";
 
 export default defineComponent({
   components: {
