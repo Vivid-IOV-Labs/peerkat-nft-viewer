@@ -59,7 +59,6 @@
         <strong class="h7 font-weight-bold">Issuer </strong><br />
         <span>{{ nft.issuer }}</span
         ><br />
-        {{ mediaUrl }}
       </div>
       <div>
         <div v-if="nft.balanceFormatted || nft.limitFormatted" class="mt-2">
