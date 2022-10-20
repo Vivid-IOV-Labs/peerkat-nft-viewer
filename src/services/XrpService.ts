@@ -185,7 +185,8 @@ async function getOne(
   let author;
   let tokenName = "";
   let sololimitFormatted;
-  let standard;
+  let standard = "XLS-14";
+
   let error_code = "";
   let error_message = "";
   if (Domain) {

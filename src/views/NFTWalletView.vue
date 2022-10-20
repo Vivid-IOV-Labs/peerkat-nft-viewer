@@ -62,7 +62,7 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
     const mediaUrl = ref("");
-    const loadingMedia = ref(true);
+    const loadingMedia = ref(false);
     const { currency, nftAddress } = route.params;
     const nft = computed(() => {
       return store.getters["nft/getByAddress"](nftAddress, currency);
@@ -81,11 +81,16 @@ export default defineComponent({
               mediaUrl.value = newNft.url;
               loadingMedia.value = false;
             } else {
+              loadingMedia.value = true;
+
               const resp = await getIpfsMedia(newNft.url);
               mediaUrl.value = resp.url;
               await delay(400);
               loadingMedia.value = false;
             }
+          } else {
+            loadingMedia.value = false;
+            mediaUrl.value = "newNft.url";
           }
         }
       },
