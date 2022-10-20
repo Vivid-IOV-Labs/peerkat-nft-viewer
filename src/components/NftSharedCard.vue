@@ -2,11 +2,12 @@
   <base-card style="height: 100%">
     <template #picture>
       <figure style="overflow: hidden; height: 100%">
+        error{{ nft.error_code }}
         <a
           class="h-100 d-block"
           style="overflow: hidden"
           href="#"
-          @click.prevent="view"
+          @click.prevent="!nft.error_code && view"
         >
           <video
             v-if="nft.media_type?.includes('video') && !loadingMedia"
@@ -44,9 +45,16 @@
       </figure>
     </template>
     <template #text>
-      <strong class="h5 font-weight-bold">Token Name </strong><br />
-      {{ nft.tokenName }}
-      <hr />
+      <div v-if="nft.error_code" class="alert alert-warning">
+        <span class="h6 font-weight-bold alert-heading">Missing Data</span
+        ><br />
+        {{ nft.error_message }}
+      </div>
+      <div v-if="!nft.error_code">
+        <strong class="h5 font-weight-bold">Token Name </strong><br />
+        {{ nft.tokenName }}
+        <hr />
+      </div>
       <strong class="h7 font-weight-bold">Issuer </strong><br />
       <span>{{ nft.issuer }}</span
       ><br />
@@ -196,9 +204,11 @@ export default defineComponent({
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
       view() {
-        router.push({
-          path: `/shared/${props.nft.issuer}/${nodetypecode.value}/view/${props.nft.currency}`,
-        });
+        if (props.nft.error_code) {
+          router.push({
+            path: `/shared/${props.nft.issuer}/${nodetypecode.value}/view/${props.nft.currency}`,
+          });
+        }
       },
       async goToOffer() {
         await store.commit("nft/setCurrent", props.nft);

@@ -220,9 +220,11 @@ export default defineComponent({
         copyText(url, params);
       },
       view() {
-        router.push({
-          path: `/wallet/${props.nft.issuer}/view/${props.nft.currency}`,
-        });
+        if (props.nft.error_code) {
+          router.push({
+            path: `/wallet/${props.nft.issuer}/view/${props.nft.currency}`,
+          });
+        }
       },
     };
   },
