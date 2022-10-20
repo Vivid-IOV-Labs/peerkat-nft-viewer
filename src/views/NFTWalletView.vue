@@ -2,50 +2,52 @@
   <div class="w-100 pt-0 p-1 text-center" style="overflow: scroll">
     <a href="#" class="mb-4 btn btn-link w-100" @click.prevent="back">Back </a>
     <div v-if="nft" class="w-100 p-1">
-      <figure v-if="mediaUrl && !loadingMedia" class="w-100">
-        <video
-          v-if="nft.media_type?.includes('video') && !loadingMedia"
-          :src="`${mediaUrl}#t=0.5`"
-          poster="\loading.gif"
-          autoplay
-          muted
-          class="img-fluid card-img-top"
-          style="object-fit: cover; height: 100%; object-position: center top"
-        ></video>
-        <img
-          v-else-if="nft.media_type?.includes('image') && !loadingMedia"
-          v-lazy="mediaUrl"
-          style="object-fit: cover; height: 100%; object-position: center top"
-          class="img-fluid card-img-top"
-          alt="Card
+      <Transition>
+        <figure v-if="mediaUrl && !loadingMedia" class="w-100">
+          <video
+            v-if="nft.media_type?.includes('video') && !loadingMedia"
+            :src="`${mediaUrl}#t=0.5`"
+            poster="\loading.gif"
+            autoplay
+            muted
+            class="img-fluid card-img-top"
+            style="object-fit: cover; height: 100%; object-position: center top"
+          ></video>
+          <img
+            v-else-if="nft.media_type?.includes('image') && !loadingMedia"
+            v-lazy="mediaUrl"
+            style="object-fit: cover; height: 100%; object-position: center top"
+            class="img-fluid card-img-top"
+            alt="Card
           image cap"
-        />
-        <img
-          v-else-if="loadingMedia && !mediaUrl"
-          :src="'/loading.gif'"
-          style="object-fit: cover; height: 100%; object-position: center top"
-          class="img-fluid card-img-top"
-          alt="Card
+          />
+          <img
+            v-else-if="loadingMedia && !mediaUrl"
+            :src="'/loading.gif'"
+            style="object-fit: cover; height: 100%; object-position: center top"
+            class="img-fluid card-img-top"
+            alt="Card
           image cap"
-        />
-        <img
-          v-else
-          :src="'/thumbnail.jpg'"
-          style="object-fit: cover; height: 100%; object-position: center top"
-          class="img-fluid card-img-top"
-          alt="Card
+          />
+          <img
+            v-else
+            :src="'/thumbnail.jpg'"
+            style="object-fit: cover; height: 100%; object-position: center top"
+            class="img-fluid card-img-top"
+            alt="Card
           image cap"
-        />
-      </figure>
-      <figure v-else class="w-100">
-        <img
-          :src="'/loading.gif'"
-          style="object-fit: cover; height: 100%; object-position: center top"
-          class="img-fluid card-img-top"
-          alt="Card
+          />
+        </figure>
+        <figure v-else class="w-100">
+          <img
+            :src="'/loading.gif'"
+            style="object-fit: cover; height: 100%; object-position: center top"
+            class="img-fluid card-img-top"
+            alt="Card
           image cap"
-        />
-      </figure>
+          />
+        </figure>
+      </Transition>
     </div>
   </div>
 </template>
