@@ -74,7 +74,7 @@ export default defineComponent({
         if (newNft) {
           if (newNft.url) {
             if (
-              ["XLS-14", "XLS-16"].includes(newNft.standard) ||
+              ["XLS-14"].includes(newNft.standard) ||
               (["XLS-20"].includes(newNft.standard) &&
                 newNft.url.split("//")[0] == "https:")
             ) {

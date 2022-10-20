@@ -170,7 +170,7 @@ export default defineComponent({
     const countOffers = countSellOffer + countBuyOffer;
     if (props.nft.url) {
       if (
-        ["XLS-14", "XLS-16"].includes(props.nft.standard) ||
+        ["XLS-14"].includes(props.nft.standard) ||
         (["XLS-20"].includes(props.nft.standard) &&
           props.nft.url.split("//")[0] == "https:")
       ) {

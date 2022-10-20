@@ -100,8 +100,9 @@ async function getMediaByXLSProtocol(
     return protocol + "//" + tokenName;
   } else if (xlsProtocol == "xls-16-peerkat") {
     const cid = source.split(":")[1];
-    const { url } = await getIpfsMedia(cid);
-    return url;
+    // const { url } = await getIpfsMedia(cid);
+    // debugger;
+    return cid;
   } else {
     return "";
   }
