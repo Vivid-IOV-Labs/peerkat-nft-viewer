@@ -1,9 +1,9 @@
 <template>
-  <div class="w-100 pt-0 p-1 text-center" style="overflow: scroll">
+  <div style="height: 60vh; overflow: hidden" class="w-100 p-1">
     <a href="#" class="mb-4 btn btn-link w-100" @click.prevent="back">Back </a>
-    <div v-if="nft" class="w-100 h-screen p-1">
-      <Transition>
-        <figure v-if="mediaUrl && !loadingMedia" class="w-100 h-screen">
+    <div v-if="nft" class="h-100">
+      <transition>
+        <figure v-if="mediaUrl && !loadingMedia" class="w-100">
           <video
             v-if="nft.media_type?.includes('video') && !loadingMedia"
             :src="`${mediaUrl}#t=0.5`"
@@ -18,27 +18,21 @@
             v-lazy="mediaUrl"
             style="object-fit: cover; height: 100%; object-position: center top"
             class="img-fluid card-img-top"
-            alt="Card
-          image cap"
           />
           <img
             v-else-if="loadingMedia && !mediaUrl"
             :src="'/loading.gif'"
             style="object-fit: cover; height: 100%; object-position: center top"
             class="img-fluid card-img-top"
-            alt="Card
-          image cap"
           />
           <img
             v-else
             :src="'/thumbnail.jpg'"
             style="object-fit: cover; height: 100%; object-position: center top"
             class="img-fluid card-img-top"
-            alt="Card
-          image cap"
           />
         </figure>
-        <figure v-else class="w-100 h-screen">
+        <div v-else class="w-100 h-100">
           <img
             :src="'/loading.gif'"
             style="object-fit: cover; height: 100%; object-position: center top"
@@ -46,8 +40,8 @@
             alt="Card
           image cap"
           />
-        </figure>
-      </Transition>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -56,6 +50,7 @@ import { defineComponent, computed, watch, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { getIpfsMedia } from "../services/XrpService";
+import { delay } from "../utils/delay";
 export default defineComponent({
   setup() {
     const route = useRoute();
@@ -83,6 +78,7 @@ export default defineComponent({
             } else {
               const resp = await getIpfsMedia(newNft.url);
               mediaUrl.value = resp.url;
+              await delay(400);
               loadingMedia.value = false;
             }
           }

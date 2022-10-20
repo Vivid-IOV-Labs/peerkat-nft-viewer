@@ -1,10 +1,10 @@
 <template>
-  <div class="w-100 pt-0 p-1 text-center" style="overflow: scroll">
+  <div style="height: 60vh; overflow: hidden" class="w-100 p-1">
     <a href="#" class="mb-4 btn btn-link w-100" @click.prevent="back">Back </a>
 
-    <div v-if="nft" class="w-100 p-1">
-      <Transition>
-        <figure v-if="mediaUrl && !loadingMedia" class="w-100 p4">
+    <div v-if="nft" class="h-100">
+      <transition>
+        <figure v-if="mediaUrl && !loadingMedia" class="w-100">
           <video
             v-if="nft.media_type?.includes('video') && !loadingMedia"
             :src="`${mediaUrl}#t=0.5`"
@@ -39,7 +39,7 @@
           image cap"
           />
         </figure>
-        <figure v-else class="w-100 p4">
+        <div v-else class="w-100 h-100">
           <img
             :src="'/loading.gif'"
             style="object-fit: cover; height: 100%; object-position: center top"
@@ -47,8 +47,8 @@
             alt="Card
           image cap"
           />
-        </figure>
-      </Transition>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
