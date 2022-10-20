@@ -1,9 +1,9 @@
 <template>
   <div class="w-100 pt-0 p-1 text-center" style="overflow: scroll">
     <a href="#" class="mb-4 btn btn-link w-100" @click.prevent="back">Back </a>
-    <div v-if="nft" class="w-100 p-1">
+    <div v-if="nft" class="w-100 h-screen p-1">
       <Transition>
-        <figure v-if="mediaUrl && !loadingMedia" class="w-100">
+        <figure v-if="mediaUrl && !loadingMedia" class="w-100 h-screen">
           <video
             v-if="nft.media_type?.includes('video') && !loadingMedia"
             :src="`${mediaUrl}#t=0.5`"
@@ -38,7 +38,7 @@
           image cap"
           />
         </figure>
-        <figure v-else class="w-100">
+        <figure v-else class="w-100 h-screen">
           <img
             :src="'/loading.gif'"
             style="object-fit: cover; height: 100%; object-position: center top"
