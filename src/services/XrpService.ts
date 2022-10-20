@@ -263,7 +263,7 @@ async function getOne(
         }
       } catch (error: any) {
         error_code = "no_nfts_in_collection";
-        error_message = "Something went wrong" + error;
+        error_message = error.message;
         await geXls14();
       }
     } else if (
@@ -792,9 +792,9 @@ const ipfsGatewayLisWithObfuscateTime: any[] = [
   //   domain: "https://cloudflare-ipfs.com/",
   //   obfuscateTime: null,
   // },
-  { domain: "https://nftstorage.link/", obfuscateTime: null },
-  { domain: "https://dweb.link/", obfuscateTime: null },
-  { domain: "https://gateway.ipfs.io/", obfuscateTime: null },
+  { domain: "https://nftstorage.link/asd", obfuscateTime: null },
+  { domain: "https://dweb.link/asd", obfuscateTime: null },
+  { domain: "https://gateway.ipfs.io/asd", obfuscateTime: null },
 ];
 
 function initIpfsGatewayLisWithObfuscateTime() {
