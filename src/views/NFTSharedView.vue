@@ -99,7 +99,7 @@ export default defineComponent({
       mediaUrl,
       loadingMedia,
       back() {
-        router.go(-1);
+        router.push({ path: "/shared" });
       },
     };
   },

@@ -46,8 +46,10 @@ export default {
       curr: string
     ): NFT | undefined => {
       const useraddress = rootState.user.user;
-      return state.sharedwithme[useraddress][nodetype].find(
-        ({ issuer, currency }) => issuer == address && currency == curr
-      );
+      if (state.sharedwithme[useraddress][nodetype]) {
+        return state.sharedwithme[useraddress][nodetype].find(
+          ({ issuer, currency }) => issuer == address && currency == curr
+        );
+      } else return undefined;
     },
 };

@@ -853,7 +853,6 @@ async function recursiveIpfsFetch(url: string): Promise<any> {
           throw new Error(`Error! status: ${response.url} ${response.status}`);
         }
         const result = response.json();
-        debugger;
         return result;
       })
     );
@@ -865,19 +864,16 @@ async function recursiveIpfsFetch(url: string): Promise<any> {
       const errorCodesInMessage = ["429", "504", "408", "524", "403"].some(
         (el) => error.message.includes(el)
       );
-      debugger;
       if (availableIpfsGateway.length) {
         const ipfs = availableIpfsGateway.find((i: any) => {
           return error.message.includes(i.domain.replace("https://", ""));
         });
-        debugger;
         if (
           (errorCodesInMessage && ipfs) ||
           ["https://cf-ipfs.com/", "https://cloudflare-ipfs.com/"].includes(
             ipfs.domain
           )
         ) {
-          debugger;
           obfuscateIpfsFromList(ipfs.domain);
           controller.abort();
           return await recursiveIpfsFetch(url);
