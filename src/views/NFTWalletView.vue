@@ -2,7 +2,7 @@
   <div class="w-100 pt-0 p-1 text-center" style="overflow: scroll">
     <a href="#" class="mb-4 btn btn-link w-100" @click.prevent="back">Back </a>
     <div v-if="nft" class="w-100 p-1">
-      <figure class="w-100">
+      <figure v-if="mediaUrl && !loadingMedia" class="w-100">
         <video
           v-if="nft.media_type?.includes('video') && !loadingMedia"
           :src="`${mediaUrl}#t=0.5`"
@@ -31,6 +31,15 @@
         <img
           v-else
           :src="'/thumbnail.jpg'"
+          style="object-fit: cover; height: 100%; object-position: center top"
+          class="img-fluid card-img-top"
+          alt="Card
+          image cap"
+        />
+      </figure>
+      <figure v-else class="w-100">
+        <img
+          :src="'/loading.gif'"
           style="object-fit: cover; height: 100%; object-position: center top"
           class="img-fluid card-img-top"
           alt="Card
