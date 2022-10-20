@@ -2,7 +2,6 @@
   <base-card style="height: 100%">
     <template #picture>
       <figure style="overflow: hidden; height: 100%">
-        error{{ nft.error_code }}
         <a
           class="h-100 d-block"
           style="overflow: hidden"
