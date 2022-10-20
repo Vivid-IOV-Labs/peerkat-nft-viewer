@@ -57,6 +57,7 @@ import { defineComponent, computed, watch, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { getIpfsMedia } from "../services/XrpService";
+import { delay } from "../utils/delay";
 import { getNetworkTypeFromCode } from "../utils/getNetworkTypeFromCode";
 export default defineComponent({
   async setup() {
@@ -88,6 +89,8 @@ export default defineComponent({
               loadingMedia.value = false;
             } else {
               const resp = await getIpfsMedia(newNft.url);
+              await delay(400);
+
               mediaUrl.value = resp.url;
               loadingMedia.value = false;
             }
