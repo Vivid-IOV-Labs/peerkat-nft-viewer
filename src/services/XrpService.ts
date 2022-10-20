@@ -877,16 +877,16 @@ async function recursiveIpfsFetch(url: string): Promise<any> {
           return await recursiveIpfsFetch(url);
         } else {
           controller.abort();
-          throw new Error("No ipfs available");
+          throw new Error("Unable to fetch NFT metadata from the link");
         }
       } else {
         controller.abort();
-        throw new Error("No ipfs available");
+        throw new Error("Unable to fetch NFT metadata from the link");
       }
     }
   } else {
-    devlog("No ipfs available");
-    throw new Error("No ipfs available");
+    devlog("Unable to fetch NFT metadata from the link");
+    throw new Error("Unable to fetch NFT metadata from the link");
   }
 }
 async function getIpfsJson(url: string) {
@@ -934,16 +934,16 @@ async function getIpfsJson(url: string) {
 //           return await recursiveIpfsFetch(url);
 //         } else {
 //           controller.abort();
-//           throw new Error("No ipfs available");
+//           throw new Error("Unable to fetch NFT metadata from the link");
 //         }
 //       } else {
 //         controller.abort();
-//         throw new Error("No ipfs available");
+//         throw new Error("Unable to fetch NFT metadata from the link");
 //       }
 //     }
 //   } else {
-//     devlog("No ipfs available");
-//     throw new Error("No ipfs available");
+//     devlog("Unable to fetch NFT metadata from the link");
+//     throw new Error("Unable to fetch NFT metadata from the link");
 //   }
 // }
 export async function getIpfsMedia(url: string) {
