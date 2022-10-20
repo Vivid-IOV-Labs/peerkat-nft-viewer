@@ -5,7 +5,7 @@
       <transition>
         <figure v-if="mediaUrl && !loadingMedia" class="w-100">
           <video
-            v-if="nft.media_type?.includes('video') && !loadingMedia"
+            v-if="nft.media_type?.includes('video')"
             :src="`${mediaUrl}#t=0.5`"
             poster="/loading.gif"
             autoplay
@@ -14,15 +14,8 @@
             style="object-fit: cover; height: 100%; object-position: center top"
           ></video>
           <img
-            v-else-if="nft.media_type?.includes('image') && !loadingMedia"
+            v-else-if="nft.media_type?.includes('image')"
             v-lazy="mediaUrl"
-            style="object-fit: cover; height: 100%; object-position: center top"
-            class="img-fluid card-img-top"
-            alt="image detail"
-          />
-          <img
-            v-else-if="loadingMedia && !mediaUrl"
-            :src="'/loading.gif'"
             style="object-fit: cover; height: 100%; object-position: center top"
             class="img-fluid card-img-top"
             alt="image detail"
