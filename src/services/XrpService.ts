@@ -511,8 +511,7 @@ export async function getOneXls(nft: any) {
     ? `/${NFTokenTaxon}.json`
     : "/base.json";
 
-  const url =
-    uri.split("//")[0] === "ipfs:" ? uri.split("//")[1] + end : uri + end;
+  const url = uri.split("//")[0] === "ipfs:" ? uri.split("//")[1] : uri;
   try {
     const details =
       uri.split("//")[0] === "ipfs:"
