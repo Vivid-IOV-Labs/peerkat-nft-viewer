@@ -261,7 +261,7 @@ async function getOne(
         } else {
           error_code = "no_nfts_in_collection";
           error_message =
-            "Individual metadata for this XLS14/SOLO NFT not found";
+            "Access to individual artwork file for this XLS14/SOLO NFT is unavailable. Peerkat NFT Viewer is not able to fetch NFT metadata, please contact Token Issuer and/or Sologenic for support.;
         }
       } catch (error: any) {
         error_code = "no_nfts_in_collection";
@@ -298,7 +298,7 @@ async function getOne(
     }
   } else {
     error_code = "no_nfts_in_collection";
-    error_message = "No 'Domain' found for this NFT";
+    error_message = "Access to domain for the artwork file for this NFT is unavailable. Peerkat NFT Viewer is not able to fetch NFT metadata, please contact Token Issuer for support.";
   }
 
   return {
@@ -879,16 +879,24 @@ async function recursiveIpfsFetch(url: string): Promise<any> {
           return await recursiveIpfsFetch(url);
         } else {
           controller.abort();
-          throw new Error("Unable to fetch NFT metadata from the link");
+          throw new Error(
+            "Access to artwork file for this NFT is unavailable. Peerkat NFT Viewer is not able to fetch NFT metadata, please contact Token Issuer for support."
+          );
         }
       } else {
         controller.abort();
-        throw new Error("Unable to fetch NFT metadata from the link");
+        throw new Error(
+          "Access to artwork file for this NFT is unavailable. Peerkat NFT Viewer is not able to fetch NFT metadata, please contact Token Issuer for support."
+        );
       }
     }
   } else {
-    devlog("Unable to fetch NFT metadata from the link");
-    throw new Error("Unable to fetch NFT metadata from the link");
+    devlog(
+      "Access to artwork file for this NFT is unavailable. Peerkat NFT Viewer is not able to fetch NFT metadata, please contact Token Issuer for support."
+    );
+    throw new Error(
+      "Access to artwork file for this NFT is unavailable. Peerkat NFT Viewer is not able to fetch NFT metadata, please contact Token Issuer for support."
+    );
   }
 }
 async function getIpfsJson(url: string) {
