@@ -6,7 +6,7 @@
           class="h-100 d-block"
           style="overflow: hidden"
           href="#"
-          @click.prevent="view"
+          @click.prevent="!nft.error_code && view"
         >
           <video
             v-if="nft.media_type?.includes('video') && !loadingMedia"
