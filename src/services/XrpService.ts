@@ -792,11 +792,9 @@ const ipfsGatewayLisWithObfuscateTime: any[] = [
   //   domain: "https://cloudflare-ipfs.com/",
   //   obfuscateTime: null,
   // },
-  //{ domain: "https://jorropo.net/", obfuscateTime: null },
-
+  { domain: "https://nftstorage.link/", obfuscateTime: null },
   { domain: "https://dweb.link/", obfuscateTime: null },
   { domain: "https://gateway.ipfs.io/", obfuscateTime: null },
-  // { domain: "https://nftstorage.link/", obfuscateTime: null },
 ];
 
 function initIpfsGatewayLisWithObfuscateTime() {
