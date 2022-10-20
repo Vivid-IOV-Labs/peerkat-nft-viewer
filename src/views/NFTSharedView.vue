@@ -42,7 +42,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, computed, watch } from "vue";
+import { defineComponent, computed, watch, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { getIpfsMedia } from "../services/XrpService";
