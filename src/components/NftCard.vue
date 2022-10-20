@@ -6,7 +6,7 @@
           class="h-100 d-block"
           style="overflow: hidden"
           href="#"
-          @click.prevent="!nft.error_code && view"
+          @click.prevent="view"
         >
           <video
             v-if="nft.media_type?.includes('video') && !loadingMedia"
@@ -220,7 +220,7 @@ export default defineComponent({
         copyText(url, params);
       },
       view() {
-        if (props.nft.error_code) {
+        if (!props.nft.error_code) {
           router.push({
             path: `/wallet/${props.nft.issuer}/view/${props.nft.currency}`,
           });

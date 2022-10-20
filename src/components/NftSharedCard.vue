@@ -7,7 +7,7 @@
           class="h-100 d-block"
           style="overflow: hidden"
           href="#"
-          @click.prevent="!nft.error_code && view"
+          @click.prevent="view"
         >
           <video
             v-if="nft.media_type?.includes('video') && !loadingMedia"
@@ -204,7 +204,7 @@ export default defineComponent({
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
       view() {
-        if (props.nft.error_code) {
+        if (!props.nft.error_code) {
           router.push({
             path: `/shared/${props.nft.issuer}/${nodetypecode.value}/view/${props.nft.currency}`,
           });
