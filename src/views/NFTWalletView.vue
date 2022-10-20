@@ -2,53 +2,51 @@
   <div style="height: 60vh; overflow: hidden" class="w-100 p-1">
     <a href="#" class="mb-4 btn btn-link w-100" @click.prevent="back">Back </a>
     <div v-if="nft" class="h-100">
-      <transition>
-        <figure v-if="mediaUrl && !loadingMedia" class="w-100">
-          <video
-            v-if="nft.media_type?.includes('video')"
-            :src="`${mediaUrl}#t=0.5`"
-            poster="/loading.gif"
-            autoplay
-            muted
-            class="img-fluid card-img-top"
-            style="object-fit: cover; height: 100%; object-position: center top"
-          ></video>
-          <img
-            v-else-if="nft.media_type?.includes('image')"
-            v-lazy="mediaUrl"
-            style="object-fit: cover; height: 100%; object-position: center top"
-            class="img-fluid card-img-top"
-            alt="image detail"
-          />
-          <img
-            v-else
-            :src="'/thumbnail.jpg'"
-            style="object-fit: cover; height: 100%; object-position: center top"
-            class="img-fluid card-img-top"
-            alt="image detail"
-          />
-        </figure>
-        <div
+      <figure v-if="mediaUrl && !loadingMedia" class="w-100">
+        <video
+          v-if="nft.media_type?.includes('video')"
+          :src="`${mediaUrl}#t=0.5`"
+          poster="/loading.gif"
+          autoplay
+          muted
+          class="img-fluid card-img-top"
+          style="object-fit: cover; height: 100%; object-position: center top"
+        ></video>
+        <img
+          v-else-if="nft.media_type?.includes('image')"
+          v-lazy="mediaUrl"
+          style="object-fit: cover; height: 100%; object-position: center top"
+          class="img-fluid card-img-top"
+          alt="image detail"
+        />
+        <img
           v-else
-          style="
-            height: 100%;
-            width: 100%;
-            position: absolute;
-            opacity: 0.8;
-            top: 0;
-            left: 0;
-          "
-          class="d-flex align-items-center justify-content-center"
+          :src="'/thumbnail.jpg'"
+          style="object-fit: cover; height: 100%; object-position: center top"
+          class="img-fluid card-img-top"
+          alt="image detail"
+        />
+      </figure>
+      <div
+        v-else
+        style="
+          height: 100%;
+          width: 100%;
+          position: absolute;
+          opacity: 0.8;
+          top: 0;
+          left: 0;
+        "
+        class="d-flex align-items-center justify-content-center"
+      >
+        <div
+          class="spinner-border"
+          style="width: 4rem; height: 4rem; color: #666"
+          role="status"
         >
-          <div
-            class="spinner-border"
-            style="width: 4rem; height: 4rem; color: #666"
-            role="status"
-          >
-            <span class="sr-only">Loading...</span>
-          </div>
+          <span class="sr-only">Loading...</span>
         </div>
-      </transition>
+      </div>
     </div>
   </div>
 </template>
