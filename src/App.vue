@@ -103,7 +103,7 @@ video[poster] {
   object-position: center top;
 }
 /* we will explain what these classes do next! */
-.v-enter-active,
+/* .v-enter-active,
 .v-leave-active {
   transition: opacity 0.2s ease;
 }
@@ -111,5 +111,5 @@ video[poster] {
 .v-enter-from,
 .v-leave-to {
   opacity: 0;
-}
+} */
 </style>

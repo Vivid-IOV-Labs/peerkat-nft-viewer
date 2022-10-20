@@ -20,8 +20,8 @@ if (process.env.NODE_ENV === "development") {
     .use(store)
     .use(Notifications)
     .use(VueLazyLoad, {
-      loading: "loading.gif",
-      error: "thumbnail.jpg",
+      loading: "/loading.gif",
+      error: "/thumbnail.jpg",
     })
     .provide("isInXumm", isInXumm())
     .mount("#app");
@@ -31,8 +31,8 @@ if (process.env.NODE_ENV === "development") {
     .use(store)
     .use(Notifications)
     .use(VueLazyLoad, {
-      loading: "loading.gif",
-      error: "thumbnail.jpg",
+      loading: "/loading.gif",
+      error: "/thumbnail.jpg",
     })
     .provide("isInXumm", isInXumm())
     .mount("#app");

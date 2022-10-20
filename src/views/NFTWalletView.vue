@@ -7,7 +7,7 @@
           <video
             v-if="nft.media_type?.includes('video') && !loadingMedia"
             :src="`${mediaUrl}#t=0.5`"
-            poster="\loading.gif"
+            poster="/loading.gif"
             autoplay
             muted
             class="img-fluid card-img-top"
@@ -18,28 +18,42 @@
             v-lazy="mediaUrl"
             style="object-fit: cover; height: 100%; object-position: center top"
             class="img-fluid card-img-top"
+            alt="image detail"
           />
           <img
             v-else-if="loadingMedia && !mediaUrl"
             :src="'/loading.gif'"
             style="object-fit: cover; height: 100%; object-position: center top"
             class="img-fluid card-img-top"
+            alt="image detail"
           />
           <img
             v-else
             :src="'/thumbnail.jpg'"
             style="object-fit: cover; height: 100%; object-position: center top"
             class="img-fluid card-img-top"
+            alt="image detail"
           />
         </figure>
-        <div v-else class="w-100 h-100">
-          <img
-            :src="'/loading.gif'"
-            style="object-fit: cover; height: 100%; object-position: center top"
-            class="img-fluid card-img-top"
-            alt="Card
-          image cap"
-          />
+        <div
+          v-else
+          style="
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            opacity: 0.8;
+            top: 0;
+            left: 0;
+          "
+          class="d-flex align-items-center justify-content-center"
+        >
+          <div
+            class="spinner-border"
+            style="width: 4rem; height: 4rem; color: #666"
+            role="status"
+          >
+            <span class="sr-only">Loading...</span>
+          </div>
         </div>
       </transition>
     </div>
