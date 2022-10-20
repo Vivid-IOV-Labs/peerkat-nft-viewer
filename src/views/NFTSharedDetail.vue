@@ -323,7 +323,7 @@ export default defineComponent({
         (event.target as HTMLImageElement).src = "thumbnail.jpg";
       },
       view() {
-        if (nft.value) {
+        if (nft.value && !nft.value.error_code) {
           router.push({
             path: `/shared/${nft.value.issuer}/${networkCodeFromType.value}/view/${nft.value.currency}`,
           });
