@@ -261,7 +261,7 @@ async function getOne(
         } else {
           error_code = "no_nfts_in_collection";
           error_message =
-            "Access to individual artwork file for this XLS14/SOLO NFT is unavailable. Peerkat NFT Viewer is not able to fetch NFT metadata, please contact Token Issuer and/or Sologenic for support.;
+            "Access to individual artwork file for this XLS14/SOLO NFT is unavailable. Peerkat NFT Viewer is not able to fetch NFT metadata, please contact Token Issuer and/or Sologenic for support.";
         }
       } catch (error: any) {
         error_code = "no_nfts_in_collection";
@@ -298,7 +298,8 @@ async function getOne(
     }
   } else {
     error_code = "no_nfts_in_collection";
-    error_message = "Access to domain for the artwork file for this NFT is unavailable. Peerkat NFT Viewer is not able to fetch NFT metadata, please contact Token Issuer for support.";
+    error_message =
+      "Access to domain for the artwork file for this NFT is unavailable. Peerkat NFT Viewer is not able to fetch NFT metadata, please contact Token Issuer for support.";
   }
 
   return {
