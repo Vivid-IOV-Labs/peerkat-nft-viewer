@@ -190,8 +190,6 @@ async function getOne(
 
   let error_code = "";
   let error_message = "";
-  console.log(account);
-  console.log(account_data);
   if (Domain) {
     const source = is_hexadecimal(hexToString(Domain))
       ? hexToString(hexToString(Domain))
