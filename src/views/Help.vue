@@ -35,6 +35,14 @@
           future, however we will not be supporting artwork for IOUs.
         </li>
         <li class="pb-2">
+          <strong>What is the “Missing Data” message for? </strong><br />
+          We have added error messages for “Missing Data” within the viewer.
+          This message occurs when the viewer is not able to fetch the NFT
+          metadata to display the artwork. In this situation we advise you to
+          request support from the Token Issuer and/or service used to acquire
+          the NFT.
+        </li>
+        <li class="pb-2">
           <strong>
             Will you support XLS14/SOLO and other NFT variations?</strong
           >
