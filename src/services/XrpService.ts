@@ -972,9 +972,8 @@ export async function getIpfsMedia(url: string) {
   const ipfsGatewayList = [
     "https://cloudflare-ipfs.com/",
     "https://cf-ipfs.com/",
-    "https://dweb.link/",
+    "https://nftstorage.link/",
     // "https://nftstorage.link/",
-    // "https://hardbin.com/",
   ].map((u) => u + "ipfs/" + url);
   const controller = new AbortController();
   const signal = controller.signal;
