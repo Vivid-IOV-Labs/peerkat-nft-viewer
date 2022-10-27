@@ -972,7 +972,7 @@ export async function getIpfsMedia(url: string) {
   const ipfsGatewayList = [
     "https://cloudflare-ipfs.com/",
     "https://cf-ipfs.com/",
-    // "https://ipfs.io/",
+    "https://dweb.link/",
     // "https://nftstorage.link/",
     // "https://hardbin.com/",
   ].map((u) => u + "ipfs/" + url);
