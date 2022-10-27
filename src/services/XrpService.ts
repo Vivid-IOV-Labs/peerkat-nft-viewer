@@ -101,7 +101,10 @@ async function getMediaByXLSProtocol(
     return protocol + "//" + tokenName;
   } else if (xlsProtocol == "xls-16-peerkat") {
     const cid = source.split(":")[1];
+    console.log("cid", cid);
     const { url } = await getIpfsMedia(cid);
+    console.log("cid", url);
+
     return url;
   } else {
     return "";
@@ -218,11 +221,18 @@ async function getOne(
             media_type = await getMediaType(url);
           }
         } else if (media_type?.includes("text/html")) {
+          console.log(metadataUrl, "metadataUrl");
           const { url: metadataUrl } = await getIpfsMedia(
             source.split("ipfs/")[1]
           );
+          console.log(metadataUrl, "url");
+
           const data = await getPdfContent(metadataUrl);
+          console.log(`data["Image IPFS CID"]`, data["Image IPFS CID"]);
+
           const res = await getIpfsMedia(data["Image IPFS CID"]);
+          console.log(`data["Image IPFS CID"]`, res.url);
+
           url = res.url;
           media_type = await getMediaType(url);
           author = data["Design"];
@@ -287,7 +297,10 @@ async function getOne(
         const mediaUri = uri.includes("hash:")
           ? uri.split(":")[1]
           : uri.split("//")[1];
+        console.log("mediaUri", mediaUri);
         const res = await getIpfsMedia(mediaUri);
+        console.log("mediaUri", res);
+
         url = res.url;
         media_type = await getMediaType(res.url);
 
@@ -539,11 +552,12 @@ export async function getOneXls(nft: any) {
     description = details.description;
     if (details.image) {
       if (details.image.split("//")[0] === "ipfs:") {
+        console.log("imageUrl", details.image.split("//")[1]);
         const { url: imageUrl } = await getIpfsMedia(
           details.image.split("//")[1]
         );
         mediaUrl = imageUrl;
-        debugger;
+        console.log("imageUrl", imageUrl);
       } else {
         mediaUrl = details.image;
       }
@@ -552,9 +566,9 @@ export async function getOneXls(nft: any) {
     if (details.video || details.animation_url) {
       const media = details.animation_url || details.video;
       if (media.split("//")[0] === "ipfs:") {
+        console.log();
         const { url: videoUrl } = await getIpfsMedia(media.split("//")[1]);
         mediaUrl = videoUrl;
-        debugger;
       } else {
         mediaUrl = media;
       }
