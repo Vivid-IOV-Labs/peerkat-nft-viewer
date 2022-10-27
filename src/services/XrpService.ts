@@ -221,10 +221,12 @@ async function getOne(
             media_type = await getMediaType(url);
           }
         } else if (media_type?.includes("text/html")) {
-          console.log("metadataUrl", source.split("ipfs/")[1]);
-          const { url: metadataUrl } = await getIpfsMedia(
-            source.split("ipfs/")[1]
-          );
+          const metaUri = source.includes("hash:")
+            ? source.split("hash:")[1]
+            : source.split("ipfs/")[1];
+          console.log("metadataUrl", metaUri);
+          debugger;
+          const { url: metadataUrl } = await getIpfsMedia(metaUri);
           console.log(metadataUrl, "url");
 
           const data = await getPdfContent(metadataUrl);
