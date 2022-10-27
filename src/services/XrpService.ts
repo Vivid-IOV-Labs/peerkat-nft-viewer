@@ -221,7 +221,7 @@ async function getOne(
             media_type = await getMediaType(url);
           }
         } else if (media_type?.includes("text/html")) {
-          console.log(metadataUrl, "metadataUrl");
+          console.log("metadataUrl", source.split("ipfs/")[1]);
           const { url: metadataUrl } = await getIpfsMedia(
             source.split("ipfs/")[1]
           );
