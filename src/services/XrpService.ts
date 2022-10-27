@@ -101,8 +101,8 @@ async function getMediaByXLSProtocol(
     return protocol + "//" + tokenName;
   } else if (xlsProtocol == "xls-16-peerkat") {
     const cid = source.split(":")[1];
-    // const { url } = await getIpfsMedia(cid);
-    return cid;
+    const { url } = await getIpfsMedia(cid);
+    return url;
   } else {
     return "";
   }
@@ -190,6 +190,8 @@ async function getOne(
 
   let error_code = "";
   let error_message = "";
+  console.log(account);
+  console.log(account_data);
   if (Domain) {
     const source = is_hexadecimal(hexToString(Domain))
       ? hexToString(hexToString(Domain))
@@ -211,7 +213,6 @@ async function getOne(
         url = await getMediaByXLSProtocol(source, xlsProtocol, tokenName);
         media_type = await getMediaType(url);
         standard = "XLS-14";
-
         if (media_type == "application/json") {
           const { image } = await getIpfsJson(url);
           if (image) {
@@ -544,6 +545,7 @@ export async function getOneXls(nft: any) {
           details.image.split("//")[1]
         );
         mediaUrl = imageUrl;
+        debugger;
       } else {
         mediaUrl = details.image;
       }
@@ -554,6 +556,7 @@ export async function getOneXls(nft: any) {
       if (media.split("//")[0] === "ipfs:") {
         const { url: videoUrl } = await getIpfsMedia(media.split("//")[1]);
         mediaUrl = videoUrl;
+        debugger;
       } else {
         mediaUrl = media;
       }

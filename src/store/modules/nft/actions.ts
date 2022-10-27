@@ -60,9 +60,14 @@ const actions: ActionTree<NFT, NFTState> = {
       getters.getLines.length > 4
         ? getters.getLines.slice(count, count + 2)
         : getters.getLines;
-    const nextNfts: NFT[] = await client.fetchNext(nextLines);
-    commit("setAllXls14", nextNfts);
-    commit("setAll", nextNfts);
+    try {
+      const nextNfts: NFT[] = await client.fetchNext(nextLines);
+      commit("setAllXls14", nextNfts);
+      commit("setAll", nextNfts);
+    } catch (err) {
+      commit("setAllXls14", []);
+      commit("setAll", []);
+    }
   },
   async fetchXls20({ commit }, { walletAddress }: FetchParams): Promise<void> {
     const Xls20 = await fetchXls20(walletAddress);

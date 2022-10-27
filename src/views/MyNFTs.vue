@@ -78,8 +78,8 @@ export default defineComponent({
     const endload = ref(true);
     const loading = computed(() => store.getters["ui/getIsloading"]);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
-    const NFTMedia = computed(
-      () => store.getters["nft/getAll"] //.filter((a: any) => a)
+    const NFTMedia = computed(() =>
+      store.getters["nft/getAll"].filter((a: any) => a)
     );
     const lines = computed(() => store.getters["nft/getLines"]);
     const xls20count = computed(() => store.getters["nft/getXls20"]);
@@ -121,7 +121,6 @@ export default defineComponent({
           store.commit("ui/setIsloading", false);
         } catch (error) {
           store.commit("ui/setIsloading", false);
-
           devlog("ON POPULATE", error);
         }
       }
@@ -146,10 +145,13 @@ export default defineComponent({
       store.commit("ui/setIsloading", true);
 
       await delay(1000);
-      await store.dispatch("nft/fetchNext", nodetype.value);
-      store.commit("ui/setIsloading", false);
+      try {
+        await store.dispatch("nft/fetchNext", nodetype.value);
+      } finally {
+        store.commit("ui/setIsloading", false);
 
-      observe();
+        observe();
+      }
     }
     async function fetchNextXls20() {
       unobserve();
