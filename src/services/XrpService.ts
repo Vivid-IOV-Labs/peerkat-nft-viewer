@@ -102,7 +102,6 @@ async function getMediaByXLSProtocol(
   } else if (xlsProtocol == "xls-16-peerkat") {
     const cid = source.split(":")[1];
     // const { url } = await getIpfsMedia(cid);
-    // debugger;
     return cid;
   } else {
     return "";
@@ -286,9 +285,13 @@ async function getOne(
             .replace("Â", "")
         );
         author = metadata.find((m: any) => m.type == "Author").data;
-        const res = await getIpfsMedia(uri.split("//")[1]);
+        const mediaUri = uri.includes("hash:")
+          ? uri.split(":")[1]
+          : uri.split("//")[1];
+        const res = await getIpfsMedia(mediaUri);
         url = res.url;
-        media_type = await getMediaType(url);
+        media_type = await getMediaType(res.url);
+
         standard = "XLS-16";
       } else {
         devlog("No metadata");
@@ -794,7 +797,7 @@ const ipfsGatewayLisWithObfuscateTime: any[] = [
     obfuscateTime: null,
   },
   {
-    domain: "https://gateway.pinata.cloud/",
+    domain: "https://ipfs.eth.aragon.network/",
     obfuscateTime: null,
   },
   { domain: "https://gateway.ipfs.io/", obfuscateTime: null },
@@ -973,7 +976,7 @@ export async function getIpfsMedia(url: string) {
     "https://cloudflare-ipfs.com/",
     "https://cf-ipfs.com/",
     "https://nftstorage.link/",
-    // "https://nftstorage.link/",
+    "https://jorropo.net/",
   ].map((u) => u + "ipfs/" + url);
   const controller = new AbortController();
   const signal = controller.signal;
