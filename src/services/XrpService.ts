@@ -1,5 +1,6 @@
 import axios from "axios";
 import { NFT } from "../models/NFT";
+import { delay } from "../utils/delay";
 import { devlog } from "../utils/devlog";
 // import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
 // GlobalWorkerOptions.workerSrc =
@@ -786,17 +787,17 @@ interface list {
   [name: string]: any | undefined;
 }
 const ipfsGatewayLisWithObfuscateTime: any[] = [
+  { domain: "https://dweb.link/", obfuscateTime: null },
+  { domain: "https://nftstorage.link/", obfuscateTime: null },
   {
     domain: "https://ipfs.io/",
     obfuscateTime: null,
   },
-  { domain: "https://dweb.link/", obfuscateTime: null },
-  { domain: "https://nftstorage.link/", obfuscateTime: null },
-  { domain: "https://gateway.ipfs.io/", obfuscateTime: null },
   {
     domain: "https://gateway.pinata.cloud/",
     obfuscateTime: null,
   },
+  { domain: "https://gateway.ipfs.io/", obfuscateTime: null },
 ];
 
 function initIpfsGatewayLisWithObfuscateTime() {
@@ -857,7 +858,18 @@ async function recursiveIpfsFetch(url: string): Promise<any> {
       })
     );
     try {
+      // const dealytensec = delay(1000).then(() => {
+      //   return "not loaded";
+      // });
       const res = await Promise.race(pomises);
+      // if (res == "not loaded") {
+      //   availableIpfsGateway.array.forEach(async (ipfs: any) => {
+      //     obfuscateIpfsFromList(ipfs.domain);
+      //     controller.abort();
+      //     return await recursiveIpfsFetch(url);
+      //   });
+      //   controller.abort();
+      // }
       controller.abort();
       return res;
     } catch (error: any) {
