@@ -572,7 +572,6 @@ export async function getOneXls(nft: any) {
     : 
     "Splash"
     */
-    debugger;
     if (details.image) {
       if (details.image.split("//")[0] === "ipfs:") {
         console.log("imageUrl", details.image.split("//")[1]);
@@ -1029,9 +1028,7 @@ export async function getIpfsMedia(url: string) {
 }
 
 export async function init(network: string): Promise<any> {
-  debugger;
   client = new xrpl.Client(network);
-  debugger;
   initIpfsGatewayLisWithObfuscateTime();
   // client.on("disconnected", async (msg: any) => {
   //   devlog("Disconnected");
