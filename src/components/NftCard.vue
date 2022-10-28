@@ -75,12 +75,10 @@
         </div>
         <div v-if="nft.collection" class="mt-2">
           <strong class="h7 font-weight-bold">Collection </strong><br />
-          <span class="mr-3"
-            ><strong>Family</strong>: {{ nft.collection.family }}
-          </span>
-          <span class="mr-3"
-            ><strong>Name</strong>: {{ nft.collection.anme }}
-          </span>
+          <ul>
+            <li><strong>Family</strong>: {{ nft.collection.family }}</li>
+            <li><strong>Name</strong>: {{ nft.collection.name }}</li>
+          </ul>
         </div>
         <div v-if="nft.author" class="mt-2">
           <strong class="h7 font-weight-bold">Author </strong><br />
