@@ -90,13 +90,8 @@
           <strong class="h7 font-weight-bold">Description </strong><br />
           <div v-html="nft.desc"></div>
         </div>
-        <div v-if="nft.tokenTaxon !== undefined" class="mt-2">
-          <strong class="h7 font-weight-bold">Token Taxon </strong><br />
-          <span class="mr-3">{{ nft.tokenTaxon }} </span>
-        </div>
-
         <div v-if="nft.attributes" class="mt-2">
-          <strong class="h7 font-weight-bold">attributes </strong><br />
+          <strong class="h7 font-weight-bold">Attributes </strong><br />
           <ul>
             <li v-for="(a, index) in nft.attributes" :key="index">
               <strong>{{ a.trait_type }}</strong
@@ -104,6 +99,11 @@
             </li>
           </ul>
         </div>
+        <div v-if="nft.tokenTaxon !== undefined" class="mt-2">
+          <strong class="h7 font-weight-bold">Token Taxon </strong><br />
+          <span class="mr-3">{{ nft.tokenTaxon }} </span>
+        </div>
+
         <div v-if="nft.standard" class="mt-2">
           <strong class="h7 font-weight-bold">Standard </strong><br />
           <span>{{ nft.standard }}</span>
