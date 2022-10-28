@@ -521,6 +521,8 @@ export async function getOneXls(nft: any) {
   let error_message;
   let tokenName;
   let description;
+  let attributes;
+  let collection;
   const { Issuer, NFTokenID, URI, NFTokenTaxon } = nft;
   const uri = hexToString(URI);
   const end = uri.includes(".json")
@@ -552,6 +554,25 @@ export async function getOneXls(nft: any) {
     // }
     tokenName = details.name.replace(/[^\w\s]/gi, "");
     description = details.description;
+    attributes = details.attributes;
+    /*display_type
+    : 
+    "boost_number"
+    trait_type
+    : 
+    "Aqua Power"
+    value
+    : 
+    40*/
+    collection = details.collection;
+    /*family
+    : 
+    "aiarts.co.uk NFTs"
+    name
+    : 
+    "Splash"
+    */
+    debugger;
     if (details.image) {
       if (details.image.split("//")[0] === "ipfs:") {
         console.log("imageUrl", details.image.split("//")[1]);
@@ -593,6 +614,8 @@ export async function getOneXls(nft: any) {
     standard: "XLS-20",
     error_code,
     error_message,
+    attributes,
+    collection,
   };
 }
 
@@ -1006,7 +1029,9 @@ export async function getIpfsMedia(url: string) {
 }
 
 export async function init(network: string): Promise<any> {
+  debugger;
   client = new xrpl.Client(network);
+  debugger;
   initIpfsGatewayLisWithObfuscateTime();
   // client.on("disconnected", async (msg: any) => {
   //   devlog("Disconnected");

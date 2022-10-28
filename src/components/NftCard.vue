@@ -73,6 +73,15 @@
           </strong>
           <span v-if="nft.limitFormatted">{{ nft.limitFormatted }}</span>
         </div>
+        <div v-if="nft.collection" class="mt-2">
+          <strong class="h7 font-weight-bold">Collection </strong><br />
+          <span class="mr-3"
+            ><strong>Family</strong>: {{ nft.collection.family }}
+          </span>
+          <span class="mr-3"
+            ><strong>Name</strong>: {{ nft.collection.anme }}
+          </span>
+        </div>
         <div v-if="nft.author" class="mt-2">
           <strong class="h7 font-weight-bold">Author </strong><br />
           <span class="mr-3">{{ nft.author }} </span>
@@ -83,7 +92,17 @@
         </div>
         <div v-if="nft.tokenTaxon !== undefined" class="mt-2">
           <strong class="h7 font-weight-bold">Token Taxon </strong><br />
-          <div v-html="nft.tokenTaxon"></div>
+          <span class="mr-3">{{ nft.tokenTaxon }} </span>
+        </div>
+
+        <div v-if="nft.attributes" class="mt-2">
+          <strong class="h7 font-weight-bold">attributes </strong><br />
+          <ul>
+            <li v-for="(a, index) in nft.attributes" :key="index">
+              <strong>{{ a.trait_type }}</strong
+              >: {{ a.value }}
+            </li>
+          </ul>
         </div>
         <div v-if="nft.standard" class="mt-2">
           <strong class="h7 font-weight-bold">Standard </strong><br />
