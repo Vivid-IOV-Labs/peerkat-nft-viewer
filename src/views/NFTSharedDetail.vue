@@ -16,8 +16,8 @@
             >
               <video
                 v-if="nft.media_type?.includes('video') && !loadingMedia"
-                :src="`${mediaUrl}#t=0.5`"
-                poster="\loading.gif"
+                :src="mediaUrl"
+                :poster="thumbnailUrl"
                 muted
                 autoplay
                 class="img-fluid card-img-top"
@@ -209,6 +209,8 @@ export default defineComponent({
     const store = useStore();
     const mediaUrl = ref("");
     const loadingMedia = ref(false);
+    const thumbnailUrl = ref("/loading.gif");
+
     const nodetypefromlink = getNetworkTypeFromCode(
       parseInt(route.params.nodetype as string)
     );
@@ -281,11 +283,17 @@ export default defineComponent({
                 newNft.url.split("//")[0] == "https:")
             ) {
               mediaUrl.value = newNft.url;
+              thumbnailUrl.value = newNft.thumbnail;
               loadingMedia.value = false;
             } else {
               const resp = await getIpfsMedia(newNft.url);
               mediaUrl.value = resp.url;
               loadingMedia.value = false;
+              if (newNft.media_type?.includes("video")) {
+                getIpfsMedia(newNft.thumbnail).then((resp: any) => {
+                  thumbnailUrl.value = resp.url;
+                });
+              }
             }
           }
         }
@@ -311,6 +319,7 @@ export default defineComponent({
     return {
       mediaUrl,
       loadingMedia,
+      thumbnailUrl,
       nft,
       nodetype,
       network,

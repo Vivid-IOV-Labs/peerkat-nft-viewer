@@ -523,6 +523,7 @@ export async function getOneXls(nft: any) {
   let description;
   let attributes;
   let collection;
+  let thumbnail;
   const { Issuer, NFTokenID, URI, NFTokenTaxon } = nft;
   const uri = hexToString(URI);
   const end = uri.includes(".json")
@@ -572,25 +573,36 @@ export async function getOneXls(nft: any) {
     : 
     "Splash"
     */
+    if (details.thumbnail) {
+      if (details.image.split("//")[0] === "ipfs:") {
+        // const { url: thumbnailUrl } = await getIpfsMedia(
+        //   details.thumbnail.split("//")[1]
+        // );
+        thumbnail = details.thumbnail.split("//")[1];
+      } else {
+        thumbnail = details.thumbnail;
+      }
+      debugger;
+    }
     if (details.image) {
       if (details.image.split("//")[0] === "ipfs:") {
-        console.log("imageUrl", details.image.split("//")[1]);
-        const { url: imageUrl } = await getIpfsMedia(
-          details.image.split("//")[1]
-        );
-        mediaUrl = imageUrl;
-        console.log("imageUrl", imageUrl);
+        // const { url: imageUrl } = await getIpfsMedia(
+        //   details.image.split("//")[1]
+        // );
+        mediaUrl = details.image.split("//")[1];
       } else {
         mediaUrl = details.image;
       }
       media_type = "image";
+      if (!thumbnail) {
+        thumbnail = mediaUrl;
+      }
     }
     if (details.video || details.animation_url) {
       const media = details.animation_url || details.video;
       if (media.split("//")[0] === "ipfs:") {
-        console.log();
-        const { url: videoUrl } = await getIpfsMedia(media.split("//")[1]);
-        mediaUrl = videoUrl;
+        //  const { url: videoUrl } = await getIpfsMedia(media.split("//")[1]);
+        mediaUrl = media.split("//")[1];
       } else {
         mediaUrl = media;
       }
@@ -615,6 +627,7 @@ export async function getOneXls(nft: any) {
     error_message,
     attributes,
     collection,
+    thumbnail,
   };
 }
 

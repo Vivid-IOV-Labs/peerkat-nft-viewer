@@ -10,8 +10,8 @@
         >
           <video
             v-if="nft.media_type?.includes('video') && !loadingMedia"
-            :src="`${mediaUrl}#t=0.5`"
-            poster="\loading.gif"
+            :src="mediaUrl"
+            :poster="thumbnailUrl"
             muted
             class="img-fluid card-img-top"
             style="object-fit: cover; height: 100%; object-position: center top"
@@ -153,6 +153,7 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
     const mediaUrl = ref("");
+    const thumbnailUrl = ref("/loading.gif");
     const loadingMedia = ref(false);
     const network = computed(() => store.getters["user/getNetwork"]);
     const nodetype = computed(() => getNodeTypeFromNetwork(network.value));
@@ -192,12 +193,20 @@ export default defineComponent({
           props.nft.url.split("//")[0] == "https:")
       ) {
         mediaUrl.value = props.nft.url || "";
+        thumbnailUrl.value = props.nft.thumbnail || "";
       } else {
         loadingMedia.value = true;
         getIpfsMedia(props.nft.url).then((resp: any) => {
           loadingMedia.value = false;
           mediaUrl.value = resp.url;
         });
+
+        if (props.nft.media_type?.includes("video")) {
+          getIpfsMedia(props.nft.thumbnail).then((resp: any) => {
+            thumbnailUrl.value = resp.url;
+          });
+        }
+
         //  mediaUrl.value = "https://w3s.link/ipfs/" + props.nft.url;
         // mediaUrl.value = "https://peerkat.mypinata.cloud/ipfs/" + props.nft.url;
       }
@@ -217,6 +226,7 @@ export default defineComponent({
     return {
       mediaUrl,
       loadingMedia,
+      thumbnailUrl,
       async goToOffer() {
         await store.commit("nft/setCurrent", props.nft);
         router.push({
