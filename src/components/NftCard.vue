@@ -75,10 +75,59 @@
         </div>
         <div v-if="nft.collection" class="mt-2">
           <strong class="h7 font-weight-bold">Collection </strong><br />
-          <ul>
-            <li><strong>Family</strong>: {{ nft.collection.family }}</li>
-            <li><strong>Name</strong>: {{ nft.collection.name }}</li>
-          </ul>
+          <div
+            class="
+              d-flex
+              flex-column
+              justify-content-between
+              align-items-center
+              px-4
+              py-2
+            "
+          >
+            <div
+              class="
+                rounded
+                tex-center
+                d-flex
+                flex-column
+                justify-content-between
+                align-items-center
+                border
+                my-2
+                w-100
+                py-1
+                bg-gradient-primary
+                border-primary
+              "
+              style=""
+            >
+              <strong class="text-uppercase text-primary small font-weight-bold"
+                >Family</strong
+              >{{ nft.collection.family }}
+            </div>
+            <div
+              class="
+                rounded
+                tex-center
+                d-flex
+                flex-column
+                justify-content-between
+                align-items-center
+                border
+                my-2
+                w-100
+                py-1
+                bg-gradient-primary
+                border-primary
+              "
+              style=""
+            >
+              <strong class="text-uppercase text-primary small font-weight-bold"
+                >Name</strong
+              >{{ nft.collection.name }}
+            </div>
+          </div>
         </div>
         <div v-if="nft.author" class="mt-2">
           <strong class="h7 font-weight-bold">Author </strong><br />
@@ -90,12 +139,41 @@
         </div>
         <div v-if="nft.attributes" class="mt-2">
           <strong class="h7 font-weight-bold">Attributes </strong><br />
-          <ul>
-            <li v-for="(a, index) in nft.attributes" :key="index">
-              <strong>{{ a.trait_type }}</strong
-              >: {{ a.value }}
-            </li>
-          </ul>
+          <div
+            class="
+              d-flex
+              flex-column
+              justify-content-between
+              align-items-center
+              px-4
+              py-2
+            "
+          >
+            <div
+              v-for="(a, index) in nft.attributes"
+              :key="index"
+              class="
+                rounded
+                tex-center
+                d-flex
+                flex-column
+                justify-content-between
+                align-items-center
+                border
+                my-2
+                w-100
+                py-1
+                bg-gradient-primary
+                border-primary
+              "
+              style=""
+            >
+              <strong
+                class="text-uppercase text-primary small font-weight-bold"
+                >{{ a.trait_type }}</strong
+              >{{ a.value }}
+            </div>
+          </div>
         </div>
         <div v-if="nft.tokenTaxon !== undefined" class="mt-2">
           <strong class="h7 font-weight-bold">Token Taxon </strong><br />
