@@ -43,14 +43,11 @@
           the NFT.
         </li>
         <li class="pb-2">
-          <strong>
-            Will you support XLS14/SOLO and other NFT variations?</strong
-          >
-          <br />We have added support for XLS14/SOLO. <br />
-          We have also added support for XLS20 NFTs (with XLS24 metadata only)
-          on XRPL nft-devnet.
-          <br />We may also add support for other NFT variations we discover
-          where it is feasible to do so.
+          <strong> What XLS20 artwork metadata does this xApp support? </strong>
+          <br />For XLS20 NFTs our xApp is compatible with XLS24d and OpenSea
+          metadata standards. If your XLS20 NFT artwork is not displayed we
+          advise you to request support from the Token Issuer and/or service
+          used to acquire the NFT.
         </li>
         <li class="pb-2">
           <strong> What features are being added next?</strong>
