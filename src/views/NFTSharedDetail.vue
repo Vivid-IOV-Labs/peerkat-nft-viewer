@@ -19,19 +19,6 @@
                 :src="mediaUrl"
                 :poster="thumbnailUrl"
                 muted
-                autoplay
-                class="img-fluid card-img-top"
-                style="
-                  object-fit: cover;
-                  height: 100%;
-                  object-position: center top;
-                "
-              ></video>
-              <video
-                v-if="nft.media_type?.includes('video') && !loadingMedia"
-                :src="`${mediaUrl}#t=0.5`"
-                poster="\loading.gif"
-                muted
                 class="img-fluid card-img-top"
                 style="
                   object-fit: cover;
@@ -85,6 +72,63 @@
           <hr />
           <strong class="h7 font-weight-bold">Issuer </strong><br />
           <span>{{ nft.issuer }}</span>
+          <div v-if="nft.collection" class="mt-2">
+            <strong class="h7 font-weight-bold">Collection </strong><br />
+            <div
+              class="
+                d-flex
+                flex-column
+                justify-content-between
+                align-items-center
+                py-2
+              "
+            >
+              <div
+                class="
+                  rounded
+                  tex-center
+                  d-flex
+                  flex-column
+                  justify-content-between
+                  align-items-center
+                  border
+                  my-2
+                  w-100
+                  py-1
+                  bg-gradient-primary
+                  border-primary
+                "
+                style=""
+              >
+                <strong
+                  class="text-uppercase text-primary small font-weight-bold"
+                  >Family</strong
+                >{{ nft.collection.family }}
+              </div>
+              <div
+                class="
+                  rounded
+                  tex-center
+                  d-flex
+                  flex-column
+                  justify-content-between
+                  align-items-center
+                  border
+                  my-2
+                  w-100
+                  py-1
+                  bg-gradient-primary
+                  border-primary
+                "
+                style=""
+              >
+                <strong
+                  class="text-uppercase text-primary small font-weight-bold"
+                  >Name</strong
+                >{{ nft.collection.name }}
+              </div>
+            </div>
+          </div>
           <div v-if="nft.author" class="mt-2">
             <strong class="h7 font-weight-bold">Author </strong><br />
             <span class="mr-3">{{ nft.author }} </span>
@@ -92,6 +136,43 @@
           <div v-if="nft.desc" class="mt-2">
             <strong class="h7 font-weight-bold">Description </strong><br />
             <span>{{ nft.desc }}</span>
+          </div>
+          <div v-if="nft.attributes" class="mt-2">
+            <strong class="h7 font-weight-bold">Attributes </strong><br />
+            <div
+              class="
+                d-flex
+                flex-column
+                justify-content-between
+                align-items-center
+                py-2
+              "
+            >
+              <div
+                v-for="(a, index) in nft.attributes"
+                :key="index"
+                class="
+                  rounded
+                  tex-center
+                  d-flex
+                  flex-column
+                  justify-content-between
+                  align-items-center
+                  border
+                  my-2
+                  w-100
+                  py-1
+                  bg-gradient-primary
+                  border-primary
+                "
+                style=""
+              >
+                <strong
+                  class="text-uppercase text-primary small font-weight-bold"
+                  >{{ a.trait_type }}</strong
+                >{{ a.value }}
+              </div>
+            </div>
           </div>
           <div v-if="nft.tokenTaxon !== undefined" class="mt-2">
             <strong class="h7 font-weight-bold">Token Taxon </strong><br />
