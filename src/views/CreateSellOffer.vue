@@ -150,7 +150,6 @@ export default defineComponent({
       async confirmSell() {
         const isValid = await validate();
         if (!isValid) {
-          console.log("loggingin");
           return;
         }
         if (isInXumm()) {

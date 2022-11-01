@@ -101,9 +101,7 @@ async function getMediaByXLSProtocol(
     return protocol + "//" + tokenName;
   } else if (xlsProtocol == "xls-16-peerkat") {
     const cid = source.split(":")[1];
-    console.log("cid", cid);
     const { url } = await getIpfsMedia(cid);
-    console.log("cid", url);
 
     return url;
   } else {
@@ -226,13 +224,10 @@ async function getOne(
             : source.split("ipfs/")[1];
 
           const { url: metadataUrl } = await getIpfsMedia(metaUri);
-          console.log(metadataUrl, "url");
 
           const data = await getPdfContent(metadataUrl);
-          console.log(`data["Image IPFS CID"]`, data["Image IPFS CID"]);
 
           const res = await getIpfsMedia(data["Image IPFS CID"]);
-          console.log(`data["Image IPFS CID"]`, res.url);
 
           url = res.url;
           media_type = await getMediaType(url);
@@ -298,9 +293,7 @@ async function getOne(
         const mediaUri = uri.includes("hash:")
           ? uri.split(":")[1]
           : uri.split("//")[1];
-        console.log("mediaUri", mediaUri);
         const res = await getIpfsMedia(mediaUri);
-        console.log("mediaUri", res);
 
         url = res.url;
         media_type = await getMediaType(res.url);
