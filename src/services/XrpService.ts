@@ -224,8 +224,7 @@ async function getOne(
           const metaUri = source.includes("hash:")
             ? source.split("hash:")[1]
             : source.split("ipfs/")[1];
-          console.log("metadataUrl", metaUri);
-          debugger;
+
           const { url: metadataUrl } = await getIpfsMedia(metaUri);
           console.log(metadataUrl, "url");
 
@@ -582,7 +581,6 @@ export async function getOneXls(nft: any) {
       } else {
         thumbnail = details.thumbnail;
       }
-      debugger;
     }
     if (details.image) {
       if (details.image.split("//")[0] === "ipfs:") {

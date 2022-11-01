@@ -10,7 +10,7 @@
         >
           <video
             v-if="nft.media_type?.includes('video') && !loadingMedia"
-            :src="mediaUrl"
+            :src="nft.standard == 'XLS-20' ? mediaUrl : `${mediaUrl}#t=0.5`"
             :poster="thumbnailUrl"
             muted
             class="img-fluid card-img-top"
