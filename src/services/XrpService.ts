@@ -525,9 +525,11 @@ export async function getOneXls(nft: any) {
     : "/base.json";
 
   const url = uri.split("//")[0] === "ipfs:" ? uri.split("//")[1] : uri;
+
   try {
+    console.log(uri.split("//")[0] === "ipfs:");
     const details =
-      uri.split("//")[0] === "ipfs:"
+      uri.split("//")[0] === "ipfs:" || !uri.includes("//")
         ? await getIpfsJson(url)
         : await fetch(url).then((r) => r.json());
 
@@ -567,19 +569,16 @@ export async function getOneXls(nft: any) {
     */
     if (details.thumbnail) {
       if (details.image.split("//")[0] === "ipfs:") {
-        // const { url: thumbnailUrl } = await getIpfsMedia(
-        //   details.thumbnail.split("//")[1]
-        // );
         thumbnail = details.thumbnail.split("//")[1];
       } else {
         thumbnail = details.thumbnail;
       }
     }
     if (details.image) {
-      if (details.image.split("//")[0] === "ipfs:") {
-        // const { url: imageUrl } = await getIpfsMedia(
-        //   details.image.split("//")[1]
-        // );
+      if (
+        details.image.split("//")[0] === "ipfs:" ||
+        !details.image.split("//")[0]
+      ) {
         mediaUrl = details.image.split("//")[1];
       } else {
         mediaUrl = details.image;

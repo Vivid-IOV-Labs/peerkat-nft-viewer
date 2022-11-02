@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 60vh; overflow: hidden" class="w-100 p-1">
+  <div style="height: 60vh" class="w-100 p-1">
     <a href="#" class="mb-4 btn btn-link w-100" @click.prevent="back">Back </a>
 
     <div v-if="nft" class="h-100">

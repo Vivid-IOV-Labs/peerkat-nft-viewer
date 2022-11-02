@@ -10,7 +10,7 @@
         >
           <video
             v-if="nft.media_type?.includes('video') && !loadingMedia"
-            :src="nft.standard == 'XLS-20' ? mediaUrl : `${mediaUrl}#t=0.5`"
+            :src="videoUrl"
             :poster="thumbnailUrl"
             muted
             class="img-fluid card-img-top"
@@ -277,7 +277,8 @@ export default defineComponent({
           mediaUrl.value = resp.url;
         });
 
-        if (props.nft.media_type?.includes("video")) {
+        if (props.nft.media_type?.includes("video") && props.nft.thumbnail) {
+          console.log(props.nft.thumbnail);
           getIpfsMedia(props.nft.thumbnail).then((resp: any) => {
             thumbnailUrl.value = resp.url;
           });
@@ -299,8 +300,15 @@ export default defineComponent({
     //   mediaUrl.value = resp.url;
     //   debugger;
     // });
+    const videoUrl = computed(() =>
+      props.nft.standard == "XLS-20" && props.nft.thumbnail
+        ? mediaUrl
+        : `${mediaUrl.value}#t=0.5`
+    );
+
     return {
       mediaUrl,
+      videoUrl,
       loadingMedia,
       thumbnailUrl,
       async goToOffer() {
