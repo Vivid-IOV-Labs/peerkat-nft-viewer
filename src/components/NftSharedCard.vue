@@ -10,7 +10,7 @@
         >
           <video
             v-if="nft.media_type?.includes('video') && !loadingMedia"
-            :src="nft.standard == 'XLS-20' ? mediaUrl : `${mediaUrl}#t=0.5`"
+            :src="videoUrl"
             :poster="thumbnailUrl"
             muted
             class="img-fluid card-img-top"
@@ -294,7 +294,13 @@ export default defineComponent({
     //     : props.nft.url
     //     ? "https://dweb.link/ipfs/" + props.nft.url
     //     : "";
+    const videoUrl = computed(() =>
+      props.nft.standard == "XLS-20" && props.nft.thumbnail
+        ? mediaUrl
+        : `${mediaUrl.value}#t=0.5`
+    );
     return {
+      videoUrl,
       mediaUrl,
       loadingMedia,
       thumbnailUrl,
