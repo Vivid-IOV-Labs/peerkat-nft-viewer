@@ -397,7 +397,7 @@ export default defineComponent({
     //     : "";
     // });
     const videoUrl = computed(() =>
-      props.nft.standard == "XLS-20" && props.nft.thumbnail
+      nft.value.standard == "XLS-20" && nft.value.thumbnail
         ? mediaUrl
         : `${mediaUrl.value}#t=0.5`
     );
