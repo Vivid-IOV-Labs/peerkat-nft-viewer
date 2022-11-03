@@ -209,6 +209,7 @@ async function getOne(
     async function geXls14() {
       const xlsProtocol = getXLSProtocol(source);
       if (xlsProtocol) {
+        debugger;
         url = await getMediaByXLSProtocol(source, xlsProtocol, tokenName);
         media_type = await getMediaType(url);
         standard = "XLS-14";
@@ -218,6 +219,7 @@ async function getOne(
             url = await getMediaByXLSProtocol(image, "xls-16-peerkat");
             media_type = await getMediaType(url);
           }
+          debugger;
         } else if (media_type?.includes("text/html")) {
           const metaUri = source.includes("hash:")
             ? source.split("hash:")[1]
