@@ -144,7 +144,7 @@
             <strong class="h7 font-weight-bold">Description </strong><br />
             <span>{{ nft.desc }}</span>
           </div>
-          <div v-if="nft.attributes" class="mt-2">
+          <div v-if="nft.attributes && nft.attributes.length" class="mt-2">
             <strong class="h7 font-weight-bold">Attributes </strong><br />
             <div
               class="

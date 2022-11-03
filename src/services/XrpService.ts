@@ -590,24 +590,24 @@ export async function getOneXls(nft: any) {
         thumbnail = details.thumbnail;
       }
     }
-    if (details.image) {
-      if (
-        details.image.split("//")[0] === "ipfs:" ||
-        !details.image.split("//")[0]
-      ) {
-        mediaUrl = details.image.split("//")[1];
+    if (details.image || details.image_url) {
+      const media = details.image || details.image_url;
+      if (media.split("//")[0] === "ipfs:" || !media.split("//")[0]) {
+        mediaUrl = media.split("//")[1].replace("ipfs/", "");
       } else {
-        mediaUrl = details.image;
+        mediaUrl = media;
       }
       media_type = "image";
       if (!thumbnail) {
         thumbnail = mediaUrl;
       }
     }
-    if (details.video || details.animation_url) {
+    if (
+      details.video ||
+      (details.animation_url && details.content_type.includes("video"))
+    ) {
       const media = details.animation_url || details.video;
       if (media.split("//")[0] === "ipfs:") {
-        //  const { url: videoUrl } = await getIpfsMedia(media.split("//")[1]);
         mediaUrl = media.split("//")[1];
       } else {
         mediaUrl = media;
