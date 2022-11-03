@@ -518,6 +518,7 @@ export async function getOneXls(nft: any) {
   let thumbnail;
   const { Issuer, NFTokenID, URI, NFTokenTaxon } = nft;
   const uri = hexToString(URI);
+  debugger;
   const end = uri.includes(".json")
     ? ""
     : Number.isInteger(NFTokenTaxon)
@@ -618,6 +619,7 @@ export async function getOneXls(nft: any) {
     attributes,
     collection,
     thumbnail,
+    nft_serial: nft.nft_serial,
   };
 }
 
@@ -645,6 +647,8 @@ export async function fetchNextXls20WithSellOffer(
   nextXls20: any[],
   owner: string
 ): Promise<any> {
+  console.log(nextXls20);
+  debugger;
   const nextNfts = await Promise.all(
     nextXls20.map(async (nft: any) => {
       const { NFTokenID } = nft;

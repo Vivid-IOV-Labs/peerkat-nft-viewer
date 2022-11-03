@@ -177,7 +177,10 @@
           <strong class="h7 font-weight-bold">Token Taxon </strong><br />
           <span class="mr-3">{{ nft.tokenTaxon }} </span>
         </div>
-
+        <div v-if="nft.nft_serial" class="mt-2">
+          <strong class="h7 font-weight-bold">Serial </strong><br />
+          <span>{{ nft.nft_serial }}</span>
+        </div>
         <div v-if="nft.standard" class="mt-2">
           <strong class="h7 font-weight-bold">Standard </strong><br />
           <span>{{ nft.standard }}</span>
