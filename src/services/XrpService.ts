@@ -506,6 +506,16 @@ export async function fetchOneXls20(
     throw new Error("Not an XLS-20");
   }
 }
+async function getDomain(account: string) {
+  const allReps = await client.request({
+    command: "account_info",
+    account,
+  });
+  const { result, error, error_code, error_message } = allReps;
+  const { account_data } = result;
+  const { Domain } = account_data;
+  return hexToString(Domain);
+}
 export async function getOneXls(nft: any) {
   let mediaUrl;
   let media_type;
@@ -516,58 +526,63 @@ export async function getOneXls(nft: any) {
   let attributes;
   let collection;
   let thumbnail;
-  const { Issuer, NFTokenID, URI, NFTokenTaxon } = nft;
-  const uri = hexToString(URI);
-  debugger;
-  const end = uri.includes(".json")
-    ? ""
-    : Number.isInteger(NFTokenTaxon)
-    ? `/${NFTokenTaxon}.json`
-    : "/base.json";
+  let details;
+  const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
 
-  const url = uri.split("//")[0] === "ipfs:" ? uri.split("//")[1] : uri;
+  if (!URI) {
+    try {
+      const domain = await getDomain(Issuer);
+      details = await fetch(domain + nft_serial).then((r) => r.json());
+    } catch (error) {
+      error_code = "no_nfts_in_collection";
+      error_message = "Individual metadata for this XLS20 NFT not found";
+    }
+  } else {
+    const uri = hexToString(URI);
+    const end = uri.includes(".json")
+      ? ""
+      : Number.isInteger(NFTokenTaxon)
+      ? `/${NFTokenTaxon}.json`
+      : "/base.json";
 
-  try {
-    console.log(uri.split("//")[0] === "ipfs:");
-    const details =
-      uri.split("//")[0] === "ipfs:" || !uri.includes("//")
-        ? await getIpfsJson(url)
-        : await fetch(url).then((r) => r.json());
+    const url = uri.split("//")[0] === "ipfs:" ? uri.split("//")[1] : uri;
 
-    // const schmeaUri =
-    //   schema.split("//")[0] === "ipfs:"
-    //     ? schema.split("//")[1] + "/$Schema.json"
-    //     : schema + "/%24Schema.json ";
+    try {
+      details =
+        uri.split("//")[0] === "ipfs:" || !uri.includes("//")
+          ? await getIpfsJson(url)
+          : await fetch(url).then((r) => r.json());
+    } catch (error) {
+      error_code = "no_nfts_in_collection";
+      error_message = "Individual metadata for this XLS20 NFT not found";
+    }
+  }
 
-    // try {
-    //   const res =
-    //     schema.split("//")[0] === "ipfs:"
-    //       ? await getIpfsJson(schmeaUri)
-    //       : await fetch(url).then((r) => r.json());
-    //   console.log(res);
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    tokenName = details.name.replace(/[^\w\s]/gi, "");
+  // const schmeaUri =
+  //   schema.split("//")[0] === "ipfs:"
+  //     ? schema.split("//")[1] + "/$Schema.json"
+  //     : schema + "/%24Schema.json ";
+
+  // try {
+  //   const res =
+  //     schema.split("//")[0] === "ipfs:"
+  //       ? await getIpfsJson(schmeaUri)
+  //       : await fetch(url).then((r) => r.json());
+  //   console.log(res);
+  // } catch (error) {
+  //   console.log(error);
+  // }
+
+  if (!details.status && details.code) {
+    error_code = "no_nfts_in_collection";
+    error_message =
+      "Unable to fetch NFT metadata from the Domain link,  please contact Token Issuer for support.";
+  } else {
+    tokenName = details.name && details.name.replace(/[^\w\s]/gi, "");
     description = details.description;
     attributes = details.attributes;
-    /*display_type
-    : 
-    "boost_number"
-    trait_type
-    : 
-    "Aqua Power"
-    value
-    : 
-    40*/
+
     collection = details.collection;
-    /*family
-    : 
-    "aiarts.co.uk NFTs"
-    name
-    : 
-    "Splash"
-    */
     if (details.thumbnail) {
       if (details.image.split("//")[0] === "ipfs:") {
         thumbnail = details.thumbnail.split("//")[1];
@@ -599,9 +614,6 @@ export async function getOneXls(nft: any) {
       }
       media_type = "video";
     }
-  } catch (error) {
-    error_code = "no_nfts_in_collection";
-    error_message = "Individual metadata for this XLS20 NFT not found";
   }
 
   return {
@@ -647,8 +659,6 @@ export async function fetchNextXls20WithSellOffer(
   nextXls20: any[],
   owner: string
 ): Promise<any> {
-  console.log(nextXls20);
-  debugger;
   const nextNfts = await Promise.all(
     nextXls20.map(async (nft: any) => {
       const { NFTokenID } = nft;

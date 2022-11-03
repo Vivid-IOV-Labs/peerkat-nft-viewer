@@ -72,7 +72,12 @@
           <hr />
           <strong class="h7 font-weight-bold">Issuer </strong><br />
           <span>{{ nft.issuer }}</span>
-          <div v-if="nft.collection" class="mt-2">
+          <div
+            v-if="
+              nft.collection && (nft.collection.family || nft.collection.name)
+            "
+            class="mt-2"
+          >
             <strong class="h7 font-weight-bold">Collection </strong><br />
             <div
               class="
@@ -84,6 +89,7 @@
               "
             >
               <div
+                v-if="nft.collection.family"
                 class="
                   rounded
                   tex-center
@@ -106,6 +112,7 @@
                 >{{ nft.collection.family }}
               </div>
               <div
+                v-if="nft.collection.name"
                 class="
                   rounded
                   tex-center
@@ -177,6 +184,10 @@
           <div v-if="nft.tokenTaxon !== undefined" class="mt-2">
             <strong class="h7 font-weight-bold">Token Taxon </strong><br />
             <div v-html="nft.tokenTaxon"></div>
+          </div>
+          <div v-if="nft.nft_serial" class="mt-2">
+            <strong class="h7 font-weight-bold">Serial </strong><br />
+            <span>{{ nft.nft_serial }}</span>
           </div>
           <div v-if="nft.standard" class="mt-2">
             <strong class="h7 font-weight-bold">Standard </strong><br />

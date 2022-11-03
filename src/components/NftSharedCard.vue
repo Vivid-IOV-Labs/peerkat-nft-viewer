@@ -57,32 +57,17 @@
       <strong class="h7 font-weight-bold">Issuer </strong><br />
       <span>{{ nft.issuer }}</span
       ><br />
-      <div v-if="nft.collection" class="mt-2">
+      <div
+        v-if="nft.collection && (nft.collection.family || nft.collection.name)"
+        class="mt-2"
+      >
         <strong class="h7 font-weight-bold">Collection </strong><br />
         <div
-          class="
-            d-flex
-            flex-column
-            justify-content-between
-            align-items-center
-            py-2
-          "
+          class="d-flex flex-column justify-content-between align-items-center py-2"
         >
           <div
-            class="
-              rounded
-              tex-center
-              d-flex
-              flex-column
-              justify-content-between
-              align-items-center
-              border
-              my-2
-              w-100
-              py-1
-              bg-gradient-primary
-              border-primary
-            "
+            v-if="nft.collection.family"
+            class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
             style=""
           >
             <strong class="text-uppercase text-primary small font-weight-bold"
@@ -90,20 +75,8 @@
             >{{ nft.collection.family }}
           </div>
           <div
-            class="
-              rounded
-              tex-center
-              d-flex
-              flex-column
-              justify-content-between
-              align-items-center
-              border
-              my-2
-              w-100
-              py-1
-              bg-gradient-primary
-              border-primary
-            "
+            v-if="nft.collection.name"
+            class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
             style=""
           >
             <strong class="text-uppercase text-primary small font-weight-bold"
@@ -124,31 +97,12 @@
       <div v-if="nft.attributes" class="mt-2">
         <strong class="h7 font-weight-bold">Attributes </strong><br />
         <div
-          class="
-            d-flex
-            flex-column
-            justify-content-between
-            align-items-center
-            py-2
-          "
+          class="d-flex flex-column justify-content-between align-items-center py-2"
         >
           <div
             v-for="(a, index) in nft.attributes"
             :key="index"
-            class="
-              rounded
-              tex-center
-              d-flex
-              flex-column
-              justify-content-between
-              align-items-center
-              border
-              my-2
-              w-100
-              py-1
-              bg-gradient-primary
-              border-primary
-            "
+            class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
             style=""
           >
             <strong
@@ -161,6 +115,10 @@
       <div v-if="nft.tokenTaxon !== undefined" class="mt-2">
         <strong class="h7 font-weight-bold">Token Taxon </strong><br />
         <div v-html="nft.tokenTaxon"></div>
+      </div>
+      <div v-if="nft.nft_serial" class="mt-2">
+        <strong class="h7 font-weight-bold">Serial </strong><br />
+        <span>{{ nft.nft_serial }}</span>
       </div>
       <div v-if="nft.standard" class="mt-2">
         <strong class="h7 font-weight-bold">Standard </strong><br />

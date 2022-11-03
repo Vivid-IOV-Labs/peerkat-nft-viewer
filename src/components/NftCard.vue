@@ -73,7 +73,12 @@
           </strong>
           <span v-if="nft.limitFormatted">{{ nft.limitFormatted }}</span>
         </div>
-        <div v-if="nft.collection" class="mt-2">
+        <div
+          v-if="
+            nft.collection && (nft.collection.family || nft.collection.name)
+          "
+          class="mt-2"
+        >
           <strong class="h7 font-weight-bold">Collection </strong><br />
           <div
             class="
@@ -85,6 +90,7 @@
             "
           >
             <div
+              v-if="nft.collection.family"
               class="
                 rounded
                 tex-center
@@ -106,6 +112,7 @@
               >{{ nft.collection.family }}
             </div>
             <div
+              v-if="nft.collection.name"
               class="
                 rounded
                 tex-center
