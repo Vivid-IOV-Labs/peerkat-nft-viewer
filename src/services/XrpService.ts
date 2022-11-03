@@ -532,13 +532,13 @@ export async function getOneXls(nft: any) {
   const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
 
   if (!URI) {
-    try {
-      const domain = await getDomain(Issuer);
-      details = await fetch(domain + nft_serial).then((r) => r.json());
-    } catch (error) {
-      error_code = "no_nfts_in_collection";
-      error_message = "Individual metadata for this XLS20 NFT not found";
-    }
+    // try {
+    //   const domain = await getDomain(Issuer);
+    //   details = await fetch(domain + nft_serial).then((r) => r.json());
+    // } catch (error) {
+    error_code = "no_nfts_in_collection";
+    error_message = "Individual metadata for this XLS20 NFT not found";
+    // }
   } else {
     const uri = hexToString(URI);
     const end = uri.includes(".json")
@@ -575,7 +575,7 @@ export async function getOneXls(nft: any) {
   //   console.log(error);
   // }
 
-  if (!details.status && details.code) {
+  if (!details || (!details.status && details.code)) {
     error_code = "no_nfts_in_collection";
     error_message =
       "Unable to fetch NFT metadata from the Domain link,  please contact Token Issuer for support.";
