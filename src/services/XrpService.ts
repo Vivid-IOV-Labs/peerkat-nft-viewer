@@ -521,10 +521,10 @@ export async function getOneXls(nft: any) {
   let media_type;
   let error_code;
   let error_message;
-  let tokenName;
-  let description;
-  let attributes;
-  let collection;
+  // let tokenName;
+  // let description;
+  // let attributes;
+  // let collection;
   let thumbnail;
   let details;
   const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
@@ -535,7 +535,8 @@ export async function getOneXls(nft: any) {
     //   details = await fetch(domain + nft_serial).then((r) => r.json());
     // } catch (error) {
     error_code = "no_nfts_in_collection";
-    error_message = "Individual metadata for this XLS20 NFT not found";
+    error_message =
+      "Unable to access the metadata for this NFT via the 'URI' field.";
     // }
   } else {
     const uri = hexToString(URI);
@@ -545,8 +546,15 @@ export async function getOneXls(nft: any) {
       ? `/${NFTokenTaxon}.json`
       : "/base.json";
 
-    const url = uri.split("//")[0] === "ipfs:" ? uri.split("//")[1] : uri;
-
+    const url = uri.includes("ipfs:")
+      ? uri.split("//")[1]
+      : uri.includes("/ipfs/")
+      ? uri.split("/ipfs/")[1]
+      : uri;
+    /*
+    ipfs://bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
+    https://ipfs.io/ipfs/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
+    */
     try {
       details =
         uri.split("//")[0] === "ipfs:" || !uri.includes("//")
@@ -554,7 +562,8 @@ export async function getOneXls(nft: any) {
           : await fetch(url).then((r) => r.json());
     } catch (error) {
       error_code = "no_nfts_in_collection";
-      error_message = "Individual metadata for this XLS20 NFT not found";
+      error_message =
+        "Unable to fetch the metadata for this NFT, please refresh the Peerkat xApp to try again; otherwise please contact your Token Issuer for support.";
     }
   }
 
@@ -572,49 +581,48 @@ export async function getOneXls(nft: any) {
   // } catch (error) {
   //   console.log(error);
   // }
+  // if (!details || (!details.status && details.code)) {
+  //   error_code = "no_nfts_in_collection";
+  //   error_message =
+  //     "Unable to fetch NFT metadata from the Domain link,  please contact Token Issuer for support.";
+  // } else {
+  const tokenName = details.name && details.name.replace(/[^\w\s]/gi, "");
+  const description = details.description;
+  const attributes = details.attributes;
 
-  if (!details || (!details.status && details.code)) {
-    error_code = "no_nfts_in_collection";
-    error_message =
-      "Unable to fetch NFT metadata from the Domain link,  please contact Token Issuer for support.";
-  } else {
-    tokenName = details.name && details.name.replace(/[^\w\s]/gi, "");
-    description = details.description;
-    attributes = details.attributes;
-
-    collection = details.collection;
-    if (details.thumbnail) {
-      if (details.image.split("//")[0] === "ipfs:") {
-        thumbnail = details.thumbnail.split("//")[1];
-      } else {
-        thumbnail = details.thumbnail;
-      }
-    }
-    if (details.image || details.image_url) {
-      const media = details.image || details.image_url;
-      if (media.split("//")[0] === "ipfs:" || !media.split("//")[0]) {
-        mediaUrl = media.split("//")[1].replace("ipfs/", "");
-      } else {
-        mediaUrl = media;
-      }
-      media_type = "image";
-      if (!thumbnail) {
-        thumbnail = mediaUrl;
-      }
-    }
-    if (
-      details.video ||
-      (details.animation_url && details.content_type.includes("video"))
-    ) {
-      const media = details.animation_url || details.video;
-      if (media.split("//")[0] === "ipfs:") {
-        mediaUrl = media.split("//")[1];
-      } else {
-        mediaUrl = media;
-      }
-      media_type = "video";
+  const collection = details.collection;
+  if (details.thumbnail) {
+    if (details.image.split("//")[0] === "ipfs:") {
+      thumbnail = details.thumbnail.split("//")[1];
+    } else {
+      thumbnail = details.thumbnail;
     }
   }
+  if (details.image || details.image_url) {
+    const media = details.image || details.image_url;
+    if (media.split("//")[0] === "ipfs:" || !media.split("//")[0]) {
+      mediaUrl = media.split("//")[1].replace("ipfs/", "");
+    } else {
+      mediaUrl = media;
+    }
+    media_type = "image";
+    if (!thumbnail) {
+      thumbnail = mediaUrl;
+    }
+  }
+  if (
+    details.video ||
+    (details.animation_url && details.content_type.includes("video"))
+  ) {
+    const media = details.animation_url || details.video;
+    if (media.split("//")[0] === "ipfs:") {
+      mediaUrl = media.split("//")[1];
+    } else {
+      mediaUrl = media;
+    }
+    media_type = "video";
+  }
+  // }
 
   return {
     tokenTaxon: NFTokenTaxon,
@@ -887,6 +895,7 @@ function getAvailableIpfsGateway() {
       );
     }
   );
+  console.log(availableIpfsGateway);
   return availableIpfsGateway.slice(0, 3);
 }
 function obfuscateIpfsFromList(domain: string) {
