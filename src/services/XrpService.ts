@@ -896,7 +896,6 @@ function getAvailableIpfsGateway() {
       );
     }
   );
-  console.log(availableIpfsGateway);
   return availableIpfsGateway.slice(0, 3);
 }
 function obfuscateIpfsFromList(domain: string) {
