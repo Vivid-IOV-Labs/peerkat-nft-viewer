@@ -552,12 +552,13 @@ export async function getOneXls(nft: any) {
       ? uri.split("/ipfs/")[1]
       : uri;
     /*
+    debugger
     ipfs://bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
     https://ipfs.io/ipfs/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
     */
     try {
       details =
-        uri.split("//")[0] === "ipfs:" || !uri.includes("//")
+        uri.includes("ipfs:") || uri.includes("/ipfs/")
           ? await getIpfsJson(url)
           : await fetch(url).then((r) => r.json());
     } catch (error) {
