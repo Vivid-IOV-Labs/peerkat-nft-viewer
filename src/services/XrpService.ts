@@ -195,7 +195,6 @@ async function getOne(
     const source = is_hexadecimal(hexToString(Domain))
       ? hexToString(hexToString(Domain))
       : hexToString(Domain);
-
     const ctiHex = getCtiHex(currency);
     const ctiDecimal = hexToDec(ctiHex);
     const ctiDecimalString = ctiDecimal.toString();
@@ -206,10 +205,11 @@ async function getOne(
     const transactionIndexDecimal = Number(transactionIndex);
     tokenName = getTokenName(currency);
     // eslint-disable-next-line no-inner-declarations
+
     async function geXls14() {
       const xlsProtocol = getXLSProtocol(source);
+
       if (xlsProtocol) {
-        debugger;
         url = await getMediaByXLSProtocol(source, xlsProtocol, tokenName);
         media_type = await getMediaType(url);
         standard = "XLS-14";
@@ -219,7 +219,6 @@ async function getOne(
             url = await getMediaByXLSProtocol(image, "xls-16-peerkat");
             media_type = await getMediaType(url);
           }
-          debugger;
         } else if (media_type?.includes("text/html")) {
           const metaUri = source.includes("hash:")
             ? source.split("hash:")[1]
@@ -447,7 +446,6 @@ async function fetchOne(
   });
   const { result, error, error_code, error_message } = allReps;
   const { account_data } = result;
-
   if (currency) {
     return await getOne(
       account_data,

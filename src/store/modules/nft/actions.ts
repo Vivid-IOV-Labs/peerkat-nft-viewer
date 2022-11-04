@@ -55,18 +55,22 @@ const actions: ActionTree<NFT, NFTState> = {
   },
   async fetchNext({ commit, getters }): Promise<void> {
     const client = getters.getXrpClient;
-    const count = getters.getAll.length;
+    const count = getters.getAllXls14.length;
     const nextLines =
-      getters.getLines.length > 4
+      getters.getLines.length > 2
         ? getters.getLines.slice(count, count + 2)
         : getters.getLines;
     try {
+      debugger;
       const nextNfts: NFT[] = await client.fetchNext(nextLines);
+      debugger;
       commit("setAllXls14", nextNfts);
       commit("setAll", nextNfts);
     } catch (err) {
+      console.log(err);
+      debugger;
       commit("setAllXls14", []);
-      commit("setAll", []);
+      // commit("setAll", []);
     }
   },
   async fetchXls20({ commit }, { walletAddress }: FetchParams): Promise<void> {
@@ -74,8 +78,8 @@ const actions: ActionTree<NFT, NFTState> = {
     commit("setXls20", Xls20);
   },
   async fetchNextXls20({ commit, getters, rootGetters }): Promise<void> {
-    const count = getters.getAll.length;
-    const nextXls20 = getters.getXls20.slice(count, count + 4);
+    const count = getters.getAllXls20.length;
+    const nextXls20 = getters.getXls20.slice(count, count + 2);
     const owner = rootGetters["user/getAddress"];
 
     const nextNfts = await fetchNextXls20WithSellOffer(nextXls20, owner);
