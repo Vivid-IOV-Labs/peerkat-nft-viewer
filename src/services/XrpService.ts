@@ -521,10 +521,10 @@ export async function getOneXls(nft: any) {
   let media_type;
   let error_code;
   let error_message;
-  // let tokenName;
-  // let description;
-  // let attributes;
-  // let collection;
+  let tokenName;
+  let description;
+  let attributes;
+  let collection;
   let thumbnail;
   let details;
   const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
@@ -561,6 +561,42 @@ export async function getOneXls(nft: any) {
         uri.includes("ipfs:") || uri.includes("/ipfs/")
           ? await getIpfsJson(url)
           : await fetch(url).then((r) => r.json());
+      tokenName = details.name && details.name.replace(/[^\w\s]/gi, "");
+      description = details.description;
+      attributes = details.attributes;
+
+      collection = details.collection;
+      if (details.thumbnail) {
+        if (details.image.split("//")[0] === "ipfs:") {
+          thumbnail = details.thumbnail.split("//")[1];
+        } else {
+          thumbnail = details.thumbnail;
+        }
+      }
+      if (details.image || details.image_url) {
+        const media = details.image || details.image_url;
+        if (media.split("//")[0] === "ipfs:" || !media.split("//")[0]) {
+          mediaUrl = media.split("//")[1].replace("ipfs/", "");
+        } else {
+          mediaUrl = media;
+        }
+        media_type = "image";
+        if (!thumbnail) {
+          thumbnail = mediaUrl;
+        }
+      }
+      if (
+        details.video ||
+        (details.animation_url && details.content_type.includes("video"))
+      ) {
+        const media = details.animation_url || details.video;
+        if (media.split("//")[0] === "ipfs:") {
+          mediaUrl = media.split("//")[1];
+        } else {
+          mediaUrl = media;
+        }
+        media_type = "video";
+      }
     } catch (error) {
       error_code = "no_nfts_in_collection";
       error_message =
@@ -587,42 +623,7 @@ export async function getOneXls(nft: any) {
   //   error_message =
   //     "Unable to fetch NFT metadata from the Domain link,  please contact Token Issuer for support.";
   // } else {
-  const tokenName = details.name && details.name.replace(/[^\w\s]/gi, "");
-  const description = details.description;
-  const attributes = details.attributes;
 
-  const collection = details.collection;
-  if (details.thumbnail) {
-    if (details.image.split("//")[0] === "ipfs:") {
-      thumbnail = details.thumbnail.split("//")[1];
-    } else {
-      thumbnail = details.thumbnail;
-    }
-  }
-  if (details.image || details.image_url) {
-    const media = details.image || details.image_url;
-    if (media.split("//")[0] === "ipfs:" || !media.split("//")[0]) {
-      mediaUrl = media.split("//")[1].replace("ipfs/", "");
-    } else {
-      mediaUrl = media;
-    }
-    media_type = "image";
-    if (!thumbnail) {
-      thumbnail = mediaUrl;
-    }
-  }
-  if (
-    details.video ||
-    (details.animation_url && details.content_type.includes("video"))
-  ) {
-    const media = details.animation_url || details.video;
-    if (media.split("//")[0] === "ipfs:") {
-      mediaUrl = media.split("//")[1];
-    } else {
-      mediaUrl = media;
-    }
-    media_type = "video";
-  }
   // }
 
   return {
