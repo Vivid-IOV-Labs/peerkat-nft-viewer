@@ -4,7 +4,7 @@ import store from "../store";
 import { devlog } from "../utils/devlog";
 import { getNodeTypeFromNetwork } from "../utils/getNetworkTypeFromCode";
 import { isInXumm } from "../utils/isInXumm";
-
+const isHoldingPage = JSON.parse(import.meta.env.VITE_HOLDING_PAGE);
 const routes = [
   { path: "/", redirect: "/wallet" },
   {
@@ -16,6 +16,18 @@ const routes = [
       title: "Welcome Page",
       announcer: {
         message: "Welcome Page",
+      },
+    },
+  },
+  {
+    path: "/holding",
+    name: "HoldingPage",
+    component: () => import("../views/HoldingPage.vue"),
+    meta: {
+      withAuth: true,
+      title: "Holding Page",
+      announcer: {
+        message: "Holding Page",
       },
     },
   },
@@ -334,6 +346,10 @@ router.beforeEach(async (to, from, next) => {
 // router.afterEach((to, from, failure) => {
 //   if (!failure) scrollToActive(to, from);
 // });
+router.beforeEach((to, from, next) => {
+  if (to.name !== "HoldingPage" && isHoldingPage) next({ name: "HoldingPage" });
+  else next();
+});
 export default router;
 
 // [
