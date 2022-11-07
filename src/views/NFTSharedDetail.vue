@@ -67,9 +67,16 @@
         </template>
 
         <template #text>
-          <strong class="h5 font-weight-bold">Token Name </strong><br />
-          {{ nft.tokenName }}
-          <hr />
+          <div v-if="nft.error_code" class="alert alert-warning">
+            <span class="h6 font-weight-bold alert-heading">Missing Data</span
+            ><br />
+            {{ nft.error_message }}
+          </div>
+          <div v-if="!nft.error_code">
+            <strong class="h5 font-weight-bold">Token Name </strong><br />
+            {{ nft.tokenName }}
+            <hr />
+          </div>
           <strong class="h7 font-weight-bold">Issuer </strong><br />
           <span>{{ nft.issuer }}</span>
           <div
