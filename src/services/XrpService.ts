@@ -557,45 +557,46 @@ export async function getOneXls(nft: any) {
     https://ipfs.io/ipfs/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
     */
     try {
-      details =
-        uri.includes("ipfs:") || uri.includes("/ipfs/")
-          ? await getIpfsJson(url)
-          : await fetch(url).then((r) => r.json());
-      tokenName = details.name && details.name.replace(/[^\w\s]/gi, "");
-      description = details.description;
-      attributes = details.attributes;
+      details = uri.includes("https:")
+        ? await fetch(url).then((r) => r.json())
+        : await getIpfsJson(url);
+      if (details) {
+        tokenName = details.name && details.name.replace(/[^\w\s]/gi, "");
+        description = details.description;
+        attributes = details.attributes;
 
-      collection = details.collection;
-      if (details.thumbnail) {
-        if (details.image.split("//")[0] === "ipfs:") {
-          thumbnail = details.thumbnail.split("//")[1];
-        } else {
-          thumbnail = details.thumbnail;
+        collection = details.collection;
+        if (details.thumbnail) {
+          if (details.image.split("//")[0] === "ipfs:") {
+            thumbnail = details.thumbnail.split("//")[1];
+          } else {
+            thumbnail = details.thumbnail;
+          }
         }
-      }
-      if (details.image || details.image_url) {
-        const media = details.image || details.image_url;
-        if (media.split("//")[0] === "ipfs:" || !media.split("//")[0]) {
-          mediaUrl = media.split("//")[1].replace("ipfs/", "");
-        } else {
-          mediaUrl = media;
+        if (details.image || details.image_url) {
+          const media = details.image || details.image_url;
+          if (media.split("//")[0] === "ipfs:" || !media.split("//")[0]) {
+            mediaUrl = media.split("//")[1].replace("ipfs/", "");
+          } else {
+            mediaUrl = media;
+          }
+          media_type = "image";
+          if (!thumbnail) {
+            thumbnail = mediaUrl;
+          }
         }
-        media_type = "image";
-        if (!thumbnail) {
-          thumbnail = mediaUrl;
+        if (
+          details.video ||
+          (details.animation_url && details.content_type.includes("video"))
+        ) {
+          const media = details.animation_url || details.video;
+          if (media.split("//")[0] === "ipfs:") {
+            mediaUrl = media.split("//")[1];
+          } else {
+            mediaUrl = media;
+          }
+          media_type = "video";
         }
-      }
-      if (
-        details.video ||
-        (details.animation_url && details.content_type.includes("video"))
-      ) {
-        const media = details.animation_url || details.video;
-        if (media.split("//")[0] === "ipfs:") {
-          mediaUrl = media.split("//")[1];
-        } else {
-          mediaUrl = media;
-        }
-        media_type = "video";
       }
     } catch (error) {
       error_code = "no_nfts_in_collection";
