@@ -24,7 +24,7 @@ const routes = [
     name: "HoldingPage",
     component: () => import("../views/HoldingPage.vue"),
     meta: {
-      withAuth: true,
+      withAuth: false,
       title: "Holding Page",
       announcer: {
         message: "Holding Page",
@@ -275,7 +275,9 @@ let loggedIn = false;
 
 router.beforeEach(async (to, from, next) => {
   if (isInXumm()) {
-    if (!loggedIn) {
+    if (to.fullPath !== "/holding" && isHoldingPage) {
+      return next({ path: "/holding" });
+    } else if (!loggedIn && !isHoldingPage) {
       store.commit("ui/setIsloading", true);
 
       await store.dispatch("xumm/getOttData");
@@ -315,7 +317,9 @@ router.beforeEach(async (to, from, next) => {
       next();
     }
   } else {
-    if (!walletAddress.value) {
+    if (to.fullPath !== "/holding" && isHoldingPage) {
+      return next({ path: "/holding" });
+    } else if (!walletAddress.value && !isHoldingPage) {
       if (to.fullPath !== "/welcome") {
         next({
           path: "/welcome",
@@ -325,7 +329,7 @@ router.beforeEach(async (to, from, next) => {
         next();
       }
     } else {
-      if (!isConnected.value) {
+      if (!isConnected.value && !isHoldingPage) {
         try {
           await connectXrpClient();
           next();
@@ -346,10 +350,6 @@ router.beforeEach(async (to, from, next) => {
 // router.afterEach((to, from, failure) => {
 //   if (!failure) scrollToActive(to, from);
 // });
-router.beforeEach((to, from, next) => {
-  if (to.name !== "HoldingPage" && isHoldingPage) next({ name: "HoldingPage" });
-  else next();
-});
 export default router;
 
 // [

@@ -21,7 +21,7 @@
       <span class="sr-only">Loading...</span>
     </div>
   </div> -->
-  <div style="height: 100%">
+  <div v-if="withAuthLayout" style="height: 100%">
     <auth-layout>
       <RouterView v-slot="{ Component }">
         <template v-if="Component">
@@ -61,6 +61,9 @@
       </RouterView>
     </auth-layout>
   </div>
+  <div v-else class="h-100">
+    <router-view></router-view>
+  </div>
 </template>
 
 <script lang="ts">
@@ -68,6 +71,7 @@ import { computed, defineComponent } from "vue";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 import MainLoader from "@/layouts/MainLoader.vue";
 import { useStore } from "vuex";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
   name: "App",
@@ -75,10 +79,14 @@ export default defineComponent({
     AuthLayout,
     MainLoader,
   },
+
   setup() {
     const store = useStore();
+    const route = useRoute();
     const isLoading = computed(() => store.getters["ui/getIsloading"]);
-    return { isLoading };
+    const withAuthLayout = computed(() => route.meta.withAuth);
+
+    return { isLoading, withAuthLayout };
   },
 });
 </script>
