@@ -550,7 +550,7 @@ export async function getOneXls(nft: any) {
     } catch (error) {
       error_code = "no_nfts_in_collection";
       error_message =
-        "Unable to fetch the metadata for this NFT, please refresh the Peerkat xApp to try again; otherwise please contact your Token Issuer for support.";
+        "Unable to fetch the metadata for this NFT, please contact your Token Issuer for support.";
     }
   } else {
     const uri = hexToString(URI);
