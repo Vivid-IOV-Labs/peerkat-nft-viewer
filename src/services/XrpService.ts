@@ -516,6 +516,16 @@ async function getDomain(account: string) {
   const { Domain } = account_data;
   return hexToString(Domain);
 }
+
+function createUrlFromDomain(domain: string, nftokenid: string) {
+  if ("https://marketplace-api.onxrp.com/api/metadata/" === domain) {
+    return `${domain}${nftokenid}.json`;
+  } else {
+    const d = domain.slice(-1) == "/" ? domain.slice(0, -1) : domain;
+    return `${d}/.well-known/xrpl-nft/${nftokenid}`;
+  }
+}
+
 export async function getOneXls(nft: any) {
   let mediaUrl;
   let media_type;
@@ -530,14 +540,18 @@ export async function getOneXls(nft: any) {
   const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
 
   if (!URI) {
-    // try {
-    //   const domain = await getDomain(Issuer);
-    //   details = await fetch(domain + nft_serial).then((r) => r.json());
-    // } catch (error) {
-    error_code = "no_nfts_in_collection";
-    error_message =
-      "Unable to access the metadata for this NFT via the 'URI' field.";
-    // }
+    const domain = await getDomain(Issuer);
+    const url = createUrlFromDomain(domain, NFTokenID);
+    try {
+      details = await fetch(url).then((r) => r.json());
+      if (details.code && details.code == 404) {
+        throw new Error();
+      }
+    } catch (error) {
+      error_code = "no_nfts_in_collection";
+      error_message =
+        "Unable to fetch the metadata for this NFT, please refresh the Peerkat xApp to try again; otherwise please contact your Token Issuer for support.";
+    }
   } else {
     const uri = hexToString(URI);
     const end = uri.includes(".json")
@@ -552,56 +566,61 @@ export async function getOneXls(nft: any) {
       ? uri.split("/ipfs/")[1]
       : uri;
     /*
-    debugger
+    different kind of uri
+    bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
     ipfs://bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
     https://ipfs.io/ipfs/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
+    https://somedomain/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
     */
     try {
-      details = uri.includes("https:")
-        ? await fetch(url).then((r) => r.json())
-        : await getIpfsJson(url);
-      if (details) {
-        tokenName = details.name && details.name.replace(/[^\w\s]/gi, "");
-        description = details.description;
-        attributes = details.attributes;
-
-        collection = details.collection;
-        if (details.thumbnail) {
-          if (details.image.split("//")[0] === "ipfs:") {
-            thumbnail = details.thumbnail.split("//")[1];
-          } else {
-            thumbnail = details.thumbnail;
-          }
-        }
-        if (details.image || details.image_url) {
-          const media = details.image || details.image_url;
-          if (media.split("//")[0] === "ipfs:" || !media.split("//")[0]) {
-            mediaUrl = media.split("//")[1].replace("ipfs/", "");
-          } else {
-            mediaUrl = media;
-          }
-          media_type = "image";
-          if (!thumbnail) {
-            thumbnail = mediaUrl;
-          }
-        }
-        if (
-          details.video ||
-          (details.animation_url && details.content_type.includes("video"))
-        ) {
-          const media = details.animation_url || details.video;
-          if (media.split("//")[0] === "ipfs:") {
-            mediaUrl = media.split("//")[1];
-          } else {
-            mediaUrl = media;
-          }
-          media_type = "video";
-        }
-      }
+      details =
+        uri.includes("ipfs") || !uri.includes("//")
+          ? await getIpfsJson(url)
+          : await fetch(url).then((r) => r.json());
     } catch (error) {
       error_code = "no_nfts_in_collection";
       error_message =
         "Unable to fetch the metadata for this NFT, please refresh the Peerkat xApp to try again; otherwise please contact your Token Issuer for support.";
+    }
+  }
+  if (details) {
+    tokenName = details.name && details.name.replace(/[^\w\s]/gi, "");
+    description = details.description;
+    attributes = details.attributes;
+
+    collection = details.collection;
+    if (details.thumbnail) {
+      if (details.image.split("//")[0] === "ipfs:") {
+        thumbnail = details.thumbnail.split("//")[1];
+      } else {
+        thumbnail = details.thumbnail;
+      }
+    }
+    if (details.image || details.image_url) {
+      const media = details.image || details.image_url;
+      if (media.split("//")[0] === "ipfs:" || !media.split("//")[0]) {
+        mediaUrl = media.split("//")[1].replace("ipfs/", "");
+      } else {
+        mediaUrl = media;
+      }
+      media_type = "image";
+      if (!thumbnail) {
+        thumbnail = mediaUrl;
+      }
+    }
+    if (
+      details.video ||
+      (details.animation_url &&
+        details.content_type &&
+        details.content_type.includes("video"))
+    ) {
+      const media = details.animation_url || details.video;
+      if (media.split("//")[0] === "ipfs:") {
+        mediaUrl = media.split("//")[1];
+      } else {
+        mediaUrl = media;
+      }
+      media_type = "video";
     }
   }
 
@@ -674,23 +693,23 @@ export async function fetchNextXls20WithSellOffer(
     nextXls20.map(async (nft: any) => {
       const { NFTokenID } = nft;
       const schema = await getOneXls(nft);
-      const sellOffersResponse = await fetchSellOffers(NFTokenID);
-      const buyOffersResponse = await fetchBuyOffers(NFTokenID);
+      // const sellOffersResponse = await fetchSellOffers(NFTokenID);
+      // const buyOffersResponse = await fetchBuyOffers(NFTokenID);
       return {
         ...schema,
-        selloffers:
-          sellOffersResponse && sellOffersResponse.offers
-            ? sellOffersResponse.offers.filter(
-                (offer: any) => offer.owner == owner
-              )
-            : [],
-        buyoffers:
-          buyOffersResponse && buyOffersResponse.offers
-            ? buyOffersResponse.offers
-            : // .filter(
-              //     (offer: any) => offer.owner == owner
-              //   )
-              [],
+        // selloffers:
+        //   sellOffersResponse && sellOffersResponse.offers
+        //     ? sellOffersResponse.offers.filter(
+        //         (offer: any) => offer.owner == owner
+        //       )
+        //     : [],
+        // buyoffers:
+        //   buyOffersResponse && buyOffersResponse.offers
+        //     ? buyOffersResponse.offers
+        //     : // .filter(
+        //       //     (offer: any) => offer.owner == owner
+        //       //   )
+        //       [],
       };
     })
   );
