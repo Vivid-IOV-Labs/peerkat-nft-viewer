@@ -574,6 +574,7 @@ export async function getOneXls(nft: any) {
       : uri;
     /*
     different kind of uri
+    https://bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4.ipfs.w3s.link/metadata.json
     bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
     ipfs://bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
     https://ipfs.io/ipfs/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
@@ -581,13 +582,11 @@ export async function getOneXls(nft: any) {
     */
     try {
       details =
-        uri.includes("ipfs") || !uri.includes("//")
+        uri.includes("ipfs:") || uri.includes("/ipfs/") || !uri.includes("//")
           ? await getIpfsJson(url)
           : await fetch(url).then((r) => r.json());
     } catch (error) {
       error_code = "no_nfts_in_collection";
-      devlog(error);
-      debugger;
       error_title = "Data currently unavailable  [X01]";
       error_message =
         "This error may occur when the viewer attempts to fetch metadata from the URI and the network request times out. This error occurs most frequently when using a public IPFS link. Please try again by quitting the xApp and reload. We will continue to upgrade the viewer, follow Peerkat via Twitter and Discord for updates and support.";
@@ -997,18 +996,11 @@ async function recursiveIpfsFetch(url: string): Promise<any> {
         }
       } else {
         controller.abort();
-        throw new Error(
-          "Access to artwork file for this NFT is unavailable. Peerkat NFT Viewer is not able to fetch NFT metadata, please contact Token Issuer for support."
-        );
+        throw new Error("No Ipfs");
       }
     }
   } else {
-    devlog(
-      "Access to artwork file for this NFT is unavailable. Peerkat NFT Viewer is not able to fetch NFT metadata, please contact Token Issuer for support."
-    );
-    throw new Error(
-      "Access to artwork file for this NFT is unavailable. Peerkat NFT Viewer is not able to fetch NFT metadata, please contact Token Issuer for support."
-    );
+    throw new Error("No Ipfs");
   }
 }
 async function getIpfsJson(url: string) {
