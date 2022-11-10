@@ -68,7 +68,9 @@
 
         <template #text>
           <div v-if="nft.error_code" class="alert alert-warning">
-            <span class="h6 font-weight-bold alert-heading">Missing Data</span
+            <span class="h6 font-weight-bold alert-heading">{{
+              nft.error_title
+            }}</span
             ><br />
             {{ nft.error_message }}
           </div>

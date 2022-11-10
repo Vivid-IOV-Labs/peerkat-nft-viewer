@@ -28,19 +28,14 @@
         <li class="pb-2">
           <strong>Why is my NFT's artwork not being displayed? </strong><br />
           It could be due to a slow connection or the viewer is unable to read
-          the metadata (referencing where the NFT asset is stored). In the case
-          of a slow connection please try to reload the Peerkat xApp. We are
-          actively working on increasing the viewer’s support for different
-          types of metadata so that your NFT artwork will be visible in the
-          future, however we will not be supporting artwork for IOUs.
-        </li>
-        <li class="pb-2">
-          <strong>What is the “Missing Data” message for? </strong><br />
-          We have added error messages for “Missing Data” within the viewer.
-          This message occurs when the viewer is not able to fetch the NFT
-          metadata to display the artwork. In this situation we advise you to
-          request support from the Token Issuer and/or service used to acquire
-          the NFT.
+          the metadata (referencing where the NFT asset is stored). <br />If you
+          can view the NFT details & attributes in the viewer the error is most
+          likely due to a slow connection where the network times out. This
+          error occurs most frequently when using a public IPFS link. Please try
+          again by quitting the xApp and reload.<br />
+          We are actively working on increasing the viewer’s support for
+          different types of metadata so that your NFT artwork will be visible
+          in the future.
         </li>
         <li class="pb-2">
           <strong> What XLS20 artwork metadata does this xApp support? </strong>
@@ -65,8 +60,10 @@
         <external-link class="mr-2" :url="`https://twitter.com/PeerkatOfficial`"
           >@PeerkatOfficial</external-link
         >
-        <external-link class="mr-2" :url="`https://peerkat.io`"
-          >Peerkat.io
+        <external-link
+          class="mr-2"
+          :url="`https://discord.com/invite/mAHEN8kCdr`"
+          >Discord
         </external-link>
         <external-link class="mr-2" :url="`https://peerkat.io/privacy`"
           >Privacy notice</external-link
