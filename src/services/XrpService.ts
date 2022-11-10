@@ -274,7 +274,8 @@ async function getOne(
       } catch (error: any) {
         error_code = "no_nfts_in_collection";
         error_title = "XLS14/SOLO data currently unavailable [X05]";
-        error_message = error.message;
+        error_message =
+          "This error may occur when the viewer is currently unable to access the asset file associated with this NFT. We will continue to upgrade the viewer, follow Peerkat via Twitter and Discord for updates and support.";
         await geXls14();
       }
     } else if (
