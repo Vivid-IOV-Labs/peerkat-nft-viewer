@@ -273,7 +273,7 @@ async function getOne(
         }
       } catch (error: any) {
         error_code = "no_nfts_in_collection";
-        error_title = "XLS14/SOLO data currently unavailable";
+        error_title = "XLS14/SOLO data currently unavailable [X05]";
         error_message = error.message;
         await geXls14();
       }
@@ -586,6 +586,8 @@ export async function getOneXls(nft: any) {
           : await fetch(url).then((r) => r.json());
     } catch (error) {
       error_code = "no_nfts_in_collection";
+      devlog(error);
+      debugger;
       error_title = "Data currently unavailable  [X01]";
       error_message =
         "This error may occur when the viewer attempts to fetch metadata from the URI and the network request times out. This error occurs most frequently when using a public IPFS link. Please try again by quitting the xApp and reload. We will continue to upgrade the viewer, follow Peerkat via Twitter and Discord for updates and support.";
