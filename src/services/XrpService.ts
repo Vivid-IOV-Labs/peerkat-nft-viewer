@@ -267,12 +267,13 @@ async function getOne(
           standard = "XLS-14d/SOLO";
         } else {
           error_code = "no_nfts_in_collection";
-          error_title = "XLS14/SOLO data currently unavailable          ";
+          error_title = "XLS14/SOLO data currently unavailable";
           error_message =
             "This error may occur when the viewer is currently unable to access the individual asset file associated with this NFT. Please contact the Token Issuer and/or Sologenic for support. We will continue to upgrade the viewer, follow Peerkat via Twitter and Discord for updates and support.";
         }
       } catch (error: any) {
         error_code = "no_nfts_in_collection";
+        error_title = "XLS14/SOLO data currently unavailable";
         error_message = error.message;
         await geXls14();
       }
