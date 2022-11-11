@@ -953,8 +953,16 @@ async function recursiveIpfsFetch(url: string): Promise<any> {
         if (!response.ok) {
           throw new Error(`Error! status: ${response.url} ${response.status}`);
         }
-        const result = response.json();
-        return result;
+        const contentType = response.headers.get("Content-Type");
+        if (contentType?.includes("image") || contentType?.includes("video")) {
+          // const blob = await response.blob();
+          // const mediaUrl = URL.createObjectURL(blob);
+          return contentType?.includes("image")
+            ? { image: response.url }
+            : { video: response.url };
+        }
+        const json = await response.json();
+        return json;
       })
     );
     try {
@@ -982,22 +990,21 @@ async function recursiveIpfsFetch(url: string): Promise<any> {
         });
         if (
           (errorCodesInMessage && ipfs) ||
-          ["https://cf-ipfs.com/", "https://cloudflare-ipfs.com/"].includes(
-            ipfs.domain
-          )
+          (ipfs &&
+            ["https://cf-ipfs.com/", "https://cloudflare-ipfs.com/"].includes(
+              ipfs.domain
+            ))
         ) {
           obfuscateIpfsFromList(ipfs.domain);
           controller.abort();
           return await recursiveIpfsFetch(url);
         } else {
           controller.abort();
-          throw new Error(
-            "Access to artwork file for this NFT is unavailable. Peerkat NFT Viewer is not able to fetch NFT metadata, please contact Token Issuer for support."
-          );
+          throw new Error(error);
         }
       } else {
         controller.abort();
-        throw new Error("No Ipfs");
+        throw new Error(error);
       }
     }
   } else {
