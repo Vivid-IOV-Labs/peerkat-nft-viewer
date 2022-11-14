@@ -960,9 +960,10 @@ async function recursiveIpfsFetch(url: string): Promise<any> {
           return contentType?.includes("image")
             ? { image: response.url }
             : { video: response.url };
+        } else {
+          const json = await response.json();
+          return json;
         }
-        const json = await response.json();
-        return json;
       })
     );
     try {
