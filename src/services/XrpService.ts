@@ -572,9 +572,12 @@ export async function getOneXls(nft: any) {
       ? uri.split("//")[1]
       : uri.includes("/ipfs/")
       ? uri.split("/ipfs/")[1]
+      : uri.includes("cid:")
+      ? uri.split("cid:")[1]
       : uri;
     /*
     different kind of uri
+    cid:bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4
     https://bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4.ipfs.w3s.link/metadata.json
     bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
     ipfs://bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
@@ -583,7 +586,10 @@ export async function getOneXls(nft: any) {
     */
     try {
       details =
-        uri.includes("ipfs:") || uri.includes("/ipfs/") || !uri.includes("//")
+        uri.includes("ipfs:") ||
+        uri.includes("/ipfs/") ||
+        !uri.includes("//") ||
+        uri.includes("cid:")
           ? await getIpfsJson(url)
           : await fetch(url).then((r) => r.json());
     } catch (error) {
@@ -599,6 +605,15 @@ export async function getOneXls(nft: any) {
     attributes = details.attributes;
 
     collection = details.collection;
+
+    if (details.content) {
+      const cid = details.content.split("cid:")[1];
+      const response = await getIpfsMedia(cid);
+      const contentType = response.headers.get("Content-Type");
+      media_type = contentType;
+      mediaUrl = response.url;
+    }
+
     if (details.thumbnail) {
       if (details.image.split("//")[0] === "ipfs:") {
         thumbnail = details.thumbnail.split("//")[1];
@@ -960,9 +975,10 @@ async function recursiveIpfsFetch(url: string): Promise<any> {
           return contentType?.includes("image")
             ? { image: response.url }
             : { video: response.url };
+        } else {
+          const json = await response.json();
+          return json;
         }
-        const json = await response.json();
-        return json;
       })
     );
     try {
