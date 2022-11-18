@@ -583,7 +583,6 @@ export async function getOneXls(nft: any) {
     https://ipfs.io/ipfs/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
     https://somedomain/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
     */
-    if (uri.includes("cid:")) debugger;
     try {
       details =
         uri.includes("ipfs:") ||
@@ -592,11 +591,7 @@ export async function getOneXls(nft: any) {
         uri.includes("cid:")
           ? await getIpfsJson(url)
           : await fetch(url).then((r) => r.json());
-      if (uri.includes("cid:")) debugger;
     } catch (error) {
-      console.log(error);
-      if (uri.includes("cid:")) debugger;
-
       error_code = "no_nfts_in_collection";
       error_title = "Data currently unavailable  [X01]";
       error_message =
