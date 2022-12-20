@@ -206,7 +206,6 @@ async function getOne(
     const transactionIndexDecimal = Number(transactionIndex);
     tokenName = getTokenName(currency);
     // eslint-disable-next-line no-inner-declarations
-
     async function geXls14() {
       const xlsProtocol = getXLSProtocol(source);
 
@@ -578,21 +577,40 @@ export async function getOneXls(nft: any) {
     /*
     different kind of uri
     cid:bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4
-    https://bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4.ipfs.w3s.link/metadata.json
+    https://bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4.ipfs.w3s.link/metadata.json #https://([a-zA-Z]+([0-9]+[a-zA-Z]+)+)\.ipfs\.[A-Za-z0-9]+\.[A-Za-z0-9]+/([A-Za-z0-9]+(_[A-Za-z0-9]+)+)\.[A-Za-z0-9]+
     bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
     ipfs://bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
     https://ipfs.io/ipfs/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
     https://somedomain/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
     */
+
     try {
-      details =
+      const response =
         uri.includes("ipfs:") ||
         uri.includes("/ipfs/") ||
         !uri.includes("//") ||
         uri.includes("cid:")
           ? await getIpfsJson(url)
-          : await fetch(url).then((r) => r.json());
+          : await fetch(url);
+
+      const contentType = response.headers.get("Content-Type");
+
+      if (contentType?.includes("image") || contentType?.includes("video")) {
+        const ipfLinkUrlPattern = new RegExp(
+          "https://([a-zA-Z]+([0-9]+[a-zA-Z]+)+).ipfs.[A-Za-z0-9]+.[A-Za-z0-9]+/([A-Za-z0-9]+(_[A-Za-z0-9]+)+).[A-Za-z0-9]+"
+        ).test(url);
+        if (ipfLinkUrlPattern) {
+          const ipfsHash = url.split(".ipfs")[0].split("//")[1];
+          const name = url.split(".ipfs")[1].split("/")[1];
+          thumbnail = ipfsHash + "/" + name;
+          media_type = contentType;
+          mediaUrl = ipfsHash + "/" + name;
+        }
+      } else {
+        details = await response.json();
+      }
     } catch (error) {
+      devlog(error);
       error_code = "no_nfts_in_collection";
       error_title = "Data currently unavailable  [X01]";
       error_message =
