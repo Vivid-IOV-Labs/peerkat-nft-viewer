@@ -1,6 +1,6 @@
 <template>
   <div style="height: 70vh">
-    <a href="#" class="mb-4 btn btn-link w-100" @click.prevent="back">Back </a>
+    <BackLink />
     <div v-if="nft" class="h-100">
       <figure class="w-100">
         <load-media :nft="nft"></load-media>
@@ -13,10 +13,12 @@ import { defineComponent, computed, watch, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import LoadMedia from "@/components/LoadMedia.vue";
+import BackLink from "@/components/BackLink.vue";
 
 export default defineComponent({
   components: {
     LoadMedia,
+    BackLink,
   },
   setup() {
     const route = useRoute();

@@ -1,5 +1,7 @@
 <template>
+  <BackLink />
   <div v-if="nft">
+    <h1 class="h2 font-weight-bold mb-4 text-center">NFT Offers</h1>
     <base-dialog v-model="toggleSellDialog" :cancellable="true" title="Sell">
       <template #body>
         <strong class="h6 font-weight-bold">Token Name </strong><br />
@@ -42,11 +44,12 @@
           :class="{ active: showTab === 'sell' }"
           href="#"
           @click="showTab = 'sell'"
-          >My Sell Offers
+          >Offers Made
           <span v-if="nft.selloffers && nft.selloffers.length"
             >({{ nft.selloffers.length }})</span
-          ></a
-        >
+          >
+          <span v-else>(0)</span>
+        </a>
       </li>
       <li class="nav-item">
         <a
@@ -54,10 +57,11 @@
           :class="{ active: showTab === 'buy' }"
           href="#"
           @click="showTab = 'buy'"
-          >Current Buy Offers
+          >Offers Received
           <span v-if="nft.buyoffers && nft.buyoffers.length"
             >({{ nft.buyoffers.length }})</span
           >
+          <span v-else>(0)</span>
         </a>
       </li>
     </ul>
@@ -87,10 +91,7 @@
       </div>
       <div v-if="showTab === 'buy'">
         <div v-if="!nft.buyoffers || nft.buyoffers.length == 0">
-          <p>
-            Peerkat is not able to find any buy offers, shared with this wallet
-            for this NFT
-          </p>
+          <p>No current offers found</p>
         </div>
         <div v-else>
           <div
@@ -133,7 +134,9 @@ import SellNftCard from "@/components/SellNftCard.vue";
 import AcceptBuyOfferCard from "@/components/AcceptBuyOfferCard.vue";
 import BaseDialog from "@/components/BaseDialog.vue";
 import BaseInput from "@/components/BaseInput.vue";
-import BaseButton from "@/components/BaseButton.vue";
+// import BaseButton from "@/components/BaseButton.vue";
+import BackLink from "@/components/BackLink.vue";
+
 import AsyncButton from "@/components/AsyncButton.vue";
 import { useStore } from "vuex";
 import { devlog } from "../utils/devlog";
@@ -149,7 +152,8 @@ export default defineComponent({
     SellNftCard,
     BaseDialog,
     BaseInput,
-    BaseButton,
+    BackLink,
+    // BaseButton,
     AsyncButton,
     AcceptBuyOfferCard,
   },

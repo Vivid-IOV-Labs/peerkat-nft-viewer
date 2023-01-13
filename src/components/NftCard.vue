@@ -171,8 +171,9 @@
           class="mr-2"
           @click="goToOffer"
           >Offers
-          <span v-if="countOffers">({{ countOffers }})</span></base-button
-        >
+          <span v-if="countOffers">({{ countOffers }})</span>
+          <span v-else>(0)</span>
+        </base-button>
         <base-button class="mr-2" @click="share">Share</base-button>
         <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl">
           Inspect</external-link
