@@ -11,42 +11,7 @@
                 href="#"
                 @click.prevent="view"
               >
-                <video
-                  v-if="nft.media_type?.includes('video')"
-                  :src="nft.url"
-                  poster="\loading.gif"
-                  muted
-                  class="img-fluid card-img"
-                  style="
-                    object-fit: cover;
-                    height: 100%;
-                    object-position: center top;
-                  "
-                ></video>
-                <img
-                  v-else-if="nft.media_type?.includes('image')"
-                  v-lazy="nft.url"
-                  style="
-                    object-fit: cover;
-                    height: 100%;
-                    object-position: center top;
-                  "
-                  class="img-fluid card-img"
-                  alt="Card
-          image cap"
-                />
-                <img
-                  v-else
-                  :src="'/thumbnail.jpg'"
-                  style="
-                    object-fit: cover;
-                    height: 100%;
-                    object-position: center top;
-                  "
-                  class="img-fluid card-img"
-                  alt="Card
-          image cap"
-                />
+                <load-media :nft="nft"></load-media>
               </a>
             </figure>
           </div>
@@ -69,9 +34,9 @@
     </div>
     <div class="card-footer mt-auto d-flex justify-content-end pb-4">
       <slot name="footer"></slot>
-      <external-link v-if="bihompUrl" class="ml-2" :url="bihompUrl">
+      <!-- <external-link v-if="bihompUrl" class="ml-2" :url="bihompUrl">
         Inspect</external-link
-      >
+      > -->
     </div>
   </div>
 </template>
@@ -80,13 +45,13 @@ import { computed } from "@vue/reactivity";
 import { defineComponent } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import ExternalLink from "@/components/ExternalLink.vue";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
 import { getNetworkCodeFromType } from "../utils/getNetworkTypeFromCode";
+import LoadMedia from "@/components/LoadMedia.vue";
 
 export default defineComponent({
   components: {
-    ExternalLink,
+    LoadMedia,
   },
   props: {
     nft: { type: Object, required: true },

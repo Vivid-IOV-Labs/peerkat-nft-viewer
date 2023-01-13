@@ -8,38 +8,7 @@
           href="#"
           @click.prevent="view"
         >
-          <video
-            v-if="nft.media_type?.includes('video') && !loadingMedia"
-            :src="videoUrl"
-            :poster="thumbnailUrl"
-            muted
-            class="img-fluid card-img-top"
-            style="object-fit: cover; height: 100%; object-position: center top"
-          ></video>
-          <img
-            v-else-if="nft.media_type?.includes('image') && !loadingMedia"
-            v-lazy="mediaUrl"
-            style="object-fit: cover; height: 100%; object-position: center top"
-            class="img-fluid card-img-top"
-            alt="Card
-          image cap"
-          />
-          <img
-            v-else-if="loadingMedia"
-            :src="'/loading.gif'"
-            style="object-fit: cover; height: 100%; object-position: center top"
-            class="img-fluid card-img-top"
-            alt="Card
-          image cap"
-          />
-          <img
-            v-else
-            :src="'/thumbnail.jpg'"
-            style="object-fit: cover; height: 100%; object-position: center top"
-            class="img-fluid card-img-top"
-            alt="Card
-          image cap"
-          />
+          <load-media :nft="nft"></load-media>
         </a>
       </figure>
     </template>
@@ -65,11 +34,30 @@
       >
         <strong class="h7 font-weight-bold">Collection </strong><br />
         <div
-          class="d-flex flex-column justify-content-between align-items-center py-2"
+          class="
+            d-flex
+            flex-column
+            justify-content-between
+            align-items-center
+            py-2
+          "
         >
           <div
             v-if="nft.collection.family"
-            class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
+            class="
+              rounded
+              tex-center
+              d-flex
+              flex-column
+              justify-content-between
+              align-items-center
+              border
+              my-2
+              w-100
+              py-1
+              bg-gradient-primary
+              border-primary
+            "
             style=""
           >
             <strong class="text-uppercase text-primary small font-weight-bold"
@@ -78,7 +66,20 @@
           </div>
           <div
             v-if="nft.collection.name"
-            class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
+            class="
+              rounded
+              tex-center
+              d-flex
+              flex-column
+              justify-content-between
+              align-items-center
+              border
+              my-2
+              w-100
+              py-1
+              bg-gradient-primary
+              border-primary
+            "
             style=""
           >
             <strong class="text-uppercase text-primary small font-weight-bold"
@@ -99,12 +100,31 @@
       <div v-if="nft.attributes && nft.attributes.length" class="mt-2">
         <strong class="h7 font-weight-bold">Attributes </strong><br />
         <div
-          class="d-flex flex-column justify-content-between align-items-center py-2"
+          class="
+            d-flex
+            flex-column
+            justify-content-between
+            align-items-center
+            py-2
+          "
         >
           <div
             v-for="(a, index) in nft.attributes"
             :key="index"
-            class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
+            class="
+              rounded
+              tex-center
+              d-flex
+              flex-column
+              justify-content-between
+              align-items-center
+              border
+              my-2
+              w-100
+              py-1
+              bg-gradient-primary
+              border-primary
+            "
             style=""
           >
             <strong
@@ -181,7 +201,7 @@ import {
   getNodeTypeFromNetwork,
 } from "../utils/getNetworkTypeFromCode";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
-import { getIpfsMedia } from "../services/XrpService";
+import LoadMedia from "@/components/LoadMedia.vue";
 
 export default defineComponent({
   components: {
@@ -189,6 +209,7 @@ export default defineComponent({
     BaseDialog,
     BaseButton,
     ExternalLink,
+    LoadMedia,
   },
   props: {
     nft: { type: Object, required: true },
@@ -196,12 +217,7 @@ export default defineComponent({
   async setup(props) {
     const router = useRouter();
     const store = useStore();
-    const mediaUrl = ref("");
-    const loadingMedia = ref(false);
-    const thumbnailUrl = ref("/loading.gif");
-
     const isConfirmDeleteOpen = ref(false);
-
     // const nodetype = computed(() => store.getters["user/getNodeType"]);
     const user = computed(() => store.getters["user/getUser"]);
     const nodetypecode = computed(() => getNetworkCodeFromType(nodetype.value));
@@ -224,46 +240,8 @@ export default defineComponent({
         : 0;
 
     const countOffers = countSellOffer + countBuyOffer;
-    if (props.nft.url) {
-      if (
-        ["XLS-14", "XLS-16"].includes(props.nft.standard) ||
-        (["XLS-20"].includes(props.nft.standard) &&
-          props.nft.url.split("//")[0] == "https:")
-      ) {
-        mediaUrl.value = props.nft.url || "";
-        thumbnailUrl.value = props.nft.thumbnail || "";
-      } else {
-        loadingMedia.value = true;
-        getIpfsMedia(props.nft.url).then((resp: any) => {
-          loadingMedia.value = false;
-          mediaUrl.value = resp.url;
-        });
-        if (props.nft.media_type?.includes("video")) {
-          getIpfsMedia(props.nft.thumbnail).then((resp: any) => {
-            thumbnailUrl.value = resp.url;
-          });
-        }
-      }
-    }
-    // const mediaUrl =
-    //   props.nft.url &&
-    //   (["XLS-14", "XLS-16"].includes(props.nft.standard) ||
-    //     (["XLS-20"].includes(props.nft.standard) &&
-    //       props.nft.url.split("//")[0] == "https:"))
-    //     ? props.nft.url
-    //     : props.nft.url
-    //     ? "https://dweb.link/ipfs/" + props.nft.url
-    //     : "";
-    const videoUrl = computed(() =>
-      props.nft.standard == "XLS-20" && props.nft.thumbnail
-        ? mediaUrl
-        : `${mediaUrl.value}#t=0.5`
-    );
+
     return {
-      videoUrl,
-      mediaUrl,
-      loadingMedia,
-      thumbnailUrl,
       bihompUrl,
       countOffers,
       isConfirmDeleteOpen,

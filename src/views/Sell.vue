@@ -31,9 +31,9 @@
       </template>
     </base-dialog>
     <sell-nft-card v-if="nft" :nft="nft">
-      <template #footer>
+      <!-- <template #footer>
         <base-button @click="openSellDialog">Create Sell Offer</base-button>
-      </template>
+      </template> -->
     </sell-nft-card>
     <ul class="nav nav-pills nav-fill my-4">
       <li class="nav-item">
