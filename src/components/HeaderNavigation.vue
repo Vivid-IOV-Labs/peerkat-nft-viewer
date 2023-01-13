@@ -117,7 +117,7 @@
                 >
               </router-link>
             </li>
-            <!-- <li class="nav-item">
+            <li class="nav-item">
               <router-link
                 v-slot="{ navigate, href, isActive }"
                 to="/offers"
@@ -132,7 +132,7 @@
                   >Offers</a
                 >
               </router-link>
-            </li> -->
+            </li>
           </ul>
         </div>
       </div>

@@ -82,30 +82,11 @@
         >
           <strong class="h7 font-weight-bold">Collection </strong><br />
           <div
-            class="
-              d-flex
-              flex-column
-              justify-content-between
-              align-items-center
-              py-2
-            "
+            class="d-flex flex-column justify-content-between align-items-center py-2"
           >
             <div
               v-if="nft.collection.family"
-              class="
-                rounded
-                tex-center
-                d-flex
-                flex-column
-                justify-content-between
-                align-items-center
-                border
-                my-2
-                w-100
-                py-1
-                bg-gradient-primary
-                border-primary
-              "
+              class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
               style=""
             >
               <strong class="text-uppercase text-primary small font-weight-bold"
@@ -114,20 +95,7 @@
             </div>
             <div
               v-if="nft.collection.name"
-              class="
-                rounded
-                tex-center
-                d-flex
-                flex-column
-                justify-content-between
-                align-items-center
-                border
-                my-2
-                w-100
-                py-1
-                bg-gradient-primary
-                border-primary
-              "
+              class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
               style=""
             >
               <strong class="text-uppercase text-primary small font-weight-bold"
@@ -147,31 +115,12 @@
         <div v-if="nft.attributes && nft.attributes.length" class="mt-2">
           <strong class="h7 font-weight-bold">Attributes </strong><br />
           <div
-            class="
-              d-flex
-              flex-column
-              justify-content-between
-              align-items-center
-              py-2
-            "
+            class="d-flex flex-column justify-content-between align-items-center py-2"
           >
             <div
               v-for="(a, index) in nft.attributes"
               :key="index"
-              class="
-                rounded
-                tex-center
-                d-flex
-                flex-column
-                justify-content-between
-                align-items-center
-                border
-                my-2
-                w-100
-                py-1
-                bg-gradient-primary
-                border-primary
-              "
+              class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
               style=""
             >
               <strong
@@ -197,13 +146,13 @@
     </template>
     <template #footer>
       <div>
-        <!-- <base-button
+        <base-button
           v-if="nft.standard == 'XLS-20'"
           class="mr-2"
           @click="goToOffer"
           >Offers
           <span v-if="countOffers">({{ countOffers }})</span></base-button
-        > -->
+        >
         <base-button class="mr-2" @click="share">Share</base-button>
         <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl">
           Inspect</external-link
