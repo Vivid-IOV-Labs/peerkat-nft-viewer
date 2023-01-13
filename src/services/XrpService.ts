@@ -737,23 +737,23 @@ export async function fetchNextXls20WithSellOffer(
     nextXls20.map(async (nft: any) => {
       const { NFTokenID } = nft;
       const schema = await getOneXls(nft);
-      // const sellOffersResponse = await fetchSellOffers(NFTokenID);
-      // const buyOffersResponse = await fetchBuyOffers(NFTokenID);
+      const sellOffersResponse = await fetchSellOffers(NFTokenID);
+      const buyOffersResponse = await fetchBuyOffers(NFTokenID);
       return {
         ...schema,
-        // selloffers:
-        //   sellOffersResponse && sellOffersResponse.offers
-        //     ? sellOffersResponse.offers.filter(
-        //         (offer: any) => offer.owner == owner
-        //       )
-        //     : [],
-        // buyoffers:
-        //   buyOffersResponse && buyOffersResponse.offers
-        //     ? buyOffersResponse.offers
-        //     : // .filter(
-        //       //     (offer: any) => offer.owner == owner
-        //       //   )
-        //       [],
+        selloffers:
+          sellOffersResponse && sellOffersResponse.offers
+            ? sellOffersResponse.offers.filter(
+                (offer: any) => offer.owner == owner
+              )
+            : [],
+        buyoffers:
+          buyOffersResponse && buyOffersResponse.offers
+            ? buyOffersResponse.offers
+            : // .filter(
+              //     (offer: any) => offer.owner == owner
+              //   )
+              [],
       };
     })
   );
