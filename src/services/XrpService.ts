@@ -883,6 +883,7 @@ export async function fetchNextSellOffers(nextXls20: any[]): Promise<any> {
         return one;
       })
     );
+    debugger;
     return sellOffers.filter((a: any) => a);
   } catch (error) {
     devlog(error);
