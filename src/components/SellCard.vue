@@ -6,6 +6,7 @@
         {{ offer.nft_offer_index }}
       </div>
       <div class="card-text">
+        {{ offer }}
         <!-- <strong class="h7 font-weight-bold">Owner </strong><br />
         <span>{{ offer.owner }}</span> -->
         <div v-if="offer.amount" class="mt-2">
@@ -40,10 +41,10 @@ import { useStore } from "vuex";
 import { openSignRequest } from "../utils/XummActions";
 
 export default defineComponent({
-  components: {
-    BaseButton,
-    AsyncButton,
-  },
+  // components: {
+  //   BaseButton,
+  //   AsyncButton,
+  // },
   props: {
     offer: { type: Object, required: true },
     token: { type: String, required: true },

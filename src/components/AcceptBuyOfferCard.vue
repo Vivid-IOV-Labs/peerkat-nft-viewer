@@ -6,6 +6,7 @@
         {{ offer.nft_offer_index }}
       </div>
       <div class="card-text">
+        {{ offer }}
         <strong class="h7 font-weight-bold">Owner </strong><br />
         <span>{{ offer.owner }}</span>
         <div v-if="offer.amount" class="mt-2">
