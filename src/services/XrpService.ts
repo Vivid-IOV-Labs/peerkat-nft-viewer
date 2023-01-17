@@ -1,4 +1,6 @@
 import axios from "axios";
+import { format } from "date-fns";
+import enUS from "date-fns/locale/en-US";
 import { NFT } from "../models/NFT";
 import { delay } from "../utils/delay";
 import { devlog } from "../utils/devlog";
@@ -739,6 +741,16 @@ export async function fetchNextXls20WithSellOffer(
       const schema = await getOneXls(nft);
       const sellOffersResponse = await fetchSellOffers(NFTokenID);
       const buyOffersResponse = await fetchBuyOffers(NFTokenID);
+      const now = Date.now();
+      const buyoffers =
+        buyOffersResponse && buyOffersResponse.offers
+          ? buyOffersResponse.offers.filter((offer: any) => {
+              if (offer.expiration) {
+                return offer.expiration * 1000 > now;
+              } else return true;
+            })
+          : [];
+      debugger;
       return {
         ...schema,
         selloffers:
@@ -747,13 +759,7 @@ export async function fetchNextXls20WithSellOffer(
                 (offer: any) => offer.owner == owner
               )
             : [],
-        buyoffers:
-          buyOffersResponse && buyOffersResponse.offers
-            ? buyOffersResponse.offers
-            : // .filter(
-              //     (offer: any) => offer.owner == owner
-              //   )
-              [],
+        buyoffers,
       };
     })
   );
@@ -902,12 +908,16 @@ export async function fetchSellOffers(TokenID: string): Promise<any> {
   }
 }
 
+// import { enUS } from "date-fns/locale";
+// import { format } from "date-fns";
+// const now = Date.now();
 export async function fetchBuyOffers(TokenID: string): Promise<any> {
   try {
     const { result } = await client.request({
       method: "nft_buy_offers",
       nft_id: TokenID,
     });
+
     return result;
   } catch (err) {
     devlog("No buy offers.");
