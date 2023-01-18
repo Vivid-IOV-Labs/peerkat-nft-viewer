@@ -16,11 +16,11 @@
             </figure>
           </div>
           <div class="col-8 d-flex flex-column">
-            <div class="">
+            <div v-if="nft.tokenName" class="">
               <strong class="h6 font-weight-bold">Token Name </strong><br />
               <span style="font-size: 0.8rem">{{ nft.tokenName }}</span>
             </div>
-            <div>
+            <div v-if="nft.desc">
               <strong class="h7 font-weight-bold">Description </strong><br />
               <div style="font-size: 0.8rem" v-html="nft.desc"></div>
             </div>
@@ -32,12 +32,12 @@
         </div>
       </div>
     </div>
-    <div class="card-footer mt-auto d-flex justify-content-end pb-4">
+    <!-- <div class="card-footer mt-auto d-flex justify-content-end pb-4">
       <slot name="footer"></slot>
-      <!-- <external-link v-if="bihompUrl" class="ml-2" :url="bihompUrl">
+       <external-link v-if="bihompUrl" class="ml-2" :url="bihompUrl">
         Inspect</external-link
-      > -->
-    </div>
+      > 
+    </div> -->
   </div>
 </template>
 <script lang="ts">

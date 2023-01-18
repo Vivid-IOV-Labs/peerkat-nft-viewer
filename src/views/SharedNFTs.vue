@@ -15,10 +15,6 @@
     </h5>
     <ul class="mt-2 p-2">
       <li class="pb-2">
-        Please note that we currently support XLS20, XLS14 and XLS14/SOLO NFTs
-        on XRPL mainnet, testnet and devnet
-      </li>
-      <li class="pb-2">
         To view another user’s XRPL-issued NFT please ensure that you have
         followed the correct link shared by the NFT owner
       </li>

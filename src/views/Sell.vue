@@ -1,10 +1,14 @@
 <template>
-  <BackLink />
+  <BackLink path="/wallet" />
   <div v-if="nft">
-    <h1 class="h2 font-weight-bold mb-4 text-center">NFT Offers</h1>
+    <h1 class="h2 font-weight-bold mb-4 text-center">
+      Offers for {{ nft.tokenName }}
+    </h1>
     <base-dialog v-model="toggleSellDialog" :cancellable="true" title="Sell">
       <template #body>
-        <strong class="h6 font-weight-bold">Token Name </strong><br />
+        <strong v-if="nft.tokenName" class="h6 font-weight-bold"
+          >Token Name </strong
+        ><br />
         {{ nft.tokenName }}<br />
         <strong class="h7 font-weight-bold">Token ID </strong><br />
         <span style="word-break: break-all">{{ nft.currency }}</span
@@ -68,10 +72,7 @@
     <div>
       <div v-if="showTab === 'sell'">
         <div v-if="nft.selloffers.length == 0">
-          <p>
-            Peerkat is not able to find any sell offers, created by this wallet
-            for this NFT
-          </p>
+          <p>No current offers found</p>
         </div>
         <div v-else>
           <div
@@ -165,12 +166,13 @@ export default defineComponent({
     const saleamount = ref(0);
     const toggleSellDialog = ref(false);
 
-    const currenTab =
-      nft.value.selloffers.length == 0 && nft.value.buyoffers.length == 0
-        ? "sell"
-        : nft.value.selloffers.length == 0 && nft.value.buyoffers.length > 0
-        ? "buy"
-        : "sell";
+    // const currenTab =
+    //   nft.value.selloffers.length == 0 && nft.value.buyoffers.length == 0
+    //     ? "sell"
+    //     : nft.value.selloffers.length == 0 && nft.value.buyoffers.length > 0
+    //     ? "buy"
+    //     : "sell";
+    const currenTab = "buy";
     const showTab = ref(currenTab);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
     const user = computed(() => store.getters["user/getUser"]);

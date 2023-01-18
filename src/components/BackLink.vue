@@ -5,12 +5,20 @@
 import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
 export default defineComponent({
-  async setup() {
+  props: {
+    path: { type: String, default: null },
+  },
+  async setup(props) {
     const router = useRouter();
 
     return {
       back() {
-        router.go(-1);
+        if (props.path)
+          router.push({
+            path: `${props.path}?refresh="true"`,
+            replace: true,
+          });
+        else router.go(-1);
       },
     };
   },

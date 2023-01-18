@@ -20,9 +20,9 @@
         <span class="mr-3">{{ offer.flags }} </span> -->
       </div>
     </div>
-    <div class="card-footer mt-auto d-flex justify-content-between pb-4">
+    <!-- <div class="card-footer mt-auto d-flex justify-content-between pb-4">
       <async-button :on-click="accept">Accept</async-button>
-    </div>
+    </div> -->
   </div>
 </template>
 <script lang="ts">
