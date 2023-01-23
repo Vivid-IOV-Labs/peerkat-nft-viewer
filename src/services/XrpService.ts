@@ -546,7 +546,6 @@ export async function getOneXls(nft: any) {
   let thumbnail;
   let details;
   const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
-
   if (!URI) {
     const domain = await getDomain(Issuer);
     const url = createUrlFromDomain(domain, NFTokenID);
@@ -594,22 +593,24 @@ export async function getOneXls(nft: any) {
         uri.includes("cid:")
           ? await getIpfsJson(url)
           : await fetch(url);
-
-      const contentType = response.headers.get("Content-Type");
-
-      if (contentType?.includes("image") || contentType?.includes("video")) {
-        const ipfLinkUrlPattern = new RegExp(
-          "https://([a-zA-Z]+([0-9]+[a-zA-Z]+)+).ipfs.[A-Za-z0-9]+.[A-Za-z0-9]+/([A-Za-z0-9]+(_[A-Za-z0-9]+)+).[A-Za-z0-9]+"
-        ).test(url);
-        if (ipfLinkUrlPattern) {
-          const ipfsHash = url.split(".ipfs")[0].split("//")[1];
-          const name = url.split(".ipfs")[1].split("/")[1];
-          thumbnail = ipfsHash + "/" + name;
-          media_type = contentType;
-          mediaUrl = ipfsHash + "/" + name;
+      if (response.headers) {
+        const contentType = response.headers.get("Content-Type");
+        if (contentType?.includes("image") || contentType?.includes("video")) {
+          const ipfLinkUrlPattern = new RegExp(
+            "https://([a-zA-Z]+([0-9]+[a-zA-Z]+)+).ipfs.[A-Za-z0-9]+.[A-Za-z0-9]+/([A-Za-z0-9]+(_[A-Za-z0-9]+)+).[A-Za-z0-9]+"
+          ).test(url);
+          if (ipfLinkUrlPattern) {
+            const ipfsHash = url.split(".ipfs")[0].split("//")[1];
+            const name = url.split(".ipfs")[1].split("/")[1];
+            thumbnail = ipfsHash + "/" + name;
+            media_type = contentType;
+            mediaUrl = ipfsHash + "/" + name;
+          }
+        } else {
+          details = await response.json();
         }
       } else {
-        details = await response.json();
+        details = response;
       }
     } catch (error) {
       devlog(error);
@@ -750,7 +751,6 @@ export async function fetchNextXls20WithSellOffer(
               } else return true;
             })
           : [];
-      debugger;
       return {
         ...schema,
         selloffers:
@@ -889,7 +889,6 @@ export async function fetchNextSellOffers(nextXls20: any[]): Promise<any> {
         return one;
       })
     );
-    debugger;
     return sellOffers.filter((a: any) => a);
   } catch (error) {
     devlog(error);
