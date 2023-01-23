@@ -6,7 +6,7 @@
         {{ offer.nft_offer_index }}
       </div>
       <div class="card-text">
-        <strong class="h7 font-weight-bold">Owner </strong><br />
+        <strong class="h7 font-weight-bold">Offer From </strong><br />
         <span>{{ offer.owner }}</span>
         <div v-if="offer.expiration" class="mt-2">
           <strong class="h7 font-weight-bold">Offer Expires</strong><br />
