@@ -1,4 +1,6 @@
 import axios from "axios";
+import { format } from "date-fns";
+import enUS from "date-fns/locale/en-US";
 import { NFT } from "../models/NFT";
 import { delay } from "../utils/delay";
 import { devlog } from "../utils/devlog";
@@ -206,7 +208,6 @@ async function getOne(
     const transactionIndexDecimal = Number(transactionIndex);
     tokenName = getTokenName(currency);
     // eslint-disable-next-line no-inner-declarations
-
     async function geXls14() {
       const xlsProtocol = getXLSProtocol(source);
 
@@ -545,7 +546,6 @@ export async function getOneXls(nft: any) {
   let thumbnail;
   let details;
   const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
-
   if (!URI) {
     const domain = await getDomain(Issuer);
     const url = createUrlFromDomain(domain, NFTokenID);
@@ -578,21 +578,42 @@ export async function getOneXls(nft: any) {
     /*
     different kind of uri
     cid:bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4
-    https://bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4.ipfs.w3s.link/metadata.json
+    https://bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4.ipfs.w3s.link/metadata.json #https://([a-zA-Z]+([0-9]+[a-zA-Z]+)+)\.ipfs\.[A-Za-z0-9]+\.[A-Za-z0-9]+/([A-Za-z0-9]+(_[A-Za-z0-9]+)+)\.[A-Za-z0-9]+
     bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
     ipfs://bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
     https://ipfs.io/ipfs/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
     https://somedomain/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
     */
+
     try {
-      details =
+      const response =
         uri.includes("ipfs:") ||
         uri.includes("/ipfs/") ||
         !uri.includes("//") ||
         uri.includes("cid:")
           ? await getIpfsJson(url)
-          : await fetch(url).then((r) => r.json());
+          : await fetch(url);
+      if (response.headers) {
+        const contentType = response.headers.get("Content-Type");
+        if (contentType?.includes("image") || contentType?.includes("video")) {
+          const ipfLinkUrlPattern = new RegExp(
+            "https://([a-zA-Z]+([0-9]+[a-zA-Z]+)+).ipfs.[A-Za-z0-9]+.[A-Za-z0-9]+/([A-Za-z0-9]+(_[A-Za-z0-9]+)+).[A-Za-z0-9]+"
+          ).test(url);
+          if (ipfLinkUrlPattern) {
+            const ipfsHash = url.split(".ipfs")[0].split("//")[1];
+            const name = url.split(".ipfs")[1].split("/")[1];
+            thumbnail = ipfsHash + "/" + name;
+            media_type = contentType;
+            mediaUrl = ipfsHash + "/" + name;
+          }
+        } else {
+          details = await response.json();
+        }
+      } else {
+        details = response;
+      }
     } catch (error) {
+      devlog(error);
       error_code = "no_nfts_in_collection";
       error_title = "Data currently unavailable  [X01]";
       error_message =
@@ -719,23 +740,26 @@ export async function fetchNextXls20WithSellOffer(
     nextXls20.map(async (nft: any) => {
       const { NFTokenID } = nft;
       const schema = await getOneXls(nft);
-      // const sellOffersResponse = await fetchSellOffers(NFTokenID);
-      // const buyOffersResponse = await fetchBuyOffers(NFTokenID);
+      const sellOffersResponse = await fetchSellOffers(NFTokenID);
+      const buyOffersResponse = await fetchBuyOffers(NFTokenID);
+      const now = Date.now();
+      const buyoffers =
+        buyOffersResponse && buyOffersResponse.offers
+          ? buyOffersResponse.offers.filter((offer: any) => {
+              if (offer.expiration) {
+                return offer.expiration * 1000 > now;
+              } else return true;
+            })
+          : [];
       return {
         ...schema,
-        // selloffers:
-        //   sellOffersResponse && sellOffersResponse.offers
-        //     ? sellOffersResponse.offers.filter(
-        //         (offer: any) => offer.owner == owner
-        //       )
-        //     : [],
-        // buyoffers:
-        //   buyOffersResponse && buyOffersResponse.offers
-        //     ? buyOffersResponse.offers
-        //     : // .filter(
-        //       //     (offer: any) => offer.owner == owner
-        //       //   )
-        //       [],
+        selloffers:
+          sellOffersResponse && sellOffersResponse.offers
+            ? sellOffersResponse.offers.filter(
+                (offer: any) => offer.owner == owner
+              )
+            : [],
+        buyoffers,
       };
     })
   );
@@ -883,12 +907,16 @@ export async function fetchSellOffers(TokenID: string): Promise<any> {
   }
 }
 
+// import { enUS } from "date-fns/locale";
+// import { format } from "date-fns";
+// const now = Date.now();
 export async function fetchBuyOffers(TokenID: string): Promise<any> {
   try {
     const { result } = await client.request({
       method: "nft_buy_offers",
       nft_id: TokenID,
     });
+
     return result;
   } catch (err) {
     devlog("No buy offers.");

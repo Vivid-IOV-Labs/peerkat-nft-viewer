@@ -5,7 +5,7 @@
       <input
         :id="id"
         class="form-control form-control-lg mt-2"
-        :class="{ 'border-red-500': errors.length }"
+        :class="{ 'border-red': errors.length }"
         :required="isRequeired"
         :aria-required="isRequeired"
         :aria-invalid="isInvalid"

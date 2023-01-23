@@ -1,8 +1,15 @@
 <template>
+  <BackLink path="/wallet" />
   <div v-if="nft">
+    <h1 v-if="nft.tokenName" class="h2 font-weight-bold mb-4 text-center">
+      Offers for {{ nft.tokenName }}
+    </h1>
+    <h1 v-else class="h2 font-weight-bold mb-4 text-center">Offers for NFT</h1>
     <base-dialog v-model="toggleSellDialog" :cancellable="true" title="Sell">
       <template #body>
-        <strong class="h6 font-weight-bold">Token Name </strong><br />
+        <strong v-if="nft.tokenName" class="h6 font-weight-bold"
+          >Token Name </strong
+        ><br />
         {{ nft.tokenName }}<br />
         <strong class="h7 font-weight-bold">Token ID </strong><br />
         <span style="word-break: break-all">{{ nft.currency }}</span
@@ -31,9 +38,9 @@
       </template>
     </base-dialog>
     <sell-nft-card v-if="nft" :nft="nft">
-      <template #footer>
+      <!-- <template #footer>
         <base-button @click="openSellDialog">Create Sell Offer</base-button>
-      </template>
+      </template> -->
     </sell-nft-card>
     <ul class="nav nav-pills nav-fill my-4">
       <li class="nav-item">
@@ -42,11 +49,12 @@
           :class="{ active: showTab === 'sell' }"
           href="#"
           @click="showTab = 'sell'"
-          >My Sell Offers
+          >Offers Made
           <span v-if="nft.selloffers && nft.selloffers.length"
             >({{ nft.selloffers.length }})</span
-          ></a
-        >
+          >
+          <span v-else>(0)</span>
+        </a>
       </li>
       <li class="nav-item">
         <a
@@ -54,20 +62,18 @@
           :class="{ active: showTab === 'buy' }"
           href="#"
           @click="showTab = 'buy'"
-          >Current Buy Offers
+          >Offers Received
           <span v-if="nft.buyoffers && nft.buyoffers.length"
             >({{ nft.buyoffers.length }})</span
           >
+          <span v-else>(0)</span>
         </a>
       </li>
     </ul>
     <div>
       <div v-if="showTab === 'sell'">
         <div v-if="nft.selloffers.length == 0">
-          <p>
-            Peerkat is not able to find any sell offers, created by this wallet
-            for this NFT
-          </p>
+          <p>No current offers found</p>
         </div>
         <div v-else>
           <div
@@ -87,10 +93,7 @@
       </div>
       <div v-if="showTab === 'buy'">
         <div v-if="!nft.buyoffers || nft.buyoffers.length == 0">
-          <p>
-            Peerkat is not able to find any buy offers, shared with this wallet
-            for this NFT
-          </p>
+          <p>No current offers found</p>
         </div>
         <div v-else>
           <div
@@ -133,7 +136,9 @@ import SellNftCard from "@/components/SellNftCard.vue";
 import AcceptBuyOfferCard from "@/components/AcceptBuyOfferCard.vue";
 import BaseDialog from "@/components/BaseDialog.vue";
 import BaseInput from "@/components/BaseInput.vue";
-import BaseButton from "@/components/BaseButton.vue";
+// import BaseButton from "@/components/BaseButton.vue";
+import BackLink from "@/components/BackLink.vue";
+
 import AsyncButton from "@/components/AsyncButton.vue";
 import { useStore } from "vuex";
 import { devlog } from "../utils/devlog";
@@ -149,7 +154,8 @@ export default defineComponent({
     SellNftCard,
     BaseDialog,
     BaseInput,
-    BaseButton,
+    BackLink,
+    // BaseButton,
     AsyncButton,
     AcceptBuyOfferCard,
   },
@@ -161,12 +167,13 @@ export default defineComponent({
     const saleamount = ref(0);
     const toggleSellDialog = ref(false);
 
-    const currenTab =
-      nft.value.selloffers.length == 0 && nft.value.buyoffers.length == 0
-        ? "sell"
-        : nft.value.selloffers.length == 0 && nft.value.buyoffers.length > 0
-        ? "buy"
-        : "sell";
+    // const currenTab =
+    //   nft.value.selloffers.length == 0 && nft.value.buyoffers.length == 0
+    //     ? "sell"
+    //     : nft.value.selloffers.length == 0 && nft.value.buyoffers.length > 0
+    //     ? "buy"
+    //     : "sell";
+    const currenTab = "buy";
     const showTab = ref(currenTab);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
     const user = computed(() => store.getters["user/getUser"]);

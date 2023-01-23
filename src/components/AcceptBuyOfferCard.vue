@@ -8,17 +8,21 @@
       <div class="card-text">
         <strong class="h7 font-weight-bold">Owner </strong><br />
         <span>{{ offer.owner }}</span>
+        <div v-if="offer.expiration" class="mt-2">
+          <strong class="h7 font-weight-bold">Offer Expires</strong><br />
+          <span class="mr-3">{{ expirationDate }} </span>
+        </div>
         <div v-if="offer.amount" class="mt-2">
-          <strong class="h7 font-weight-bold">Sale Amount (XRP)</strong><br />
+          <strong class="h7 font-weight-bold">Price (XRP)</strong><br />
           <span class="mr-3">{{ Number(offer.amount) / 1000000 }} </span>
         </div>
         <!-- <strong class="h7 font-weight-bold">Flags </strong><br />
         <span class="mr-3">{{ offer.flags }} </span> -->
       </div>
     </div>
-    <div class="card-footer mt-auto d-flex justify-content-between pb-4">
+    <!-- <div class="card-footer mt-auto d-flex justify-content-between pb-4">
       <async-button :on-click="accept">Accept</async-button>
-    </div>
+    </div> -->
   </div>
 </template>
 <script lang="ts">
@@ -31,6 +35,8 @@ import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { acceptBuyOffer } from "../services/XrpService";
 import XummSdk from "../services/XummService";
+import format from "date-fns/format";
+import enUS from "date-fns/locale/en-US";
 export default defineComponent({
   components: {
     AsyncButton,
@@ -50,9 +56,16 @@ export default defineComponent({
     const bihompUrl = computed(() =>
       getInspectorUrl(network.value, props.offer.nft_offer_index)
     );
-
+    const expirationDate = computed(() => {
+      if (props.offer.expiration) {
+        return format(props.offer.expiration * 1000, "YYY MMM dd", {
+          locale: enUS,
+        });
+      } else return null;
+    });
     return {
       bihompUrl,
+      expirationDate,
       async accept() {
         if (isInXumm()) {
           const { created } = await XummSdk.acceptBuyOffer(

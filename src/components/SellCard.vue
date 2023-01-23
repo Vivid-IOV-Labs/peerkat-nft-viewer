@@ -8,24 +8,25 @@
       <div class="card-text">
         <!-- <strong class="h7 font-weight-bold">Owner </strong><br />
         <span>{{ offer.owner }}</span> -->
-        <div v-if="offer.amount" class="mt-2">
-          <strong class="h7 font-weight-bold">Sale Amount (XRP)</strong><br />
-          <span class="mr-3">{{ Number(offer.amount) / 1000000 }} </span>
-        </div>
+
         <!-- <strong class="h7 font-weight-bold">Flags </strong><br />
         <span class="mr-3">{{ offer.flags }} </span> -->
         <div v-if="offer.destination" class="mt-2">
           <strong class="h7 font-weight-bold">Destination </strong><br />
           <span class="mr-3">{{ offer.destination }} </span>
         </div>
+        <div v-if="offer.amount" class="mt-2">
+          <strong class="h7 font-weight-bold">Price (XRP)</strong><br />
+          <span class="mr-3">{{ Number(offer.amount) / 1000000 }} </span>
+        </div>
       </div>
     </div>
-    <div class="card-footer mt-auto d-flex justify-content-between pb-4">
-      <async-button :on-click="cancelOffer">Cancel</async-button>
+    <!-- <div class="card-footer mt-auto d-flex justify-content-between pb-4">
+       <async-button :on-click="cancelOffer">Cancel</async-button>
       <div class="d-flex justify-content-between">
         <base-button class="mr-2" @click="share">Share</base-button>
-      </div>
-    </div>
+      </div> 
+    </div> -->
   </div>
 </template>
 <script lang="ts">
@@ -40,10 +41,10 @@ import { useStore } from "vuex";
 import { openSignRequest } from "../utils/XummActions";
 
 export default defineComponent({
-  components: {
-    BaseButton,
-    AsyncButton,
-  },
+  // components: {
+  //   BaseButton,
+  //   AsyncButton,
+  // },
   props: {
     offer: { type: Object, required: true },
     token: { type: String, required: true },
