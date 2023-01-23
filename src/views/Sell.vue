@@ -1,9 +1,10 @@
 <template>
   <BackLink path="/wallet" />
   <div v-if="nft">
-    <h1 class="h2 font-weight-bold mb-4 text-center">
+    <h1 v-if="nft.tokenName" class="h2 font-weight-bold mb-4 text-center">
       Offers for {{ nft.tokenName }}
     </h1>
+    <h1 v-else class="h2 font-weight-bold mb-4 text-center">Offers for NFT</h1>
     <base-dialog v-model="toggleSellDialog" :cancellable="true" title="Sell">
       <template #body>
         <strong v-if="nft.tokenName" class="h6 font-weight-bold"
