@@ -57,11 +57,28 @@ export default defineComponent({
       } else {
         loadingMedia.value = true;
         try {
-          const url = `https://d2gdfyavin91j3.cloudfront.net/assets/images/${props.nft.currency}/full/image.jpeg`;
-          const me = await fetch(url).then((r) => r.json());
+          const ext =
+            props.nft.media_type && props.nft.media_type.split("/")[1]
+              ? props.nft.media_type.split("/")[1]
+              : props.nft.thumbnail
+              ? props.nft.thumbnail.split(".")[1]
+              : "jpg";
+
+          console.log(ext);
+          const url = `https://d2gdfyavin91j3.cloudfront.net/assets/images/${props.nft.currency}/full/image.${ext}`;
+
+          await fetch(url, {
+            cache: "force-cache",
+            method: "HEAD",
+          }).then((r) => r.json());
+          console.log(url);
+
+          mediaUrl.value = url;
           loadingMedia.value = false;
-          console.log(me);
+          // console.log(me);
         } catch (err) {
+          console.log(err);
+
           getIpfsMedia(props.nft.url).then((resp: any) => {
             loadingMedia.value = false;
             mediaUrl.value = resp.url;
