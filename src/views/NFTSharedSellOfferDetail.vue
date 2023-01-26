@@ -175,7 +175,7 @@ import {
   acceptOffer,
   fetchSellOffers,
   fetchXls20,
-  getOneXls,
+  getOneXls20,
 } from "../services/XrpService";
 
 import { isInXumm } from "../utils/isInXumm";
