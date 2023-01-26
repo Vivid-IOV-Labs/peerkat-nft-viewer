@@ -40,12 +40,13 @@ export default defineComponent({
   props: {
     nft: { type: Object, required: true },
   },
-  setup(props) {
+  async setup(props) {
     const mediaUrl = ref("");
     const thumbnailUrl = ref("/loading.gif");
     const loadingMedia = ref(false);
 
     if (props.nft.url) {
+      console.log(props.nft);
       if (
         ["XLS-14", "XLS-16"].includes(props.nft.standard) ||
         (["XLS-20"].includes(props.nft.standard) &&
@@ -55,10 +56,17 @@ export default defineComponent({
         thumbnailUrl.value = props.nft.thumbnail || "";
       } else {
         loadingMedia.value = true;
-        getIpfsMedia(props.nft.url).then((resp: any) => {
+        try {
+          const url = `https://d2gdfyavin91j3.cloudfront.net/assets/images/${props.nft.currency}/full/image.jpeg`;
+          const me = await fetch(url).then((r) => r.json());
           loadingMedia.value = false;
-          mediaUrl.value = resp.url;
-        });
+          console.log(me);
+        } catch (err) {
+          getIpfsMedia(props.nft.url).then((resp: any) => {
+            loadingMedia.value = false;
+            mediaUrl.value = resp.url;
+          });
+        }
 
         if (props.nft.media_type?.includes("video") && props.nft.thumbnail) {
           console.log(props.nft.thumbnail);
