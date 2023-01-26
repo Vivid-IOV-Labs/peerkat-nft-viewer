@@ -212,7 +212,7 @@ export default defineComponent({
     const { URI, Issuer, NFTokenID } = currentNft;
 
     try {
-      nft.value = await getOneXls({ URI, Issuer, NFTokenID });
+      nft.value = await getOneXls20({ URI, Issuer, NFTokenID });
       devlog("nft", nft);
       const { offers } = sellOffers;
       devlog("sellOffers", sellOffers);
