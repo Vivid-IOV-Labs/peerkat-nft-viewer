@@ -46,7 +46,6 @@ export default defineComponent({
     const loadingMedia = ref(false);
 
     if (props.nft.url) {
-      console.log(props.nft);
       if (
         ["XLS-14", "XLS-16"].includes(props.nft.standard) ||
         (["XLS-20"].includes(props.nft.standard) &&
@@ -58,26 +57,32 @@ export default defineComponent({
         loadingMedia.value = true;
         try {
           const ext =
-            props.nft.media_type && props.nft.media_type.split("/")[1]
-              ? props.nft.media_type.split("/")[1]
+            props.nft.media_type && props.nft.media_type.split("/").pop()
+              ? props.nft.media_type.split("/").pop()
               : props.nft.thumbnail
-              ? props.nft.thumbnail.split(".")[1]
+              ? props.nft.thumbnail.split(".").pop()
               : "jpg";
 
-          console.log(ext);
+          console.log("Extension " + props.nft.tokenName, ext);
           const url = `https://d2gdfyavin91j3.cloudfront.net/assets/images/${props.nft.currency}/full/image.${ext}`;
 
-          await fetch(url, {
+          const isReturned = await fetch(url, {
             cache: "force-cache",
             method: "HEAD",
-          }).then((r) => r.json());
-          console.log(url);
+          });
+          if (isReturned.ok && isReturned.status === 200) {
+            console.log("MEdia isReturned " + props.nft.tokenName, isReturned);
+            console.log("MEdia Url Retruned " + props.nft.tokenName, url);
 
-          mediaUrl.value = url;
-          loadingMedia.value = false;
+            mediaUrl.value = url;
+            loadingMedia.value = false;
+          } else {
+            throw new Error("Error Status:" + isReturned.status);
+          }
+
           // console.log(me);
         } catch (err) {
-          console.log(err);
+          console.error("MEdia NOT isReturned " + props.nft.tokenName, err);
 
           getIpfsMedia(props.nft.url).then((resp: any) => {
             loadingMedia.value = false;

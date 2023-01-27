@@ -661,7 +661,7 @@ export async function getOneXls20(nft: any) {
       } else {
         mediaUrl = media;
       }
-      media_type = "image";
+      media_type = "image/" + mediaUrl.split(".").pop();
       if (!thumbnail) {
         thumbnail = mediaUrl;
       }
@@ -678,7 +678,7 @@ export async function getOneXls20(nft: any) {
       } else {
         mediaUrl = media;
       }
-      media_type = "video";
+      media_type = "video/" + mediaUrl.split(".").pop();
     }
   }
 
@@ -703,7 +703,26 @@ export async function getOneXls20(nft: any) {
   // } else {
 
   // }
-
+  console.log("details", details);
+  console.log("nft obj constructed", {
+    tokenTaxon: NFTokenTaxon,
+    issuer: Issuer,
+    currency: NFTokenID,
+    tokenName,
+    url: mediaUrl,
+    media_type,
+    desc: description,
+    issuerTruncated: truncate(Issuer),
+    standard: "XLS-20",
+    error_code,
+    error_message,
+    error_title,
+    attributes,
+    collection,
+    thumbnail,
+    nft_serial: nft.nft_serial,
+  });
+  debugger;
   return {
     tokenTaxon: NFTokenTaxon,
     issuer: Issuer,
