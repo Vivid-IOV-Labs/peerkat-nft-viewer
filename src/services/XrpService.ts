@@ -527,6 +527,8 @@ async function getDomain(account: string) {
 function createUrlFromDomain(domain: string, nftokenid: string) {
   if ("https://marketplace-api.onxrp.com/api/metadata/" === domain) {
     return `${domain}${nftokenid}.json`;
+  } else if (domain.includes("ipfs")) {
+    return `${domain.split("//")[1]}${nftokenid}.json`;
   } else {
     const d = domain.slice(-1) == "/" ? domain.slice(0, -1) : domain;
     return `${d}/.well-known/xrpl-nft/${nftokenid}`;
@@ -550,9 +552,13 @@ export async function getOneXls(nft: any) {
     const domain = await getDomain(Issuer);
     const url = createUrlFromDomain(domain, NFTokenID);
     try {
-      details = await fetch(url).then((r) => r.json());
-      if (details.code && details.code == 404) {
-        throw new Error();
+      if (domain.includes("ipfs")) {
+        details = await getIpfsJson(url);
+      } else {
+        details = await fetch(url).then((r) => r.json());
+        if (details.code && details.code == 404) {
+          throw new Error();
+        }
       }
     } catch (error) {
       error_code = "no_nfts_in_collection";
@@ -561,7 +567,7 @@ export async function getOneXls(nft: any) {
         "This error may occur when the viewer is currently unable to fetch metadata from the URI. This error occurs when the viewer is not familiar with the URI approach. Please contact the Token Issuer for support. We will continue to upgrade the viewer, follow Peerkat via Twitter and Discord for updates and support.";
     }
   } else {
-    const uri = hexToString(URI);
+    const uri = hexToString(URI); //.replace(/\\/g, "");
     const end = uri.includes(".json")
       ? ""
       : Number.isInteger(NFTokenTaxon)
@@ -577,6 +583,7 @@ export async function getOneXls(nft: any) {
       : uri;
     /*
     different kind of uri
+    
     cid:bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4
     https://bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4.ipfs.w3s.link/metadata.json #https://([a-zA-Z]+([0-9]+[a-zA-Z]+)+)\.ipfs\.[A-Za-z0-9]+\.[A-Za-z0-9]+/([A-Za-z0-9]+(_[A-Za-z0-9]+)+)\.[A-Za-z0-9]+
     bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
