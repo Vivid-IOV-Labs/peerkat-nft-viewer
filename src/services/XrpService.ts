@@ -527,6 +527,8 @@ async function getDomain(account: string) {
 function createUrlFromDomain(domain: string, nftokenid: string) {
   if ("https://marketplace-api.onxrp.com/api/metadata/" === domain) {
     return `${domain}${nftokenid}.json`;
+  } else if (domain.includes("ipfs")) {
+    return `${domain.split("//")[1]}${nftokenid}.json`;
   } else {
     const d = domain.slice(-1) == "/" ? domain.slice(0, -1) : domain;
     return `${d}/.well-known/xrpl-nft/${nftokenid}`;
@@ -550,9 +552,13 @@ export async function getOneXls(nft: any) {
     const domain = await getDomain(Issuer);
     const url = createUrlFromDomain(domain, NFTokenID);
     try {
-      details = await fetch(url).then((r) => r.json());
-      if (details.code && details.code == 404) {
-        throw new Error();
+      if (domain.includes("ipfs")) {
+        details = await getIpfsJson(url);
+      } else {
+        details = await fetch(url).then((r) => r.json());
+        if (details.code && details.code == 404) {
+          throw new Error();
+        }
       }
     } catch (error) {
       error_code = "no_nfts_in_collection";
