@@ -555,12 +555,16 @@ export async function getOneXls20(nft: any) {
     if (!URI) {
       const domain = await getDomain(Issuer);
       const url = createUrlFromDomain(domain, NFTokenID);
+      debugger;
       try {
         details = await fetch(url).then((r) => r.json());
+        debugger;
         if (details.code && details.code == 404) {
           throw new Error();
         }
       } catch (error) {
+        devlog("X02", error);
+        debugger;
         error_code = "no_nfts_in_collection";
         error_title = "Data currently unavailable  [X02]";
         error_message =
