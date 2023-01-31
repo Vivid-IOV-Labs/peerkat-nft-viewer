@@ -1,4 +1,10 @@
 [[redirects]]
+  from = "/apidev/*"
+  to = "https://d2gdfyavin91j3.cloudfront.net/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
 from = '/*'
 status = 200
 to = '/index.html'

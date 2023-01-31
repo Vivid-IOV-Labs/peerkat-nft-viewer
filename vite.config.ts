@@ -55,4 +55,13 @@ export default defineConfig({
       "@": path.resolve(__dirname, "/src"),
     },
   },
+  server: {
+    proxy: {
+      "/apidev": {
+        target: "https://d2gdfyavin91j3.cloudfront.net",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/apidev/, ""),
+      },
+    },
+  },
 });
