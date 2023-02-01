@@ -49,7 +49,7 @@
           :class="{ active: showTab === 'sell' }"
           href="#"
           @click="showTab = 'sell'"
-          >Offers Made
+          >Sell Offers
           <span v-if="nft.selloffers && nft.selloffers.length"
             >({{ nft.selloffers.length }})</span
           >
@@ -62,7 +62,7 @@
           :class="{ active: showTab === 'buy' }"
           href="#"
           @click="showTab = 'buy'"
-          >Offers Received
+          >Buy Offers
           <span v-if="nft.buyoffers && nft.buyoffers.length"
             >({{ nft.buyoffers.length }})</span
           >
