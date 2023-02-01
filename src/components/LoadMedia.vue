@@ -34,7 +34,7 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, ref } from "vue";
-import { getIpfsMedia } from "../services/XrpService";
+import { getIpfsMedia, logFailedToLoad } from "../services/XrpService";
 
 export default defineComponent({
   props: {
@@ -77,6 +77,11 @@ export default defineComponent({
             mediaUrl.value = url;
             loadingMedia.value = false;
           } else {
+            await logFailedToLoad({
+              Issuer: props.nft.issuer,
+              NFTokenID: props.nft.id,
+              Source: "xummapp-frontend",
+            });
             throw new Error("Error Status:" + isReturned.status);
           }
 
