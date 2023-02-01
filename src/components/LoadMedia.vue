@@ -63,13 +63,13 @@ export default defineComponent({
               ? props.nft.thumbnail.split(".").pop()
               : "jpg";
 
-          console.log("Extension " + props.nft.tokenName, ext);
           const url = `https://d2gdfyavin91j3.cloudfront.net/assets/images/${props.nft.currency}/full/image.${ext}`;
 
           const isReturned = await fetch(url, {
-            cache: "force-cache",
             method: "HEAD",
           });
+          console.log(isReturned);
+
           if (isReturned.ok && isReturned.status === 200) {
             console.log("MEdia isReturned " + props.nft.tokenName, isReturned);
             console.log("MEdia Url Retruned " + props.nft.tokenName, url);
@@ -77,11 +77,12 @@ export default defineComponent({
             mediaUrl.value = url;
             loadingMedia.value = false;
           } else {
-            await logFailedToLoad({
+            const t = await logFailedToLoad({
               Issuer: props.nft.issuer,
               NFTokenID: props.nft.id,
               Source: "xummapp-frontend",
             });
+            console.log(t);
             throw new Error("Error Status:" + isReturned.status);
           }
 

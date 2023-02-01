@@ -535,12 +535,12 @@ function createUrlFromDomain(domain: string, nftokenid: string) {
   }
 }
 
-export async function logFailedToLoad(obj: any): any {
-  const lambdaUrl = `https://17asvselri.execute-api.eu-west-2.amazonaws.com/`;
+export async function logFailedToLoad(obj: any): Promise<any> {
+  const lambdaUrl = `https://17asvselri.execute-api.eu-west-2.amazonaws.com/Prod/log`;
   try {
     await fetch(lambdaUrl, {
       method: "POST",
-      mode: "cors",
+      //mode: "cors",
       headers: {
         "Content-Type": "application/json",
       },
@@ -568,7 +568,7 @@ export async function getOneXls20(nft: any) {
     const url = `https://d2gdfyavin91j3.cloudfront.net/assets/metadata/${NFTokenID}/metadata.json`;
     details = await fetch(url).then((r) => r.json());
   } catch (err) {
-    logFailedToLoad({
+    const t = await logFailedToLoad({
       Issuer,
       NFTokenID,
       URI,
@@ -576,12 +576,11 @@ export async function getOneXls20(nft: any) {
       nft_serial,
       Source: "xummapp-frontend",
     });
+    devlog(t);
     devlog(err);
-    debugger;
     if (!URI) {
       const domain = await getDomain(Issuer);
       const url = createUrlFromDomain(domain, NFTokenID);
-      debugger;
       try {
         details = await fetch(url).then((r) => r.json());
         if (domain.includes("ipfs")) {
