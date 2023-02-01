@@ -3,6 +3,12 @@
   to = "https://d2gdfyavin91j3.cloudfront.net/:splat"
   status = 200
   force = true
+  
+[[redirects]]
+  from = "/logger/*"
+  to = "https://17asvselri.execute-api.eu-west-2.amazonaws.com/Prod/log/:splat"
+  status = 200
+  force = true
 
 [[redirects]]
 from = '/*'

@@ -62,6 +62,12 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/apidev/, ""),
       },
+      "/logger": {
+        target:
+          "https://17asvselri.execute-api.eu-west-2.amazonaws.com/Prod/log",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/logger/, ""),
+      },
     },
   },
 });

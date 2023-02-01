@@ -536,7 +536,7 @@ function createUrlFromDomain(domain: string, nftokenid: string) {
 }
 
 export async function logFailedToLoad(obj: any): Promise<any> {
-  const lambdaUrl = `https://17asvselri.execute-api.eu-west-2.amazonaws.com/Prod/log`;
+  const lambdaUrl = `logger`;
   try {
     await fetch(lambdaUrl, {
       method: "POST",
