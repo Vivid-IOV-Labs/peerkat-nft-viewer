@@ -45,6 +45,14 @@
           used to acquire the NFT.
         </li>
         <li class="pb-2">
+          <strong> What are the sell offers and buy offers?</strong>
+          <br />In the xApp we display any current offers for the NFT made via
+          the XRP Ledger.<br />
+          Sell offers are the prices that the owner of the NFT has set for the
+          sale of the NFT, whereas buy offers are made by another account who
+          has made a bid to purchase the NFT.
+        </li>
+        <li class="pb-2">
           <strong> What features are being added next?</strong>
           <br />NFT Analytics are next on our roadmap. Please suggest any other
           features you would like to see by getting in contact with us.
