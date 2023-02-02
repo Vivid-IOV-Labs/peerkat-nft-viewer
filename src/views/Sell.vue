@@ -46,7 +46,7 @@
       <li class="nav-item">
         <a
           class="nav-link"
-          :class="{ active: showTab === 'sell' }"
+          :class="{ 'active  bg-danger': showTab === 'sell' }"
           href="#"
           @click="showTab = 'sell'"
           >Sell Offers
@@ -59,7 +59,7 @@
       <li class="nav-item">
         <a
           class="nav-link"
-          :class="{ active: showTab === 'buy' }"
+          :class="{ 'active text-white bg-success': showTab === 'buy' }"
           href="#"
           @click="showTab = 'buy'"
           >Buy Offers
