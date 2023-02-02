@@ -76,7 +76,6 @@ export default defineComponent({
             mediaUrl.value = url;
             loadingMedia.value = false;
           } else {
-            console.log();
             const t = await logFailedToLoad({
               Issuer: props.nft.issuer,
               NFTokenID: props.nft.currency,
