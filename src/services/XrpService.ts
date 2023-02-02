@@ -563,14 +563,15 @@ export async function getOneXls20(nft: any) {
   let collection;
   let thumbnail;
   let details;
+  let domain;
   const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
   try {
-    const url = `/apidev/assets/metadata/${NFTokenID}/metadata.json`;
+    const url = `apidev/assets/metadata/${NFTokenID}/metadata.json`;
     details = await fetch(url).then((r) => r.json());
   } catch (err) {
     devlog(err);
     if (!URI) {
-      const domain = await getDomain(Issuer);
+      domain = await getDomain(Issuer);
       const t = await logFailedToLoad({
         Issuer,
         NFTokenID,
@@ -763,12 +764,13 @@ export async function getOneXls20(nft: any) {
     thumbnail,
     nft_serial: nft.nft_serial,
   });
-  debugger;
   return {
     tokenTaxon: NFTokenTaxon,
     issuer: Issuer,
     currency: NFTokenID,
     tokenName,
+    URI,
+    Domain: domain,
     url: mediaUrl,
     media_type,
     desc: description,
