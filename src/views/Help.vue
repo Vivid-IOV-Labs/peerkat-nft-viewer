@@ -52,6 +52,11 @@
           sale of the NFT, whereas buy offers are made by another account who
           has made a bid to purchase the NFT.
         </li>
+        <li class="pb-2">
+          <strong> What features are being added next?</strong>
+          <br />NFT Analytics are next on our roadmap. Please suggest any other
+          features you would like to see by getting in contact with us.
+        </li>
       </ul>
     </div>
     <p class="mt-4 text-center text-small">
