@@ -568,18 +568,18 @@ export async function getOneXls20(nft: any) {
     const url = `https://d2gdfyavin91j3.cloudfront.net/assets/metadata/${NFTokenID}/metadata.json`;
     details = await fetch(url).then((r) => r.json());
   } catch (err) {
-    const t = await logFailedToLoad({
-      Issuer,
-      NFTokenID,
-      URI,
-      NFTokenTaxon,
-      nft_serial,
-      Source: "xummapp-frontend",
-    });
-    devlog(t);
     devlog(err);
     if (!URI) {
       const domain = await getDomain(Issuer);
+      const t = await logFailedToLoad({
+        Issuer,
+        NFTokenID,
+        Domain: domain,
+        NFTokenTaxon,
+        nft_serial,
+        Source: "xummapp-frontend",
+      });
+      devlog(t);
       const url = createUrlFromDomain(domain, NFTokenID);
       try {
         details = await fetch(url).then((r) => r.json());
@@ -599,6 +599,15 @@ export async function getOneXls20(nft: any) {
           "This error may occur when the viewer is currently unable to fetch metadata from the URI. This error occurs when the viewer is not familiar with the URI approach. Please contact the Token Issuer for support. We will continue to upgrade the viewer, follow Peerkat via Twitter and Discord for updates and support.";
       }
     } else {
+      const t = await logFailedToLoad({
+        Issuer,
+        NFTokenID,
+        URI,
+        NFTokenTaxon,
+        nft_serial,
+        Source: "xummapp-frontend",
+      });
+      devlog(t);
       const uri = hexToString(URI); //.replace(/\\/g, "");
       const end = uri.includes(".json")
         ? ""
