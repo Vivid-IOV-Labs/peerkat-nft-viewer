@@ -605,7 +605,6 @@ export async function getOneXls20(nft: any) {
         NFTokenID,
         URI,
         NFTokenTaxon,
-        nft_serial,
         Source: "xummapp-frontend",
       });
       devlog(t);

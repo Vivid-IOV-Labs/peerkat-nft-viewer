@@ -82,6 +82,7 @@ export default defineComponent({
               NFTokenID: props.nft.currency,
               URI: props.nft.URI,
               Domain: props.nft.Domain,
+              NFTokenTaxon: props.nft.tokenTaxon,
               Source: "xummapp-frontend",
             });
             throw new Error("Error Status:" + isReturned.status);
