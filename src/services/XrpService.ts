@@ -565,7 +565,7 @@ export async function getOneXls20(nft: any) {
   let details;
   const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
   try {
-    const url = `https://d2gdfyavin91j3.cloudfront.net/assets/metadata/${NFTokenID}/metadata.json`;
+    const url = `/apidev/assets/metadata/${NFTokenID}/metadata.json`;
     details = await fetch(url).then((r) => r.json());
   } catch (err) {
     devlog(err);
