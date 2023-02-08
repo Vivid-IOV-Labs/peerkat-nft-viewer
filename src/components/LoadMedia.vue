@@ -62,8 +62,9 @@ export default defineComponent({
               : props.nft.thumbnail
               ? props.nft.thumbnail.split(".").pop()
               : "jpg";
-
-          const url = `apidev/assets/images/${props.nft.currency}/full/image.${ext}`;
+          const url = props.nft.media_type?.includes("video")
+            ? `apidev/assets/videos/${props.nft.currency}/full/video.${ext}`
+            : `apidev/assets/images/${props.nft.currency}/full/image.${ext}`;
 
           const isReturned = await fetch(url, {
             method: "HEAD",
