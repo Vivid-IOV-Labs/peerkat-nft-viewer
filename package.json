@@ -5,7 +5,8 @@
     "build": " vite build",
     "serve": "vite preview",
     "lint": "eslint --ext .ts,vue --ignore-path .gitignore .",
-    "start": "node server.js"
+    "start": "node server.js",
+    "test:unit": "vitest --environment jsdom"
   },
   "dependencies": {
     "@headlessui/vue": "^1.3.0",
@@ -58,12 +59,14 @@
     "eslint-plugin-vuejs-accessibility": "^1.1.0",
     "express": "^4.17.1",
     "express-static-gzip": "^2.1.1",
+    "jsdom": "^21.1.0",
     "postcss": "^8.3.5",
     "prettier": "^2.3.1",
     "typescript": "^4.3.2",
     "vite": "^2.3.7",
     "vite-plugin-html": "^2.1.2",
     "vite-plugin-pwa": "^0.11.13",
+    "vitest": "^0.28.4",
     "vue-axe": "^3.1.2",
     "vue-tsc": "^0.0.24"
   }
