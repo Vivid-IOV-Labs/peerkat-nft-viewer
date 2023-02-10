@@ -926,7 +926,6 @@ export async function getOneXls20(nft: any) {
       media_type = contentType;
       mediaUrl = response.url;
     }
-
     if (details.thumbnail) {
       if (details.image.split("//")[0] === "ipfs:") {
         thumbnail = details.thumbnail.split("//")[1];
@@ -941,11 +940,24 @@ export async function getOneXls20(nft: any) {
       } else {
         mediaUrl = media;
       }
-      media_type = "image";
+      const ext = mediaUrl.split(".").pop();
+      if (["png", "jpg", "jpeg", "gif", "mp4"].includes(ext)) {
+        media_type = "image/" + ext;
+      } else {
+        const response = await getIpfsMedia(mediaUrl);
+        const contentType = response.headers.get("Content-Type");
+        media_type = contentType;
+      }
       if (!thumbnail) {
         thumbnail = mediaUrl;
       }
     }
+
+    // if (details.animation_url) {
+    //   const response = await getIpfsMedia(mediaUrl);
+    //   details.content_type = response.headers.get("Content-Type");
+    // }
+
     if (
       details.video ||
       (details.animation_url &&
@@ -958,7 +970,14 @@ export async function getOneXls20(nft: any) {
       } else {
         mediaUrl = media;
       }
-      media_type = "video";
+      const ext = mediaUrl.split(".").pop();
+      if (["png", "jpg", "jpeg", "gif", "mp4"].includes(ext)) {
+        media_type = "video/" + ext;
+      } else {
+        const response = await getIpfsMedia(mediaUrl);
+        const contentType = response.headers.get("Content-Type");
+        media_type = contentType;
+      }
     }
   }
 

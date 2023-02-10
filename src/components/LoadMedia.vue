@@ -34,6 +34,7 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, ref } from "vue";
+import { useStore } from "vuex";
 import { getIpfsMedia, logFailedToLoad } from "../services/XrpService";
 
 export default defineComponent({
@@ -42,71 +43,90 @@ export default defineComponent({
   },
   async setup(props) {
     const mediaUrl = ref("");
+    const store = useStore();
     const thumbnailUrl = ref("/loading.gif");
     const loadingMedia = ref(false);
+    if (props.nft.mediaUrl) {
+      mediaUrl.value = props.nft.mediaUrl || "";
+      thumbnailUrl.value = props.nft.thumbnailUrl || "";
+    } else {
+      if (props.nft.url) {
+        debugger;
 
-    if (props.nft.url) {
-      if (
-        ["XLS-14", "XLS-16"].includes(props.nft.standard) ||
-        (["XLS-20"].includes(props.nft.standard) &&
-          props.nft.url.split("//")[0] == "https:")
-      ) {
-        mediaUrl.value = props.nft.url || "";
-        thumbnailUrl.value = props.nft.thumbnail || "";
-      } else {
-        loadingMedia.value = true;
-        try {
-          const ext =
-            props.nft.media_type && props.nft.media_type.split("/").pop()
-              ? props.nft.media_type.split("/").pop()
-              : props.nft.thumbnail
-              ? props.nft.thumbnail.split(".").pop()
-              : "jpg";
-          const url = props.nft.media_type?.includes("video")
-            ? `apidev/assets/videos/${props.nft.currency}/full/video.${ext}`
-            : `apidev/assets/images/${props.nft.currency}/full/image.${ext}`;
+        if (
+          ["XLS-14", "XLS-16"].includes(props.nft.standard) ||
+          (["XLS-20"].includes(props.nft.standard) &&
+            props.nft.url.split("//")[0] == "https:")
+        ) {
+          mediaUrl.value = props.nft.url || "";
+          thumbnailUrl.value = props.nft.thumbnail || "";
+        } else {
+          loadingMedia.value = true;
+          try {
+            const ext =
+              props.nft.media_type && props.nft.media_type.split("/").pop()
+                ? props.nft.media_type.split("/").pop()
+                : props.nft.thumbnail
+                ? props.nft.thumbnail.split(".").pop()
+                : "jpg";
+            const url = props.nft.media_type?.includes("video")
+              ? `apidev/assets/videos/${props.nft.currency}/full/video.${ext}`
+              : `apidev/assets/images/${props.nft.currency}/full/image.${ext}`;
 
-          const isReturned = await fetch(url, {
-            method: "HEAD",
-          });
-
-          if (isReturned.ok && isReturned.status === 200) {
-            console.log("MEdia isReturned " + props.nft.tokenName, isReturned);
-            console.log("MEdia Url Retruned " + props.nft.tokenName, url);
-
-            mediaUrl.value = url;
-            loadingMedia.value = false;
-          } else {
-            const t = await logFailedToLoad({
-              Issuer: props.nft.issuer,
-              NFTokenID: props.nft.currency,
-              URI: props.nft.URI,
-              Domain: props.nft.Domain,
-              NFTokenTaxon: props.nft.tokenTaxon,
-              Source: "xummapp-frontend",
+            const isReturned = await fetch(url, {
+              method: "HEAD",
             });
-            throw new Error("Error Status:" + isReturned.status);
-          }
 
-          // console.log(me);
-        } catch (err) {
-          console.error("MEdia NOT isReturned " + props.nft.tokenName, err);
+            if (isReturned.ok && isReturned.status === 200) {
+              console.log(
+                "MEdia isReturned " + props.nft.tokenName,
+                isReturned
+              );
+              console.log("MEdia Url Retruned " + props.nft.tokenName, url);
 
-          getIpfsMedia(props.nft.url).then((resp: any) => {
+              mediaUrl.value = url;
+              loadingMedia.value = false;
+              const params = {
+                tokenID: props.nft.currency,
+                mediaUrl: mediaUrl.value,
+                thumbnailUrl: thumbnailUrl.value,
+              };
+              await store.commit("nft/setXls20MediaUrlById", params);
+            } else {
+              const t = await logFailedToLoad({
+                Issuer: props.nft.issuer,
+                NFTokenID: props.nft.currency,
+                URI: props.nft.URI,
+                Domain: props.nft.Domain,
+                NFTokenTaxon: props.nft.tokenTaxon,
+                Source: "xummapp-frontend",
+              });
+              throw new Error("Error Status:" + isReturned.status);
+            }
+
+            // console.log(me);
+          } catch (err) {
+            console.error("MEdia NOT isReturned " + props.nft.tokenName, err);
+
+            const resp = await getIpfsMedia(props.nft.url);
             loadingMedia.value = false;
             mediaUrl.value = resp.url;
-          });
-        }
+          }
 
-        if (props.nft.media_type?.includes("video") && props.nft.thumbnail) {
-          console.log(props.nft.thumbnail);
-          getIpfsMedia(props.nft.thumbnail).then((resp: any) => {
+          if (props.nft.media_type?.includes("video") && props.nft.thumbnail) {
+            console.log(props.nft.thumbnail);
+            const resp = await getIpfsMedia(props.nft.thumbnail);
             thumbnailUrl.value = resp.url;
-          });
+          }
+          const params = {
+            tokenID: props.nft.currency,
+            mediaUrl: mediaUrl.value,
+            thumbnailUrl: thumbnailUrl.value,
+          };
+          await store.commit("nft/setXls20MediaUrlById", params);
+          //  mediaUrl.value = "https://w3s.link/ipfs/" + props.nft.url;
+          // mediaUrl.value = "https://peerkat.mypinata.cloud/ipfs/" + props.nft.url;
         }
-
-        //  mediaUrl.value = "https://w3s.link/ipfs/" + props.nft.url;
-        // mediaUrl.value = "https://peerkat.mypinata.cloud/ipfs/" + props.nft.url;
       }
     }
 
@@ -121,6 +141,7 @@ export default defineComponent({
     //   mediaUrl.value = resp.url;
     //   debugger;
     // });
+
     const videoUrl = computed(() =>
       props.nft.standard == "XLS-20" && props.nft.thumbnail
         ? mediaUrl
