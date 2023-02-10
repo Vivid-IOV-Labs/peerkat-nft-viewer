@@ -9,7 +9,7 @@
   ></video>
   <img
     v-else-if="nft.media_type?.includes('image') && !loadingMedia"
-    v-lazy="mediaUrl"
+    v-lazy="lazyOptions"
     style="object-fit: cover; height: 100%; object-position: center center"
     class="img-fluid card-img-top"
     alt="Card
@@ -33,7 +33,7 @@
   />
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, reactive, ref } from "vue";
 import { useStore } from "vuex";
 import { getIpfsMedia, logFailedToLoad } from "../services/XrpService";
 
@@ -46,10 +46,7 @@ export default defineComponent({
     const store = useStore();
     const thumbnailUrl = ref("/loading.gif");
     const loadingMedia = ref(false);
-    if (props.nft.mediaUrl) {
-      mediaUrl.value = props.nft.mediaUrl || "";
-      thumbnailUrl.value = props.nft.thumbnailUrl || "";
-    } else {
+    async function fetchMedia() {
       if (props.nft.url) {
         debugger;
 
@@ -129,6 +126,12 @@ export default defineComponent({
         }
       }
     }
+    if (props.nft.mediaUrl) {
+      mediaUrl.value = props.nft.mediaUrl || "";
+      thumbnailUrl.value = props.nft.thumbnailUrl || "";
+    } else {
+      await fetchMedia();
+    }
 
     // props.nft.url &&
 
@@ -148,7 +151,24 @@ export default defineComponent({
         : `${mediaUrl.value}#t=0.5`
     );
 
+    const lazyOptions = reactive({
+      src: mediaUrl.value,
+      lifecycle: {
+        loading: (el: any) => {
+          console.log("image loading", el);
+        },
+        error: async (el: any) => {
+          console.log("image error", el);
+          await fetchMedia();
+        },
+        loaded: (el: any) => {
+          console.log("image loaded", el);
+        },
+      },
+    });
+
     return {
+      lazyOptions,
       mediaUrl,
       videoUrl,
       loadingMedia,

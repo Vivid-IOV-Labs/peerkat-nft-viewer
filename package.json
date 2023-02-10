@@ -29,7 +29,7 @@
     "vue-i18n": "^9.2.0-beta.11",
     "vue-multiselect": "^3.0.0-alpha.2",
     "vue-router": "^4.0.9",
-    "vue3-lazyload": "^0.2.5-beta",
+    "vue3-lazyload": "^0.3.6",
     "vuex": "^4.0.2",
     "vuex-persistedstate": "^4.1.0",
     "xrpl": "^2.1.1",
