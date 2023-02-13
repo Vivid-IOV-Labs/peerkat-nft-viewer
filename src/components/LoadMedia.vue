@@ -73,12 +73,6 @@ export default defineComponent({
             });
 
             if (isReturned.ok && isReturned.status === 200) {
-              console.log(
-                "MEdia isReturned " + props.nft.tokenName,
-                isReturned
-              );
-              console.log("MEdia Url Retruned " + props.nft.tokenName, url);
-
               mediaUrl.value = url;
               loadingMedia.value = false;
               const params = {
@@ -98,8 +92,6 @@ export default defineComponent({
               });
               throw new Error("Error Status:" + isReturned.status);
             }
-
-            // console.log(me);
           } catch (err) {
             console.error("MEdia NOT isReturned " + props.nft.tokenName, err);
 
@@ -109,7 +101,6 @@ export default defineComponent({
           }
 
           if (props.nft.media_type?.includes("video") && props.nft.thumbnail) {
-            console.log(props.nft.thumbnail);
             const resp = await getIpfsMedia(props.nft.thumbnail);
             thumbnailUrl.value = resp.url;
           }
@@ -152,16 +143,19 @@ export default defineComponent({
     const lazyOptions = reactive({
       src: mediaUrl.value,
       lifecycle: {
-        loading: (el: any) => {
-          console.log("image loading", el);
-        },
+        // loading: (el: any) => {
+        //   console.log("image loading", el);
+        // },
         error: async (el: any) => {
-          console.log("image error", el);
-          await fetchMedia();
+          if (el && el.src) {
+            console.log("erroro loading image", el.src);
+            debugger;
+            await fetchMedia();
+          }
         },
-        loaded: (el: any) => {
-          console.log("image loaded", el);
-        },
+        // loaded: (el: any) => {
+        //   console.log("image loaded", el);
+        // },
       },
     });
 

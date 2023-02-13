@@ -547,7 +547,7 @@ export async function logFailedToLoad(obj: any): Promise<any> {
       body: JSON.stringify(obj),
     }).then((r) => r.json());
   } catch (err) {
-    devlog(err);
+    devlog("logFailedToLoad", err);
   }
 }
 
@@ -822,7 +822,6 @@ export async function getOneXls20(nft: any) {
         nft_serial,
         Source: "xummapp-frontend",
       });
-      devlog(t);
       const url = createUrlFromDomain(domain, NFTokenID);
       try {
         if (domain.includes("ipfs")) {
@@ -847,7 +846,6 @@ export async function getOneXls20(nft: any) {
         NFTokenTaxon,
         Source: "xummapp-frontend",
       });
-      devlog(t);
       const uri = hexToString(URI); //.replace(/\\/g, "");
       const end = uri.includes(".json")
         ? ""
@@ -904,7 +902,7 @@ export async function getOneXls20(nft: any) {
           details = response;
         }
       } catch (error) {
-        devlog(error);
+        devlog("no_nfts_in_collection", error);
         error_code = "no_nfts_in_collection";
         error_title = "Data currently unavailable  [X01]";
         error_message =
@@ -1040,7 +1038,7 @@ export async function fetchNextXls20(nextXls20: any[]): Promise<any> {
     );
     return nextNfts;
   } catch (error) {
-    devlog(error);
+    devlog("fetchNextXls20 Error", error);
   }
 }
 export async function fetchNextXls20WithSellOffer(
@@ -1089,7 +1087,7 @@ export async function cancelOffer({ TokenID, OfferID }: any): Promise<any> {
     const sellOffer = await fetchSellOffers(TokenID);
     return sellOffer;
   } catch (error) {
-    devlog(error);
+    devlog("cancelOffer", error);
   }
 }
 export async function cancelBuyOffer({ TokenID, OfferID }: any): Promise<any> {
@@ -1105,7 +1103,7 @@ export async function cancelBuyOffer({ TokenID, OfferID }: any): Promise<any> {
     const sellOffer = await fetchBuyOffers(TokenID);
     return sellOffer;
   } catch (error) {
-    devlog(error);
+    devlog("cancelBuyOffer Error", error);
   }
 }
 export async function acceptOffer({ OfferID }: any): Promise<any> {
