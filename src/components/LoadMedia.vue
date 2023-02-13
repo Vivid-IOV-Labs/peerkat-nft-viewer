@@ -48,8 +48,6 @@ export default defineComponent({
     const loadingMedia = ref(false);
     async function fetchMedia() {
       if (props.nft.url) {
-        debugger;
-
         if (
           ["XLS-14", "XLS-16"].includes(props.nft.standard) ||
           (["XLS-20"].includes(props.nft.standard) &&
