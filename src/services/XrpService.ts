@@ -1212,7 +1212,7 @@ export async function fetchSellOffers(TokenID: string): Promise<any> {
     });
     return result;
   } catch (err) {
-    devlog("No sell offers.");
+    // devlog("No sell offers.");
   }
 }
 
@@ -1228,7 +1228,7 @@ export async function fetchBuyOffers(TokenID: string): Promise<any> {
 
     return result;
   } catch (err) {
-    devlog("No buy offers.");
+    // devlog("No buy offers.");
   }
 }
 

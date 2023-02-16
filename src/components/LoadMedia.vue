@@ -148,6 +148,7 @@ export default defineComponent({
         //   console.log("image loading", el);
         // },
         error: async (el: any) => {
+          console.log("ERRRORRORORR");
           mediaUrl.value = "https://via.placeholder.com/300/09f/fff.png";
           // if (el && el.src) {
           //   if (!loadingMedia.value) {
