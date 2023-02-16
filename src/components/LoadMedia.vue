@@ -1,7 +1,9 @@
 <template>
+  <pre style="overflow-y: scroll">{{ nft.media_type }} {{ nft.mediaUrl }}</pre>
+  <pre style="overflow-y: scroll">{{ nft.thumbnailUrl }}</pre>
   <video
     v-if="nft.media_type?.includes('video') && !loadingMedia"
-    :src="videoUrl"
+    :src="mediaUrl"
     :poster="thumbnailUrl"
     muted
     class="img-fluid card-img-top"
@@ -118,7 +120,7 @@ export default defineComponent({
     }
     if (props.nft.mediaUrl) {
       mediaUrl.value = props.nft.mediaUrl || "";
-      //thumbnailUrl.value = props.nft.thumbnailUrl || "";
+      thumbnailUrl.value = props.nft.thumbnailUrl || props.nft.thumbnail;
     } else {
       await fetchMedia();
     }
@@ -141,6 +143,10 @@ export default defineComponent({
         : `${mediaUrl.value}#t=0.5`
     );
 
+    if (props.nft.media_type.includes("video")) {
+      console.log("videoUrl", videoUrl.value);
+    }
+
     const lazyOptions = reactive({
       src: mediaUrl.value,
       lifecycle: {
@@ -148,12 +154,12 @@ export default defineComponent({
         //   console.log("image loading", el);
         // },
         error: async (el: any) => {
-          lazyOptions.src = "https://via.placeholder.com/300/09f/fff.png";
-          // if (el && el.src) {
-          //   if (!loadingMedia.value) {
-          //     await fetchMedia();
-          //   }
-          // }
+          if (el && el.src) {
+            if (!loadingMedia.value) {
+              await fetchMedia();
+              lazyOptions.src = mediaUrl.value;
+            }
+          }
         },
         // loaded: (el: any) => {
         //   console.log("image loaded", el);

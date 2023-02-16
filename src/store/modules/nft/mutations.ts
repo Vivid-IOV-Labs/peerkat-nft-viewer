@@ -51,9 +51,10 @@ const mutations: MutationTree<NFTState> = {
     state.xls20nfts = xls20nfts;
   },
   setXls20MediaUrlById(state: NFTState, params: any): void {
-    const { tokenID, mediaUrl } = params;
+    const { tokenID, mediaUrl, thumbnailUrl } = params;
     const nft = state.allXls20.find((n) => n.currency == tokenID);
     nft.mediaUrl = mediaUrl;
+    nft.thumbnailUrl = thumbnailUrl;
   },
   setCurrent(state: NFTState, nft: NFT): void {
     state.currentNFT = nft;
