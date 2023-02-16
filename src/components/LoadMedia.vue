@@ -96,7 +96,6 @@ export default defineComponent({
             console.error("MEdia NOT isReturned " + props.nft.tokenName, err);
 
             const resp = await getIpfsMedia(props.nft.url);
-            loadingMedia.value = false;
             mediaUrl.value = resp.url;
           }
 
@@ -110,6 +109,8 @@ export default defineComponent({
             thumbnailUrl: thumbnailUrl.value,
           };
           await store.commit("nft/setXls20MediaUrlById", params);
+          loadingMedia.value = false;
+
           //  mediaUrl.value = "https://w3s.link/ipfs/" + props.nft.url;
           // mediaUrl.value = "https://peerkat.mypinata.cloud/ipfs/" + props.nft.url;
         }
@@ -117,7 +118,7 @@ export default defineComponent({
     }
     if (props.nft.mediaUrl) {
       mediaUrl.value = props.nft.mediaUrl || "";
-      thumbnailUrl.value = props.nft.thumbnailUrl || "";
+      //thumbnailUrl.value = props.nft.thumbnailUrl || "";
     } else {
       await fetchMedia();
     }
@@ -147,11 +148,12 @@ export default defineComponent({
         //   console.log("image loading", el);
         // },
         error: async (el: any) => {
-          if (el && el.src) {
-            console.log("erroro loading image", el.src);
-            debugger;
-            await fetchMedia();
-          }
+          mediaUrl.value = "https://via.placeholder.com/300/09f/fff.png";
+          // if (el && el.src) {
+          //   if (!loadingMedia.value) {
+          //     await fetchMedia();
+          //   }
+          // }
         },
         // loaded: (el: any) => {
         //   console.log("image loaded", el);
