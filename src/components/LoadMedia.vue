@@ -1,6 +1,4 @@
 <template>
-  <pre style="overflow-y: scroll">{{ nft.media_type }} {{ nft.mediaUrl }}</pre>
-  <pre style="overflow-y: scroll">{{ nft.thumbnailUrl }}</pre>
   <video
     v-if="nft.media_type?.includes('video') && !loadingMedia"
     :src="mediaUrl"
