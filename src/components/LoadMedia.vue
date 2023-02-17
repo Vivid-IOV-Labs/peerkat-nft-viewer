@@ -74,7 +74,6 @@ export default defineComponent({
 
             if (isReturned.ok && isReturned.status === 200) {
               mediaUrl.value = url;
-              loadingMedia.value = false;
               const params = {
                 tokenID: props.nft.currency,
                 mediaUrl: mediaUrl.value,
@@ -97,22 +96,25 @@ export default defineComponent({
 
             const resp = await getIpfsMedia(props.nft.url);
             mediaUrl.value = resp.url;
-          }
+          } finally {
+            if (
+              props.nft.media_type?.includes("video") &&
+              props.nft.thumbnail
+            ) {
+              const resp = await getIpfsMedia(props.nft.thumbnail);
+              thumbnailUrl.value = resp.url;
+            }
+            const params = {
+              tokenID: props.nft.currency,
+              mediaUrl: mediaUrl.value,
+              thumbnailUrl: thumbnailUrl.value,
+            };
+            await store.commit("nft/setXls20MediaUrlById", params);
+            loadingMedia.value = false;
 
-          if (props.nft.media_type?.includes("video") && props.nft.thumbnail) {
-            const resp = await getIpfsMedia(props.nft.thumbnail);
-            thumbnailUrl.value = resp.url;
+            //  mediaUrl.value = "https://w3s.link/ipfs/" + props.nft.url;
+            // mediaUrl.value = "https://peerkat.mypinata.cloud/ipfs/" + props.nft.url;
           }
-          const params = {
-            tokenID: props.nft.currency,
-            mediaUrl: mediaUrl.value,
-            thumbnailUrl: thumbnailUrl.value,
-          };
-          await store.commit("nft/setXls20MediaUrlById", params);
-          loadingMedia.value = false;
-
-          //  mediaUrl.value = "https://w3s.link/ipfs/" + props.nft.url;
-          // mediaUrl.value = "https://peerkat.mypinata.cloud/ipfs/" + props.nft.url;
         }
       }
     }
