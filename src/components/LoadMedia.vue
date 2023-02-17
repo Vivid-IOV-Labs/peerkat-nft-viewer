@@ -153,10 +153,10 @@ export default defineComponent({
         // },
         error: async (el: any) => {
           if (el && el.src) {
-            if (!loadingMedia.value) {
-              await fetchMedia();
-              lazyOptions.src = mediaUrl.value;
-            }
+            // if (!loadingMedia.value) {
+            //   await fetchMedia();
+            //   lazyOptions.src = mediaUrl.value;
+            // }
           }
         },
         // loaded: (el: any) => {
