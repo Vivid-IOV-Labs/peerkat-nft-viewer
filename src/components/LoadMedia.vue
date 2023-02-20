@@ -1,7 +1,7 @@
 <template>
   <video
     v-if="nft.media_type?.includes('video') && !loadingMedia"
-    :src="mediaUrl"
+    :src="videoUrl"
     :poster="thumbnailUrl"
     muted
     class="img-fluid card-img-top"

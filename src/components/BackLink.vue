@@ -15,7 +15,7 @@ export default defineComponent({
       back() {
         if (props.path)
           router.push({
-            path: `${props.path}?refresh="true"`,
+            path: `${props.path}`,
             replace: true,
           });
         else router.go(-1);
