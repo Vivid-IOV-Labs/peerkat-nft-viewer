@@ -79,7 +79,6 @@ export default defineComponent({
                 thumbnailUrl: thumbnailUrl.value,
               };
               await store.commit("nft/setXls20MediaUrlById", params);
-              console.error("MEdia  isReturned " + props.nft.tokenName);
             } else {
               const t = await logFailedToLoad({
                 Issuer: props.nft.issuer,
@@ -92,8 +91,6 @@ export default defineComponent({
               throw new Error("Error Status:" + isReturned.status);
             }
           } catch (err) {
-            console.error("MEdia NOT isReturned " + props.nft.tokenName, err);
-
             const resp = await getIpfsMedia(props.nft.url);
             mediaUrl.value = resp.url;
           } finally {
