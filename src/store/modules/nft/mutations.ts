@@ -59,6 +59,9 @@ const mutations: MutationTree<NFTState> = {
   setCurrent(state: NFTState, nft: NFT): void {
     state.currentNFT = nft;
   },
+  setLastVisited(state: NFTState, tokenID: string): void {
+    state.lastVisited = tokenID;
+  },
   deleteCurrent(state: NFTState): void {
     state.currentNFT = null;
   },

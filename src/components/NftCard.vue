@@ -51,30 +51,11 @@
         >
           <strong class="h7 font-weight-bold">Collection </strong><br />
           <div
-            class="
-              d-flex
-              flex-column
-              justify-content-between
-              align-items-center
-              py-2
-            "
+            class="d-flex flex-column justify-content-between align-items-center py-2"
           >
             <div
               v-if="nft.collection.family"
-              class="
-                rounded
-                tex-center
-                d-flex
-                flex-column
-                justify-content-between
-                align-items-center
-                border
-                my-2
-                w-100
-                py-1
-                bg-gradient-primary
-                border-primary
-              "
+              class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
               style=""
             >
               <strong class="text-uppercase text-primary small font-weight-bold"
@@ -83,20 +64,7 @@
             </div>
             <div
               v-if="nft.collection.name"
-              class="
-                rounded
-                tex-center
-                d-flex
-                flex-column
-                justify-content-between
-                align-items-center
-                border
-                my-2
-                w-100
-                py-1
-                bg-gradient-primary
-                border-primary
-              "
+              class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
               style=""
             >
               <strong class="text-uppercase text-primary small font-weight-bold"
@@ -116,31 +84,12 @@
         <div v-if="nft.attributes && nft.attributes.length" class="mt-2">
           <strong class="h7 font-weight-bold">Attributes </strong><br />
           <div
-            class="
-              d-flex
-              flex-column
-              justify-content-between
-              align-items-center
-              py-2
-            "
+            class="d-flex flex-column justify-content-between align-items-center py-2"
           >
             <div
               v-for="(a, index) in nft.attributes"
               :key="index"
-              class="
-                rounded
-                tex-center
-                d-flex
-                flex-column
-                justify-content-between
-                align-items-center
-                border
-                my-2
-                w-100
-                py-1
-                bg-gradient-primary
-                border-primary
-              "
+              class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
               style=""
             >
               <strong
@@ -264,6 +213,8 @@ export default defineComponent({
         copyText(url, params);
       },
       view() {
+        store.commit("nft/setCurrent", props.nft);
+
         if (!props.nft.error_code) {
           router.push({
             path: `/wallet/${props.nft.issuer}/view/${props.nft.currency}`,

@@ -1,6 +1,6 @@
 <template>
   <div style="height: 70vh">
-    <BackLink />
+    <BackLink :query="{ tokenID: nft.currency }" />
     <div v-if="nft" class="h-100">
       <figure class="w-100">
         <load-media :nft="nft"></load-media>
@@ -9,8 +9,8 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, computed, watch, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { defineComponent, computed } from "vue";
+import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import LoadMedia from "@/components/LoadMedia.vue";
 import BackLink from "@/components/BackLink.vue";
@@ -22,7 +22,6 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
-    const router = useRouter();
     const store = useStore();
     const { currency, nftAddress } = route.params;
     const nft = computed(() => {
@@ -30,9 +29,6 @@ export default defineComponent({
     });
     return {
       nft,
-      back() {
-        router.go(-1);
-      },
     };
   },
 });

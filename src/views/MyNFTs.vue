@@ -7,7 +7,11 @@
     style="padding-bottom: 2rem"
   >
     <div v-for="nft in NFTMedia" :key="nft.currency" class="col-11">
-      <nft-card v-if="nft" :nft="nft"></nft-card>
+      <nft-card
+        v-if="nft"
+        :id="`tokenID-${nft.currency}`"
+        :nft="nft"
+      ></nft-card>
     </div>
     <div
       v-if="!endload"
@@ -41,13 +45,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from "vue";
+import { defineComponent, ref, computed, watch, onMounted } from "vue";
 import NftCard from "@/components/NftCard.vue";
 import { useStore } from "vuex";
 import { inject } from "vue";
 import useIntersectionObserver from "../composable/useIntersectionObserver";
 import { devlog } from "../utils/devlog";
 import { delay } from "../utils/delay";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
   components: {
@@ -55,6 +60,7 @@ export default defineComponent({
   },
   async setup() {
     const store = useStore();
+    const route = useRoute();
     const sentinel = ref<HTMLElement | null>(null);
     const scroller = ref<HTMLElement | null>(null);
     const isInXumm = inject("isInXumm");
@@ -72,11 +78,27 @@ export default defineComponent({
     const allXls20 = computed(() => store.getters["nft/getAllXls20"]);
     const allXls14 = computed(() => store.getters["nft/getAllXls14"]);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
+    const lastVisited = computed(() => store.getters["nft/getCurrent"]);
+
     const { unobserve, observe, isIntersecting } = useIntersectionObserver(
       scroller,
       sentinel
     );
     unobserve();
+
+    onMounted(() => {
+      if (lastVisited.value && scroller.value) {
+        const nftVisited = document.getElementById(
+          `tokenID-${lastVisited.value.currency}`
+        );
+        if (nftVisited) {
+          const rect = nftVisited.getBoundingClientRect();
+          const move = rect.x - rect.width / 6;
+          scroller.value.scrollLeft += move;
+        }
+      }
+    });
+
     if (
       lines.value.length + xls20count.value.length > NFTMedia.value.length ||
       NFTMedia.value.length == 0

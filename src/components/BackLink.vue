@@ -7,6 +7,7 @@ import { useRouter } from "vue-router";
 export default defineComponent({
   props: {
     path: { type: String, default: null },
+    query: { type: Object, default: undefined },
   },
   async setup(props) {
     const router = useRouter();
@@ -16,6 +17,7 @@ export default defineComponent({
         if (props.path)
           router.push({
             path: `${props.path}`,
+            query: props.query,
             replace: true,
           });
         else router.go(-1);

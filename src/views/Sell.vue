@@ -177,7 +177,6 @@ export default defineComponent({
     const showTab = ref(currenTab);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
     const user = computed(() => store.getters["user/getUser"]);
-
     return {
       nft,
       saleamount,

@@ -71,7 +71,6 @@ export default defineComponent({
             const isReturned = await fetch(url, {
               method: "HEAD",
             });
-
             if (isReturned.ok && isReturned.status === 200) {
               mediaUrl.value = url;
               const params = {
@@ -80,6 +79,7 @@ export default defineComponent({
                 thumbnailUrl: thumbnailUrl.value,
               };
               await store.commit("nft/setXls20MediaUrlById", params);
+              console.error("MEdia  isReturned " + props.nft.tokenName);
             } else {
               const t = await logFailedToLoad({
                 Issuer: props.nft.issuer,
@@ -102,6 +102,7 @@ export default defineComponent({
               props.nft.thumbnail
             ) {
               const resp = await getIpfsMedia(props.nft.thumbnail);
+
               thumbnailUrl.value = resp.url;
             }
             const params = {
