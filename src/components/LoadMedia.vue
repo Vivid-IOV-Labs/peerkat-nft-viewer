@@ -49,9 +49,10 @@ export default defineComponent({
     async function fetchMedia() {
       if (props.nft.url) {
         if (
-          ["XLS-14", "XLS-16"].includes(props.nft.standard) ||
-          (["XLS-20"].includes(props.nft.standard) &&
-            props.nft.url.split("//")[0] == "https:")
+          ["XLS-14", "XLS-16"].includes(props.nft.standard)
+          // ||
+          // (["XLS-20"].includes(props.nft.standard) &&
+          //   props.nft.url.split("//")[0] == "https:")
         ) {
           mediaUrl.value = props.nft.url || "";
           thumbnailUrl.value = props.nft.thumbnail || "";
@@ -64,6 +65,8 @@ export default defineComponent({
                 : props.nft.thumbnail
                 ? props.nft.thumbnail.split(".").pop()
                 : "jpg";
+            console.log(ext);
+            debugger;
             const url = props.nft.media_type?.includes("video")
               ? `/apidev/assets/videos/${props.nft.currency}/full/video.${ext}`
               : `/apidev/assets/images/${props.nft.currency}/full/image.${ext}`;
