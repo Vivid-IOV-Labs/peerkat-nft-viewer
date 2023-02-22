@@ -941,7 +941,7 @@ export async function getOneXls20(nft: any) {
         mediaUrl = media;
       }
       const ext = mediaUrl.split(".").pop();
-      if (["png", "jpg", "jpeg", "gif", "mp4"].includes(ext)) {
+      if (["png", "jpg", "jpeg", "gif", "mp4", "webp"].includes(ext)) {
         media_type = "image/" + ext;
       } else {
         const response = await getIpfsMedia(mediaUrl);
@@ -971,7 +971,7 @@ export async function getOneXls20(nft: any) {
         mediaUrl = media;
       }
       const ext = mediaUrl.split(".").pop();
-      if (["png", "jpg", "jpeg", "gif", "mp4"].includes(ext)) {
+      if (["png", "jpg", "jpeg", "gif", "mp4", "webp"].includes(ext)) {
         media_type = "video/" + ext;
       } else {
         const response = await getIpfsMedia(mediaUrl);
