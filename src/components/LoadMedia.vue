@@ -67,7 +67,7 @@ export default defineComponent({
             const url = props.nft.media_type?.includes("video")
               ? `/apidev/assets/videos/${props.nft.currency}/full/video.${ext}`
               : `/apidev/assets/images/${props.nft.currency}/full/image.${ext}`;
-
+            // thumbnailUrl.value = `/apidev/assets/images/${props.nft.currency}/200px/image.${ext}`;
             const isReturned = await fetch(url, {
               method: "HEAD",
             });
@@ -88,6 +88,7 @@ export default defineComponent({
                 NFTokenTaxon: props.nft.tokenTaxon,
                 Source: "xummapp-frontend",
               });
+
               throw new Error("Error Status:" + isReturned.status);
             }
           } catch (err) {

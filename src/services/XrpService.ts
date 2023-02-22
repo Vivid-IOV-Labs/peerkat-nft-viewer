@@ -870,7 +870,6 @@ export async function getOneXls20(nft: any) {
       https://ipfs.io/ipfs/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
       https://somedomain/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
       */
-
       try {
         const response =
           uri.includes("ipfs:") ||
@@ -879,6 +878,7 @@ export async function getOneXls20(nft: any) {
           uri.includes("cid:")
             ? await getIpfsJson(url)
             : await fetch(url);
+
         if (response.headers) {
           const contentType = response.headers.get("Content-Type");
           if (
@@ -933,8 +933,10 @@ export async function getOneXls20(nft: any) {
     }
     if (details.image || details.image_url) {
       const media = details.image || details.image_url;
-      if (media.split("//")[0] === "ipfs:" || !media.split("//")[0]) {
+      if (media.split("//")[0].includes("ipfs:") || !media.split("//")[0]) {
         mediaUrl = media.split("//")[1].replace("ipfs/", "");
+      } else if (media.includes("/ipfs/")) {
+        mediaUrl = media.split("/ipfs/")[1];
       } else {
         mediaUrl = media;
       }
@@ -1018,6 +1020,8 @@ export async function getOneXls20(nft: any) {
     collection,
     thumbnail,
     nft_serial: nft.nft_serial,
+    URI,
+    Domain: domain,
   };
 }
 

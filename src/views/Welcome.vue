@@ -73,7 +73,6 @@ import BaseButton from "@/components/BaseButton.vue";
 import BaseInput from "@/components/BaseInput.vue";
 import BaseSelect from "@/components/BaseSelect.vue";
 import { useStore } from "vuex";
-import BaseDialog from "@/components/BaseDialog.vue";
 import { useRoute, useRouter } from "vue-router";
 
 export default defineComponent({
@@ -81,7 +80,6 @@ export default defineComponent({
     BaseInput,
     BaseSelect,
     BaseButton,
-    BaseDialog,
   },
   async setup() {
     const store = useStore();
