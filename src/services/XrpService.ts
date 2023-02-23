@@ -822,6 +822,7 @@ export async function getOneXls20(nft: any) {
         nft_serial,
         Source: "xummapp-frontend",
       });
+
       const url = createUrlFromDomain(domain, NFTokenID);
       try {
         if (domain.includes("ipfs")) {
@@ -878,7 +879,6 @@ export async function getOneXls20(nft: any) {
           uri.includes("cid:")
             ? await getIpfsJson(url)
             : await fetch(url);
-
         if (response.headers) {
           const contentType = response.headers.get("Content-Type");
           if (
@@ -931,8 +931,17 @@ export async function getOneXls20(nft: any) {
         thumbnail = details.thumbnail;
       }
     }
-    if (details.image || details.image_url) {
-      const media = details.image || details.image_url;
+    if (
+      details.image ||
+      details.image_url ||
+      details.animation ||
+      details.animation_url
+    ) {
+      const media =
+        details.image ||
+        details.image_url ||
+        details.animation ||
+        details.animation_url;
       if (media.split("//")[0].includes("ipfs:") || !media.split("//")[0]) {
         mediaUrl = media.split("//")[1].replace("ipfs/", "");
       } else if (media.includes("/ipfs/")) {

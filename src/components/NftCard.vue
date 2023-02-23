@@ -1,7 +1,7 @@
 <template>
   <base-card>
     <template #picture>
-      <figure style="overflow: hidden; height: 100%">
+      <figure v-if="nft.url" style="overflow: hidden; height: 100%">
         <a
           class="h-100 d-block"
           style="overflow: hidden"
@@ -11,6 +11,14 @@
           <load-media :nft="nft"></load-media>
         </a>
       </figure>
+      <img
+        v-else
+        :src="'/thumbnail.jpg'"
+        style="object-fit: cover; height: 100%; object-position: center center"
+        class="img-fluid card-img-top"
+        alt="Card
+          image cap"
+      />
     </template>
 
     <template #text>
@@ -81,7 +89,7 @@
           <strong class="h7 font-weight-bold">Description </strong><br />
           <div v-html="nft.desc"></div>
         </div>
-        <div v-if="nft.attributes && nft.attributes.length" class="mt-2">
+        <!-- <div v-if="nft.attributes && nft.attributes.length" class="mt-2">
           <strong class="h7 font-weight-bold">Attributes </strong><br />
           <div
             class="d-flex flex-column justify-content-between align-items-center py-2"
@@ -98,7 +106,7 @@
               >{{ a.value }}
             </div>
           </div>
-        </div>
+        </div> -->
         <!-- <div v-if="nft.tokenTaxon !== undefined" class="mt-2">
           <strong class="h7 font-weight-bold">Token Taxon </strong><br />
           <span class="mr-3">{{ nft.tokenTaxon }} </span>
