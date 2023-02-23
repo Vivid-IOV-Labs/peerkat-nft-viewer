@@ -969,7 +969,8 @@ export async function getOneXls20(nft: any) {
 
     if (
       details.video ||
-      (details.animation_url &&
+      details.animation_url ||
+      (details.animation &&
         details.content_type &&
         details.content_type.includes("video"))
     ) {
@@ -1011,6 +1012,12 @@ export async function getOneXls20(nft: any) {
   // } else {
 
   // }
+  const type =
+    details.animation_url || details.animation
+      ? "animation"
+      : details.image_url || details.image
+      ? "image"
+      : "video";
 
   return {
     tokenTaxon: NFTokenTaxon,
@@ -1019,6 +1026,7 @@ export async function getOneXls20(nft: any) {
     tokenName,
     url: mediaUrl,
     media_type,
+    type,
     desc: description,
     issuerTruncated: truncate(Issuer),
     standard: "XLS-20",

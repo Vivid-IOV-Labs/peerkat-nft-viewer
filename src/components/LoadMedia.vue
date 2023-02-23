@@ -66,9 +66,9 @@ export default defineComponent({
               : props.nft.thumbnail
               ? props.nft.thumbnail.split(".").pop()
               : "jpg";
-          const url = props.nft.media_type?.includes("video")
+          const url = props.nft.type?.includes("video")
             ? `/apidev/assets/videos/${props.nft.currency}/video.${ext}`
-            : props.nft.media_type?.includes("gif")
+            : props.nft.type?.includes("animation")
             ? `/apidev/assets/animations/${props.nft.currency}/animation.${ext}`
             : `/apidev/assets/images/${props.nft.currency}/full/image.${ext}`;
           // thumbnailUrl.value = `/apidev/assets/images/${props.nft.currency}/200px/image.${ext}`;
