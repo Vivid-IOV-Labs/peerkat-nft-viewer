@@ -47,6 +47,11 @@
 </template>
 
 <script lang="ts">
+declare global {
+  interface Window {
+    scrollPositionWallet: any;
+  }
+}
 import { defineComponent, ref, computed, watch, onMounted } from "vue";
 import NftCard from "@/components/NftCard.vue";
 import { useStore } from "vuex";
@@ -59,6 +64,13 @@ import { useRoute } from "vue-router";
 export default defineComponent({
   components: {
     NftCard,
+  },
+  beforeRouteLeave() {
+    const scroller = <HTMLElement>document.getElementById("scroller");
+    if (scroller) {
+      const scrollPosition = scroller.scrollLeft;
+      window.scrollPositionWallet = scrollPosition || 0;
+    }
   },
   async setup() {
     const store = useStore();
@@ -89,14 +101,9 @@ export default defineComponent({
     unobserve();
 
     onMounted(() => {
-      if (lastVisited.value && scroller.value) {
-        const nftVisited = document.getElementById(
-          `tokenID-${lastVisited.value.currency}`
-        );
-        if (nftVisited) {
-          const rect = nftVisited.getBoundingClientRect();
-          const move = rect.x - rect.width / 6;
-          scroller.value.scrollLeft += move;
+      if (scroller.value) {
+        if (window.scrollPositionWallet) {
+          scroller.value.scrollLeft += window.scrollPositionWallet;
         }
       }
     });
