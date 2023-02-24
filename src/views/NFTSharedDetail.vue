@@ -259,7 +259,6 @@ export default defineComponent({
         if (nftXLS20) {
           nft.value = nftXLS20;
           await fetchMedia();
-          console.log(nftXLS20);
           store.commit("nft/addShared", {
             shared: nft.value,
             nodetype: nodetype.value,
