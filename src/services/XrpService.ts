@@ -809,7 +809,7 @@ export async function getOneXls20(nft: any) {
   const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
 
   try {
-    const url = `apidev/assets/metadata/${NFTokenID}/metadata.json`;
+    const url = `/apidev/assets/metadata/${NFTokenID}/metadata.json`;
     details = await fetch(url).then((r) => r.json());
   } catch (err) {
     if (!URI) {

@@ -202,7 +202,7 @@ import {
 } from "../utils/getNetworkTypeFromCode";
 import { devlog } from "../utils/devlog";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
-import { fetchOneXls20 } from "../services/XrpService";
+import { fetchOneXls20, getIpfsMedia } from "../services/XrpService";
 import LoadMedia from "@/components/LoadMedia.vue";
 
 export default defineComponent({
@@ -258,6 +258,8 @@ export default defineComponent({
         );
         if (nftXLS20) {
           nft.value = nftXLS20;
+          await fetchMedia();
+          console.log(nftXLS20);
           store.commit("nft/addShared", {
             shared: nft.value,
             nodetype: nodetype.value,
@@ -269,6 +271,36 @@ export default defineComponent({
         }
       } catch (error) {
         await fetchOneXls14();
+      }
+    }
+    async function fetchMedia() {
+      if (["XLS-14", "XLS-16"].includes(nft.value.standard)) {
+        nft.value.mediaUrl = nft.value.url || "";
+        nft.value.thumbnailUrl = nft.value.thumbnail || "";
+      } else {
+        const ext =
+          nft.value.media_type && nft.value.media_type.split("/").pop()
+            ? nft.value.media_type.split("/").pop()
+            : nft.value.thumbnail
+            ? nft.value.thumbnail.split(".").pop()
+            : "jpg";
+        const extnojpg = ext.replace("jpg", "jpeg");
+        const url = nft.value.type?.includes("video")
+          ? `/apidev/assets/videos/${nft.value.currency}/video.${extnojpg}`
+          : nft.value.type?.includes("animation")
+          ? `/apidev/assets/animations/${nft.value.currency}/animation.${extnojpg}`
+          : `/apidev/assets/images/${nft.value.currency}/full/image.${extnojpg}`;
+        // thumbnailUrl.value = `/apidev/assets/images/${nft.value.currency}/200px/image.${ext}`;
+        const isReturned = await fetch(url, {
+          method: "HEAD",
+        });
+
+        if (isReturned.ok && isReturned.status === 200) {
+          nft.value.mediaUrl = url;
+        } else {
+          const resp = await getIpfsMedia(nft.value.url);
+          nft.value.mediaUrl = resp.url;
+        }
       }
     }
     if (nodetypefromlink == nodetype.value) {

@@ -94,11 +94,7 @@ export default defineComponent({
               mediaUrl: mediaUrl.value,
               thumbnailUrl: thumbnailUrl.value,
             };
-            if (!props.shared) {
-              await store.commit("nft/setXls20MediaUrlById", params);
-            } else {
-              await store.commit("nft/setXls20MediaUrlById", params);
-            }
+            await store.commit("nft/setXls20MediaUrlById", params);
           } else {
             const t = await logFailedToLoad({
               Issuer: props.nft.issuer,
@@ -125,9 +121,8 @@ export default defineComponent({
             mediaUrl: mediaUrl.value,
             thumbnailUrl: thumbnailUrl.value,
           };
-          if (!props.shared) {
-            await store.commit("nft/setXls20MediaUrlById", params);
-          }
+          await store.commit("nft/setXls20MediaUrlById", params);
+
           loadingMedia.value = false;
 
           //  mediaUrl.value = "https://w3s.link/ipfs/" + props.nft.url;
