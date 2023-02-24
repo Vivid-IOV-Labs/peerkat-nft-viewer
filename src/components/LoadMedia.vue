@@ -42,6 +42,7 @@ import { getIpfsMedia, logFailedToLoad } from "../services/XrpService";
 export default defineComponent({
   props: {
     nft: { type: Object, required: true },
+    shared: { type: Boolean, default: () => false },
   },
   async setup(props) {
     const mediaUrl = ref("");
@@ -50,7 +51,7 @@ export default defineComponent({
     const loadingMedia = ref(false);
     async function fetchMedia() {
       if (
-        ["XLS-14", "XLS-16"].includes(props.nft.standard) 
+        ["XLS-14", "XLS-16"].includes(props.nft.standard)
         // ||
         // (["XLS-20"].includes(props.nft.standard) &&
         //   props.nft.url.split("//")[0] == "https:" &&
@@ -67,12 +68,22 @@ export default defineComponent({
               : props.nft.thumbnail
               ? props.nft.thumbnail.split(".").pop()
               : "jpg";
+          const extnojpg = ext.replace("jpg", "jpeg");
+
           const url = props.nft.type?.includes("video")
-            ? `/apidev/assets/videos/${props.nft.currency}/video.${ext}`
+            ? `/apidev/assets/videos/${props.nft.currency}/video.${extnojpg}`
             : props.nft.type?.includes("animation")
-            ? `/apidev/assets/animations/${props.nft.currency}/animation.${ext}`
-            : `/apidev/assets/images/${props.nft.currency}/full/image.${ext}`;
+            ? `/apidev/assets/animations/${props.nft.currency}/animation.${extnojpg}`
+            : `/apidev/assets/images/${props.nft.currency}/full/image.${extnojpg}`;
           // thumbnailUrl.value = `/apidev/assets/images/${props.nft.currency}/200px/image.${ext}`;
+
+          if (
+            props.nft.currency ===
+            "00082710A90DF172FB2B5E51DADEAFED0EF075BB086AA7DA92B89D3F00000390"
+          ) {
+            console.log(props.nft);
+            console.log(ext);
+          }
           const isReturned = await fetch(url, {
             method: "HEAD",
           });
@@ -83,7 +94,11 @@ export default defineComponent({
               mediaUrl: mediaUrl.value,
               thumbnailUrl: thumbnailUrl.value,
             };
-            await store.commit("nft/setXls20MediaUrlById", params);
+            if (!props.shared) {
+              await store.commit("nft/setXls20MediaUrlById", params);
+            } else {
+              await store.commit("nft/setXls20MediaUrlById", params);
+            }
           } else {
             const t = await logFailedToLoad({
               Issuer: props.nft.issuer,
@@ -110,7 +125,9 @@ export default defineComponent({
             mediaUrl: mediaUrl.value,
             thumbnailUrl: thumbnailUrl.value,
           };
-          await store.commit("nft/setXls20MediaUrlById", params);
+          if (!props.shared) {
+            await store.commit("nft/setXls20MediaUrlById", params);
+          }
           loadingMedia.value = false;
 
           //  mediaUrl.value = "https://w3s.link/ipfs/" + props.nft.url;

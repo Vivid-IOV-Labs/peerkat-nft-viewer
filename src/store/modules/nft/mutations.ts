@@ -56,6 +56,12 @@ const mutations: MutationTree<NFTState> = {
     nft.mediaUrl = mediaUrl;
     nft.thumbnailUrl = thumbnailUrl;
   },
+  setXls20SharedMediaUrlById(state: NFTState, params: any): void {
+    const { tokenID, mediaUrl, thumbnailUrl } = params;
+    const nft = state.sharedwithme.find((n) => n.currency == tokenID);
+    nft.mediaUrl = mediaUrl;
+    nft.thumbnailUrl = thumbnailUrl;
+  },
   setCurrent(state: NFTState, nft: NFT): void {
     state.currentNFT = nft;
   },

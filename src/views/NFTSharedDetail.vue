@@ -14,7 +14,7 @@
               href="#"
               @click.prevent="view"
             >
-              <load-media :nft="nft"></load-media>
+              <load-media :nft="nft" :shared="true"></load-media>
             </a>
           </figure>
         </template>
@@ -42,30 +42,11 @@
           >
             <strong class="h7 font-weight-bold">Collection </strong><br />
             <div
-              class="
-                d-flex
-                flex-column
-                justify-content-between
-                align-items-center
-                py-2
-              "
+              class="d-flex flex-column justify-content-between align-items-center py-2"
             >
               <div
                 v-if="nft.collection.family"
-                class="
-                  rounded
-                  tex-center
-                  d-flex
-                  flex-column
-                  justify-content-between
-                  align-items-center
-                  border
-                  my-2
-                  w-100
-                  py-1
-                  bg-gradient-primary
-                  border-primary
-                "
+                class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
                 style=""
               >
                 <strong
@@ -75,20 +56,7 @@
               </div>
               <div
                 v-if="nft.collection.name"
-                class="
-                  rounded
-                  tex-center
-                  d-flex
-                  flex-column
-                  justify-content-between
-                  align-items-center
-                  border
-                  my-2
-                  w-100
-                  py-1
-                  bg-gradient-primary
-                  border-primary
-                "
+                class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
                 style=""
               >
                 <strong
@@ -109,31 +77,12 @@
           <div v-if="nft.attributes && nft.attributes.length" class="mt-2">
             <strong class="h7 font-weight-bold">Attributes </strong><br />
             <div
-              class="
-                d-flex
-                flex-column
-                justify-content-between
-                align-items-center
-                py-2
-              "
+              class="d-flex flex-column justify-content-between align-items-center py-2"
             >
               <div
                 v-for="(a, index) in nft.attributes"
                 :key="index"
-                class="
-                  rounded
-                  tex-center
-                  d-flex
-                  flex-column
-                  justify-content-between
-                  align-items-center
-                  border
-                  my-2
-                  w-100
-                  py-1
-                  bg-gradient-primary
-                  border-primary
-                "
+                class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
                 style=""
               >
                 <strong
@@ -307,7 +256,6 @@ export default defineComponent({
           route.params.nftAddress.toString(),
           route.params.currency.toString()
         );
-
         if (nftXLS20) {
           nft.value = nftXLS20;
           store.commit("nft/addShared", {
