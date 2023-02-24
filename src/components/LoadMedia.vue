@@ -50,10 +50,11 @@ export default defineComponent({
     const loadingMedia = ref(false);
     async function fetchMedia() {
       if (
-        ["XLS-14", "XLS-16"].includes(props.nft.standard) ||
-        (["XLS-20"].includes(props.nft.standard) &&
-          props.nft.url.split("//")[0] == "https:" &&
-          !props.nft.url.includes("ipfs.w3s"))
+        ["XLS-14", "XLS-16"].includes(props.nft.standard) 
+        // ||
+        // (["XLS-20"].includes(props.nft.standard) &&
+        //   props.nft.url.split("//")[0] == "https:" &&
+        //   !props.nft.url.includes("ipfs.w3s"))
       ) {
         mediaUrl.value = props.nft.url || "";
         thumbnailUrl.value = props.nft.thumbnail || "";

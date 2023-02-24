@@ -4,6 +4,7 @@
     id="scroller"
     ref="scroller"
     class="d-flex h-100 flex-row flex-nowrap overflow-auto pb-4"
+    :class="{ loading }"
     style="padding-bottom: 2rem"
   >
     <div v-for="nft in NFTMedia" :key="nft.currency" class="col-11">
@@ -15,6 +16,7 @@
     </div>
     <div
       v-if="!endload"
+      id="sentinel"
       ref="sentinel"
       style="height: 100%"
       class="col-11 card"
