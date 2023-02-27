@@ -261,10 +261,14 @@ async function getOne(
           //   metadata.split("//")[1].replace("metadata.json", `data.${fil_ext}`)
           // );
           media_type = content_type;
-          url = metadata
-            .split("//")[1]
-            .replace("metadata.json", `data.${fil_ext}`);
-          //url = mediaUrl;
+          // url = metadata
+          //   .split("//")[1]
+          //   .replace("metadata.json", `data.${fil_ext}`);
+          // debugger;
+          const { url: mediaUrl } = await getIpfsMedia(
+            metadata.split("//")[1].replace("metadata.json", `data.${fil_ext}`)
+          );
+          url = mediaUrl;
           standard = "XLS-14d/SOLO";
         } else {
           error_code = "no_nfts_in_collection";

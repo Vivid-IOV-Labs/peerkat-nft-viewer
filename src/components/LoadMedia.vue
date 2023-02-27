@@ -51,14 +51,19 @@ export default defineComponent({
     const loadingMedia = ref(false);
     async function fetchMedia() {
       if (
-        ["XLS-14", "XLS-16"].includes(props.nft.standard)
+        !["XLS-20"].includes(props.nft.standard)
         // ||
         // (["XLS-20"].includes(props.nft.standard) &&
         //   props.nft.url.split("//")[0] == "https:" &&
         //   !props.nft.url.includes("ipfs.w3s"))
       ) {
-        mediaUrl.value = props.nft.url || "";
-        thumbnailUrl.value = props.nft.thumbnail || "";
+        debugger;
+        mediaUrl.value = props.nft.url;
+        thumbnailUrl.value = props.nft.thumbnail;
+        console.log(mediaUrl.value);
+        console.log(props.nft);
+        debugger;
+        return;
       } else {
         loadingMedia.value = true;
         try {
@@ -159,27 +164,27 @@ export default defineComponent({
     //   console.log("videoUrl", videoUrl.value);
     // }
 
-    const lazyOptions = reactive({
-      src: mediaUrl.value,
-      lifecycle: {
-        // loading: (el: any) => {
-        //   console.log("image loading", el);
-        // },
-        error: async (el: any) => {
-          if (el && el.src) {
-            if (!loadingMedia.value) {
-              await fetchMedia();
-              lazyOptions.src = mediaUrl.value;
-            }
-          }
-        },
-        // loaded: (el: any) => {
-        //   console.log("image loaded", el);
-        // },
-      },
-    });
+    // const lazyOptions = reactive({
+    //   src: mediaUrl.value,
+    //   lifecycle: {
+    //     // loading: (el: any) => {
+    //     //   console.log("image loading", el);
+    //     // },
+    //     error: async (el: any) => {
+    //       if (el && el.src) {
+    //         if (!loadingMedia.value) {
+    //           await fetchMedia();
+    //           lazyOptions.src = mediaUrl.value;
+    //         }
+    //       }
+    //     },
+    //     // loaded: (el: any) => {
+    //     //   console.log("image loaded", el);
+    //     // },
+    //   },
+    // });
     return {
-      lazyOptions,
+      //lazyOptions,
       mediaUrl,
       // videoUrl,
       loadingMedia,
