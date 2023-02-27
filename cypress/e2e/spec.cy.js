@@ -1,12 +1,9 @@
-function recursivelyScroll(done) {
-  cy.get("#scroller").scrollTo("right");
-}
 import { recurse } from "cypress-recurse";
 
 describe("template spec", () => {
-  it("Should display at least one facility in booking panel", (done) => {
+  it("Should display at least one facility in booking panel", () => {
     cy.visit("http://localhost:3000");
-    cy.get("#walletaddress").type("rDF8kbsdZYfNSbXFwPLJEVBMB9p5P9pS5M");
+    cy.get("#walletaddress").type("rK8B6YThXFfgJywBQoPykQvkqGE9FTBy7y");
     cy.get("#nodetypes").select("Test");
     cy.get("#nodetypes").select("Main");
     cy.wait(500);
@@ -15,26 +12,21 @@ describe("template spec", () => {
 
     cy.wait(1000);
 
-    recursivelyScroll(done);
-
-    cy.get("#scroller").scrollTo("right");
     recurse(
-      () => cy.contains("element", "Loading").should(() => {}),
+      () => cy.get("#sentinel").should(() => {}),
       (card) => {
-        console.log(card);
-        card.length > 0;
+        card.should("not.exist");
       },
       {
-        limit: 300,
-        log: false,
+        log: true,
+        limit: 120, // max number of iterations
+        timeout: 3000000, // time limit in ms
+        delay: 2000,
         post() {
-          // cy.intercept("/**").as("ajax-requests");
-
-          //cy.wait("@ajax-requests", { timeout: 40000 });
-          cy.gett("#scroller").should("not.have.class", "loading", {
-            timeout: 20000,
+          cy.get(".card").then((card) => {
+            cy.get("#scroller").scrollTo("right");
+            cy.get(".card").should("have.length.greaterThan", card.length);
           });
-          recursivelyScroll(done);
         },
       }
     );
