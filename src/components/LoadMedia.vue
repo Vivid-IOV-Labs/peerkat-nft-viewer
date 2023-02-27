@@ -51,19 +51,21 @@ export default defineComponent({
     const loadingMedia = ref(false);
     async function fetchMedia() {
       if (
-        !["XLS-20"].includes(props.nft.standard)
+        props.nft.standard == "XLS-14" ||
+        props.nft.standard == "XLS-16"
         // ||
         // (["XLS-20"].includes(props.nft.standard) &&
         //   props.nft.url.split("//")[0] == "https:" &&
         //   !props.nft.url.includes("ipfs.w3s"))
       ) {
-        debugger;
         mediaUrl.value = props.nft.url;
         thumbnailUrl.value = props.nft.thumbnail;
         console.log(mediaUrl.value);
         console.log(props.nft);
-        debugger;
         return;
+      } else if (props.nft.standard == "XLS-14d/SOLO") {
+        const resp = await getIpfsMedia(props.nft.url);
+        mediaUrl.value = resp.url;
       } else {
         loadingMedia.value = true;
         try {
@@ -138,7 +140,7 @@ export default defineComponent({
     if (props.nft.mediaUrl) {
       mediaUrl.value = props.nft.mediaUrl || "";
       thumbnailUrl.value = props.nft.thumbnailUrl || props.nft.thumbnail;
-    } else if (props.nft.url) {
+    } else if (props.nft && props.nft.url && props.nft.standard) {
       await fetchMedia();
     }
 
