@@ -60,22 +60,30 @@ export default defineComponent({
       ) {
         mediaUrl.value = props.nft.url;
         thumbnailUrl.value = props.nft.thumbnail;
-        console.log(mediaUrl.value);
-        console.log(props.nft);
-        return;
-      } else if (props.nft.standard == "XLS-14d/SOLO") {
-        const resp = await getIpfsMedia(props.nft.url);
-        mediaUrl.value = resp.url;
-        thumbnailUrl.value = props.nft.thumbnail;
 
         const params = {
           tokenID: props.nft.currency,
           mediaUrl: mediaUrl.value,
           thumbnailUrl: thumbnailUrl.value,
         };
-        await store.commit("nft/setXls20MediaUrlById", params);
+        await store.commit("nft/setXlsMediaUrlById", params);
+
+        return;
+      } else if (props.nft.standard == "XLS-14d/SOLO") {
+        const resp = await getIpfsMedia(props.nft.url);
+        mediaUrl.value = resp.url;
+        console.log(mediaUrl.value);
+        console.log(props.nft);
+        const params = {
+          tokenID: props.nft.currency,
+          mediaUrl: mediaUrl.value,
+          thumbnailUrl: thumbnailUrl.value,
+        };
+        // console.log(mediaUrl.value);
+        // console.log(props.nft);
+        // debugger;
+        await store.commit("nft/setXlsMediaUrlById", params);
       } else {
-        loadingMedia.value = true;
         try {
           const ext =
             props.nft.media_type && props.nft.media_type.split("/").pop()
@@ -138,8 +146,6 @@ export default defineComponent({
           };
           await store.commit("nft/setXls20MediaUrlById", params);
 
-          loadingMedia.value = false;
-
           //  mediaUrl.value = "https://w3s.link/ipfs/" + props.nft.url;
           // mediaUrl.value = "https://peerkat.mypinata.cloud/ipfs/" + props.nft.url;
         }
@@ -149,7 +155,9 @@ export default defineComponent({
       mediaUrl.value = props.nft.mediaUrl || "";
       thumbnailUrl.value = props.nft.thumbnailUrl || props.nft.thumbnail;
     } else if (props.nft && props.nft.url && props.nft.standard) {
+      loadingMedia.value = true;
       await fetchMedia();
+      loadingMedia.value = false;
     }
 
     // props.nft.url &&

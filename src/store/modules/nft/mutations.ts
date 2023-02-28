@@ -50,6 +50,14 @@ const mutations: MutationTree<NFTState> = {
   setXls20(state: NFTState, xls20nfts: Array<any>): void {
     state.xls20nfts = xls20nfts;
   },
+  setXlsMediaUrlById(state: NFTState, params: any): void {
+    const { tokenID, mediaUrl, thumbnailUrl } = params;
+    const nft = state.allXls14.find((n) => n.currency == tokenID);
+    if (nft) {
+      nft.mediaUrl = mediaUrl;
+      nft.thumbnailUrl = thumbnailUrl;
+    }
+  },
   setXls20MediaUrlById(state: NFTState, params: any): void {
     const { tokenID, mediaUrl, thumbnailUrl } = params;
     const nft = state.allXls20.find((n) => n.currency == tokenID);
