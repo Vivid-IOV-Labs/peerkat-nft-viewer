@@ -893,7 +893,7 @@ export async function getOneXls20(nft: any) {
       } else {
         mediaUrl = media;
       }
-      const ext = mediaUrl.split(".").pop();
+      const ext = mediaUrl.split(".").pop().toLowerCase();
       if (["png", "jpg", "jpeg", "gif", "mp4", "webp", "svg"].includes(ext)) {
         media_type = "image/" + ext;
       } else {
@@ -923,19 +923,14 @@ export async function getOneXls20(nft: any) {
       } else {
         mediaUrl = media;
       }
-      const ext = mediaUrl.split(".").pop();
+      const ext = mediaUrl.split(".").pop().toLowerCase();
       if (["png", "jpg", "jpeg", "gif", "mp4", "webp", "svg"].includes(ext)) {
         media_type = "video/" + ext;
       } else {
-        if (mediaUrl.includes("https")) {
-          const response = await fetch(mediaUrl);
-          const contentType = response.headers.get("Content-Type");
-          media_type = contentType;
-        } else {
-          const response = await getIpfsMedia(mediaUrl);
-          const contentType = response.headers.get("Content-Type");
-          media_type = contentType;
-        }
+        debugger;
+        const response = await getIpfsMedia(mediaUrl);
+        const contentType = response.headers.get("Content-Type");
+        media_type = contentType;
       }
     }
     type =
@@ -1393,7 +1388,9 @@ async function getIpfsJson(url: string) {
 // }
 export async function getIpfsMedia(url: string): Promise<any> {
   if (url.includes("https")) {
+    debugger;
     const response = await fetch(url, { cache: "force-cache", method: "HEAD" });
+    debugger;
     return response;
   } else {
     const ipfsGatewayList = [
