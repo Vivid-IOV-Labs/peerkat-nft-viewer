@@ -751,7 +751,6 @@ export async function getOneXls20(nft: any) {
   let domain;
   let type;
   const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
-  debugger;
   try {
     const url = `/apidev/assets/metadata/${NFTokenID}/metadata.json`;
     details = await fetch(url).then((r) => r.json());
@@ -856,8 +855,6 @@ export async function getOneXls20(nft: any) {
     }
   }
   if (details) {
-    console.log(details);
-    debugger;
     tokenName = details.name && details.name.replace(/[^\w\s]/gi, "");
     description = details.description;
     attributes = details.attributes;
