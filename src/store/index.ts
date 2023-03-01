@@ -1,4 +1,4 @@
-import { createStore } from "vuex";
+import { createLogger, createStore } from "vuex";
 import { NftModule } from "./modules/nft";
 import { XummModule } from "./modules/xumm";
 import { UserModule } from "./modules/user";
@@ -16,16 +16,16 @@ const store = createStore({
   plugins:
     xummSandbox == "main"
       ? [
-          createPersistedState({
-            paths: [
-              "nft.sharedwithme",
-              "nft.currentNFT",
-              "nft.sharedBuyOffers",
-            ],
-          }),
+          // createPersistedState({
+          //   paths: [
+          //     "nft.sharedwithme",
+          //     "nft.currentNFT",
+          //     "nft.sharedBuyOffers",
+          //   ],
+          // }),
         ]
       : [
-          //createLogger(),
+          createLogger(),
           createPersistedState({
             paths: [
               "nft.sharedwithme",

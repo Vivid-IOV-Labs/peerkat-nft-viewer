@@ -50,14 +50,7 @@ export default defineComponent({
     const thumbnailUrl = ref("/loading.gif");
     const loadingMedia = ref(false);
     async function fetchMedia() {
-      if (
-        props.nft.standard == "XLS-14" ||
-        props.nft.standard == "XLS-16"
-        // ||
-        // (["XLS-20"].includes(props.nft.standard) &&
-        //   props.nft.url.split("//")[0] == "https:" &&
-        //   !props.nft.url.includes("ipfs.w3s"))
-      ) {
+      if (props.nft.standard == "XLS-14" || props.nft.standard == "XLS-16") {
         mediaUrl.value = props.nft.url;
         thumbnailUrl.value = props.nft.thumbnail;
 
@@ -67,8 +60,6 @@ export default defineComponent({
           thumbnailUrl: thumbnailUrl.value,
         };
         await store.commit("nft/setXlsMediaUrlById", params);
-
-        return;
       } else if (props.nft.standard == "XLS-14d/SOLO") {
         const resp = await getIpfsMedia(props.nft.url);
         mediaUrl.value = resp.url;
@@ -81,7 +72,6 @@ export default defineComponent({
         };
         // console.log(mediaUrl.value);
         // console.log(props.nft);
-        // debugger;
         await store.commit("nft/setXlsMediaUrlById", params);
       } else {
         try {

@@ -2,10 +2,11 @@ import { recurse } from "cypress-recurse";
 
 describe("template spec", () => {
   [
-    "rK8B6YThXFfgJywBQoPykQvkqGE9FTBy7y",
-    "rHh17LPJywYqBRVkmHANRH3cJeyZ3t7DCP",
-    "rsvSVU4PGY1erjVtkLBGSeK8BnXUUpjs4K",
-    "rD4HRrWLKmxw4kQhQtB7o8pX9464EyD6ov",
+    "radT5HJfA6yWP2yvukhG1KxyQq38SybCZw",
+    // "rK8B6YThXFfgJywBQoPykQvkqGE9FTBy7y",
+    // "rHh17LPJywYqBRVkmHANRH3cJeyZ3t7DCP",
+    // "rsvSVU4PGY1erjVtkLBGSeK8BnXUUpjs4K",
+    // "rD4HRrWLKmxw4kQhQtB7o8pX9464EyD6ov",
   ].forEach((address) => {
     it("Should load " + address, () => {
       cy.visit("http://localhost:3000");
