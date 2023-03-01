@@ -269,6 +269,7 @@ export default defineComponent({
           throw new Error("Not an XLS-20");
         }
       } catch (error) {
+        devlog(error);
         await fetchOneXls14();
       }
     }
@@ -296,7 +297,7 @@ export default defineComponent({
 
         if (isReturned.ok && isReturned.status === 200) {
           nft.value.mediaUrl = url;
-        } else {
+        } else if (nft.value.url) {
           const resp = await getIpfsMedia(nft.value.url);
           nft.value.mediaUrl = resp.url;
         }

@@ -507,6 +507,7 @@ export async function fetchOneXls20(
   const nftXLS20 = account_nfts.find((n: any) => {
     return n.NFTokenID == NFTokenID;
   });
+
   if (nftXLS20) {
     return getOneXls20(nftXLS20);
   } else {
@@ -750,7 +751,7 @@ export async function getOneXls20(nft: any) {
   let domain;
   let type;
   const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
-
+  debugger;
   try {
     const url = `/apidev/assets/metadata/${NFTokenID}/metadata.json`;
     details = await fetch(url).then((r) => r.json());
@@ -768,15 +769,16 @@ export async function getOneXls20(nft: any) {
 
       const url = createUrlFromDomain(domain, NFTokenID);
       try {
-        if (domain.includes("ipfs")) {
-          details = await getIpfsJson(url);
-        } else {
+        if (domain.includes("https")) {
           details = await fetch(url).then((r) => r.json());
           if (details.code && details.code == 404) {
             throw new Error();
           }
+        } else {
+          details = await getIpfsJson(url);
         }
       } catch (error) {
+        devlog(error);
         error_code = "no_nfts_in_collection";
         error_title = "Data currently unavailable  [X02]";
         error_message =
@@ -854,6 +856,8 @@ export async function getOneXls20(nft: any) {
     }
   }
   if (details) {
+    console.log(details);
+    debugger;
     tokenName = details.name && details.name.replace(/[^\w\s]/gi, "");
     description = details.description;
     attributes = details.attributes;
@@ -893,7 +897,6 @@ export async function getOneXls20(nft: any) {
         mediaUrl = media;
       }
       const ext = mediaUrl.split(".").pop();
-
       if (["png", "jpg", "jpeg", "gif", "mp4", "webp", "svg"].includes(ext)) {
         media_type = "image/" + ext;
       } else {
@@ -927,17 +930,23 @@ export async function getOneXls20(nft: any) {
       if (["png", "jpg", "jpeg", "gif", "mp4", "webp", "svg"].includes(ext)) {
         media_type = "video/" + ext;
       } else {
-        const response = await getIpfsMedia(mediaUrl);
-        const contentType = response.headers.get("Content-Type");
-        media_type = contentType;
+        if (mediaUrl.includes("https")) {
+          const response = await fetch(mediaUrl);
+          const contentType = response.headers.get("Content-Type");
+          media_type = contentType;
+        } else {
+          const response = await getIpfsMedia(mediaUrl);
+          const contentType = response.headers.get("Content-Type");
+          media_type = contentType;
+        }
       }
     }
     type =
       details.animation_url || details.animation
         ? "animation"
-        : details.image_url || details.image
-        ? "image"
-        : "video";
+        : details.video
+        ? "video"
+        : "image";
   }
 
   // const schmeaUri =
@@ -1386,27 +1395,25 @@ async function getIpfsJson(url: string) {
 //   }
 // }
 export async function getIpfsMedia(url: string): Promise<any> {
-  // if (url.includes("https")) {
-  //   const resp = { url };
-  //   await delay(200);
-  //   debugger;
-  //   return resp;
-  // } else {
-  const ipfsGatewayList = [
-    "https://cloudflare-ipfs.com/ipfs/",
-    "https://cf-ipfs.com/ipfs/",
-    "https://nftstorage.link/ipfs/",
-    "https://jorropo.net/ipfs/",
-  ].map((u) => u + url);
-  const controller = new AbortController();
-  const signal = controller.signal;
-  const pomises = ipfsGatewayList.map((u: string) =>
-    fetch(u, { signal, cache: "force-cache", method: "HEAD" })
-  );
-  const result = await Promise.any(pomises);
-  controller.abort();
-  return result;
-  // }
+  if (url.includes("https")) {
+    const response = await fetch(url, { cache: "force-cache", method: "HEAD" });
+    return response;
+  } else {
+    const ipfsGatewayList = [
+      "https://cloudflare-ipfs.com/ipfs/",
+      "https://cf-ipfs.com/ipfs/",
+      "https://nftstorage.link/ipfs/",
+      "https://jorropo.net/ipfs/",
+    ].map((u) => u + url);
+    const controller = new AbortController();
+    const signal = controller.signal;
+    const pomises = ipfsGatewayList.map((u: string) =>
+      fetch(u, { signal, cache: "force-cache", method: "HEAD" })
+    );
+    const result = await Promise.any(pomises);
+    controller.abort();
+    return result;
+  }
 }
 
 export async function init(network: string): Promise<any> {
