@@ -893,7 +893,8 @@ export async function getOneXls20(nft: any) {
         mediaUrl = media;
       }
       const ext = mediaUrl.split(".").pop();
-      if (["png", "jpg", "jpeg", "gif", "mp4", "webp"].includes(ext)) {
+
+      if (["png", "jpg", "jpeg", "gif", "mp4", "webp", "svg"].includes(ext)) {
         media_type = "image/" + ext;
       } else {
         const response = await getIpfsMedia(mediaUrl);
@@ -912,8 +913,7 @@ export async function getOneXls20(nft: any) {
 
     if (
       details.video ||
-      details.animation_url ||
-      (details.animation &&
+      ((details.animation_url || details.animation) &&
         details.content_type &&
         details.content_type.includes("video"))
     ) {
@@ -924,7 +924,7 @@ export async function getOneXls20(nft: any) {
         mediaUrl = media;
       }
       const ext = mediaUrl.split(".").pop();
-      if (["png", "jpg", "jpeg", "gif", "mp4", "webp"].includes(ext)) {
+      if (["png", "jpg", "jpeg", "gif", "mp4", "webp", "svg"].includes(ext)) {
         media_type = "video/" + ext;
       } else {
         const response = await getIpfsMedia(mediaUrl);
@@ -1385,7 +1385,13 @@ async function getIpfsJson(url: string) {
 //     throw new Error("Unable to fetch NFT metadata from the link");
 //   }
 // }
-export async function getIpfsMedia(url: string) {
+export async function getIpfsMedia(url: string): Promise<any> {
+  // if (url.includes("https")) {
+  //   const resp = { url };
+  //   await delay(200);
+  //   debugger;
+  //   return resp;
+  // } else {
   const ipfsGatewayList = [
     "https://cloudflare-ipfs.com/ipfs/",
     "https://cf-ipfs.com/ipfs/",
@@ -1400,6 +1406,7 @@ export async function getIpfsMedia(url: string) {
   const result = await Promise.any(pomises);
   controller.abort();
   return result;
+  // }
 }
 
 export async function init(network: string): Promise<any> {

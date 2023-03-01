@@ -81,6 +81,7 @@ export default defineComponent({
               : props.nft.thumbnail
               ? props.nft.thumbnail.split(".").pop()
               : "jpg";
+
           const extnojpg = ext.replace("jpg", "jpeg");
 
           const url = props.nft.type?.includes("video")
@@ -92,7 +93,7 @@ export default defineComponent({
 
           if (
             props.nft.currency ===
-            "00082710A90DF172FB2B5E51DADEAFED0EF075BB086AA7DA92B89D3F00000390"
+            "000913880A377543F3C855425FC25424703CED606B389BA00665C6C80000002D"
           ) {
             console.log(props.nft);
             console.log(ext);
@@ -121,8 +122,12 @@ export default defineComponent({
             throw new Error("Error Status:" + isReturned.status);
           }
         } catch (err) {
-          const resp = await getIpfsMedia(props.nft.url);
-          mediaUrl.value = resp.url;
+          if (props.nft.url.includes("https")) {
+            mediaUrl.value = props.nft.url;
+          } else {
+            const resp = await getIpfsMedia(props.nft.url);
+            mediaUrl.value = resp.url;
+          }
         } finally {
           if (props.nft.media_type?.includes("video") && props.nft.thumbnail) {
             const resp = await getIpfsMedia(props.nft.thumbnail);
