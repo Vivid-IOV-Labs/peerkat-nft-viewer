@@ -61,7 +61,6 @@ export default defineComponent({
         };
         await store.commit("nft/setXlsMediaUrlById", params);
       } else if (props.nft.standard == "XLS-14d/SOLO") {
-        debugger;
         const resp = await getIpfsMedia(props.nft.url);
         mediaUrl.value = resp.url;
         console.log(mediaUrl.value);
@@ -124,16 +123,13 @@ export default defineComponent({
           }
         } catch (err) {
           if (props.nft.url.includes("https")) {
-            debugger;
             mediaUrl.value = props.nft.url;
           } else {
-            debugger;
             const resp = await getIpfsMedia(props.nft.url);
             mediaUrl.value = resp.url;
           }
         } finally {
           if (props.nft.media_type?.includes("video") && props.nft.thumbnail) {
-            debugger;
             const resp = await getIpfsMedia(props.nft.thumbnail);
 
             thumbnailUrl.value = resp.url;

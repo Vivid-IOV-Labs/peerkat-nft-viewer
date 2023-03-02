@@ -927,7 +927,6 @@ export async function getOneXls20(nft: any) {
       if (["png", "jpg", "jpeg", "gif", "mp4", "webp", "svg"].includes(ext)) {
         media_type = "video/" + ext;
       } else {
-        debugger;
         const response = await getIpfsMedia(mediaUrl);
         const contentType = response.headers.get("Content-Type");
         media_type = contentType;
@@ -1388,9 +1387,7 @@ async function getIpfsJson(url: string) {
 // }
 export async function getIpfsMedia(url: string): Promise<any> {
   if (url.includes("https")) {
-    debugger;
     const response = await fetch(url, { cache: "force-cache", method: "HEAD" });
-    debugger;
     return response;
   } else {
     const ipfsGatewayList = [
