@@ -49,6 +49,7 @@ export default defineComponent({
     const store = useStore();
     const thumbnailUrl = ref("/loading.gif");
     const loadingMedia = ref(false);
+
     async function fetchMedia() {
       if (props.nft.standard == "XLS-14" || props.nft.standard == "XLS-16") {
         mediaUrl.value = props.nft.url;
@@ -91,13 +92,6 @@ export default defineComponent({
             : `/apidev/assets/images/${props.nft.currency}/full/image.${extnojpg}`;
           // thumbnailUrl.value = `/apidev/assets/images/${props.nft.currency}/200px/image.${ext}`;
 
-          if (
-            props.nft.currency ===
-            "000913880A377543F3C855425FC25424703CED606B389BA00665C6C80000002D"
-          ) {
-            console.log(props.nft);
-            console.log(ext);
-          }
           const isReturned = await fetch(url, {
             method: "HEAD",
           });

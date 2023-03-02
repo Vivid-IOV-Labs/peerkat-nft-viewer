@@ -537,7 +537,7 @@ export function createUrlFromDomain(domain: string, nftokenid: string) {
 }
 
 export async function logFailedToLoad(obj: any): Promise<any> {
-  const lambdaUrl = `logger`;
+  const lambdaUrl = `/logger`;
   try {
     await fetch(lambdaUrl, {
       method: "POST",
@@ -752,6 +752,12 @@ export async function getOneXls20(nft: any) {
   let type;
   const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
   try {
+    // if (
+    //   NFTokenID ==
+    //   "000803E8CEC1EB1B331D8A55E39D451DE8E13F59CF5509D5175146160000007C"
+    // ) {
+    //   throw new Error();
+    // }
     const url = `/apidev/assets/metadata/${NFTokenID}/metadata.json`;
     details = await fetch(url).then((r) => r.json());
   } catch (err) {
@@ -854,6 +860,7 @@ export async function getOneXls20(nft: any) {
       }
     }
   }
+
   if (details) {
     tokenName = details.name && details.name.replace(/[^\w\s]/gi, "");
     description = details.description;
@@ -939,7 +946,13 @@ export async function getOneXls20(nft: any) {
         ? "video"
         : "image";
   }
-
+  if (
+    NFTokenTaxon ===
+    "000803E8CEC1EB1B331D8A55E39D451DE8E13F59CF5509D5175146160000007C"
+  ) {
+    console.log(details);
+    debugger;
+  }
   // const schmeaUri =
   //   schema.split("//")[0] === "ipfs:"
   //     ? schema.split("//")[1] + "/$Schema.json"
