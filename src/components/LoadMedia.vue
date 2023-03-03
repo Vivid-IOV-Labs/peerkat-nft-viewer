@@ -7,6 +7,7 @@
     loop
     muted
     playsinline
+    webkit-playsinline
     class="img-fluid card-img-top"
     style="object-fit: cover; height: 100%; object-position: center center"
   ></video>
