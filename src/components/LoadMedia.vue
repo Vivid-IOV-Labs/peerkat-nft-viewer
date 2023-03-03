@@ -3,9 +3,10 @@
     v-if="nft.media_type?.includes('video') && !loadingMedia"
     :src="mediaUrl"
     :poster="thumbnailUrl"
-    muted
     autoplay
     loop
+    muted
+    playsinline
     class="img-fluid card-img-top"
     style="object-fit: cover; height: 100%; object-position: center center"
   ></video>

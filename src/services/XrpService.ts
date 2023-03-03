@@ -752,12 +752,12 @@ export async function getOneXls20(nft: any) {
   let type;
   const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
   try {
-    // if (
-    //   NFTokenID ==
-    //   "000803E8CEC1EB1B331D8A55E39D451DE8E13F59CF5509D5175146160000007C"
-    // ) {
-    //   throw new Error();
-    // }
+    if (
+      NFTokenID ==
+      "000803E8CEC1EB1B331D8A55E39D451DE8E13F59CF5509D5175146160000007C"
+    ) {
+      throw new Error();
+    }
     const url = `/apidev/assets/metadata/${NFTokenID}/metadata.json`;
     details = await fetch(url).then((r) => r.json());
   } catch (err) {
