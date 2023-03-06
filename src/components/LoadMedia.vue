@@ -3,7 +3,7 @@
     v-if="nft.media_type?.includes('video') && !loadingMedia"
     :src="mediaUrl"
     :poster="thumbnailUrl"
-    autoplay
+    :autoplay="autoplay"
     loop
     muted
     playsinline
@@ -44,7 +44,7 @@ import { getIpfsMedia, logFailedToLoad } from "../services/XrpService";
 export default defineComponent({
   props: {
     nft: { type: Object, required: true },
-    shared: { type: Boolean, default: () => false },
+    autoplay: { type: Boolean, default: () => false },
   },
   async setup(props) {
     const mediaUrl = ref("");

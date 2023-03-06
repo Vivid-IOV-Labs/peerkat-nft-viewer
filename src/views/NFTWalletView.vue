@@ -3,7 +3,7 @@
     <BackLink :query="{ tokenID: nft.currency }" />
     <div v-if="nft" class="h-100">
       <figure class="w-100">
-        <load-media :nft="nft"></load-media>
+        <load-media :autoplay="true" :nft="nft"></load-media>
       </figure>
     </div>
   </div>
