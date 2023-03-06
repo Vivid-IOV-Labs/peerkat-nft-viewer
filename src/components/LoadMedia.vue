@@ -1,5 +1,4 @@
 <template>
-  <pre>{{ thumbnailUrl }}</pre>
   <video
     v-if="nft.media_type?.includes('video') && !loadingMedia"
     :src="videoUrl"
