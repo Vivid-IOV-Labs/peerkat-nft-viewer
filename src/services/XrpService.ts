@@ -507,8 +507,9 @@ export async function fetchOneXls20(
   const nftXLS20 = account_nfts.find((n: any) => {
     return n.NFTokenID == NFTokenID;
   });
+
   if (nftXLS20) {
-    return getOneXls(nftXLS20);
+    return getOneXls20(nftXLS20);
   } else {
     throw new Error("Not an XLS-20");
   }
@@ -524,7 +525,7 @@ async function getDomain(account: string) {
   return hexToString(Domain);
 }
 
-function createUrlFromDomain(domain: string, nftokenid: string) {
+export function createUrlFromDomain(domain: string, nftokenid: string) {
   if ("https://marketplace-api.onxrp.com/api/metadata/" === domain) {
     return `${domain}${nftokenid}.json`;
   } else if (domain.includes("ipfs")) {
@@ -532,6 +533,22 @@ function createUrlFromDomain(domain: string, nftokenid: string) {
   } else {
     const d = domain.slice(-1) == "/" ? domain.slice(0, -1) : domain;
     return `${d}/.well-known/xrpl-nft/${nftokenid}`;
+  }
+}
+
+export async function logFailedToLoad(obj: any): Promise<any> {
+  const lambdaUrl = `/logger`;
+  try {
+    await fetch(lambdaUrl, {
+      method: "POST",
+      //mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(obj),
+    }).then((r) => r.json());
+  } catch (err) {
+    devlog("logFailedToLoad", err);
   }
 }
 
@@ -548,85 +565,109 @@ export async function getOneXls(nft: any) {
   let thumbnail;
   let details;
   const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
-  if (!URI) {
-    const domain = await getDomain(Issuer);
-    const url = createUrlFromDomain(domain, NFTokenID);
-    try {
-      if (domain.includes("ipfs")) {
-        details = await getIpfsJson(url);
-      } else {
-        details = await fetch(url).then((r) => r.json());
-        if (details.code && details.code == 404) {
-          throw new Error();
+  try {
+    const url = `/apidev/assets/metadata/${NFTokenID}/metadata.json`;
+    details = await fetch(url).then((r) => r.json());
+  } catch (err) {
+    if (!URI) {
+      const domain = await getDomain(Issuer);
+      await logFailedToLoad({
+        Issuer,
+        NFTokenID,
+        Domain: domain,
+        NFTokenTaxon,
+        nft_serial,
+        Source: "xummapp-frontend",
+      });
+      const url = createUrlFromDomain(domain, NFTokenID);
+      try {
+        if (domain.includes("ipfs")) {
+          details = await getIpfsJson(url);
+        } else {
+          details = await fetch(url).then((r) => r.json());
+          if (details.code && details.code == 404) {
+            throw new Error();
+          }
         }
+      } catch (error) {
+        error_code = "no_nfts_in_collection";
+        error_title = "Data currently unavailable  [X02]";
+        error_message =
+          "This error may occur when the viewer is currently unable to fetch metadata from the URI. This error occurs when the viewer is not familiar with the URI approach. Please contact the Token Issuer for support. We will continue to upgrade the viewer, follow Peerkat via Twitter and Discord for updates and support.";
       }
-    } catch (error) {
-      error_code = "no_nfts_in_collection";
-      error_title = "Data currently unavailable  [X02]";
-      error_message =
-        "This error may occur when the viewer is currently unable to fetch metadata from the URI. This error occurs when the viewer is not familiar with the URI approach. Please contact the Token Issuer for support. We will continue to upgrade the viewer, follow Peerkat via Twitter and Discord for updates and support.";
-    }
-  } else {
-    const uri = hexToString(URI); //.replace(/\\/g, "");
-    const end = uri.includes(".json")
-      ? ""
-      : Number.isInteger(NFTokenTaxon)
-      ? `/${NFTokenTaxon}.json`
-      : "/base.json";
+    } else {
+      const t = await logFailedToLoad({
+        Issuer,
+        NFTokenID,
+        URI,
+        NFTokenTaxon,
+        Source: "xummapp-frontend",
+      });
+      const uri = hexToString(URI); //.replace(/\\/g, "");
+      const end = uri.includes(".json")
+        ? ""
+        : Number.isInteger(NFTokenTaxon)
+        ? `/${NFTokenTaxon}.json`
+        : "/base.json";
 
-    const url = uri.includes("ipfs:")
-      ? uri.split("//")[1]
-      : uri.includes("/ipfs/")
-      ? uri.split("/ipfs/")[1]
-      : uri.includes("cid:")
-      ? uri.split("cid:")[1]
-      : uri;
-    /*
-    different kind of uri
-    
-    cid:bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4
-    https://bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4.ipfs.w3s.link/metadata.json #https://([a-zA-Z]+([0-9]+[a-zA-Z]+)+)\.ipfs\.[A-Za-z0-9]+\.[A-Za-z0-9]+/([A-Za-z0-9]+(_[A-Za-z0-9]+)+)\.[A-Za-z0-9]+
-    bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
-    ipfs://bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
-    https://ipfs.io/ipfs/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
-    https://somedomain/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
-    */
+      const url = uri.includes("ipfs:")
+        ? uri.split("//")[1]
+        : uri.includes("/ipfs/")
+        ? uri.split("/ipfs/")[1]
+        : uri.includes("cid:")
+        ? uri.split("cid:")[1]
+        : uri;
+      /*
+      different kind of uri
+      
+      cid:bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4
+      https://bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4.ipfs.w3s.link/metadata.json #https://([a-zA-Z]+([0-9]+[a-zA-Z]+)+)\.ipfs\.[A-Za-z0-9]+\.[A-Za-z0-9]+/([A-Za-z0-9]+(_[A-Za-z0-9]+)+)\.[A-Za-z0-9]+
+      bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
+      ipfs://bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
+      https://ipfs.io/ipfs/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
+      https://somedomain/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
+      */
 
-    try {
-      const response =
-        uri.includes("ipfs:") ||
-        uri.includes("/ipfs/") ||
-        !uri.includes("//") ||
-        uri.includes("cid:")
-          ? await getIpfsJson(url)
-          : await fetch(url);
-      if (response.headers) {
-        const contentType = response.headers.get("Content-Type");
-        if (contentType?.includes("image") || contentType?.includes("video")) {
-          const ipfLinkUrlPattern = new RegExp(
-            "https://([a-zA-Z]+([0-9]+[a-zA-Z]+)+).ipfs.[A-Za-z0-9]+.[A-Za-z0-9]+/([A-Za-z0-9]+(_[A-Za-z0-9]+)+).[A-Za-z0-9]+"
-          ).test(url);
-          if (ipfLinkUrlPattern) {
-            const ipfsHash = url.split(".ipfs")[0].split("//")[1];
-            const name = url.split(".ipfs")[1].split("/")[1];
-            thumbnail = ipfsHash + "/" + name;
-            media_type = contentType;
-            mediaUrl = ipfsHash + "/" + name;
+      try {
+        const response =
+          uri.includes("ipfs:") ||
+          uri.includes("/ipfs/") ||
+          !uri.includes("//") ||
+          uri.includes("cid:")
+            ? await getIpfsJson(url)
+            : await fetch(url);
+        if (response.headers) {
+          const contentType = response.headers.get("Content-Type");
+          if (
+            contentType?.includes("image") ||
+            contentType?.includes("video")
+          ) {
+            const ipfLinkUrlPattern = new RegExp(
+              "https://([a-zA-Z]+([0-9]+[a-zA-Z]+)+).ipfs.[A-Za-z0-9]+.[A-Za-z0-9]+/([A-Za-z0-9]+(_[A-Za-z0-9]+)+).[A-Za-z0-9]+"
+            ).test(url);
+            if (ipfLinkUrlPattern) {
+              const ipfsHash = url.split(".ipfs")[0].split("//")[1];
+              const name = url.split(".ipfs")[1].split("/")[1];
+              thumbnail = ipfsHash + "/" + name;
+              media_type = contentType;
+              mediaUrl = ipfsHash + "/" + name;
+            }
+          } else {
+            details = await response.json();
           }
         } else {
-          details = await response.json();
+          details = response;
         }
-      } else {
-        details = response;
+      } catch (error) {
+        devlog(error);
+        error_code = "no_nfts_in_collection";
+        error_title = "Data currently unavailable  [X01]";
+        error_message =
+          "This error may occur when the viewer attempts to fetch metadata from the URI and the network request times out. This error occurs most frequently when using a public IPFS link. Please try again by quitting the xApp and reload. We will continue to upgrade the viewer, follow Peerkat via Twitter and Discord for updates and support.";
       }
-    } catch (error) {
-      devlog(error);
-      error_code = "no_nfts_in_collection";
-      error_title = "Data currently unavailable  [X01]";
-      error_message =
-        "This error may occur when the viewer attempts to fetch metadata from the URI and the network request times out. This error occurs most frequently when using a public IPFS link. Please try again by quitting the xApp and reload. We will continue to upgrade the viewer, follow Peerkat via Twitter and Discord for updates and support.";
     }
   }
+
   if (details) {
     tokenName = details.name && details.name.replace(/[^\w\s]/gi, "");
     description = details.description;
@@ -676,7 +717,242 @@ export async function getOneXls(nft: any) {
       media_type = "video";
     }
   }
+  return {
+    tokenTaxon: NFTokenTaxon,
+    issuer: Issuer,
+    currency: NFTokenID,
+    tokenName,
+    url: mediaUrl,
+    media_type,
+    desc: description,
+    issuerTruncated: truncate(Issuer),
+    standard: "XLS-20",
+    error_code,
+    error_message,
+    error_title,
+    attributes,
+    collection,
+    thumbnail,
+    nft_serial: nft.nft_serial,
+  };
+}
+export async function getOneXls20(nft: any) {
+  let mediaUrl;
+  let media_type;
+  let error_code;
+  let error_message;
+  let error_title;
+  let tokenName;
+  let description;
+  let attributes;
+  let collection;
+  let thumbnail;
+  let details;
+  let domain;
+  let type;
+  const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
+  try {
+    if (
+      NFTokenID ==
+      "000803E8CEC1EB1B331D8A55E39D451DE8E13F59CF5509D5175146160000007C"
+    ) {
+      throw new Error();
+    }
+    const url = `/apidev/assets/metadata/${NFTokenID}/metadata.json`;
+    details = await fetch(url).then((r) => r.json());
+  } catch (err) {
+    if (!URI) {
+      domain = await getDomain(Issuer);
+      const t = await logFailedToLoad({
+        Issuer,
+        NFTokenID,
+        Domain: domain,
+        NFTokenTaxon,
+        nft_serial,
+        Source: "xummapp-frontend",
+      });
 
+      const url = createUrlFromDomain(domain, NFTokenID);
+      try {
+        if (domain.includes("https")) {
+          details = await fetch(url).then((r) => r.json());
+          if (details.code && details.code == 404) {
+            throw new Error();
+          }
+        } else {
+          details = await getIpfsJson(url);
+        }
+      } catch (error) {
+        devlog(error);
+        error_code = "no_nfts_in_collection";
+        error_title = "Data currently unavailable  [X02]";
+        error_message =
+          "This error may occur when the viewer is currently unable to fetch metadata from the URI. This error occurs when the viewer is not familiar with the URI approach. Please contact the Token Issuer for support. We will continue to upgrade the viewer, follow Peerkat via Twitter and Discord for updates and support.";
+      }
+    } else {
+      const t = await logFailedToLoad({
+        Issuer,
+        NFTokenID,
+        URI,
+        NFTokenTaxon,
+        Source: "xummapp-frontend",
+      });
+      const uri = hexToString(URI); //.replace(/\\/g, "");
+      const end = uri.includes(".json")
+        ? ""
+        : Number.isInteger(NFTokenTaxon)
+        ? `/${NFTokenTaxon}.json`
+        : "/base.json";
+
+      const url = uri.includes("ipfs:")
+        ? uri.split("//")[1]
+        : uri.includes("/ipfs/")
+        ? uri.split("/ipfs/")[1]
+        : uri.includes("cid:")
+        ? uri.split("cid:")[1]
+        : uri;
+      /*
+      different kind of uri
+      
+      cid:bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4
+      https://bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4.ipfs.w3s.link/metadata.json #https://([a-zA-Z]+([0-9]+[a-zA-Z]+)+)\.ipfs\.[A-Za-z0-9]+\.[A-Za-z0-9]+/([A-Za-z0-9]+(_[A-Za-z0-9]+)+)\.[A-Za-z0-9]+
+      bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
+      ipfs://bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
+      https://ipfs.io/ipfs/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
+      https://somedomain/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
+      */
+      try {
+        const response =
+          uri.includes("ipfs:") ||
+          uri.includes("/ipfs/") ||
+          !uri.includes("//") ||
+          uri.includes("cid:")
+            ? await getIpfsJson(url)
+            : await fetch(url);
+        if (response.headers) {
+          const contentType = response.headers.get("Content-Type");
+          if (
+            contentType?.includes("image") ||
+            contentType?.includes("video")
+          ) {
+            const ipfLinkUrlPattern = new RegExp(
+              "https://([a-zA-Z]+([0-9]+[a-zA-Z]+)+).ipfs.[A-Za-z0-9]+.[A-Za-z0-9]+/([A-Za-z0-9]+(_[A-Za-z0-9]+)+).[A-Za-z0-9]+"
+            ).test(url);
+            if (ipfLinkUrlPattern) {
+              const ipfsHash = url.split(".ipfs")[0].split("//")[1];
+              const name = url.split(".ipfs")[1].split("/")[1];
+              thumbnail = ipfsHash + "/" + name;
+              media_type = contentType;
+              mediaUrl = ipfsHash + "/" + name;
+            }
+          } else {
+            details = await response.json();
+          }
+        } else {
+          details = response;
+        }
+      } catch (error) {
+        devlog("no_nfts_in_collection", error);
+        error_code = "no_nfts_in_collection";
+        error_title = "Data currently unavailable  [X01]";
+        error_message =
+          "This error may occur when the viewer attempts to fetch metadata from the URI and the network request times out. This error occurs most frequently when using a public IPFS link. Please try again by quitting the xApp and reload. We will continue to upgrade the viewer, follow Peerkat via Twitter and Discord for updates and support.";
+      }
+    }
+  }
+
+  if (details) {
+    tokenName = details.name && details.name.replace(/[^\w\s]/gi, "");
+    description = details.description;
+    attributes = details.attributes;
+
+    collection = details.collection;
+
+    if (details.content) {
+      const cid = details.content.split("cid:")[1];
+      const response = await getIpfsMedia(cid);
+      const contentType = response.headers.get("Content-Type");
+      media_type = contentType;
+      mediaUrl = response.url;
+    }
+    if (details.thumbnail) {
+      if (details.image.split("//")[0] === "ipfs:") {
+        thumbnail = details.thumbnail.split("//")[1];
+      } else {
+        thumbnail = details.thumbnail;
+      }
+    }
+    if (
+      details.image ||
+      details.image_url ||
+      details.animation ||
+      details.animation_url
+    ) {
+      const media =
+        details.image ||
+        details.image_url ||
+        details.animation ||
+        details.animation_url;
+      if (media.split("//")[0].includes("ipfs:") || !media.split("//")[0]) {
+        mediaUrl = media.split("//")[1].replace("ipfs/", "");
+      } else if (media.includes("/ipfs/")) {
+        mediaUrl = media.split("/ipfs/")[1];
+      } else {
+        mediaUrl = media;
+      }
+      const ext = mediaUrl.split(".").pop().toLowerCase();
+      if (["png", "jpg", "jpeg", "gif", "mp4", "webp", "svg"].includes(ext)) {
+        media_type = "image/" + ext;
+      } else {
+        const response = await getIpfsMedia(mediaUrl);
+        const contentType = response.headers.get("Content-Type");
+        media_type = contentType;
+      }
+      if (!thumbnail) {
+        thumbnail = mediaUrl;
+      }
+    }
+
+    // if (details.animation_url) {
+    //   const response = await getIpfsMedia(mediaUrl);
+    //   details.content_type = response.headers.get("Content-Type");
+    // }
+
+    if (
+      details.video ||
+      ((details.animation_url || details.animation) &&
+        details.content_type &&
+        details.content_type.includes("video"))
+    ) {
+      const media = details.animation_url || details.video;
+      if (media.split("//")[0] === "ipfs:") {
+        mediaUrl = media.split("//")[1];
+      } else {
+        mediaUrl = media;
+      }
+      const ext = mediaUrl.split(".").pop().toLowerCase();
+      if (["png", "jpg", "jpeg", "gif", "mp4", "webp", "svg"].includes(ext)) {
+        media_type = "video/" + ext;
+      } else {
+        const response = await getIpfsMedia(mediaUrl);
+        const contentType = response.headers.get("Content-Type");
+        media_type = contentType;
+      }
+    }
+    type =
+      details.animation_url || details.animation
+        ? "animation"
+        : details.video
+        ? "video"
+        : "image";
+  }
+  if (
+    NFTokenTaxon ===
+    "000803E8CEC1EB1B331D8A55E39D451DE8E13F59CF5509D5175146160000007C"
+  ) {
+    console.log(details);
+    debugger;
+  }
   // const schmeaUri =
   //   schema.split("//")[0] === "ipfs:"
   //     ? schema.split("//")[1] + "/$Schema.json"
@@ -706,6 +982,7 @@ export async function getOneXls(nft: any) {
     tokenName,
     url: mediaUrl,
     media_type,
+    type,
     desc: description,
     issuerTruncated: truncate(Issuer),
     standard: "XLS-20",
@@ -716,6 +993,8 @@ export async function getOneXls(nft: any) {
     collection,
     thumbnail,
     nft_serial: nft.nft_serial,
+    URI,
+    Domain: domain,
   };
 }
 
@@ -730,13 +1009,13 @@ export async function fetchNextXls20(nextXls20: any[]): Promise<any> {
   try {
     const nextNfts = await Promise.all(
       nextXls20.map(async (nft: any) => {
-        const one = await getOneXls(nft);
+        const one = await getOneXls20(nft);
         return one;
       })
     );
     return nextNfts;
   } catch (error) {
-    devlog(error);
+    devlog("fetchNextXls20 Error", error);
   }
 }
 export async function fetchNextXls20WithSellOffer(
@@ -746,7 +1025,7 @@ export async function fetchNextXls20WithSellOffer(
   const nextNfts = await Promise.all(
     nextXls20.map(async (nft: any) => {
       const { NFTokenID } = nft;
-      const schema = await getOneXls(nft);
+      const schema = await getOneXls20(nft);
       const sellOffersResponse = await fetchSellOffers(NFTokenID);
       const buyOffersResponse = await fetchBuyOffers(NFTokenID);
       const now = Date.now();
@@ -785,7 +1064,7 @@ export async function cancelOffer({ TokenID, OfferID }: any): Promise<any> {
     const sellOffer = await fetchSellOffers(TokenID);
     return sellOffer;
   } catch (error) {
-    devlog(error);
+    devlog("cancelOffer", error);
   }
 }
 export async function cancelBuyOffer({ TokenID, OfferID }: any): Promise<any> {
@@ -801,7 +1080,7 @@ export async function cancelBuyOffer({ TokenID, OfferID }: any): Promise<any> {
     const sellOffer = await fetchBuyOffers(TokenID);
     return sellOffer;
   } catch (error) {
-    devlog(error);
+    devlog("cancelBuyOffer Error", error);
   }
 }
 export async function acceptOffer({ OfferID }: any): Promise<any> {
@@ -910,7 +1189,7 @@ export async function fetchSellOffers(TokenID: string): Promise<any> {
     });
     return result;
   } catch (err) {
-    devlog("No sell offers.");
+    // devlog("No sell offers.");
   }
 }
 
@@ -926,7 +1205,7 @@ export async function fetchBuyOffers(TokenID: string): Promise<any> {
 
     return result;
   } catch (err) {
-    devlog("No buy offers.");
+    // devlog("No buy offers.");
   }
 }
 
@@ -937,17 +1216,17 @@ interface list {
   [name: string]: any | undefined;
 }
 const ipfsGatewayLisWithObfuscateTime: any[] = [
-  { domain: "https://dweb.link/", obfuscateTime: null },
-  { domain: "https://nftstorage.link/", obfuscateTime: null },
+  { domain: "https://dweb.link/ipfs/", obfuscateTime: null },
+  { domain: "https://nftstorage.link/ipfs/", obfuscateTime: null },
   {
-    domain: "https://ipfs.io/",
+    domain: "https://ipfs.io/ipfs/",
     obfuscateTime: null,
   },
   {
-    domain: "https://ipfs.eth.aragon.network/",
+    domain: "https://ipfs.eth.aragon.network/ipfs/",
     obfuscateTime: null,
   },
-  { domain: "https://gateway.ipfs.io/", obfuscateTime: null },
+  { domain: "https://gateway.ipfs.io/ipfs/", obfuscateTime: null },
 ];
 
 function initIpfsGatewayLisWithObfuscateTime() {
@@ -995,7 +1274,7 @@ async function recursiveIpfsFetch(url: string): Promise<any> {
   const availableIpfsGateway = getAvailableIpfsGateway();
   if (availableIpfsGateway.length) {
     const pomises = availableIpfsGateway.map((u: any) =>
-      fetch(u.domain + "ipfs/" + url, {
+      fetch(u.domain + url, {
         signal,
         cache: "force-cache",
         mode: "cors",
@@ -1119,21 +1398,26 @@ async function getIpfsJson(url: string) {
 //     throw new Error("Unable to fetch NFT metadata from the link");
 //   }
 // }
-export async function getIpfsMedia(url: string) {
-  const ipfsGatewayList = [
-    "https://cloudflare-ipfs.com/",
-    "https://cf-ipfs.com/",
-    "https://nftstorage.link/",
-    "https://jorropo.net/",
-  ].map((u) => u + "ipfs/" + url);
-  const controller = new AbortController();
-  const signal = controller.signal;
-  const pomises = ipfsGatewayList.map((u: string) =>
-    fetch(u, { signal, cache: "force-cache", method: "HEAD" })
-  );
-  const result = await Promise.any(pomises);
-  controller.abort();
-  return result;
+export async function getIpfsMedia(url: string): Promise<any> {
+  if (url.includes("https")) {
+    const response = await fetch(url, { cache: "force-cache", method: "HEAD" });
+    return response;
+  } else {
+    const ipfsGatewayList = [
+      "https://cloudflare-ipfs.com/ipfs/",
+      "https://cf-ipfs.com/ipfs/",
+      "https://nftstorage.link/ipfs/",
+      "https://jorropo.net/ipfs/",
+    ].map((u) => u + url);
+    const controller = new AbortController();
+    const signal = controller.signal;
+    const pomises = ipfsGatewayList.map((u: string) =>
+      fetch(u, { signal, cache: "force-cache", method: "HEAD" })
+    );
+    const result = await Promise.any(pomises);
+    controller.abort();
+    return result;
+  }
 }
 
 export async function init(network: string): Promise<any> {

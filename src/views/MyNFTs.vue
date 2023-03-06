@@ -4,13 +4,19 @@
     id="scroller"
     ref="scroller"
     class="d-flex h-100 flex-row flex-nowrap overflow-auto pb-4"
+    :class="{ loading }"
     style="padding-bottom: 2rem"
   >
-    <div v-for="(nft, index) in NFTMedia" :key="index" class="col-11">
-      <nft-card v-if="nft" :nft="nft"></nft-card>
+    <div v-for="nft in NFTMedia" :key="nft.currency" class="col-11">
+      <nft-card
+        v-if="nft"
+        :id="`tokenID-${nft.currency}`"
+        :nft="nft"
+      ></nft-card>
     </div>
     <div
       v-if="!endload"
+      id="sentinel"
       ref="sentinel"
       style="height: 100%"
       class="col-11 card"
@@ -41,20 +47,34 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from "vue";
+declare global {
+  interface Window {
+    scrollPositionWallet: any;
+  }
+}
+import { defineComponent, ref, computed, watch, onMounted } from "vue";
 import NftCard from "@/components/NftCard.vue";
 import { useStore } from "vuex";
 import { inject } from "vue";
 import useIntersectionObserver from "../composable/useIntersectionObserver";
 import { devlog } from "../utils/devlog";
 import { delay } from "../utils/delay";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
   components: {
     NftCard,
   },
+  beforeRouteLeave() {
+    const scroller = <HTMLElement>document.getElementById("scroller");
+    if (scroller) {
+      const scrollPosition = scroller.scrollLeft;
+      window.scrollPositionWallet = scrollPosition || 0;
+    }
+  },
   async setup() {
     const store = useStore();
+    const route = useRoute();
     const sentinel = ref<HTMLElement | null>(null);
     const scroller = ref<HTMLElement | null>(null);
     const isInXumm = inject("isInXumm");
@@ -68,14 +88,26 @@ export default defineComponent({
     );
     const lines = computed(() => store.getters["nft/getLines"]);
     const xls20count = computed(() => store.getters["nft/getXls20"]);
+    const all = computed(() => store.getters["nft/getAll"]);
     const allXls20 = computed(() => store.getters["nft/getAllXls20"]);
     const allXls14 = computed(() => store.getters["nft/getAllXls14"]);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
+    const lastVisited = computed(() => store.getters["nft/getCurrent"]);
+
     const { unobserve, observe, isIntersecting } = useIntersectionObserver(
       scroller,
       sentinel
     );
     unobserve();
+
+    onMounted(() => {
+      if (scroller.value) {
+        if (window.scrollPositionWallet) {
+          scroller.value.scrollLeft += window.scrollPositionWallet;
+        }
+      }
+    });
+
     if (
       lines.value.length + xls20count.value.length > NFTMedia.value.length ||
       NFTMedia.value.length == 0
@@ -85,7 +117,6 @@ export default defineComponent({
 
     const poupulateXls20NFTs = async () => {
       store.commit("ui/setIsloading", true);
-
       await store.dispatch("nft/fetchXls20", {
         walletAddress: walletAddress.value,
       });
@@ -163,13 +194,17 @@ export default defineComponent({
       },
       { deep: false }
     );
-    watch(NFTMedia, async (newNfts) => {
-      if (lines.value.length + xls20count.value.length == newNfts.length) {
-        unobserve();
-        endload.value = true;
-        //    await store.dispatch("nft/disconnect");
-      }
-    });
+    watch(
+      NFTMedia,
+      async (newNfts) => {
+        if (lines.value.length + xls20count.value.length == newNfts.length) {
+          unobserve();
+          endload.value = true;
+          //    await store.dispatch("nft/disconnect");
+        }
+      },
+      { deep: false }
+    );
 
     if (lines.value && lines.value.length === 0) {
       try {
@@ -183,15 +218,18 @@ export default defineComponent({
         devlog("ON POPULATE", error);
       }
     }
-    if (
-      xls20count.value &&
-      xls20count.value.length === 0 &&
-      allXls14.value.length == 0
-    ) {
-      await populateNFTs();
-    } else {
-      await populateXls14NFTs();
+    if (all.value.length === 0) {
+      if (
+        xls20count.value &&
+        xls20count.value.length === 0 &&
+        allXls14.value.length === 0
+      ) {
+        await populateNFTs();
+      } else {
+        await populateXls14NFTs();
+      }
     }
+
     return {
       sentinel,
       endload,

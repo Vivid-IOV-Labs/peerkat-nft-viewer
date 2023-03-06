@@ -175,7 +175,7 @@ import {
   acceptOffer,
   fetchBuyOffers,
   fetchXls20,
-  getOneXls,
+  getOneXls20,
 } from "../services/XrpService";
 
 import { isInXumm } from "../utils/isInXumm";
@@ -211,7 +211,7 @@ export default defineComponent({
     const account_nfts = await fetchXls20(owner);
     const currentNft = account_nfts.find((n: any) => n.NFTokenID == nftId);
     const { URI, Issuer, NFTokenID } = currentNft;
-    nft.value = await getOneXls({ URI, Issuer, NFTokenID });
+    nft.value = await getOneXls20({ URI, Issuer, NFTokenID });
 
     const { offers = null } = buyOffers;
     if (offers) {

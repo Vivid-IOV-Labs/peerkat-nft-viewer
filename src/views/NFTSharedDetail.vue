@@ -14,7 +14,7 @@
               href="#"
               @click.prevent="view"
             >
-              <load-media :nft="nft"></load-media>
+              <load-media :nft="nft" :shared="true"></load-media>
             </a>
           </figure>
         </template>
@@ -42,30 +42,11 @@
           >
             <strong class="h7 font-weight-bold">Collection </strong><br />
             <div
-              class="
-                d-flex
-                flex-column
-                justify-content-between
-                align-items-center
-                py-2
-              "
+              class="d-flex flex-column justify-content-between align-items-center py-2"
             >
               <div
                 v-if="nft.collection.family"
-                class="
-                  rounded
-                  tex-center
-                  d-flex
-                  flex-column
-                  justify-content-between
-                  align-items-center
-                  border
-                  my-2
-                  w-100
-                  py-1
-                  bg-gradient-primary
-                  border-primary
-                "
+                class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
                 style=""
               >
                 <strong
@@ -75,20 +56,7 @@
               </div>
               <div
                 v-if="nft.collection.name"
-                class="
-                  rounded
-                  tex-center
-                  d-flex
-                  flex-column
-                  justify-content-between
-                  align-items-center
-                  border
-                  my-2
-                  w-100
-                  py-1
-                  bg-gradient-primary
-                  border-primary
-                "
+                class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
                 style=""
               >
                 <strong
@@ -109,31 +77,12 @@
           <div v-if="nft.attributes && nft.attributes.length" class="mt-2">
             <strong class="h7 font-weight-bold">Attributes </strong><br />
             <div
-              class="
-                d-flex
-                flex-column
-                justify-content-between
-                align-items-center
-                py-2
-              "
+              class="d-flex flex-column justify-content-between align-items-center py-2"
             >
               <div
                 v-for="(a, index) in nft.attributes"
                 :key="index"
-                class="
-                  rounded
-                  tex-center
-                  d-flex
-                  flex-column
-                  justify-content-between
-                  align-items-center
-                  border
-                  my-2
-                  w-100
-                  py-1
-                  bg-gradient-primary
-                  border-primary
-                "
+                class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
                 style=""
               >
                 <strong
@@ -253,7 +202,7 @@ import {
 } from "../utils/getNetworkTypeFromCode";
 import { devlog } from "../utils/devlog";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
-import { fetchOneXls20 } from "../services/XrpService";
+import { fetchOneXls20, getIpfsMedia } from "../services/XrpService";
 import LoadMedia from "@/components/LoadMedia.vue";
 
 export default defineComponent({
@@ -307,9 +256,9 @@ export default defineComponent({
           route.params.nftAddress.toString(),
           route.params.currency.toString()
         );
-
         if (nftXLS20) {
           nft.value = nftXLS20;
+          await fetchMedia();
           store.commit("nft/addShared", {
             shared: nft.value,
             nodetype: nodetype.value,
@@ -320,7 +269,38 @@ export default defineComponent({
           throw new Error("Not an XLS-20");
         }
       } catch (error) {
+        devlog(error);
         await fetchOneXls14();
+      }
+    }
+    async function fetchMedia() {
+      if (["XLS-14", "XLS-16"].includes(nft.value.standard)) {
+        nft.value.mediaUrl = nft.value.url || "";
+        nft.value.thumbnailUrl = nft.value.thumbnail || "";
+      } else {
+        const ext =
+          nft.value.media_type && nft.value.media_type.split("/").pop()
+            ? nft.value.media_type.split("/").pop()
+            : nft.value.thumbnail
+            ? nft.value.thumbnail.split(".").pop()
+            : "jpg";
+        const extnojpg = ext.replace("jpg", "jpeg");
+        const url = nft.value.type?.includes("video")
+          ? `/apidev/assets/videos/${nft.value.currency}/video.${extnojpg}`
+          : nft.value.type?.includes("animation")
+          ? `/apidev/assets/animations/${nft.value.currency}/animation.${extnojpg}`
+          : `/apidev/assets/images/${nft.value.currency}/full/image.${extnojpg}`;
+        // thumbnailUrl.value = `/apidev/assets/images/${nft.value.currency}/200px/image.${ext}`;
+        const isReturned = await fetch(url, {
+          method: "HEAD",
+        });
+
+        if (isReturned.ok && isReturned.status === 200) {
+          nft.value.mediaUrl = url;
+        } else if (nft.value.url) {
+          const resp = await getIpfsMedia(nft.value.url);
+          nft.value.mediaUrl = resp.url;
+        }
       }
     }
     if (nodetypefromlink == nodetype.value) {

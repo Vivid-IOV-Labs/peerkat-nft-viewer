@@ -72,7 +72,6 @@ const actions: ActionTree<NFT, NFTState> = {
     const count = getters.getAllXls20.length;
     const nextXls20 = getters.getXls20.slice(count, count + 2);
     const owner = rootGetters["user/getAddress"];
-
     const nextNfts = await fetchNextXls20WithSellOffer(nextXls20, owner);
     commit("setAllXls20", nextNfts);
     commit("setAll", nextNfts);

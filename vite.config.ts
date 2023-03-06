@@ -55,4 +55,19 @@ export default defineConfig({
       "@": path.resolve(__dirname, "/src"),
     },
   },
+  server: {
+    proxy: {
+      "/apidev": {
+        target: "https://d2gdfyavin91j3.cloudfront.net",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/apidev/, ""),
+      },
+      "/logger": {
+        target:
+          "https://17asvselri.execute-api.eu-west-2.amazonaws.com/Prod/log",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/logger/, ""),
+      },
+    },
+  },
 });

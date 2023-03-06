@@ -46,10 +46,10 @@
       <li class="nav-item">
         <a
           class="nav-link"
-          :class="{ active: showTab === 'sell' }"
+          :class="{ 'active  bg-danger': showTab === 'sell' }"
           href="#"
           @click="showTab = 'sell'"
-          >Offers Made
+          >Sell Offers
           <span v-if="nft.selloffers && nft.selloffers.length"
             >({{ nft.selloffers.length }})</span
           >
@@ -59,10 +59,10 @@
       <li class="nav-item">
         <a
           class="nav-link"
-          :class="{ active: showTab === 'buy' }"
+          :class="{ 'active text-white bg-success': showTab === 'buy' }"
           href="#"
           @click="showTab = 'buy'"
-          >Offers Received
+          >Buy Offers
           <span v-if="nft.buyoffers && nft.buyoffers.length"
             >({{ nft.buyoffers.length }})</span
           >
@@ -177,7 +177,6 @@ export default defineComponent({
     const showTab = ref(currenTab);
     const walletAddress = computed(() => store.getters["user/getAddress"]);
     const user = computed(() => store.getters["user/getUser"]);
-
     return {
       nft,
       saleamount,
