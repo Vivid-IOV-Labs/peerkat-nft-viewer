@@ -24,7 +24,10 @@
     -->
 
       <div>
-        <div id="navbarscroll" class="overflow-x:scroll; py-2">
+        <div
+          id="navbarscroll"
+          class="overflow-x:scroll; py-2; max-width: 65vw;"
+        >
           <ul style="display: block" class="nav nav-pills ml-auto p-2">
             <li v-if="!isInXumm" class="nav-item d-none d-sm-inline-block">
               <router-link
