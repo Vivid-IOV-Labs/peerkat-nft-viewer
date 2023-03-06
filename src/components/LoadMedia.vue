@@ -1,4 +1,5 @@
 <template>
+  <pre>{{ thumbnailUrl }}</pre>
   <video
     v-if="nft.media_type?.includes('video') && !loadingMedia"
     :src="videoUrl"
@@ -37,7 +38,7 @@
   />
 </template>
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { computed, defineComponent, reactive, ref } from "vue";
 import { useStore } from "vuex";
 import { getIpfsMedia, logFailedToLoad } from "../services/XrpService";
 
@@ -55,7 +56,7 @@ export default defineComponent({
     async function fetchMedia() {
       if (props.nft.standard == "XLS-14" || props.nft.standard == "XLS-16") {
         mediaUrl.value = props.nft.url;
-        thumbnailUrl.value = props.nft.thumbnail || ;
+        thumbnailUrl.value = props.nft.thumbnail;
 
         const params = {
           tokenID: props.nft.currency,
@@ -66,13 +67,15 @@ export default defineComponent({
       } else if (props.nft.standard == "XLS-14d/SOLO") {
         const resp = await getIpfsMedia(props.nft.url);
         mediaUrl.value = resp.url;
-
+        console.log(mediaUrl.value);
+        console.log(props.nft);
         const params = {
           tokenID: props.nft.currency,
           mediaUrl: mediaUrl.value,
           thumbnailUrl: thumbnailUrl.value,
         };
-
+        // console.log(mediaUrl.value);
+        // console.log(props.nft);
         await store.commit("nft/setXlsMediaUrlById", params);
       } else {
         try {
@@ -162,9 +165,7 @@ export default defineComponent({
     // });
 
     const videoUrl = computed(() =>
-      props.nft.standard == "XLS-20" && props.nft.thumbnail
-        ? mediaUrl
-        : `${mediaUrl.value}#t=0.5`
+      props.nft.thumbnailUrl ? mediaUrl : `${mediaUrl.value}#t=0.5`
     );
 
     // if (props.nft.media_type.includes("video")) {
