@@ -164,7 +164,7 @@ export default defineComponent({
     // });
 
     const videoUrl = computed(() =>
-      props.nft.thumbnailUrl ? mediaUrl : `${mediaUrl.value}#t=0.5`
+      props.nft.thumbnailUrl ? mediaUrl.value : `${mediaUrl.value}#t=0.5`
     );
 
     // if (props.nft.media_type.includes("video")) {
