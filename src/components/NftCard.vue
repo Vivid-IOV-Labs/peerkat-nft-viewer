@@ -29,9 +29,8 @@
         {{ nft.error_message }}
       </div>
       <div v-if="!nft.error_code && nft.tokenName">
-        <strong class="h5 font-weight-bold">Token Name </strong><br />
+        <strong class="h7 font-weight-bold">Token Name </strong><br />
         {{ nft.tokenName }}
-        <hr />
       </div>
       <div>
         <strong class="h7 font-weight-bold">Issuer </strong><br />
