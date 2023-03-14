@@ -29,23 +29,23 @@
         {{ nft.error_message }}
       </div>
       <div v-if="!nft.error_code && nft.tokenName">
-        <strong class="h7 font-weight-bold">Token Name </strong><br />
+        <strong class="font-weight-bold">Token Name </strong><br />
         {{ nft.tokenName }}
       </div>
       <div>
-        <strong class="h7 font-weight-bold">Issuer </strong><br />
+        <strong class="font-weight-bold">Issuer </strong><br />
         <span>{{ nft.issuer }}</span
         ><br />
       </div>
       <div>
         <div v-if="nft.balanceFormatted || nft.limitFormatted" class="mt-2">
-          <strong v-if="nft.balanceFormatted" class="h7 font-weight-bold"
+          <strong v-if="nft.balanceFormatted" class="font-weight-bold"
             >Balance
           </strong>
           <span v-if="nft.balanceFormatted" class="mr-3"
             >{{ nft.balanceFormatted }}
           </span>
-          <strong v-if="nft.limitFormatted" class="h7 font-weight-bold"
+          <strong v-if="nft.limitFormatted" class="font-weight-bold"
             >Total Supply
           </strong>
           <span v-if="nft.limitFormatted">{{ nft.limitFormatted }}</span>
@@ -56,7 +56,7 @@
           "
           class="mt-2"
         >
-          <strong class="h7 font-weight-bold">Collection </strong><br />
+          <strong class="font-weight-bold">Collection </strong><br />
           <div
             class="d-flex flex-column justify-content-between align-items-center py-2"
           >
@@ -81,15 +81,15 @@
           </div>
         </div>
         <div v-if="nft.author" class="mt-2">
-          <strong class="h7 font-weight-bold">Author </strong><br />
+          <strong class="font-weight-bold">Author </strong><br />
           <span class="mr-3">{{ nft.author }} </span>
         </div>
         <div v-if="nft.desc" class="mt-2">
-          <strong class="h7 font-weight-bold">Description </strong><br />
+          <strong class="font-weight-bold">Description </strong><br />
           <div v-html="nft.desc"></div>
         </div>
         <div v-if="nft.attributes && nft.attributes.length" class="mt-2">
-          <strong class="h7 font-weight-bold">Attributes </strong><br />
+          <strong class="font-weight-bold">Attributes </strong><br />
           <div
             class="d-flex flex-column justify-content-between align-items-center py-2"
           >
@@ -107,15 +107,15 @@
           </div>
         </div>
         <!-- <div v-if="nft.tokenTaxon !== undefined" class="mt-2">
-          <strong class="h7 font-weight-bold">Token Taxon </strong><br />
+          <strong class=" font-weight-bold">Token Taxon </strong><br />
           <span class="mr-3">{{ nft.tokenTaxon }} </span>
         </div>
         <div v-if="nft.nft_serial" class="mt-2">
-          <strong class="h7 font-weight-bold">Serial </strong><br />
+          <strong class=" font-weight-bold">Serial </strong><br />
           <span>{{ nft.nft_serial }}</span>
         </div> -->
         <div v-if="nft.standard" class="mt-2">
-          <strong class="h7 font-weight-bold">Standard </strong><br />
+          <strong class="font-weight-bold">Standard </strong><br />
           <span>{{ nft.standard }}</span>
         </div>
       </div>

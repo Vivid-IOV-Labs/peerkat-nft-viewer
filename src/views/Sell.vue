@@ -1,21 +1,24 @@
 <template>
   <BackLink path="/wallet" />
   <div v-if="nft">
-    <h1 v-if="nft.tokenName" class="h4 font-weight-bold mb-4 text-center">
+    <span
+      v-if="nft.tokenName"
+      class="font-weight-bold mb-4 text-center d-block"
+    >
       Offers for {{ nft.tokenName }}
-    </h1>
-    <h1 v-else class="h2 font-weight-bold mb-4 text-center">Offers for NFT</h1>
+    </span>
+    <span v-else class="font-weight-bold mb-4 text-center">Offers for NFT</span>
     <base-dialog v-model="toggleSellDialog" :cancellable="true" title="Sell">
       <template #body>
-        <strong v-if="nft.tokenName" class="h6 font-weight-bold"
+        <strong v-if="nft.tokenName" class="font-weight-bold"
           >Token Name </strong
         ><br />
         {{ nft.tokenName }}<br />
-        <strong class="h7 font-weight-bold">Token ID </strong><br />
+        <strong class="font-weight-bold">Token ID </strong><br />
         <span style="word-break: break-all">{{ nft.currency }}</span
         ><br />
         <div v-if="nft.desc" class="mt-2">
-          <strong class="h7 font-weight-bold">Description </strong><br />
+          <strong class="font-weight-bold">Description </strong><br />
           <div v-html="nft.desc"></div>
         </div>
         <div class="form-group flex justify-between">
