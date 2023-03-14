@@ -9,18 +9,11 @@ export default defineComponent({
     path: { type: String, default: null },
     query: { type: Object, default: undefined },
   },
-  async setup(props) {
+  async setup() {
     const router = useRouter();
 
     return {
       back() {
-        // if (props.path)
-        //   router.push({
-        //     path: `${props.path}`,
-        //     query: props.query,
-        //     replace: true,
-        //   });
-        // else
         router.go(-1);
       },
     };
