@@ -14,13 +14,14 @@ export default defineComponent({
 
     return {
       back() {
-        if (props.path)
-          router.push({
-            path: `${props.path}`,
-            query: props.query,
-            replace: true,
-          });
-        else router.go(-1);
+        // if (props.path)
+        //   router.push({
+        //     path: `${props.path}`,
+        //     query: props.query,
+        //     replace: true,
+        //   });
+        // else
+        router.go(-1);
       },
     };
   },
