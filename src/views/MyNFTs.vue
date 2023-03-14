@@ -44,6 +44,13 @@
       </li>
     </ul>
   </div>
+  <a
+    class="mt-4 rounded flex-center text-center d-flex"
+    style="height: 180px; background-color: aquamarine"
+    href="#"
+  >
+    Banner
+  </a>
 </template>
 
 <script lang="ts">
