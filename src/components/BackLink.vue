@@ -2,8 +2,9 @@
   <a href="#" class="mb-4 btn btn-link w-100" @click="back">Back </a>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 export default defineComponent({
   props: {
     path: { type: String, default: null },
@@ -11,10 +12,11 @@ export default defineComponent({
   },
   async setup() {
     const router = useRouter();
-
+    const store = useStore();
+    const lastView = computed(() => store.getters["ui/getLastView"]);
     return {
       back() {
-        router.go(-1);
+        router.push({ path: lastView.value });
       },
     };
   },

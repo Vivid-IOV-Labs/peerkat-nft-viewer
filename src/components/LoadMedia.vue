@@ -66,15 +66,12 @@ export default defineComponent({
       } else if (props.nft.standard == "XLS-14d/SOLO") {
         const resp = await getIpfsMedia(props.nft.url);
         mediaUrl.value = resp.url;
-        console.log(mediaUrl.value);
-        console.log(props.nft);
         const params = {
           tokenID: props.nft.currency,
           mediaUrl: mediaUrl.value,
           thumbnailUrl: thumbnailUrl.value,
         };
-        // console.log(mediaUrl.value);
-        // console.log(props.nft);
+
         await store.commit("nft/setXlsMediaUrlById", params);
       } else {
         try {
