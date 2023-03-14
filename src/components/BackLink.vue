@@ -1,5 +1,5 @@
 <template>
-  <a href="#" class="mb-4 btn btn-link w-100" @click.prevent="back">Back </a>
+  <a href="#" class="mb-4 btn btn-link w-100" @click="back">Back </a>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
