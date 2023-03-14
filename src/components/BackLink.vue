@@ -10,13 +10,17 @@ export default defineComponent({
     path: { type: String, default: null },
     query: { type: Object, default: undefined },
   },
-  async setup() {
+  async setup(props) {
     const router = useRouter();
     const store = useStore();
     const lastView = computed(() => store.getters["ui/getLastView"]);
     return {
       back() {
-        router.push({ path: lastView.value });
+        if (props.path) {
+          router.push({ path: props.path });
+        } else {
+          router.push({ path: lastView.value });
+        }
       },
     };
   },
