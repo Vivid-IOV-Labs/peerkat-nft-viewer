@@ -106,7 +106,10 @@
           </div>
         </template>
         <template #footer>
-          <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl"
+          <external-link
+            v-if="bihompUrl"
+            class="mr-2 btn btn-primary btn-sm"
+            :url="bihompUrl"
             >Inspect</external-link
           >
         </template>

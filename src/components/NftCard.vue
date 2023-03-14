@@ -131,7 +131,11 @@
           <span v-else>(0)</span>
         </base-button>
         <base-button class="mr-2" @click="share">Share</base-button>
-        <external-link v-if="bihompUrl" class="mr-2" :url="bihompUrl">
+        <external-link
+          v-if="bihompUrl"
+          class="mr-2 btn btn-primary btn-sm"
+          :url="bihompUrl"
+        >
           Inspect</external-link
         >
       </div>
