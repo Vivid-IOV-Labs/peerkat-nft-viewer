@@ -30,6 +30,12 @@
       </div>
       <h5>Loading Next NFTs...</h5>
     </div>
+    <external-link
+      class="mt-1 rounded flex-center text-center d-flex"
+      url="https://docs.google.com/forms/d/e/1FAIpQLSdx3iena1rUPaHrj99kDuI0wEaoR5FV3nkWVVsaeouppUZ4_w/viewform"
+    >
+      <img class="w-100" src="/banner-primary.png" />
+    </external-link>
   </div>
   <div v-if="!NFTMedia.length" style="margin-top: 13%">
     <h5 class="text-center mt-2">
@@ -43,13 +49,13 @@
         too
       </li>
     </ul>
+    <external-link
+      class="mt-1 rounded flex-center text-center d-flex"
+      url="https://docs.google.com/forms/d/e/1FAIpQLSdx3iena1rUPaHrj99kDuI0wEaoR5FV3nkWVVsaeouppUZ4_w/viewform"
+    >
+      <img class="w-100" src="/banner-primary.png" />
+    </external-link>
   </div>
-  <!-- <external-link
-    class="mt-1 rounded flex-center text-center d-flex"
-    url="https://docs.google.com/forms/d/e/1FAIpQLSdx3iena1rUPaHrj99kDuI0wEaoR5FV3nkWVVsaeouppUZ4_w/viewform"
-  >
-    <img class="w-100" src="/banner-primary.png" />
-  </external-link> -->
 </template>
 
 <script lang="ts">
