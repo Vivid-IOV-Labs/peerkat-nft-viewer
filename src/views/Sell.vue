@@ -230,38 +230,3 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
-.horizontal-scroll-container {
-  width: 100%;
-  height: 100%;
-
-  position: relative;
-}
-.horizontal-scroll-container__left-scrim:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 10%;
-  height: 100%;
-  background: linear-gradient(to right, #111, transparent);
-}
-.horizontal-scroll-container__right-scrim:after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 10%;
-  height: 100%;
-  background: linear-gradient(to left, #111, transparent);
-}
-.horizontal-scroll-container .horizontal-scroller {
-  display: grid;
-  grid-gap: 1rem;
-  height: 100%;
-  padding-right: 0;
-  overflow-y: hidden;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-</style>
