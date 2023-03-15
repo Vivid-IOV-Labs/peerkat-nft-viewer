@@ -347,7 +347,6 @@ router.beforeEach(async (to, from, next) => {
   }
 });
 router.afterEach((to, from) => {
-  debugger;
   store.commit("ui/setLastView", from.fullPath);
 });
 
