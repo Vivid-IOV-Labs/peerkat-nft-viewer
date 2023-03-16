@@ -1,29 +1,31 @@
 <template>
-  <div
-    v-if="sharedNFTs.length"
-    id="scroller"
-    ref="scroller"
-    class="d-flex h-100 flex-row flex-nowrap overflow-auto pb-4"
-    style="padding-bottom: 2rem"
-  >
-    <div v-for="nft in sharedNFTs" :key="nft.issuer" class="col-11">
-      <nft-shared-card :nft="nft"></nft-shared-card>
+  <div class="h-100 overflow-hidden d-flex flex-column">
+    <div
+      v-if="sharedNFTs.length"
+      id="scroller"
+      ref="scroller"
+      class="d-flex flex-row flex-nowrap overflow-auto pb-2"
+      style="flex: 1; align-items: center"
+    >
+      <div v-for="nft in sharedNFTs" :key="nft.issuer" class="col-11">
+        <nft-shared-card :nft="nft"></nft-shared-card>
+      </div>
     </div>
-  </div>
-  <div v-else style="margin-top: 13%">
-    <h5 class="text-center mt-2">
-      Peerkat is not able to find any NFTs shared with this wallet
-    </h5>
-    <ul class="mt-2 p-2">
-      <li class="pb-2">
-        To view another user’s XRPL-issued NFT please ensure that you have
-        followed the correct link shared by the NFT owner
-      </li>
-      <li class="pb-2">
-        You can view the NFT in fullscreen mode and inspect the transaction
-        history of an NFT via the Bithomp explorer
-      </li>
-    </ul>
+    <div v-else style="margin-top: 13%">
+      <h5 class="text-center mt-2">
+        Peerkat is not able to find any NFTs shared with this wallet
+      </h5>
+      <ul class="mt-2 p-2">
+        <li class="pb-2">
+          To view another user’s XRPL-issued NFT please ensure that you have
+          followed the correct link shared by the NFT owner
+        </li>
+        <li class="pb-2">
+          You can view the NFT in fullscreen mode and inspect the transaction
+          history of an NFT via the Bithomp explorer
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 <script lang="ts">
