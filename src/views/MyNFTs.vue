@@ -44,6 +44,12 @@
       </li>
     </ul>
   </div>
+  <external-link
+    class="mt-1 rounded flex-center text-center d-flex"
+    url="https://docs.google.com/forms/d/e/1FAIpQLSdx3iena1rUPaHrj99kDuI0wEaoR5FV3nkWVVsaeouppUZ4_w/viewform"
+  >
+    <img class="w-100" src="/banner-primary.png" />
+  </external-link>
 </template>
 
 <script lang="ts">
@@ -60,10 +66,12 @@ import useIntersectionObserver from "../composable/useIntersectionObserver";
 import { devlog } from "../utils/devlog";
 import { delay } from "../utils/delay";
 import { useRoute } from "vue-router";
+import ExternalLink from "@/components/ExternalLink.vue";
 
 export default defineComponent({
   components: {
     NftCard,
+    ExternalLink,
   },
   beforeRouteLeave() {
     const scroller = <HTMLElement>document.getElementById("scroller");
