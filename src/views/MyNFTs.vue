@@ -44,12 +44,6 @@
       </li>
     </ul>
   </div>
-  <external-link
-    class="mt-1 rounded flex-center text-center d-flex"
-    url="https://docs.google.com/forms/d/e/1FAIpQLSdx3iena1rUPaHrj99kDuI0wEaoR5FV3nkWVVsaeouppUZ4_w/viewform"
-  >
-    <img class="w-100" src="/banner-primary.png" />
-  </external-link>
 </template>
 
 <script lang="ts">
