@@ -1,5 +1,5 @@
 <template>
-  <base-card>
+  <base-card style="height: 70vh">
     <template #picture>
       <figure style="overflow: hidden; height: 100%">
         <a

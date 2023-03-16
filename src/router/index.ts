@@ -347,7 +347,8 @@ router.beforeEach(async (to, from, next) => {
   }
 });
 router.afterEach((to, from) => {
-  store.commit("ui/setLastView", from.fullPath);
+  const path = from.fullPath ? from.fullPath : "/";
+  store.commit("ui/setLastView", path);
 });
 
 // router.afterEach((to, from, failure) => {
