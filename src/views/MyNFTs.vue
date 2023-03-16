@@ -3,7 +3,7 @@
     v-if="NFTMedia.length"
     id="scroller"
     ref="scroller"
-    class="d-flex flex-row flex-nowrap overflow-auto pb-4"
+    class="d-flex h-100 flex-row flex-nowrap overflow-auto pb-4"
     :class="{ loading }"
     style="padding-bottom: 2rem"
   >
