@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 70vh" class="card">
+  <div class="card">
     <div style="height: 60%; overflow: hidden">
       <slot name="picture"></slot>
     </div>

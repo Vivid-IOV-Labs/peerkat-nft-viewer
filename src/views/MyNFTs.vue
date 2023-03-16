@@ -10,6 +10,7 @@
     >
       <div v-for="nft in NFTMedia" :key="nft.currency" class="col-11">
         <nft-card
+          style="height: 60vh"
           v-if="nft"
           :id="`tokenID-${nft.currency}`"
           :nft="nft"
@@ -19,7 +20,7 @@
         v-if="!endload"
         id="sentinel"
         ref="sentinel"
-        style="height: 70vh"
+        style="height: 60vh"
         class="col-11 card"
       >
         <div class="d-flex align-items-center justify-content-center card-body">
