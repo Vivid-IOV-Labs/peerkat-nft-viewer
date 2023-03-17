@@ -1,5 +1,4 @@
 <template>
-  <VueAnnouncer />
   <notifications :duration="1000" position="bottom center" />
   <!-- <div
     v-if="isLoading"
