@@ -1,9 +1,10 @@
 <template>
-  <a href="#" class="mb-4 btn btn-link w-100" @click.prevent="back">Back </a>
+  <a href="#" class="mb-4 btn btn-link w-100" @click="back">Back </a>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 export default defineComponent({
   props: {
     path: { type: String, default: null },
@@ -11,16 +12,15 @@ export default defineComponent({
   },
   async setup(props) {
     const router = useRouter();
-
+    const store = useStore();
+    const lastView = computed(() => store.getters["ui/getLastView"]);
     return {
       back() {
-        if (props.path)
-          router.push({
-            path: `${props.path}`,
-            query: props.query,
-            replace: true,
-          });
-        else router.go(-1);
+        if (props.path) {
+          router.push({ path: props.path });
+        } else {
+          router.push({ path: lastView.value });
+        }
       },
     };
   },

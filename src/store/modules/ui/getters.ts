@@ -6,4 +6,5 @@ export default {
     state.scrollPositionWallet,
   getScrollPositionShared: (state: UiState): number =>
     state.scrollPositionShared,
+  getLastView: (state: UiState): string => state.lastView,
 };

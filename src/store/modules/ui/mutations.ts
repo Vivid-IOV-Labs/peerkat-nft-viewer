@@ -11,6 +11,9 @@ const mutations: MutationTree<UiState> = {
   setScrollPositionWallet(state: UiState, scrollPositionWallet: number): void {
     state.scrollPositionWallet = scrollPositionWallet;
   },
+  setLastView(state: UiState, lastView: string): void {
+    state.lastView = lastView;
+  },
 };
 
 export default mutations;

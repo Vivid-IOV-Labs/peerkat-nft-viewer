@@ -1,48 +1,67 @@
 <template>
-  <div
-    v-if="NFTMedia.length"
-    id="scroller"
-    ref="scroller"
-    class="d-flex h-100 flex-row flex-nowrap overflow-auto pb-4"
-    :class="{ loading }"
-    style="padding-bottom: 2rem"
-  >
-    <div v-for="nft in NFTMedia" :key="nft.currency" class="col-11">
-      <nft-card
-        v-if="nft"
-        :id="`tokenID-${nft.currency}`"
-        :nft="nft"
-      ></nft-card>
+  <div class="h-100 overflow-hidden d-flex flex-column">
+    <div
+      v-if="NFTMedia.length"
+      id="scroller"
+      ref="scroller"
+      class="d-flex flex-row flex-nowrap overflow-auto pb-2"
+      style="flex: 1; align-items: center"
+      :class="{ loading }"
+    >
+      <div v-for="nft in NFTMedia" :key="nft.currency" class="col-11">
+        <nft-card
+          style="height: 70vh"
+          v-if="nft"
+          :id="`tokenID-${nft.currency}`"
+          :nft="nft"
+        ></nft-card>
+      </div>
+      <div
+        v-if="!endload"
+        id="sentinel"
+        ref="sentinel"
+        style="height: 70vh"
+        class="col-11 card"
+      >
+        <div class="d-flex align-items-center justify-content-center card-body">
+          <div
+            class="spinner-border"
+            style="width: 4rem; height: 4rem; color: #666"
+            role="status"
+          ></div>
+        </div>
+        <h5>Loading Next NFTs...</h5>
+      </div>
     </div>
     <div
-      v-if="!endload"
-      id="sentinel"
-      ref="sentinel"
-      style="height: 100%"
-      class="col-11 card"
+      v-if="!NFTMedia.length"
+      class="d-flex flex-column overflow-auto pb-2"
+      style="flex: 1; align-items: center; margin-top: 13%"
     >
-      <div class="d-flex align-items-center justify-content-center card-body">
-        <div
-          class="spinner-border"
-          style="width: 4rem; height: 4rem; color: #666"
-          role="status"
-        ></div>
-      </div>
-      <h5>Loading Next NFTs...</h5>
+      <h5 class="text-center mt-2">
+        Peerkat is not able to find any NFTs in this wallet
+      </h5>
+      <ul class="mt-2">
+        <li class="pb-2">
+          You can view an NFT in fullscreen mode, view current offers for your
+          NFTs, inspect the transaction history of an NFT via the Bithomp
+          explorer and share your NFTs with another user to enable them to view
+          the NFTs too
+        </li>
+      </ul>
     </div>
-  </div>
-  <div v-if="!NFTMedia.length" style="margin-top: 13%">
-    <h5 class="text-center mt-2">
-      Peerkat is not able to find any NFTs in this wallet
-    </h5>
-    <ul class="mt-2 p-2">
-      <li class="pb-2">
-        You can view an NFT in fullscreen mode, view current offers for your
-        NFTs, inspect the transaction history of an NFT via the Bithomp explorer
-        and share your NFTs with another user to enable them to view the NFTs
-        too
-      </li>
-    </ul>
+    <external-link
+      v-if="NFTMedia.length"
+      class="rounded flex-center text-center d-flex w-100"
+      url="https://docs.google.com/forms/d/e/1FAIpQLSdx3iena1rUPaHrj99kDuI0wEaoR5FV3nkWVVsaeouppUZ4_w/viewform"
+      style="heigth: 10%"
+    >
+      <img
+        style="object-fit: cover; height: 100%; object-position: center center"
+        class="img-fluid w-100 h-100"
+        src="/banner-primary.png"
+      />
+    </external-link>
   </div>
 </template>
 
@@ -60,10 +79,12 @@ import useIntersectionObserver from "../composable/useIntersectionObserver";
 import { devlog } from "../utils/devlog";
 import { delay } from "../utils/delay";
 import { useRoute } from "vue-router";
+import ExternalLink from "@/components/ExternalLink.vue";
 
 export default defineComponent({
   components: {
     NftCard,
+    ExternalLink,
   },
   beforeRouteLeave() {
     const scroller = <HTMLElement>document.getElementById("scroller");

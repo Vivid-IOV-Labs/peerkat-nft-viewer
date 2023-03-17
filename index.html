@@ -4,7 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" href="/favicon.ico" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> 
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">` -->
+
   <link rel="apple-touch-icon" sizes="57x57" href="icons/apple-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="icons/apple-icon-60x60.png">
   <link rel="apple-touch-icon" sizes="72x72" href="icons/apple-icon-72x72.png">
@@ -22,10 +24,10 @@
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="msapplication-TileImage" content="icons/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
-
   <link rel="stylesheet" href="//use.typekit.net/vtt7ckl.css">
   <script src="https://unpkg.com/xrpl@2.1.0-beta.1"></script>
-    
+  <!-- <script src="https://unpkg.com/xrpl@2.0.0/build/xrpl-latest-min.js"></script> -->
+
   <script src="https://cdn.jsdelivr.net/npm/xumm-sdk/dist/browser.min.js"></script>  
    <script src="https://xumm.app/assets/cdn/xumm-xapp-sdk.min.js"></script>
 
@@ -44,19 +46,42 @@
   </script>
 </head>
 <style>
-html,
+/* html,
 body,
 .main-container {
   height: 100%;
   width: 100%;
+  overflow: hidden;
+} */
+
+/* html {
+    height  : 100%;
+    overflow: hidden;
+    position: relative;
+}
+body {
+    height  : 100%;
+    overflow: auto;
+    position: relative;
+} */
+
+
+ html {
+  position: fixed;
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
-  overflow: hidden;
-}
+  width: 100vw;
+  height: 100vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+} 
 </style>
 <body >
-  <div class="main-container" id="app"></div>
+  <div class="h-100  d-flex flex-column" id="app"></div>
   <script type="module" src="/src/main.ts"></script>
 </body>
 
