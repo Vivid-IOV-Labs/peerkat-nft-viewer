@@ -65,15 +65,19 @@
     </p>
     <div style="font-size: 0.8rem">
       <nav class="d-flex justify-content-center mb-4">
-        <external-link class="mr-2" :url="`https://twitter.com/PeerkatOfficial`"
+        <external-link
+          class="mr-2 btn btn-primary btn-sm"
+          :url="`https://twitter.com/PeerkatOfficial`"
           >@PeerkatOfficial</external-link
         >
         <external-link
-          class="mr-2"
+          class="mr-2 btn btn-primary btn-sm"
           :url="`https://discord.com/invite/mAHEN8kCdr`"
           >Discord
         </external-link>
-        <external-link class="mr-2" :url="`https://peerkat.io/privacy`"
+        <external-link
+          class="mr-2 btn btn-primary btn-sm"
+          :url="`https://peerkat.io/privacy`"
           >Privacy notice</external-link
         >
       </nav>
