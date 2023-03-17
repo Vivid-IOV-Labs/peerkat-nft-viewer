@@ -16,20 +16,20 @@ const store = createStore({
   plugins:
     xummSandbox == "main"
       ? [
-          // createPersistedState({
-          //   paths: [
-          //     "nft.sharedwithme",
-          //     "nft.currentNFT",
-          //     "nft.sharedBuyOffers",
-          //   ],
-          // }),
+          createPersistedState({
+            paths: [
+              "nft.sharedwithme",
+              "nft.currentNFT",
+              "nft.sharedBuyOffers",
+            ],
+          }),
         ]
       : [
           createLogger(),
           createPersistedState({
             paths: [
               "nft.sharedwithme",
-              "user",
+              // "user",
               "nft.currentNFT",
               "nft.sharedBuyOffers",
             ],
