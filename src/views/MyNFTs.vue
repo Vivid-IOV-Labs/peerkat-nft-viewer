@@ -33,11 +33,15 @@
         <h5>Loading Next NFTs...</h5>
       </div>
     </div>
-    <div v-if="!NFTMedia.length" style="margin-top: 13%">
+    <div
+      v-if="!NFTMedia.length"
+      class="d-flex flex-column overflow-auto pb-2"
+      style="flex: 1; align-items: center; margin-top: 13%"
+    >
       <h5 class="text-center mt-2">
         Peerkat is not able to find any NFTs in this wallet
       </h5>
-      <ul class="mt-2 p-2">
+      <ul class="mt-2">
         <li class="pb-2">
           You can view an NFT in fullscreen mode, view current offers for your
           NFTs, inspect the transaction history of an NFT via the Bithomp
@@ -47,11 +51,15 @@
       </ul>
     </div>
     <external-link
-      class="mb-4 rounded flex-center text-center d-flex"
+      class="rounded flex-center text-center d-flex"
       url="https://docs.google.com/forms/d/e/1FAIpQLSdx3iena1rUPaHrj99kDuI0wEaoR5FV3nkWVVsaeouppUZ4_w/viewform"
       style="heigth: 10%"
     >
-      <img class="w-100" src="/banner-primary.png" />
+      <img
+        style="object-fit: cover; height: 100%; object-position: center center"
+        class="img-fluid"
+        src="/banner-primary.png"
+      />
     </external-link>
   </div>
 </template>

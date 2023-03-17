@@ -24,7 +24,7 @@
         ></base-button>
       </h4>
       <h5 class="mt-4 text-center bold">FAQs</h5>
-      <ul class="mt-2 mb-4 p-2">
+      <ul class="mt-2 mb-4">
         <li class="pb-2">
           <strong>Why is my NFT's artwork not being displayed? </strong><br />
           It could be due to a slow connection or the viewer is unable to read

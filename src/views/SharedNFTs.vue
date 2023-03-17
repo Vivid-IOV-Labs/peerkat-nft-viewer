@@ -11,11 +11,15 @@
         <nft-shared-card :nft="nft"></nft-shared-card>
       </div>
     </div>
-    <div v-else style="margin-top: 13%">
+    <div
+      v-else
+      class="d-flex flex-column overflow-auto pb-2"
+      style="flex: 1; align-items: center; margin-top: 13%"
+    >
       <h5 class="text-center mt-2">
         Peerkat is not able to find any NFTs shared with this wallet
       </h5>
-      <ul class="mt-2 p-2">
+      <ul class="mt-2">
         <li class="pb-2">
           To view another user’s XRPL-issued NFT please ensure that you have
           followed the correct link shared by the NFT owner

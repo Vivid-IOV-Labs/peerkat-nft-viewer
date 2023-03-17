@@ -1,6 +1,6 @@
 <template>
   <HeaderNavigation style="height: 10% !important" />
-  <main style="flex: 1" class="d-flex flex-column px-2">
+  <main style="flex: 1" class="d-flex flex-column px-2 container-fluid pb-4">
     <slot></slot>
   </main>
 </template>
