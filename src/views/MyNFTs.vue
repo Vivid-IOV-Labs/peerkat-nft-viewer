@@ -51,13 +51,14 @@
       </ul>
     </div>
     <external-link
-      class="rounded flex-center text-center d-flex"
+      v-if="NFTMedia.length"
+      class="rounded flex-center text-center d-flex w-100"
       url="https://docs.google.com/forms/d/e/1FAIpQLSdx3iena1rUPaHrj99kDuI0wEaoR5FV3nkWVVsaeouppUZ4_w/viewform"
       style="heigth: 10%"
     >
       <img
         style="object-fit: cover; height: 100%; object-position: center center"
-        class="img-fluid"
+        class="img-fluid w-100 h-100"
         src="/banner-primary.png"
       />
     </external-link>
