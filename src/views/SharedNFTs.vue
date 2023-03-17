@@ -8,7 +8,7 @@
       style="flex: 1; align-items: center"
     >
       <div v-for="nft in sharedNFTs" :key="nft.issuer" class="col-11">
-        <nft-shared-card style="height: 70vh" :nft="nft"></nft-shared-card>
+        <nft-shared-card :nft="nft"></nft-shared-card>
       </div>
     </div>
     <div v-else style="margin-top: 13%">
