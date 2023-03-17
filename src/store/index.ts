@@ -29,7 +29,7 @@ const store = createStore({
           createPersistedState({
             paths: [
               "nft.sharedwithme",
-              // "user",
+              "user",
               "nft.currentNFT",
               "nft.sharedBuyOffers",
             ],
