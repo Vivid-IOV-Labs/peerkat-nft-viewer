@@ -19,7 +19,7 @@ const PDFJS = window["pdfjs-dist/build/pdf"];
 
 // PDFJS.GlobalWorkerOptions.workerSrc =
 //   "//mozilla.github.io/pdf.js/build/pdf.worker.js";
-PDFJS.disableWorker = true;
+if (PDFJS && PDFJS.disableWorker) PDFJS.disableWorker = true;
 // const ipfsPublicGateway = import.meta.env.VITE_PUBLIC_IPFS_GATEWAY;
 // const ipfsGateway = import.meta.env.VITE_IPFS_GATEWAY;
 const walletSecret = import.meta.env.VITE_WALLET_SECRET;
