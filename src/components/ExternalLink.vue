@@ -1,8 +1,8 @@
 <template>
-  <base-button v-if="isInXumm" href="#" @click="openLink">
+  <a v-if="isInXumm" href="#" @click="openLink">
     <slot />
-  </base-button>
-  <a v-else :href="url" target="_blank" class="btn btn-primary btn-sm">
+  </a>
+  <a v-else :href="url" target="_blank">
     <slot />
   </a>
 </template>
@@ -10,11 +10,7 @@
 import { defineComponent, inject } from "vue";
 import XummService from "../services/XummService";
 
-import BaseButton from "./BaseButton.vue";
 export default defineComponent({
-  components: {
-    BaseButton,
-  },
   props: {
     url: { type: String, default: () => "" },
   },

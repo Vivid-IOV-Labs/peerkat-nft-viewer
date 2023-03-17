@@ -100,7 +100,7 @@
                   :class="{ active: isActive }"
                   :href="href"
                   @click="navigate"
-                  >My Wallet</a
+                  >My NFTs</a
                 >
               </router-link>
             </li>
@@ -116,7 +116,7 @@
                   :class="{ active: isActive }"
                   :href="href"
                   @click="navigate"
-                  >Shared with me</a
+                  >Shared</a
                 >
               </router-link>
             </li>

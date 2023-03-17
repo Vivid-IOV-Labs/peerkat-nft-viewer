@@ -14,9 +14,9 @@ const routes = [
     meta: {
       withAuth: true,
       title: "Welcome Page",
-      announcer: {
-        message: "Welcome Page",
-      },
+      // announcer: {
+      //   message: "Welcome Page",
+      // },
     },
   },
   {
@@ -26,9 +26,9 @@ const routes = [
     meta: {
       withAuth: false,
       title: "Holding Page",
-      announcer: {
-        message: "Holding Page",
-      },
+      // announcer: {
+      //   message: "Holding Page",
+      // },
     },
   },
   {
@@ -38,9 +38,9 @@ const routes = [
     meta: {
       withAuth: true,
       title: "NetowrkError Page",
-      announcer: {
-        message: "NetowrkError Page",
-      },
+      // announcer: {
+      //   message: "NetowrkError Page",
+      // },
     },
   },
   {
@@ -50,9 +50,9 @@ const routes = [
     meta: {
       withAuth: true,
       title: "Help Page",
-      announcer: {
-        message: "Help Page",
-      },
+      // announcer: {
+      //   message: "Help Page",
+      // },
     },
   },
   {
@@ -62,9 +62,9 @@ const routes = [
     meta: {
       withAuth: true,
       title: "Home Wallet Page",
-      announcer: {
-        message: "Home Wallet Page",
-      },
+      // announcer: {
+      //   message: "Home Wallet Page",
+      // },
     },
     children: [
       {
@@ -77,9 +77,9 @@ const routes = [
         name: "NFTWalletView",
         component: () => import("../views/NFTWalletView.vue"),
         meta: {
-          announcer: {
-            message: "NFT View Page",
-          },
+          // announcer: {
+          //   message: "NFT View Page",
+          // },
         },
       },
     ],
@@ -104,9 +104,9 @@ const routes = [
         component: () => import("../views/NFTSharedDetail.vue"),
         meta: {
           withAuth: true,
-          announcer: {
-            message: "NFT Shared Detail Page",
-          },
+          // announcer: {
+          //   message: "NFT Shared Detail Page",
+          // },
         },
       },
       {
@@ -115,9 +115,9 @@ const routes = [
         component: () => import("../views/NFTSharedView.vue"),
         meta: {
           withAuth: true,
-          announcer: {
-            message: "NFT Shared View Page",
-          },
+          // announcer: {
+          //   message: "NFT Shared View Page",
+          // },
         },
       },
     ],
@@ -149,9 +149,9 @@ const routes = [
     meta: {
       withAuth: true,
       title: "Home Wallet Page",
-      announcer: {
-        message: "Home Wallet Page",
-      },
+      // announcer: {
+      //   message: "Home Wallet Page",
+      // },
     },
     children: [
       {
@@ -164,9 +164,9 @@ const routes = [
         name: "Buy",
         component: () => import("../views/Buy.vue"),
         meta: {
-          announcer: {
-            message: "NFT View Page",
-          },
+          // announcer: {
+          //   message: "NFT View Page",
+          // },
         },
         children: [],
       },
@@ -185,9 +185,9 @@ const routes = [
         name: "SellOfferShared",
         component: () => import("../views/Shared.vue"),
         meta: {
-          announcer: {
-            message: "NFT View Page",
-          },
+          // announcer: {
+          //   message: "NFT View Page",
+          // },
         },
         children: [
           {
@@ -215,9 +215,9 @@ const routes = [
         name: "SharedBuyOffers",
         component: () => import("../views/Shared.vue"),
         meta: {
-          announcer: {
-            message: "NFT View Page",
-          },
+          // announcer: {
+          //   message: "NFT View Page",
+          // },
         },
         children: [
           {
@@ -345,6 +345,10 @@ router.beforeEach(async (to, from, next) => {
       }
     }
   }
+});
+router.afterEach((to, from) => {
+  const path = from.fullPath ? from.fullPath : "/";
+  store.commit("ui/setLastView", path);
 });
 
 // router.afterEach((to, from, failure) => {

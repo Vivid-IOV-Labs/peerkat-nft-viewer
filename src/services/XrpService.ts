@@ -19,7 +19,7 @@ const PDFJS = window["pdfjs-dist/build/pdf"];
 
 // PDFJS.GlobalWorkerOptions.workerSrc =
 //   "//mozilla.github.io/pdf.js/build/pdf.worker.js";
-PDFJS.disableWorker = true;
+if (PDFJS && PDFJS.disableWorker) PDFJS.disableWorker = true;
 // const ipfsPublicGateway = import.meta.env.VITE_PUBLIC_IPFS_GATEWAY;
 // const ipfsGateway = import.meta.env.VITE_IPFS_GATEWAY;
 const walletSecret = import.meta.env.VITE_WALLET_SECRET;
@@ -946,13 +946,7 @@ export async function getOneXls20(nft: any) {
         ? "video"
         : "image";
   }
-  if (
-    NFTokenTaxon ===
-    "000803E8CEC1EB1B331D8A55E39D451DE8E13F59CF5509D5175146160000007C"
-  ) {
-    console.log(details);
-    debugger;
-  }
+
   // const schmeaUri =
   //   schema.split("//")[0] === "ipfs:"
   //     ? schema.split("//")[1] + "/$Schema.json"
