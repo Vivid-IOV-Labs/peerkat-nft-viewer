@@ -208,7 +208,7 @@ export default defineComponent({
         }
       },
       async goToOffer() {
-        await store.commit("nft/setCurrent", props.nft);
+        // await store.commit("nft/setCurrent", props.nft);
         router.push({
           path: `/offers/buy`,
         });

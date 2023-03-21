@@ -1,6 +1,6 @@
 <template>
   <div style="height: 70vh">
-    <BackLink :query="{ tokenID: nft.currency }" />
+    <BackLink />
     <div v-if="nft" class="h-100">
       <figure class="w-100">
         <load-media :autoplay="true" :nft="nft"></load-media>

@@ -1,5 +1,5 @@
 <template>
-  <a href="#" class="mb-4 btn btn-link w-100" @click="back">Back </a>
+  <router-link class="mb-4 btn btn-link w-100" :to="link">Back </router-link>
 </template>
 <script lang="ts">
 import { computed, defineComponent } from "vue";
@@ -14,12 +14,15 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
     const lastView = computed(() => store.getters["ui/getLastView"]);
+    console.log(lastView.value);
+    const link = props.path ? props.path : lastView.value || "/";
     return {
+      link,
       back() {
         if (props.path) {
           router.push({ path: props.path });
         } else {
-          router.push({ path: lastView.value });
+          router.push({ path: lastView.value || "/" });
         }
       },
     };
