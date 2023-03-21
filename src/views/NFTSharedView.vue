@@ -1,7 +1,6 @@
 <template>
-  <div style="height: 60vh" class="w-100 p-1">
-    <a href="#" class="mb-4 btn btn-link w-100" @click.prevent="back">Back </a>
-
+  <div style="height: 70vh">
+    <BackLink />
     <div v-if="nft" class="h-100">
       <figure class="w-100">
         <load-media :autoplay="true" :nft="nft"></load-media>
@@ -10,15 +9,17 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, computed, watch, ref } from "vue";
+import { defineComponent, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { getNetworkTypeFromCode } from "../utils/getNetworkTypeFromCode";
 import LoadMedia from "@/components/LoadMedia.vue";
+import BackLink from "@/components/BackLink.vue";
 
 export default defineComponent({
   components: {
     LoadMedia,
+    BackLink,
   },
   async setup() {
     const route = useRoute();

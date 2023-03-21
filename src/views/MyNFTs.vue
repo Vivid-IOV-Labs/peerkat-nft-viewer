@@ -227,7 +227,11 @@ export default defineComponent({
       { deep: false }
     );
 
-    if (lines.value && lines.value.length === 0) {
+    if (
+      lines.value &&
+      lines.value.length === 0 &&
+      !(lines.value.length + xls20count.value.length > NFTMedia.value.length)
+    ) {
       try {
         await store.dispatch("nft/fetchNftLines", {
           walletAddress: walletAddress.value,

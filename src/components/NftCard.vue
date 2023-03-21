@@ -224,7 +224,7 @@ export default defineComponent({
         copyText(url, params);
       },
       view() {
-        store.commit("nft/setCurrent", props.nft);
+        //store.commit("nft/setCurrent", props.nft);
 
         if (!props.nft.error_code) {
           router.push({
