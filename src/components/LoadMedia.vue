@@ -92,14 +92,12 @@ export default defineComponent({
             ? `/apidev/assets/animations/${props.nft.currency}/animation.${extnojpg}`
             : `/apidev/assets/images/${props.nft.currency}/full/image.${extnojpg}`;
           // thumbnailUrl.value = `/apidev/assets/images/${props.nft.currency}/200px/image.${ext}`;
-
           const isReturned = await fetch(url, {
             method: "HEAD",
           });
           if (isReturned.ok && isReturned.status === 200) {
             mediaUrl.value = url;
             thumbnailUrl.value = props.nft.thumbnail;
-
             const params = {
               tokenID: props.nft.currency,
               mediaUrl: mediaUrl.value,
@@ -134,7 +132,10 @@ export default defineComponent({
           const params = {
             tokenID: props.nft.currency,
             mediaUrl: mediaUrl.value,
-            thumbnailUrl: thumbnailUrl.value,
+            thumbnailUrl:
+              thumbnailUrl.value === "/loading.gif"
+                ? undefined
+                : thumbnailUrl.value,
           };
           await store.commit("nft/setXls20MediaUrlById", params);
 
