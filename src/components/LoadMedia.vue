@@ -37,7 +37,7 @@
   />
 </template>
 <script lang="ts">
-import { computed, defineComponent, reactive, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import { getIpfsMedia, logFailedToLoad } from "../services/XrpService";
 
@@ -66,6 +66,8 @@ export default defineComponent({
       } else if (props.nft.standard == "XLS-14d/SOLO") {
         const resp = await getIpfsMedia(props.nft.url);
         mediaUrl.value = resp.url;
+        thumbnailUrl.value = props.nft.thumbnail;
+
         const params = {
           tokenID: props.nft.currency,
           mediaUrl: mediaUrl.value,
@@ -96,6 +98,8 @@ export default defineComponent({
           });
           if (isReturned.ok && isReturned.status === 200) {
             mediaUrl.value = url;
+            thumbnailUrl.value = props.nft.thumbnail;
+
             const params = {
               tokenID: props.nft.currency,
               mediaUrl: mediaUrl.value,
@@ -161,7 +165,7 @@ export default defineComponent({
     // });
 
     const videoUrl = computed(() =>
-      props.nft.thumbnailUrl ? mediaUrl.value : `${mediaUrl.value}#t=0.2`
+      props.nft.thumbnailUrl ? mediaUrl.value : `${mediaUrl.value}#t=0.5`
     );
 
     // if (props.nft.media_type.includes("video")) {
