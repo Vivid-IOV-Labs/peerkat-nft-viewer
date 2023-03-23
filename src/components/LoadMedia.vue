@@ -4,6 +4,7 @@
     :src="videoUrl"
     :poster="thumbnailUrl"
     :autoplay="autoplay"
+    :controls="controls"
     loop
     muted
     playsinline
@@ -45,6 +46,7 @@ export default defineComponent({
   props: {
     nft: { type: Object, required: true },
     autoplay: { type: Boolean, default: () => false },
+    controls: { type: Boolean, default: () => false },
   },
   async setup(props) {
     const mediaUrl = ref("");
