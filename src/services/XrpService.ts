@@ -937,7 +937,6 @@ export async function getOneXls20(nft: any) {
           NFTokenID,
           type
         );
-        debugger;
         media_type = contentType;
       }
 
