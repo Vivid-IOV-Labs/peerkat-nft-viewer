@@ -753,8 +753,9 @@ async function getXLS20ContentType(
   type: string
 ): Promis<any> {
   try {
-    const url = `/apidev/assets/${type}s/${NFTokenID}/${type}`;
-    const response = await fetch(url, { method: "HEAD" }).then((r) => r.json());
+    const end = type === "image" ? `full/${type}` : type;
+    const url = `/apidev/assets/${type}s/${NFTokenID}/${end}`;
+    const response = await fetch(url, { method: "HEAD" });
     return response.headers.get("Content-Type");
   } catch (err) {
     const response = await getIpfsMedia(mediaUrl);
