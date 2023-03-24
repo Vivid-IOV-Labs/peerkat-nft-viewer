@@ -1017,7 +1017,13 @@ export async function getOneXls20(nft: any) {
   // } else {
 
   // }
-
+  const badgetypes = {
+    animation: details.animation || details.animation_url,
+    image: details.image || details.image_url,
+    video: details.video,
+    file: details.file,
+    audio: details.audio,
+  };
   return {
     tokenTaxon: NFTokenTaxon,
     issuer: Issuer,
@@ -1038,6 +1044,7 @@ export async function getOneXls20(nft: any) {
     nft_serial: nft.nft_serial,
     URI,
     Domain: domain,
+    badgetypes,
   };
 }
 
