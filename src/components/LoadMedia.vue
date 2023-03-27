@@ -4,6 +4,7 @@
     :src="videoUrl"
     :poster="thumbnailUrl"
     :autoplay="autoplay"
+    :controls="controls"
     loop
     muted
     playsinline
@@ -37,7 +38,7 @@
   />
 </template>
 <script lang="ts">
-import { computed, defineComponent, reactive, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import { getIpfsMedia, logFailedToLoad } from "../services/XrpService";
 
@@ -45,6 +46,7 @@ export default defineComponent({
   props: {
     nft: { type: Object, required: true },
     autoplay: { type: Boolean, default: () => false },
+    controls: { type: Boolean, default: () => false },
   },
   async setup(props) {
     const mediaUrl = ref("");
@@ -66,6 +68,8 @@ export default defineComponent({
       } else if (props.nft.standard == "XLS-14d/SOLO") {
         const resp = await getIpfsMedia(props.nft.url);
         mediaUrl.value = resp.url;
+        thumbnailUrl.value = props.nft.thumbnail;
+
         const params = {
           tokenID: props.nft.currency,
           mediaUrl: mediaUrl.value,
@@ -90,12 +94,12 @@ export default defineComponent({
             ? `/apidev/assets/animations/${props.nft.currency}/animation.${extnojpg}`
             : `/apidev/assets/images/${props.nft.currency}/full/image.${extnojpg}`;
           // thumbnailUrl.value = `/apidev/assets/images/${props.nft.currency}/200px/image.${ext}`;
-
           const isReturned = await fetch(url, {
             method: "HEAD",
           });
           if (isReturned.ok && isReturned.status === 200) {
             mediaUrl.value = url;
+            thumbnailUrl.value = props.nft.thumbnail;
             const params = {
               tokenID: props.nft.currency,
               mediaUrl: mediaUrl.value,
@@ -130,7 +134,10 @@ export default defineComponent({
           const params = {
             tokenID: props.nft.currency,
             mediaUrl: mediaUrl.value,
-            thumbnailUrl: thumbnailUrl.value,
+            thumbnailUrl:
+              thumbnailUrl.value === "/loading.gif"
+                ? undefined
+                : thumbnailUrl.value,
           };
           await store.commit("nft/setXls20MediaUrlById", params);
 
