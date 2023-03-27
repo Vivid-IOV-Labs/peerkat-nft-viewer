@@ -47,14 +47,110 @@ export default defineComponent({
     nft: { type: Object, required: true },
     autoplay: { type: Boolean, default: () => false },
     controls: { type: Boolean, default: () => false },
+    preview: { type: Boolean, default: () => true },
   },
   async setup(props) {
     const mediaUrl = ref("");
     const store = useStore();
     const thumbnailUrl = ref("/loading.gif");
     const loadingMedia = ref(false);
-
+    const nodetype = computed(() => store.getters["user/getNodeType"]);
     async function fetchMedia() {
+      if (props.nft.standard == "XLS-14" || props.nft.standard == "XLS-16") {
+        mediaUrl.value = props.nft.url;
+        thumbnailUrl.value = props.nft.thumbnail;
+
+        const params = {
+          tokenID: props.nft.currency,
+          mediaUrl: mediaUrl.value,
+          thumbnailUrl: thumbnailUrl.value,
+        };
+        await store.commit("nft/setXlsMediaUrlById", params);
+      } else if (props.nft.standard == "XLS-14d/SOLO") {
+        const resp = await getIpfsMedia(props.nft.url);
+        mediaUrl.value = resp.url;
+        thumbnailUrl.value = props.nft.thumbnail;
+
+        const params = {
+          tokenID: props.nft.currency,
+          mediaUrl: mediaUrl.value,
+          thumbnailUrl: thumbnailUrl.value,
+        };
+
+        await store.commit("nft/setXlsMediaUrlById", params);
+      } else {
+        try {
+          if (nodetype.value !== "MAINNET") {
+            throw new Error("not mainnet");
+          }
+          const ext =
+            props.nft.media_type && props.nft.media_type.split("/").pop()
+              ? props.nft.media_type.split("/").pop()
+              : props.nft.thumbnail
+              ? props.nft.thumbnail.split(".").pop()
+              : "jpg";
+
+          const extnojpg = ext.replace("jpg", "jpeg");
+
+          const url = props.nft.type?.includes("video")
+            ? `/apidev/assets/videos/${props.nft.currency}/video.${extnojpg}`
+            : props.nft.type?.includes("animation")
+            ? `/apidev/assets/animations/${props.nft.currency}/animation.${extnojpg}`
+            : `/apidev/assets/images/${props.nft.currency}/full/image.${extnojpg}`;
+          thumbnailUrl.value = `/apidev/assets/images/${props.nft.currency}/200px/image.${ext}`;
+          const isReturned = await fetch(url, {
+            method: "HEAD",
+          });
+          if (isReturned.ok && isReturned.status === 200) {
+            mediaUrl.value = url;
+            thumbnailUrl.value = props.nft.thumbnail;
+            const params = {
+              tokenID: props.nft.currency,
+              mediaUrl: mediaUrl.value,
+              thumbnailUrl: thumbnailUrl.value,
+            };
+            await store.commit("nft/setXls20MediaUrlById", params);
+          } else {
+            const t = await logFailedToLoad({
+              Issuer: props.nft.issuer,
+              NFTokenID: props.nft.currency,
+              URI: props.nft.URI,
+              Domain: props.nft.Domain,
+              NFTokenTaxon: props.nft.tokenTaxon,
+              Source: "xummapp-frontend",
+            });
+
+            throw new Error("Error Status:" + isReturned.status);
+          }
+        } catch (err) {
+          if (props.nft.url.includes("https")) {
+            mediaUrl.value = props.nft.url;
+          } else {
+            const resp = await getIpfsMedia(props.nft.url);
+            mediaUrl.value = resp.url;
+          }
+        } finally {
+          if (props.nft.media_type?.includes("video") && props.nft.thumbnail) {
+            const resp = await getIpfsMedia(props.nft.thumbnail);
+
+            thumbnailUrl.value = resp.url;
+          }
+          const params = {
+            tokenID: props.nft.currency,
+            mediaUrl: mediaUrl.value,
+            thumbnailUrl:
+              thumbnailUrl.value === "/loading.gif"
+                ? undefined
+                : thumbnailUrl.value,
+          };
+          await store.commit("nft/setXls20MediaUrlById", params);
+
+          //  mediaUrl.value = "https://w3s.link/ipfs/" + props.nft.url;
+          // mediaUrl.value = "https://peerkat.mypinata.cloud/ipfs/" + props.nft.url;
+        }
+      }
+    }
+    async function fetchThumbanil() {
       if (props.nft.standard == "XLS-14" || props.nft.standard == "XLS-16") {
         mediaUrl.value = props.nft.url;
         thumbnailUrl.value = props.nft.thumbnail;
@@ -93,7 +189,7 @@ export default defineComponent({
             : props.nft.type?.includes("animation")
             ? `/apidev/assets/animations/${props.nft.currency}/animation.${extnojpg}`
             : `/apidev/assets/images/${props.nft.currency}/full/image.${extnojpg}`;
-          // thumbnailUrl.value = `/apidev/assets/images/${props.nft.currency}/200px/image.${ext}`;
+          thumbnailUrl.value = `/apidev/assets/images/${props.nft.currency}/200px/image.${ext}`;
           const isReturned = await fetch(url, {
             method: "HEAD",
           });
