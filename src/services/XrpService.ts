@@ -594,7 +594,7 @@ export async function getOneXls20(nft: any) {
   } catch (err) {
     if (!URI) {
       domain = await getDomain(Issuer);
-      if (nodetype !== "MAINNET") {
+      if (nodetype === "MAINNET") {
         const t = await logFailedToLoad({
           Issuer,
           NFTokenID,
