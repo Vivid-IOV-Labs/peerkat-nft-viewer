@@ -222,7 +222,7 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from "vue";
 import BaseCard from "@/components/BaseCard.vue";
-import LoadMedia from "@/components/LoadMedia.vue";
+import LoadMedia from "@/components/LoadMediaPreview.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import ExternalLink from "@/components/ExternalLink.vue";
 import { useRouter } from "vue-router";
