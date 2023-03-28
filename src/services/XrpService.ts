@@ -583,9 +583,9 @@ export async function getOneXls20(nft: any) {
   let domain;
   let type;
   const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
-  try {
-    const nodetype = store.getters["user/getNodeType"];
+  const nodetype = store.getters["user/getNodeType"];
 
+  try {
     if (nodetype !== "MAINNET") {
       throw new Error("not mainnet");
     }
@@ -594,14 +594,16 @@ export async function getOneXls20(nft: any) {
   } catch (err) {
     if (!URI) {
       domain = await getDomain(Issuer);
-      const t = await logFailedToLoad({
-        Issuer,
-        NFTokenID,
-        Domain: domain,
-        NFTokenTaxon,
-        nft_serial,
-        Source: "xummapp-frontend",
-      });
+      if (nodetype !== "MAINNET") {
+        const t = await logFailedToLoad({
+          Issuer,
+          NFTokenID,
+          Domain: domain,
+          NFTokenTaxon,
+          nft_serial,
+          Source: "xummapp-frontend",
+        });
+      }
 
       const url = createUrlFromDomain(domain, NFTokenID);
       try {
