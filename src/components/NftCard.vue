@@ -173,7 +173,7 @@
             <div
               v-for="(a, index) in nft.attributes"
               :key="index"
-              class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
+              class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 p-2 bg-gradient-primary border-primary"
               style=""
             >
               <strong
