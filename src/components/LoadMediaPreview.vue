@@ -1,9 +1,7 @@
 <template>
-  {{ thumbnailUrl }}
   <video
-    v-if="nft.media_type?.includes('video') && !loadingMedia"
-    :src="thumbnailUrl"
-    :poster="thumbnailUrl"
+    v-if="nft.thumbnailType?.includes('video') && !loadingMedia"
+    :src="thumbnailUrl + '#t=0.5'"
     :autoplay="autoplay"
     :controls="controls"
     loop
@@ -14,7 +12,7 @@
     style="object-fit: cover; height: 100%; object-position: center center"
   ></video>
   <img
-    v-else-if="nft.media_type?.includes('image') && !loadingMedia"
+    v-else-if="!loadingMedia"
     v-lazy="thumbnailUrl"
     style="object-fit: cover; height: 100%; object-position: center center"
     class="img-fluid card-img-top"
@@ -80,8 +78,8 @@ export default defineComponent({
             throw new Error("not mainnet");
           }
           const ext =
-            props.nft.media_type && props.nft.media_type.split("/").pop()
-              ? props.nft.media_type.split("/").pop()
+            props.nft.thumbnailType && props.nft.thumbnailType.split("/").pop()
+              ? props.nft.thumbnailType.split("/").pop()
               : props.nft.thumbnail;
 
           const extnojpg = ext.replace("jpg", "jpeg");

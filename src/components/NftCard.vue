@@ -8,7 +8,11 @@
           href="#"
           @click.prevent="view"
         >
-          <load-media :nft="nft"></load-media>
+          <load-media-preview
+            v-if="nft.standard == 'XLS-20'"
+            :nft="nft"
+          ></load-media-preview>
+          <load-media v-else :nft="nft"></load-media>
         </a>
       </figure>
       <img
@@ -222,7 +226,8 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from "vue";
 import BaseCard from "@/components/BaseCard.vue";
-import LoadMedia from "@/components/LoadMediaPreview.vue";
+import LoadMedia from "@/components/LoadMedia.vue";
+import LoadMediaPreview from "@/components/LoadMediaPreview.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import ExternalLink from "@/components/ExternalLink.vue";
 import { useRouter } from "vue-router";
@@ -240,6 +245,7 @@ export default defineComponent({
     BaseButton,
     ExternalLink,
     LoadMedia,
+    LoadMediaPreview,
   },
   props: {
     nft: { type: Object, required: true },
