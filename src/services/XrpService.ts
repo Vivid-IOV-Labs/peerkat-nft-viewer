@@ -557,15 +557,23 @@ async function getXLS20ContentType(
   mediaUrl: string,
   NFTokenID: string,
   type: string
-): Promis<any> {
-  try {
-    const end = type === "image" ? `full/${type}` : type;
-    const url = `/apidev/assets/${type}s/${NFTokenID}/${end}`;
-    const response = await fetch(url, { method: "HEAD" });
-    return response.headers.get("Content-Type");
-  } catch (err) {
-    const response = await getIpfsMedia(mediaUrl);
-    return response.headers.get("Content-Type");
+): Promise<any> {
+  const ext = mediaUrl && mediaUrl.split(".")?.pop()?.toLowerCase();
+
+  if (ext && ["png", "jpg", "jpeg", "gif", "webp", "svg"].includes(ext)) {
+    return "image/" + ext;
+  } else if (ext && ["mp4", "mpeg", "ogv", "webm"].includes(ext)) {
+    return "video/" + ext;
+  } else {
+    try {
+      const end = type === "image" ? `full/${type}` : type;
+      const url = `/apidev/assets/${type}s/${NFTokenID}/${end}`;
+      const response = await fetch(url, { method: "HEAD" });
+      return response.headers.get("Content-Type");
+    } catch (err) {
+      const response = await getIpfsMedia(mediaUrl);
+      return response.headers.get("Content-Type");
+    }
   }
 }
 export async function getOneXls20(nft: any) {
@@ -586,6 +594,7 @@ export async function getOneXls20(nft: any) {
   let attributes;
   let collection;
   let thumbnail;
+  let thumbnailType;
   let details;
   let domain;
   let type;
@@ -740,18 +749,9 @@ export async function getOneXls20(nft: any) {
       } else {
         mediaUrl = media;
       }
-      const ext = mediaUrl.split(".").pop().toLowerCase();
-      if (["png", "jpg", "jpeg", "gif", "mp4", "webp", "svg"].includes(ext)) {
-        media_type = "image/" + ext;
-      } else {
-        const type = "image";
-        const contentType = await getXLS20ContentType(
-          mediaUrl,
-          NFTokenID,
-          type
-        );
-        media_type = contentType;
-      }
+
+      const type = "image";
+      media_type = await getXLS20ContentType(mediaUrl, NFTokenID, type);
       thumbnail = details.thumbnail || mediaUrl;
       assets.image = {
         media_type,
@@ -769,20 +769,9 @@ export async function getOneXls20(nft: any) {
       } else {
         mediaUrl = media;
       }
-      const ext = mediaUrl.split(".").pop().toLowerCase();
-      if (["png", "jpg", "jpeg", "gif", "mp4", "webp", "svg"].includes(ext)) {
-        media_type = "image/" + ext;
-      } else if (["mp4"].includes(ext)) {
-        media_type = "video/" + ext;
-      } else {
-        const type = "animation";
-        const contentType = await getXLS20ContentType(
-          mediaUrl,
-          NFTokenID,
-          type
-        );
-        media_type = contentType;
-      }
+
+      const type = "animation";
+      media_type = await getXLS20ContentType(mediaUrl, NFTokenID, type);
       if (
         (details.content_type && details.content_type.includes("video")) ||
         media_type.includes("video")
@@ -836,17 +825,8 @@ export async function getOneXls20(nft: any) {
       } else {
         mediaUrl = media;
       }
-      const ext = mediaUrl.split(".").pop().toLowerCase();
-      if (["mp4"].includes(ext)) {
-        media_type = "video/" + ext;
-      } else {
-        const contentType = await getXLS20ContentType(
-          mediaUrl,
-          NFTokenID,
-          "video"
-        );
-        media_type = contentType;
-      }
+
+      media_type = await getXLS20ContentType(mediaUrl, NFTokenID, "video");
       if (details.image || details.image_url) {
         const poster = details.image || details.image_url;
         let posterUrl;
