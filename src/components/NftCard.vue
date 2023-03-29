@@ -13,6 +13,7 @@
             :nft="nft"
           ></load-media-preview>
           <load-media v-else :nft="nft"></load-media>
+          <!-- <load-media :nft="nft"></load-media> -->
         </a>
       </figure>
       <img
