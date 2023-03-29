@@ -576,6 +576,15 @@ async function getXLS20ContentType(
     }
   }
 }
+function getXLS20MediaUrl(mediaUrl: string): string {
+  if (mediaUrl.split("//")[0].includes("ipfs:") || !mediaUrl.split("//")[0]) {
+    return mediaUrl.split("//")[1].replace("ipfs/", "");
+  } else if (mediaUrl.includes("/ipfs/")) {
+    return mediaUrl.split("/ipfs/")[1];
+  } else {
+    return mediaUrl;
+  }
+}
 export async function getOneXls20(nft: any) {
   interface Assets {
     image?: any | null;
@@ -732,23 +741,12 @@ export async function getOneXls20(nft: any) {
       mediaUrl = response.url;
     }
     if (details.thumbnail) {
-      if (details.image.split("//")[0] === "ipfs:") {
-        thumbnail = details.thumbnail.split("//")[1];
-      } else {
-        thumbnail = details.thumbnail;
-      }
+      thumbnail = getXLS20MediaUrl(details.thumbnail);
     }
 
     if (details.image || details.image_url) {
       const media = details.image || details.image_url;
-
-      if (media.split("//")[0].includes("ipfs:") || !media.split("//")[0]) {
-        mediaUrl = media.split("//")[1].replace("ipfs/", "");
-      } else if (media.includes("/ipfs/")) {
-        mediaUrl = media.split("/ipfs/")[1];
-      } else {
-        mediaUrl = media;
-      }
+      mediaUrl = getXLS20MediaUrl(media);
 
       const type = "image";
       media_type = await getXLS20ContentType(mediaUrl, NFTokenID, type);
@@ -762,14 +760,7 @@ export async function getOneXls20(nft: any) {
     if (details.animation || details.animation_url) {
       const media = details.animation || details.animation_url;
 
-      if (media.split("//")[0].includes("ipfs:") || !media.split("//")[0]) {
-        mediaUrl = media.split("//")[1].replace("ipfs/", "");
-      } else if (media.includes("/ipfs/")) {
-        mediaUrl = media.split("/ipfs/")[1];
-      } else {
-        mediaUrl = media;
-      }
-
+      mediaUrl = getXLS20MediaUrl(media);
       const type = "animation";
       media_type = await getXLS20ContentType(mediaUrl, NFTokenID, type);
       if (
@@ -778,36 +769,14 @@ export async function getOneXls20(nft: any) {
       ) {
         if (details.image || details.image_url) {
           const poster = details.image || details.image_url;
-          let posterUrl;
-          if (
-            poster.split("//")[0].includes("ipfs:") ||
-            !poster.split("//")[0]
-          ) {
-            posterUrl = poster.split("//")[1].replace("ipfs/", "");
-          } else if (poster.includes("/ipfs/")) {
-            posterUrl = poster.split("/ipfs/")[1];
-          } else {
-            posterUrl = poster;
-          }
-          thumbnail = posterUrl;
+          thumbnail = getXLS20MediaUrl(poster);
         } else {
           thumbnail = details.thumbnail || mediaUrl;
         }
       } else {
         if (details.image || details.image_url) {
           const poster = details.image || details.image_url;
-          let posterUrl;
-          if (
-            poster.split("//")[0].includes("ipfs:") ||
-            !poster.split("//")[0]
-          ) {
-            posterUrl = poster.split("//")[1].replace("ipfs/", "");
-          } else if (poster.includes("/ipfs/")) {
-            posterUrl = poster.split("/ipfs/")[1];
-          } else {
-            posterUrl = poster;
-          }
-          thumbnail = posterUrl;
+          thumbnail = getXLS20MediaUrl(poster);
         } else {
           thumbnail = details.thumbnail || mediaUrl;
         }
