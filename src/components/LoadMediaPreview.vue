@@ -12,7 +12,7 @@
     style="object-fit: cover; height: 100%; object-position: center center"
   ></video>
   <img
-    v-else-if="!loadingMedia"
+    v-else-if="nft.thumbnailType?.includes('image') && !loadingMedia"
     v-lazy="thumbnailUrl"
     style="object-fit: cover; height: 100%; object-position: center center"
     class="img-fluid card-img-top"
@@ -50,7 +50,7 @@ export default defineComponent({
   },
   async setup(props) {
     const store = useStore();
-    const thumbnailUrl = ref(null);
+    const thumbnailUrl = ref("/loading.gif");
     const loadingMedia = ref(false);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     async function fetchMedia() {
@@ -84,17 +84,15 @@ export default defineComponent({
 
           const extnojpg = ext.replace("jpg", "jpeg");
 
-          const url = props.nft.type?.includes("video")
+          const url = props.nft.thumbnailType?.includes("video")
             ? `/apidev/assets/videos/${props.nft.currency}/video.${extnojpg}`
-            : props.nft.type?.includes("animation")
-            ? `/apidev/assets/animations/${props.nft.currency}/animation.${extnojpg}`
             : `/apidev/assets/images/${props.nft.currency}/full/image.${extnojpg}`;
           // thumbnailUrl.value = `/apidev/assets/images/${props.nft.currency}/200px/image.${ext}`;
           const isReturned = await fetch(url, {
             method: "HEAD",
           });
           if (isReturned.ok && isReturned.status === 200) {
-            thumbnailUrl.value = props.nft.thumbnail;
+            thumbnailUrl.value = url;
             const params = {
               tokenID: props.nft.currency,
               thumbnailUrl: thumbnailUrl.value,
