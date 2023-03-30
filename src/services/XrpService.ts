@@ -761,7 +761,7 @@ export async function getOneXls20(nft: any) {
       thumbnailType = await getXLS20ContentType(thumbnail, NFTokenID, type);
       assets.image = {
         media_type,
-        thumbnail,
+        mediaUrl,
       };
     }
 
@@ -803,7 +803,7 @@ export async function getOneXls20(nft: any) {
       }
       assets.animation = {
         media_type,
-        thumbnail,
+        mediaUrl,
       };
     }
 
@@ -838,7 +838,7 @@ export async function getOneXls20(nft: any) {
       }
       assets.video = {
         media_type,
-        thumbnail,
+        mediaUrl,
       };
     }
     type =

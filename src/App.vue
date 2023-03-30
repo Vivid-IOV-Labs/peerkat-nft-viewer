@@ -119,4 +119,7 @@ video[poster] {
 .v-leave-to {
   opacity: 0;
 }
+.word-break-all {
+  word-break: break-all;
+}
 </style>

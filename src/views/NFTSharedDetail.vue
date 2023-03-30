@@ -46,7 +46,7 @@
             >
               <div
                 v-if="nft.collection.family"
-                class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
+                class="rounded text-break word-break-all text-center d-flex flex-column justify-content-between align-items-center border py-2 px-4 my-2 w-100 py-1 bg-gradient-primary border-primary"
                 style=""
               >
                 <strong
@@ -56,7 +56,7 @@
               </div>
               <div
                 v-if="nft.collection.name"
-                class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
+                class="rounded text-break word-break-all text-center d-flex flex-column justify-content-between align-items-center border py-2 px-4 my-2 w-100 py-1 bg-gradient-primary border-primary"
                 style=""
               >
                 <strong
@@ -82,7 +82,7 @@
               <div
                 v-for="(a, index) in nft.attributes"
                 :key="index"
-                class="rounded tex-center d-flex flex-column justify-content-between align-items-center border my-2 w-100 py-1 bg-gradient-primary border-primary"
+                class="rounded text-break word-break-all text-center d-flex flex-column justify-content-between align-items-center border py-2 px-4 my-2 w-100 py-1 bg-gradient-primary border-primary"
                 style=""
               >
                 <strong
