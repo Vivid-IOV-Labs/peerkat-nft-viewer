@@ -150,7 +150,14 @@
             <strong class="font-weight-bold">Description </strong><br />
             <span>{{ nft.desc }}</span>
           </div>
-          <div v-if="nft.attributes && nft.attributes.length" class="mt-2">
+          <div
+            v-if="
+              nft.attributes &&
+              nft.attributes.filter((a) => a.trait_type || a.value).length
+                .length
+            "
+            class="mt-2"
+          >
             <strong class="font-weight-bold">Attributes </strong><br />
             <div
               class="d-flex flex-column justify-content-between align-items-center py-2"

@@ -20,6 +20,22 @@
     alt="Card
           image cap"
   />
+  <svg
+    v-else-if="nft.media_type?.includes('xml') && !loadingMedia"
+    style="object-fit: cover; height: 100%; object-position: center center"
+    class="img-fluid card-img-top"
+  >
+    <image
+      style="
+        object-fit: cover;
+        height: 100%;
+        width: 100%;
+        object-position: center center;
+      "
+      :xlink:href="mediaUrl"
+      src="/thumbnail.jpg"
+    />
+  </svg>
   <img
     v-else-if="loadingMedia"
     :src="'/loading.gif'"
