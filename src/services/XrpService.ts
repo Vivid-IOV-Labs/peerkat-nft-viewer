@@ -4,6 +4,7 @@ import enUS from "date-fns/locale/en-US";
 import { NFT } from "../models/NFT";
 import { delay } from "../utils/delay";
 import { devlog } from "../utils/devlog";
+import store from "../store/";
 // import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
 // GlobalWorkerOptions.workerSrc =
 //   "../../node_modules/pdfjs-dist/build/pdf.worker.js";
@@ -552,217 +553,48 @@ export async function logFailedToLoad(obj: any): Promise<any> {
   }
 }
 
-export async function getOneXls(nft: any) {
-  let mediaUrl;
-  let media_type;
-  let type;
-  let error_code;
-  let error_message;
-  let error_title;
-  let tokenName;
-  let description;
-  let attributes;
-  let collection;
-  let thumbnail;
-  let details;
-  const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
-  try {
-    const url = `/apidev/assets/metadata/${NFTokenID}/metadata.json`;
-    details = await fetch(url).then((r) => r.json());
-  } catch (err) {
-    if (!URI) {
-      const domain = await getDomain(Issuer);
-      await logFailedToLoad({
-        Issuer,
-        NFTokenID,
-        Domain: domain,
-        NFTokenTaxon,
-        nft_serial,
-        Source: "xummapp-frontend",
-      });
-      const url = createUrlFromDomain(domain, NFTokenID);
-      try {
-        if (domain.includes("ipfs")) {
-          details = await getIpfsJson(url);
-        } else {
-          details = await fetch(url).then((r) => r.json());
-          if (details.code && details.code == 404) {
-            throw new Error();
-          }
-        }
-      } catch (error) {
-        error_code = "no_nfts_in_collection";
-        error_title = "Data currently unavailable  [X02]";
-        error_message =
-          "This error may occur when the viewer is currently unable to fetch metadata from the URI. This error occurs when the viewer is not familiar with the URI approach. Please contact the Token Issuer for support. We will continue to upgrade the viewer, follow Peerkat via Twitter and Discord for updates and support.";
-      }
-    } else {
-      const t = await logFailedToLoad({
-        Issuer,
-        NFTokenID,
-        URI,
-        NFTokenTaxon,
-        Source: "xummapp-frontend",
-      });
-      const uri = hexToString(URI); //.replace(/\\/g, "");
-      const end = uri.includes(".json")
-        ? ""
-        : Number.isInteger(NFTokenTaxon)
-        ? `/${NFTokenTaxon}.json`
-        : "/base.json";
-
-      const url = uri.includes("ipfs:")
-        ? uri.split("//")[1]
-        : uri.includes("/ipfs/")
-        ? uri.split("/ipfs/")[1]
-        : uri.includes("cid:")
-        ? uri.split("cid:")[1]
-        : uri;
-      /*
-      different kind of uri
-      
-      cid:bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4
-      https://bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4.ipfs.w3s.link/metadata.json #https://([a-zA-Z]+([0-9]+[a-zA-Z]+)+)\.ipfs\.[A-Za-z0-9]+\.[A-Za-z0-9]+/([A-Za-z0-9]+(_[A-Za-z0-9]+)+)\.[A-Za-z0-9]+
-      bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
-      ipfs://bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
-      https://ipfs.io/ipfs/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
-      https://somedomain/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
-      */
-
-      try {
-        const response =
-          uri.includes("ipfs:") ||
-          uri.includes("/ipfs/") ||
-          !uri.includes("//") ||
-          uri.includes("cid:")
-            ? await getIpfsJson(url)
-            : await fetch(url);
-        if (response.headers) {
-          const contentType = response.headers.get("Content-Type");
-          if (
-            contentType?.includes("image") ||
-            contentType?.includes("video")
-          ) {
-            const ipfLinkUrlPattern = new RegExp(
-              "https://([a-zA-Z]+([0-9]+[a-zA-Z]+)+).ipfs.[A-Za-z0-9]+.[A-Za-z0-9]+/([A-Za-z0-9]+(_[A-Za-z0-9]+)+).[A-Za-z0-9]+"
-            ).test(url);
-            if (ipfLinkUrlPattern) {
-              const ipfsHash = url.split(".ipfs")[0].split("//")[1];
-              const name = url.split(".ipfs")[1].split("/")[1];
-              thumbnail = ipfsHash + "/" + name;
-              media_type = contentType;
-              mediaUrl = ipfsHash + "/" + name;
-            }
-          } else {
-            details = await response.json();
-          }
-        } else {
-          details = response;
-        }
-      } catch (error) {
-        devlog(error);
-        error_code = "no_nfts_in_collection";
-        error_title = "Data currently unavailable  [X01]";
-        error_message =
-          "This error may occur when the viewer attempts to fetch metadata from the URI and the network request times out. This error occurs most frequently when using a public IPFS link. Please try again by quitting the xApp and reload. We will continue to upgrade the viewer, follow Peerkat via Twitter and Discord for updates and support.";
-      }
-    }
-  }
-
-  if (details) {
-    tokenName = details.name && details.name.replace(/[^\w\s]/gi, "");
-    description = details.description;
-    attributes = details.attributes;
-
-    collection = details.collection;
-
-    if (details.content) {
-      const cid = details.content.split("cid:")[1];
-      const response = await getIpfsMedia(cid);
-      const contentType = response.headers.get("Content-Type");
-      media_type = contentType;
-      mediaUrl = response.url;
-    }
-    if (details.thumbnail) {
-      if (details.image.split("//")[0] === "ipfs:") {
-        thumbnail = details.thumbnail.split("//")[1];
-      } else {
-        thumbnail = details.thumbnail;
-      }
-    }
-    if (details.image || details.image_url) {
-      const media = details.image || details.image_url;
-      if (media.split("//")[0] === "ipfs:" || !media.split("//")[0]) {
-        mediaUrl = media.split("//")[1].replace("ipfs/", "");
-      } else {
-        mediaUrl = media;
-      }
-      media_type = "image";
-      type = "image";
-    }
-    if (details.animation || details.animation_url) {
-      const media = details.animation_url || details.video;
-      if (media.split("//")[0] === "ipfs:" || !media.split("//")[0]) {
-        mediaUrl = media.split("//")[1].replace("ipfs/", "");
-      } else {
-        mediaUrl = media;
-      }
-      media_type = "image";
-      type = "image";
-    }
-    if (
-      details.video ||
-      (details.animation_url &&
-        details.content_type &&
-        details.content_type.includes("video"))
-    ) {
-      const media = details.animation_url || details.video;
-      if (media.split("//")[0] === "ipfs:") {
-        mediaUrl = media.split("//")[1];
-      } else {
-        mediaUrl = media;
-      }
-      media_type = "video";
-      type = "video";
-    }
-  }
-  return {
-    tokenTaxon: NFTokenTaxon,
-    issuer: Issuer,
-    currency: NFTokenID,
-    tokenName,
-    url: mediaUrl,
-    media_type,
-    type,
-    desc: description,
-    issuerTruncated: truncate(Issuer),
-    standard: "XLS-20",
-    error_code,
-    error_message,
-    error_title,
-    attributes,
-    collection,
-    thumbnail,
-    nft_serial: nft.nft_serial,
-  };
-}
-
 async function getXLS20ContentType(
   mediaUrl: string,
   NFTokenID: string,
   type: string
-): Promis<any> {
-  try {
-    const end = type === "image" ? `full/${type}` : type;
-    const url = `/apidev/assets/${type}s/${NFTokenID}/${end}`;
-    const response = await fetch(url, { method: "HEAD" });
-    return response.headers.get("Content-Type");
-  } catch (err) {
-    const response = await getIpfsMedia(mediaUrl);
-    return response.headers.get("Content-Type");
+): Promise<any> {
+  const ext = mediaUrl && mediaUrl.split(".")?.pop()?.toLowerCase();
+
+  if (ext && ["png", "jpg", "jpeg", "gif", "webp", "svg"].includes(ext)) {
+    return "image/" + ext;
+  } else if (ext && ["mp4", "mpeg", "ogv", "webm"].includes(ext)) {
+    return "video/" + ext;
+  } else {
+    try {
+      const end = type === "image" ? `full/${type}` : type;
+      const url = `/apidev/assets/${type}s/${NFTokenID}/${end}`;
+      const response = await fetch(url, { method: "HEAD" });
+      return response.headers.get("Content-Type");
+    } catch (err) {
+      const response = await getIpfsMedia(mediaUrl);
+      return response && response.headers
+        ? response.headers.get("Content-Type")
+        : null;
+    }
+  }
+}
+function getXLS20MediaUrl(mediaUrl: string): string {
+  if (mediaUrl.split("//")[0].includes("ipfs:") || !mediaUrl.split("//")[0]) {
+    return mediaUrl.split("//")[1].replace("ipfs/", "");
+  } else if (mediaUrl.includes("/ipfs/")) {
+    return mediaUrl.split("/ipfs/")[1];
+  } else {
+    return mediaUrl;
   }
 }
 export async function getOneXls20(nft: any) {
+  interface Assets {
+    image?: any | null;
+    video?: any | null;
+    aufio?: any | null;
+    animation?: any | null;
+    file?: any | null;
+  }
   let mediaUrl;
   let media_type;
   let error_code;
@@ -773,30 +605,39 @@ export async function getOneXls20(nft: any) {
   let attributes;
   let collection;
   let thumbnail;
+  let thumbnailType;
   let details;
   let domain;
   let type;
+  const assets: Assets = {
+    image: undefined,
+    video: undefined,
+    aufio: undefined,
+    animation: undefined,
+    file: undefined,
+  };
   const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
+  const nodetype = store.getters["user/getNodeType"];
+
   try {
-    if (
-      NFTokenID ==
-      "000803E8CEC1EB1B331D8A55E39D451DE8E13F59CF5509D5175146160000007C"
-    ) {
-      throw new Error();
+    if (nodetype !== "MAINNET") {
+      throw new Error("not mainnet");
     }
     const url = `/apidev/assets/metadata/${NFTokenID}/metadata.json`;
     details = await fetch(url).then((r) => r.json());
   } catch (err) {
     if (!URI) {
       domain = await getDomain(Issuer);
-      const t = await logFailedToLoad({
-        Issuer,
-        NFTokenID,
-        Domain: domain,
-        NFTokenTaxon,
-        nft_serial,
-        Source: "xummapp-frontend",
-      });
+      if (nodetype === "MAINNET") {
+        const t = await logFailedToLoad({
+          Issuer,
+          NFTokenID,
+          Domain: domain,
+          NFTokenTaxon,
+          nft_serial,
+          Source: "xummapp-frontend",
+        });
+      }
 
       const url = createUrlFromDomain(domain, NFTokenID);
       try {
@@ -902,49 +743,80 @@ export async function getOneXls20(nft: any) {
       mediaUrl = response.url;
     }
     if (details.thumbnail) {
-      if (details.image.split("//")[0] === "ipfs:") {
-        thumbnail = details.thumbnail.split("//")[1];
-      } else {
-        thumbnail = details.thumbnail;
-      }
+      thumbnail = getXLS20MediaUrl(details.thumbnail);
+      thumbnailType = await getXLS20ContentType(
+        details.thumbnail,
+        NFTokenID,
+        "image"
+      );
     }
-    if (
-      details.image ||
-      details.image_url ||
-      details.animation ||
-      details.animation_url
-    ) {
-      const media =
-        details.animation ||
-        details.animation_url ||
-        details.image ||
-        details.image_url;
 
-      if (media.split("//")[0].includes("ipfs:") || !media.split("//")[0]) {
-        mediaUrl = media.split("//")[1].replace("ipfs/", "");
-      } else if (media.includes("/ipfs/")) {
-        mediaUrl = media.split("/ipfs/")[1];
+    if (details.image || details.image_url) {
+      const media = details.image || details.image_url;
+      mediaUrl = getXLS20MediaUrl(media);
+
+      const type = "image";
+      media_type = await getXLS20ContentType(mediaUrl, NFTokenID, type);
+      thumbnail = details.thumbnail || mediaUrl;
+      thumbnailType = await getXLS20ContentType(thumbnail, NFTokenID, type);
+      assets.image = {
+        media_type,
+        mediaUrl,
+      };
+    }
+
+    if (details.animation || details.animation_url) {
+      const media = details.animation || details.animation_url;
+
+      mediaUrl = getXLS20MediaUrl(media);
+      const type = "animation";
+      media_type = await getXLS20ContentType(mediaUrl, NFTokenID, type);
+      if (
+        (details.content_type && details.content_type.includes("video")) ||
+        media_type.includes("video")
+      ) {
+        if (details.image || details.image_url) {
+          const poster = details.image || details.image_url;
+          thumbnail = getXLS20MediaUrl(poster);
+          thumbnailType = await getXLS20ContentType(
+            thumbnail,
+            NFTokenID,
+            "image"
+          );
+        } else {
+          thumbnail = details.thumbnail || mediaUrl;
+          thumbnailType = media_type;
+        }
+      } else {
+        if (details.image || details.image_url) {
+          const poster = details.image || details.image_url;
+          thumbnail = getXLS20MediaUrl(poster);
+          thumbnailType = await getXLS20ContentType(
+            thumbnail,
+            NFTokenID,
+            "image"
+          );
+        } else {
+          thumbnail = details.thumbnail || mediaUrl;
+          thumbnailType = media_type;
+        }
+      }
+      assets.animation = {
+        media_type,
+        mediaUrl,
+      };
+    }
+
+    if (details.video) {
+      const media = details.animation_url || details.video;
+      if (media.split("//")[0] === "ipfs:") {
+        mediaUrl = media.split("//")[1];
       } else {
         mediaUrl = media;
       }
-      const ext = mediaUrl.split(".").pop().toLowerCase();
-      if (["png", "jpg", "jpeg", "gif", "mp4", "webp", "svg"].includes(ext)) {
-        media_type = "image/" + ext;
-      } else {
-        const type =
-          details.animation || details.animation_url ? "animation" : "image";
-        const contentType = await getXLS20ContentType(
-          mediaUrl,
-          NFTokenID,
-          type
-        );
-        media_type = contentType;
-      }
 
-      if (
-        media_type.includes("video") &&
-        (details.image || details.image_url)
-      ) {
+      media_type = await getXLS20ContentType(mediaUrl, NFTokenID, "video");
+      if (details.image || details.image_url) {
         const poster = details.image || details.image_url;
         let posterUrl;
         if (poster.split("//")[0].includes("ipfs:") || !poster.split("//")[0]) {
@@ -955,38 +827,19 @@ export async function getOneXls20(nft: any) {
           posterUrl = poster;
         }
         thumbnail = posterUrl;
-      }
-    }
-
-    // if (details.animation_url || details.animation) {
-    //   const response = await getIpfsMedia(mediaUrl);
-    //   details.content_type = response.headers.get("Content-Type");
-    //   debugger;
-    // }
-
-    if (
-      details.video ||
-      ((details.animation_url || details.animation) &&
-        details.content_type &&
-        details.content_type.includes("video"))
-    ) {
-      const media = details.animation_url || details.video;
-      if (media.split("//")[0] === "ipfs:") {
-        mediaUrl = media.split("//")[1];
-      } else {
-        mediaUrl = media;
-      }
-      const ext = mediaUrl.split(".").pop().toLowerCase();
-      if (["png", "jpg", "jpeg", "gif", "mp4", "webp", "svg"].includes(ext)) {
-        media_type = "video/" + ext;
-      } else {
-        const contentType = await getXLS20ContentType(
-          mediaUrl,
+        thumbnailType = await getXLS20ContentType(
+          thumbnail,
           NFTokenID,
-          "video"
+          "image"
         );
-        media_type = contentType;
+      } else {
+        thumbnail = details.thumbnail || mediaUrl;
+        thumbnailType = media_type;
       }
+      assets.video = {
+        media_type,
+        mediaUrl,
+      };
     }
     type =
       details.animation_url || details.animation
@@ -996,27 +849,13 @@ export async function getOneXls20(nft: any) {
         : "image";
   }
 
-  // const schmeaUri =
-  //   schema.split("//")[0] === "ipfs:"
-  //     ? schema.split("//")[1] + "/$Schema.json"
-  //     : schema + "/%24Schema.json ";
-
-  // try {
-  //   const res =
-  //     schema.split("//")[0] === "ipfs:"
-  //       ? await getIpfsJson(schmeaUri)
-  //       : await fetch(url).then((r) => r.json());
-  //   console.log(res);
-  // } catch (error) {
-  //   console.log(error);
-  // }
-  // if (!details || (!details.status && details.code)) {
-  //   error_code = "no_nfts_in_collection";
-  //   error_message =
-  //     "Unable to fetch NFT metadata from the Domain link,  please contact Token Issuer for support.";
-  // } else {
-
-  // }
+  const badgetypes = {
+    animation: details.animation || details.animation_url,
+    image: details.image || details.image_url,
+    video: details.video,
+    file: details.file,
+    audio: details.audio,
+  };
 
   return {
     tokenTaxon: NFTokenTaxon,
@@ -1025,6 +864,7 @@ export async function getOneXls20(nft: any) {
     tokenName,
     url: mediaUrl,
     media_type,
+    thumbnailType,
     type,
     desc: description,
     issuerTruncated: truncate(Issuer),
@@ -1038,6 +878,8 @@ export async function getOneXls20(nft: any) {
     nft_serial: nft.nft_serial,
     URI,
     Domain: domain,
+    badgetypes,
+    assets,
   };
 }
 

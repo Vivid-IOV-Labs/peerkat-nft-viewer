@@ -16,8 +16,15 @@
           <span class="mr-3">{{ offer.destination }} </span>
         </div>
         <div v-if="offer.amount" class="mt-2">
-          <strong class="h7 font-weight-bold">Price (XRP)</strong><br />
-          <span class="mr-3">{{ Number(offer.amount) / 1000000 }} </span>
+          <div v-if="Number(offer.amount)">
+            <strong class="h7 font-weight-bold">Price (XRP)</strong><br />
+            <span class="mr-3">{{ Number(offer.amount) / 1000000 }} </span>
+          </div>
+          <div v-else-if="offer.amount.value">
+            <strong class="h7 font-weight-bold">Price (Issued Token)</strong
+            ><br />
+            <span class="mr-3">{{ offer.amount.value }} </span>
+          </div>
         </div>
       </div>
     </div>
@@ -30,9 +37,9 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-import BaseButton from "@/components/BaseButton.vue";
-import AsyncButton from "@/components/AsyncButton.vue";
+import { computed, defineComponent } from "vue";
+// import BaseButton from "@/components/BaseButton.vue";
+// import AsyncButton from "@/components/AsyncButton.vue";
 
 import { copyText } from "../utils/copytext";
 import { isInXumm } from "../utils/isInXumm";
@@ -55,7 +62,7 @@ export default defineComponent({
       const xummSandbox = import.meta.env.VITE_XUMM_DEEPLINK;
       return `${xummSandbox}?redirect=/shared_sell_offers/${props.offer.nft_offer_index}/${props.token}/${props.offer.owner}`;
     }
-
+    const price = computed(() => {});
     return {
       async cancelOffer() {
         if (isInXumm()) {

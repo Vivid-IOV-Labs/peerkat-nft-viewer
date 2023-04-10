@@ -59,7 +59,7 @@
       <img
         style="object-fit: cover; height: 100%; object-position: center center"
         class="img-fluid w-100 h-100"
-        src="/banner-light.png"
+        src="/banner-dark.png"
       />
     </external-link>
   </div>
