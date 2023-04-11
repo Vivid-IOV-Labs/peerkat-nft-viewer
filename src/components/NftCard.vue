@@ -8,12 +8,12 @@
           href="#"
           @click.prevent="view"
         >
-          <!-- <load-media-preview
+          <load-media-preview
             v-if="nft.standard == 'XLS-20'"
             :nft="nft"
           ></load-media-preview>
-          <load-media v-else :nft="nft"></load-media> -->
-          <load-media :nft="nft"></load-media>
+          <load-media v-else :nft="nft"></load-media>
+          <!-- <load-media :nft="nft"></load-media> -->
         </a>
       </figure>
       <img

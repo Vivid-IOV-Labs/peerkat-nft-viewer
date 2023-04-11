@@ -84,9 +84,7 @@ export default defineComponent({
 
           const extnojpg = ext.replace("jpg", "jpeg");
 
-          const url = props.nft.thumbnailType?.includes("video")
-            ? `/apidev/assets/videos/${props.nft.currency}/video.${extnojpg}`
-            : `/apidev/assets/images/${props.nft.currency}/200px/image.${ext}`;
+          const url = `/apidev/assets/images/${props.nft.currency}/200px/image`;
           // thumbnailUrl.value = `/apidev/assets/images/${props.nft.currency}/200px/image.${ext}`;
           const isReturned = await fetch(url, {
             method: "HEAD",
