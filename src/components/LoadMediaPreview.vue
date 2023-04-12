@@ -1,5 +1,5 @@
 <template>
-  <video
+  <!-- <video
     v-if="nft.thumbnailType?.includes('video') && !loadingMedia"
     :src="thumbnailUrl + '#t=0.5'"
     :autoplay="autoplay"
@@ -10,9 +10,9 @@
     webkit-playsinline
     class="img-fluid card-img-top"
     style="object-fit: cover; height: 100%; object-position: center center"
-  ></video>
+  ></video> nft.thumbnailType?.includes('image') &&  -->
   <img
-    v-else-if="nft.thumbnailType?.includes('image') && !loadingMedia"
+    v-if="!loadingMedia"
     v-lazy="thumbnailUrl"
     style="object-fit: cover; height: 100%; object-position: center center"
     class="img-fluid card-img-top"
@@ -47,11 +47,14 @@ export default defineComponent({
     autoplay: { type: Boolean, default: () => false },
     controls: { type: Boolean, default: () => false },
     preview: { type: Boolean, default: () => true },
+    shared: { type: Boolean, default: () => false },
   },
   async setup(props) {
     const store = useStore();
     const thumbnailUrl = ref("/loading.gif");
     const loadingMedia = ref(false);
+    const walletaddress = computed(() => store.getters["user/getAddress"]);
+    const user = computed(() => store.getters["user/getUser"]);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     async function fetchMedia() {
       if (props.nft.standard == "XLS-14" || props.nft.standard == "XLS-16") {
@@ -60,6 +63,7 @@ export default defineComponent({
         const params = {
           tokenID: props.nft.currency,
           thumbnailUrl: thumbnailUrl.value,
+          shared: { user: user.value, nodetype: nodetype.value },
         };
         await store.commit("nft/setXlsMediaUrlById", params);
       } else if (props.nft.standard == "XLS-14d/SOLO") {
@@ -69,6 +73,9 @@ export default defineComponent({
         const params = {
           tokenID: props.nft.currency,
           thumbnailUrl: thumbnailUrl.value,
+          shared: props.shared
+            ? { user: user.value, nodetype: nodetype.value }
+            : false,
         };
 
         await store.commit("nft/setXlsMediaUrlById", params);
@@ -77,12 +84,12 @@ export default defineComponent({
           if (nodetype.value !== "MAINNET") {
             throw new Error("not mainnet");
           }
-          const ext =
-            props.nft.thumbnailType && props.nft.thumbnailType.split("/").pop()
-              ? props.nft.thumbnailType.split("/").pop()
-              : props.nft.thumbnail;
+          // const ext =
+          //   props.nft.thumbnailType && props.nft.thumbnailType.split("/").pop()
+          //     ? props.nft.thumbnailType.split("/").pop()
+          //     : props.nft.thumbnail;
 
-          const extnojpg = ext.replace("jpg", "jpeg");
+          // const extnojpg = ext.replace("jpg", "jpeg");
 
           const url = `/apidev/assets/images/${props.nft.currency}/200px/image`;
           // thumbnailUrl.value = `/apidev/assets/images/${props.nft.currency}/200px/image.${ext}`;
@@ -94,6 +101,9 @@ export default defineComponent({
             const params = {
               tokenID: props.nft.currency,
               thumbnailUrl: thumbnailUrl.value,
+              shared: props.shared
+                ? { user: user.value, nodetype: nodetype.value }
+                : false,
             };
             await store.commit("nft/setXls20MediaUrlById", params);
           } else {
@@ -119,6 +129,9 @@ export default defineComponent({
           const params = {
             tokenID: props.nft.currency,
             thumbnailUrl: thumbnailUrl.value,
+            shared: props.shared
+              ? { user: user.value, nodetype: nodetype.value }
+              : false,
           };
           await store.commit("nft/setXls20MediaUrlById", params);
         }
@@ -131,7 +144,7 @@ export default defineComponent({
       await fetchMedia();
       loadingMedia.value = false;
     } else {
-      thumbnailUrl.value = null;
+      //thumbnailUrl.value = null;
     }
     // const videoUrl = computed(() =>
     //   props.nft.thumbnailUrl ? mediaUrl.value : `${mediaUrl.value}#t=0.5`
