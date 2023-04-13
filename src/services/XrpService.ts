@@ -775,6 +775,7 @@ export async function getOneXls20(nft: any) {
         (details.content_type && details.content_type.includes("video")) ||
         media_type.includes("video")
       ) {
+        debugger;
         if (details.image || details.image_url) {
           const poster = details.image || details.image_url;
           thumbnail = getXLS20MediaUrl(poster);
@@ -783,9 +784,11 @@ export async function getOneXls20(nft: any) {
             NFTokenID,
             "image"
           );
+          debugger;
         } else {
           thumbnail = details.thumbnail || mediaUrl;
           thumbnailType = media_type;
+          debugger;
         }
       } else {
         if (details.image || details.image_url) {
@@ -796,6 +799,7 @@ export async function getOneXls20(nft: any) {
             NFTokenID,
             "image"
           );
+          debugger;
         } else {
           thumbnail = details.thumbnail || mediaUrl;
           thumbnailType = media_type;

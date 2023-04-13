@@ -5,6 +5,8 @@
     </router-link>
 
     <div class="w-100 p-1">
+      <pre>{{ nft }}</pre>
+
       <base-card v-if="nft">
         <template #picture>
           <figure style="overflow: hidden">
@@ -14,12 +16,12 @@
               href="#"
               @click.prevent="view"
             >
-              <!-- <load-media-preview
+              <load-media-preview
                 v-if="nft.standard == 'XLS-20'"
                 :nft="nft"
               ></load-media-preview>
-              <load-media v-else :nft="nft"></load-media> -->
-              <load-media :nft="nft" :shared="true"></load-media>
+              <load-media v-else :nft="nft"></load-media>
+              <!-- <load-media :nft="nft" :shared="true"></load-media> -->
             </a>
           </figure>
         </template>
