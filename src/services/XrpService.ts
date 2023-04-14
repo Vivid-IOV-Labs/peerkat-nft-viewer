@@ -560,23 +560,23 @@ async function getXLS20ContentType(
 ): Promise<any> {
   const ext = mediaUrl && mediaUrl.split(".")?.pop()?.toLowerCase();
 
-  if (ext && ["png", "jpg", "jpeg", "gif", "webp", "svg"].includes(ext)) {
-    return "image/" + ext;
-  } else if (ext && ["mp4", "mpeg", "ogv", "webm"].includes(ext)) {
-    return "video/" + ext;
-  } else {
-    try {
-      const end = type === "image" ? `full/${type}` : type;
-      const url = `/apidev/assets/${type}s/${NFTokenID}/${end}`;
-      const response = await fetch(url, { method: "HEAD" });
-      return response.headers.get("Content-Type");
-    } catch (err) {
-      const response = await getIpfsMedia(mediaUrl);
-      return response && response.headers
-        ? response.headers.get("Content-Type")
-        : null;
-    }
+  // if (ext && ["png", "jpg", "jpeg", "gif", "webp", "svg"].includes(ext)) {
+  //   return "image/" + ext;
+  // } else if (ext && ["mp4", "mpeg", "ogv", "webm"].includes(ext)) {
+  //   return "video/" + ext;
+  // } else {
+  try {
+    const end = type === "image" ? `full/${type}` : type;
+    const url = `/apidev/assets/${type}s/${NFTokenID}/${end}`;
+    const response = await fetch(url, { method: "HEAD" });
+    return response.headers.get("Content-Type");
+  } catch (err) {
+    const response = await getIpfsMedia(mediaUrl);
+    return response && response.headers
+      ? response.headers.get("Content-Type")
+      : null;
   }
+  // }
 }
 function getXLS20MediaUrl(mediaUrl: string): string {
   if (mediaUrl.split("//")[0].includes("ipfs:") || !mediaUrl.split("//")[0]) {
