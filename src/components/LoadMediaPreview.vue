@@ -92,12 +92,16 @@ export default defineComponent({
           // const extnojpg = ext.replace("jpg", "jpeg");
 
           const url = `/apidev/assets/images/${props.nft.currency}/200px/image`;
+
           // thumbnailUrl.value = `/apidev/assets/images/${props.nft.currency}/200px/image.${ext}`;
           const isReturned = await fetch(url, {
             method: "HEAD",
           });
+
           if (isReturned.ok && isReturned.status === 200) {
             thumbnailUrl.value = url;
+            debugger;
+
             const params = {
               tokenID: props.nft.currency,
               thumbnailUrl: thumbnailUrl.value,

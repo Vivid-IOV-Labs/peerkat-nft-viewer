@@ -556,27 +556,37 @@ export async function logFailedToLoad(obj: any): Promise<any> {
 async function getXLS20ContentType(
   mediaUrl: string,
   NFTokenID: string,
-  type: string
+  type: string,
+  isThumbnail: boolean
 ): Promise<any> {
   const ext = mediaUrl && mediaUrl.split(".")?.pop()?.toLowerCase();
 
-  // if (ext && ["png", "jpg", "jpeg", "gif", "webp", "svg"].includes(ext)) {
-  //   return "image/" + ext;
-  // } else if (ext && ["mp4", "mpeg", "ogv", "webm"].includes(ext)) {
-  //   return "video/" + ext;
-  // } else {
-  try {
-    const end = type === "image" ? `full/${type}` : type;
-    const url = `/apidev/assets/${type}s/${NFTokenID}/${end}`;
-    const response = await fetch(url, { method: "HEAD" });
-    return response.headers.get("Content-Type");
-  } catch (err) {
-    const response = await getIpfsMedia(mediaUrl);
-    return response && response.headers
-      ? response.headers.get("Content-Type")
-      : null;
+  if (ext && ["png", "jpg", "jpeg", "gif", "webp", "svg"].includes(ext)) {
+    return "image/" + ext;
+  } else if (ext && ["mp4", "mpeg", "ogv", "webm"].includes(ext)) {
+    return "video/" + ext;
+  } else {
+    try {
+      const end =
+        type === "image"
+          ? `full/${type}`
+          : type === "image" && isThumbnail
+          ? `200px/${type}`
+          : type;
+      const url = `/apidev/assets/${type}s/${NFTokenID}/${end}`;
+      const isReturned = await fetch(url, { method: "HEAD" });
+      if (isReturned.ok && isReturned.status === 200) {
+        return isReturned.headers.get("Content-Type");
+      } else {
+        throw new Error("Error Status:" + isReturned.status);
+      }
+    } catch (err) {
+      const response = await getIpfsMedia(mediaUrl);
+      return response && response.headers
+        ? response.headers.get("Content-Type")
+        : null;
+    }
   }
-  // }
 }
 function getXLS20MediaUrl(mediaUrl: string): string {
   if (mediaUrl.split("//")[0].includes("ipfs:") || !mediaUrl.split("//")[0]) {
@@ -727,8 +737,9 @@ export async function getOneXls20(nft: any) {
       }
     }
   }
-
   if (details) {
+    details = details.metadata ? details.metadata : details;
+
     tokenName = details.name && details.name.replace(/[^\w\s]/gi, "");
     description = details.description;
     attributes = details.attributes;
@@ -743,22 +754,27 @@ export async function getOneXls20(nft: any) {
       mediaUrl = response.url;
     }
     if (details.thumbnail) {
+      debugger;
       thumbnail = getXLS20MediaUrl(details.thumbnail);
       thumbnailType = await getXLS20ContentType(
         details.thumbnail,
         NFTokenID,
-        "image"
+        "image",
+        true
       );
     }
-
     if (details.image || details.image_url) {
       const media = details.image || details.image_url;
       mediaUrl = getXLS20MediaUrl(media);
-
       const type = "image";
-      media_type = await getXLS20ContentType(mediaUrl, NFTokenID, type);
+      media_type = await getXLS20ContentType(mediaUrl, NFTokenID, type, false);
       thumbnail = details.thumbnail || mediaUrl;
-      thumbnailType = await getXLS20ContentType(thumbnail, NFTokenID, type);
+      thumbnailType = await getXLS20ContentType(
+        thumbnail,
+        NFTokenID,
+        type,
+        false
+      );
       assets.image = {
         media_type,
         mediaUrl,
@@ -770,7 +786,7 @@ export async function getOneXls20(nft: any) {
 
       mediaUrl = getXLS20MediaUrl(media);
       const type = "animation";
-      media_type = await getXLS20ContentType(mediaUrl, NFTokenID, type);
+      media_type = await getXLS20ContentType(mediaUrl, NFTokenID, type, true);
       if (
         (details.content_type && details.content_type.includes("video")) ||
         media_type.includes("video")
@@ -782,7 +798,8 @@ export async function getOneXls20(nft: any) {
           thumbnailType = await getXLS20ContentType(
             thumbnail,
             NFTokenID,
-            "image"
+            "image",
+            true
           );
           debugger;
         } else {
@@ -797,7 +814,8 @@ export async function getOneXls20(nft: any) {
           thumbnailType = await getXLS20ContentType(
             thumbnail,
             NFTokenID,
-            "image"
+            "image",
+            false
           );
           debugger;
         } else {
@@ -834,7 +852,8 @@ export async function getOneXls20(nft: any) {
         thumbnailType = await getXLS20ContentType(
           thumbnail,
           NFTokenID,
-          "image"
+          "image",
+          true
         );
       } else {
         thumbnail = details.thumbnail || mediaUrl;
@@ -853,20 +872,12 @@ export async function getOneXls20(nft: any) {
         : "image";
   }
 
-  const badgetypes = {
-    animation: details.animation || details.animation_url,
-    image: details.image || details.image_url,
-    video: details.video,
-    file: details.file,
-    audio: details.audio,
-  };
-
   return {
     tokenTaxon: NFTokenTaxon,
     issuer: Issuer,
     currency: NFTokenID,
     tokenName,
-    url: mediaUrl,
+    url: mediaUrl ? encodeURIComponent(mediaUrl) : mediaUrl,
     media_type,
     thumbnailType,
     type,
@@ -878,12 +889,15 @@ export async function getOneXls20(nft: any) {
     error_title,
     attributes,
     collection,
-    thumbnail,
+    thumbnail: thumbnail ? encodeURIComponent(thumbnail) : thumbnail,
     nft_serial: nft.nft_serial,
     URI,
     Domain: domain,
-    badgetypes,
-    assets,
+    assets: Object.values(assets)
+      .filter((a) => a)
+      .map(({ media_type, mediaUrl }: any) => {
+        return { media_type, mediaUrl: encodeURIComponent(mediaUrl) };
+      }),
   };
 }
 
@@ -1295,8 +1309,9 @@ export async function getIpfsMedia(url: string): Promise<any> {
     const ipfsGatewayList = [
       "https://cloudflare-ipfs.com/ipfs/",
       "https://cf-ipfs.com/ipfs/",
-      "https://nftstorage.link/ipfs/",
-      "https://jorropo.net/ipfs/",
+      "https://ipfs.io/ipfs/",
+      // "https://nftstorage.link/ipfs/",
+      // "https://jorropo.net/ipfs/",
     ].map((u) => u + url);
     const controller = new AbortController();
     const signal = controller.signal;
