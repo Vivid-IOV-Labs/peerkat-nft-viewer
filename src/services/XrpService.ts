@@ -755,7 +755,6 @@ export async function getOneXls20(nft: any) {
       mediaUrl = response.url;
     }
     if (details.thumbnail) {
-      debugger;
       thumbnail = getXLS20MediaUrl(details.thumbnail);
       thumbnailType = await getXLS20ContentType(
         details.thumbnail,
@@ -792,7 +791,6 @@ export async function getOneXls20(nft: any) {
         (details.content_type && details.content_type.includes("video")) ||
         media_type.includes("video")
       ) {
-        debugger;
         if (details.image || details.image_url) {
           const poster = details.image || details.image_url;
           thumbnail = getXLS20MediaUrl(poster);
@@ -875,6 +873,9 @@ export async function getOneXls20(nft: any) {
         : "image";
   }
 
+  if (!domain && !URI) {
+    domain = await getDomain(Issuer);
+  }
   return {
     tokenTaxon: NFTokenTaxon,
     issuer: Issuer,
@@ -895,7 +896,7 @@ export async function getOneXls20(nft: any) {
     thumbnail: thumbnail ? encodeURIComponent(thumbnail) : thumbnail,
     nft_serial: nft.nft_serial,
     URI,
-    Domain: domain || (await getDomain(Issuer)),
+    Domain: domain,
     assets,
   };
 }
