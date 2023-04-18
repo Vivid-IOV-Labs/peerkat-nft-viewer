@@ -100,8 +100,6 @@ export default defineComponent({
 
           if (isReturned.ok && isReturned.status === 200) {
             thumbnailUrl.value = url;
-            debugger;
-
             const params = {
               tokenID: props.nft.currency,
               thumbnailUrl: thumbnailUrl.value,

@@ -590,11 +590,11 @@ async function getXLS20ContentType(
 }
 function getXLS20MediaUrl(mediaUrl: string): string {
   if (mediaUrl.split("//")[0].includes("ipfs:") || !mediaUrl.split("//")[0]) {
-    return mediaUrl.split("//")[1].replace("ipfs/", "");
+    return encodeURIComponent(mediaUrl.split("//")[1].replace("ipfs/", ""));
   } else if (mediaUrl.includes("/ipfs/")) {
-    return mediaUrl.split("/ipfs/")[1];
+    return encodeURIComponent(mediaUrl.split("/ipfs/")[1]);
   } else {
-    return mediaUrl;
+    return encodeURIComponent(mediaUrl);
   }
 }
 export async function getOneXls20(nft: any) {
@@ -638,6 +638,7 @@ export async function getOneXls20(nft: any) {
   } catch (err) {
     if (!URI) {
       domain = await getDomain(Issuer);
+
       if (nodetype === "MAINNET") {
         const t = await logFailedToLoad({
           Issuer,
@@ -801,11 +802,9 @@ export async function getOneXls20(nft: any) {
             "image",
             true
           );
-          debugger;
         } else {
           thumbnail = details.thumbnail || mediaUrl;
           thumbnailType = media_type;
-          debugger;
         }
       } else {
         if (details.image || details.image_url) {
@@ -817,7 +816,6 @@ export async function getOneXls20(nft: any) {
             "image",
             false
           );
-          debugger;
         } else {
           thumbnail = details.thumbnail || mediaUrl;
           thumbnailType = media_type;
@@ -837,7 +835,12 @@ export async function getOneXls20(nft: any) {
         mediaUrl = media;
       }
 
-      media_type = await getXLS20ContentType(mediaUrl, NFTokenID, "video");
+      media_type = await getXLS20ContentType(
+        mediaUrl,
+        NFTokenID,
+        "video",
+        false
+      );
       if (details.image || details.image_url) {
         const poster = details.image || details.image_url;
         let posterUrl;
@@ -892,12 +895,8 @@ export async function getOneXls20(nft: any) {
     thumbnail: thumbnail ? encodeURIComponent(thumbnail) : thumbnail,
     nft_serial: nft.nft_serial,
     URI,
-    Domain: domain,
-    assets: Object.values(assets)
-      .filter((a) => a)
-      .map(({ media_type, mediaUrl }: any) => {
-        return { media_type, mediaUrl: encodeURIComponent(mediaUrl) };
-      }),
+    Domain: domain || (await getDomain(Issuer)),
+    assets,
   };
 }
 
