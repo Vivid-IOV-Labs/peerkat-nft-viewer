@@ -590,11 +590,11 @@ async function getXLS20ContentType(
 }
 function getXLS20MediaUrl(mediaUrl: string): string {
   if (mediaUrl.split("//")[0].includes("ipfs:") || !mediaUrl.split("//")[0]) {
-    return encodeURIComponent(mediaUrl.split("//")[1].replace("ipfs/", ""));
+    return encodeURI(mediaUrl.split("//")[1].replace("ipfs/", ""));
   } else if (mediaUrl.includes("/ipfs/")) {
-    return encodeURIComponent(mediaUrl.split("/ipfs/")[1]);
+    return encodeURI(mediaUrl.split("/ipfs/")[1]);
   } else {
-    return encodeURIComponent(mediaUrl);
+    return encodeURI(mediaUrl);
   }
 }
 export async function getOneXls20(nft: any) {
@@ -881,7 +881,7 @@ export async function getOneXls20(nft: any) {
     issuer: Issuer,
     currency: NFTokenID,
     tokenName,
-    url: mediaUrl ? encodeURIComponent(mediaUrl) : mediaUrl,
+    url: mediaUrl,
     media_type,
     thumbnailType,
     type,
@@ -893,7 +893,7 @@ export async function getOneXls20(nft: any) {
     error_title,
     attributes,
     collection,
-    thumbnail: thumbnail ? encodeURIComponent(thumbnail) : thumbnail,
+    thumbnail: thumbnail,
     nft_serial: nft.nft_serial,
     URI,
     Domain: domain,
