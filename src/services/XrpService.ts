@@ -746,13 +746,14 @@ export async function getOneXls20(nft: any) {
     attributes = details.attributes;
 
     collection = details.collection;
-
     if (details.content) {
       const cid = details.content.split("cid:")[1];
       const response = await getIpfsMedia(cid);
       const contentType = response.headers.get("Content-Type");
       media_type = contentType;
       mediaUrl = response.url;
+      thumbnail = response.url;
+      thumbnailType = contentType;
     }
     if (details.thumbnail) {
       thumbnail = getXLS20MediaUrl(details.thumbnail);
@@ -783,7 +784,6 @@ export async function getOneXls20(nft: any) {
 
     if (details.animation || details.animation_url) {
       const media = details.animation || details.animation_url;
-
       mediaUrl = getXLS20MediaUrl(media);
       const type = "animation";
       media_type = await getXLS20ContentType(mediaUrl, NFTokenID, type, true);
@@ -832,7 +832,6 @@ export async function getOneXls20(nft: any) {
       } else {
         mediaUrl = media;
       }
-
       media_type = await getXLS20ContentType(
         mediaUrl,
         NFTokenID,
@@ -841,14 +840,7 @@ export async function getOneXls20(nft: any) {
       );
       if (details.image || details.image_url) {
         const poster = details.image || details.image_url;
-        let posterUrl;
-        if (poster.split("//")[0].includes("ipfs:") || !poster.split("//")[0]) {
-          posterUrl = poster.split("//")[1].replace("ipfs/", "");
-        } else if (poster.includes("/ipfs/")) {
-          posterUrl = poster.split("/ipfs/")[1];
-        } else {
-          posterUrl = poster;
-        }
+        const posterUrl = getXLS20MediaUrl(poster);
         thumbnail = posterUrl;
         thumbnailType = await getXLS20ContentType(
           thumbnail,

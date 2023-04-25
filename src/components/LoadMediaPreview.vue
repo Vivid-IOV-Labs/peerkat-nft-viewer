@@ -117,14 +117,14 @@ export default defineComponent({
               NFTokenTaxon: props.nft.tokenTaxon,
               Source: "xummapp-frontend",
             });
-
             throw new Error("Error Status:" + isReturned.status);
           }
         } catch (err) {
-          if (props.nft.thumbnail && props.nft.thumbnail.includes("https")) {
-            thumbnailUrl.value = props.nft.thumbnail;
+          const linkkToMedia = props.nft.thumbnail || props.nft.url;
+          if (linkkToMedia.includes("https") || linkkToMedia.includes("ipfs")) {
+            thumbnailUrl.value = linkkToMedia;
           } else {
-            const resp = await getIpfsMedia(props.nft.thumbnail);
+            const resp = await getIpfsMedia(linkkToMedia);
             thumbnailUrl.value = resp.url;
           }
         } finally {
