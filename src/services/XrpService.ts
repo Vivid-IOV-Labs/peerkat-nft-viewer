@@ -537,6 +537,24 @@ export function createUrlFromDomain(domain: string, nftokenid: string) {
   }
 }
 
+export function createUrlFromURI(uri: string) {
+  // const uri = hexToString(URI); //.replace(/\\/g, "");
+  // const end = uri.includes(".json")
+  //   ? ""
+  //   : Number.isInteger(NFTokenTaxon)
+  //   ? `/${NFTokenTaxon}.json`
+  //   : "/base.json";
+
+  const url = uri.includes("ipfs:")
+    ? uri.split("//")[1]
+    : uri.includes("/ipfs/")
+    ? uri.split("/ipfs/")[1]
+    : uri.includes("cid:")
+    ? uri.split("cid:")[1]
+    : uri;
+  return url;
+}
+
 export async function logFailedToLoad(obj: any): Promise<any> {
   const lambdaUrl = `/logger`;
   try {
@@ -588,6 +606,7 @@ async function getXLS20ContentType(
     }
   }
 }
+
 function getXLS20MediaUrl(mediaUrl: string): string {
   if (mediaUrl.split("//")[0].includes("ipfs:") || !mediaUrl.split("//")[0]) {
     return encodeURI(mediaUrl.split("//")[1].replace("ipfs/", ""));
@@ -597,6 +616,7 @@ function getXLS20MediaUrl(mediaUrl: string): string {
     return encodeURI(mediaUrl);
   }
 }
+
 export async function getOneXls20(nft: any) {
   interface Assets {
     image?: any | null;
@@ -676,29 +696,8 @@ export async function getOneXls20(nft: any) {
         Source: "xummapp-frontend",
       });
       const uri = hexToString(URI); //.replace(/\\/g, "");
-      const end = uri.includes(".json")
-        ? ""
-        : Number.isInteger(NFTokenTaxon)
-        ? `/${NFTokenTaxon}.json`
-        : "/base.json";
+      const url = createUrlFromURI(uri);
 
-      const url = uri.includes("ipfs:")
-        ? uri.split("//")[1]
-        : uri.includes("/ipfs/")
-        ? uri.split("/ipfs/")[1]
-        : uri.includes("cid:")
-        ? uri.split("cid:")[1]
-        : uri;
-      /*
-      different kind of uri
-      
-      cid:bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4
-      https://bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4.ipfs.w3s.link/metadata.json #https://([a-zA-Z]+([0-9]+[a-zA-Z]+)+)\.ipfs\.[A-Za-z0-9]+\.[A-Za-z0-9]+/([A-Za-z0-9]+(_[A-Za-z0-9]+)+)\.[A-Za-z0-9]+
-      bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
-      ipfs://bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
-      https://ipfs.io/ipfs/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
-      https://somedomain/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
-      */
       try {
         const response =
           uri.includes("ipfs:") ||
