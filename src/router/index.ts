@@ -282,7 +282,7 @@ router.beforeEach(async (to, from, next) => {
 
       await store.dispatch("xumm/getOttData");
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
-      console.log("ottdata", JSON.stringify(ottdata));
+      console.log("ottdata", JSON.stringify(ottdata.value));
       await store.commit("user/setAddress", ottdata.value.account);
       await store.commit("user/setNetwork", ottdata.value.nodewss);
       const nodetype = getNodeTypeFromNetwork(ottdata.value.nodewss);
