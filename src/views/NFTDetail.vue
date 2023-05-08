@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-link :to="{ path: `/shared` }" class="mb-4 btn btn-link w-100"
+    <router-link :to="{ path: `/wallet` }" class="mb-4 btn btn-link w-100"
       >Back
     </router-link>
 
@@ -142,7 +142,7 @@
           <div
             v-if="
               nft.attributes &&
-              nft.attributes.filter((a) => a.trait_type || a.value).length
+              nft.attributes.filter((a:any) => a.trait_type || a.value).length
                 .length
             "
             class="mt-2"
@@ -291,10 +291,9 @@ export default defineComponent({
       parseInt(route.params.nodetype as string)
     );
     const client = computed(() => store.getters["nft/getXrpClient"]);
-    const user = computed(() => store.getters["user/getUser"]);
 
-    const malformedLink = ref(false);
     const network = computed(() => store.getters["user/getNetwork"]);
+    const walletAddress = computed(() => store.getters["user/getAddress"]);
     const nodetype = computed(() => getNodeTypeFromNetwork(network.value));
     const networkCodeFromType = computed(() =>
       getNetworkCodeFromType(nodetype.value)
@@ -311,8 +310,8 @@ export default defineComponent({
     async function fetchOneXls14() {
       try {
         nft.value = await client.value.fetchOne(
-          route.params.nftAddress.toString(),
-          route.params.currency.toString()
+          walletAddress.value,
+          route.params.nftToken.toString()
         );
       } catch (error) {
         // malformedLink.value = true;
@@ -322,8 +321,8 @@ export default defineComponent({
     async function fetchShared() {
       try {
         const nftXLS20 = await fetchOneXls20(
-          route.params.nftAddress.toString(),
-          route.params.currency.toString()
+          walletAddress.value,
+          route.params.nftToken.toString()
         );
         if (nftXLS20) {
           nft.value = nftXLS20;
@@ -366,11 +365,6 @@ export default defineComponent({
         }
       }
     }
-    if (nodetypefromlink == nodetype.value) {
-      await fetchShared();
-    } else {
-      malformedLink.value = true;
-    }
 
     return {
       nft,
@@ -378,7 +372,6 @@ export default defineComponent({
       network,
       nodetypefromlink,
       bihompUrl,
-      malformedLink,
       isCustomNode,
       getNetworkFromNodeType,
       fallbackImg(event: Event): void {

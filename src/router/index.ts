@@ -73,7 +73,7 @@ const routes = [
         component: () => import("../views/MyNFTs.vue"),
       },
       {
-        path: ":nftAddress/:nodetype/:currency?",
+        path: ":nftToken",
         name: "NFTDetail",
         component: () => import("../views/NFTDetail.vue"),
         meta: {
@@ -314,12 +314,15 @@ router.beforeEach(async (to, from, next) => {
       if (!shared.value) {
         store.commit("nft/initSharedStore", ottdata.value.user);
       }
-
-      const path = ottdata.value.redirect;
-      loggedIn = true;
-      store.commit("ui/setIsloading", false);
-
-      if (path) {
+      if (ottdata.value.redirect) {
+        const path = ottdata.value.redirect;
+        loggedIn = true;
+        store.commit("ui/setIsloading", false);
+        next({ path });
+      } else if (ottdata.value.token) {
+        const path = `/wallet/${ottdata.value.token}`;
+        loggedIn = true;
+        store.commit("ui/setIsloading", false);
         next({ path });
       } else {
         next();
@@ -437,3 +440,35 @@ export default router;
 //     },
 //   },
 // ];
+
+// const ottData = {
+//   version: "2.4.0",
+//   locale: "en",
+//   currency: "USD",
+//   style: "LIGHT",
+//   nodetype: "MAINNET",
+//   token: "00083A98425D5408873C7C141C270879D254C84AC1CC10F0A15E6442000003A7",
+//   account: "rDF8kbsdZYfNSbXFwPLJEVBMB9p5P9pS5M",
+//   accounttype: "REGULAR",
+//   accountaccess: "FULL",
+//   xAppNavigateData: {
+//     command: "xAppNavigate",
+//     xApp: "peerkat.viewer",
+//     token: "00083A98425D5408873C7C141C270879D254C84AC1CC10F0A15E6442000003A7",
+//   },
+//   nodewss: "wss://xrplcluster.com",
+//   user: "b16505d0-34f8-4174-945e-9289815ceda1",
+//   user_device: { currency: "USD", platform: "android" },
+//   account_info: {
+//     account: "rDF8kbsdZYfNSbXFwPLJEVBMB9p5P9pS5M",
+//     name: null,
+//     domain: null,
+//     blocked: false,
+//     source: "",
+//     force_dtag: false,
+//     kycApproved: false,
+//     proSubscription: false,
+//   },
+//   origin_info: { application_allow_fetch_kyc_data: 0 },
+//   subscriptions: [],
+// };

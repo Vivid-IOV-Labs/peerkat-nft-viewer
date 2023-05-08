@@ -195,6 +195,14 @@
         <base-button
           v-if="nft.standard == 'XLS-20'"
           class="mr-2"
+          @click="goToDetails"
+          >det
+          <span v-if="countOffers">({{ countOffers }})</span>
+          <span v-else>(0)</span>
+        </base-button>
+        <base-button
+          v-if="nft.standard == 'XLS-20'"
+          class="mr-2"
           @click="goToOffer"
           >Offers
           <span v-if="countOffers">({{ countOffers }})</span>
@@ -280,6 +288,12 @@ export default defineComponent({
         await store.commit("nft/setCurrent", props.nft);
         router.push({
           path: `/offers/sell`,
+        });
+      },
+      async goToDetails() {
+        await store.commit("nft/setCurrent", props.nft);
+        router.push({
+          path: `/wallet/${props.nft.currency}`,
         });
       },
       bihompUrl,
