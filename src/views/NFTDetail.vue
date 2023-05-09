@@ -329,7 +329,6 @@ export default defineComponent({
           route.params.nftToken.toString(),
           user.value
         );
-        debugger;
         if (nftXLS20) {
           nft.value = nftXLS20;
           await fetchMedia();
