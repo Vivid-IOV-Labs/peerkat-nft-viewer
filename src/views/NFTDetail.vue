@@ -175,7 +175,7 @@
             <span>{{ nft.standard }}</span>
           </div>
 
-          <!-- <ul class="nav nav-pills nav-fill my-4">
+          <ul class="nav nav-pills nav-fill my-4">
             <li class="nav-item">
               <a
                 class="nav-link"
@@ -244,7 +244,7 @@
                 </div>
               </div>
             </div>
-          </div> -->
+          </div>
         </template>
         <template #footer>
           <external-link
