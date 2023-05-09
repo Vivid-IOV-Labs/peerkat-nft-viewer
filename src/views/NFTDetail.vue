@@ -5,8 +5,6 @@
     </router-link>
 
     <div class="w-100 p-1">
-      <pre>{{ nft }}</pre>
-
       <base-card v-if="nft">
         <template #picture>
           <figure style="overflow: hidden">
@@ -177,7 +175,7 @@
             <span>{{ nft.standard }}</span>
           </div>
 
-          <ul class="nav nav-pills nav-fill my-4">
+          <!-- <ul class="nav nav-pills nav-fill my-4">
             <li class="nav-item">
               <a
                 class="nav-link"
@@ -246,7 +244,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </template>
         <template #footer>
           <external-link

@@ -196,9 +196,7 @@
           v-if="nft.standard == 'XLS-20'"
           class="mr-2"
           @click="goToDetails"
-          >det
-          <span v-if="countOffers">({{ countOffers }})</span>
-          <span v-else>(0)</span>
+          >Details
         </base-button>
         <base-button
           v-if="nft.standard == 'XLS-20'"
