@@ -500,7 +500,8 @@ export async function getTokens(walletAddress: string): Promise<any> {
 
 export async function fetchOneXls20(
   walletAddress: string,
-  NFTokenID: string
+  NFTokenID: string,
+  owner?: string
 ): Promise<any> {
   const {
     result: { account_nfts },
@@ -510,7 +511,29 @@ export async function fetchOneXls20(
   });
 
   if (nftXLS20) {
-    return getOneXls20(nftXLS20);
+    const schema = await getOneXls20(nftXLS20);
+    const sellOffersResponse = await fetchSellOffers(NFTokenID);
+    const buyOffersResponse = await fetchBuyOffers(NFTokenID);
+    const now = Date.now();
+    const buyoffers =
+      buyOffersResponse && buyOffersResponse.offers
+        ? buyOffersResponse.offers.filter((offer: any) => {
+            if (offer.expiration) {
+              return offer.expiration * 1000 > now;
+            } else return true;
+          })
+        : [];
+    return {
+      ...schema,
+      selloffers:
+        sellOffersResponse && sellOffersResponse.offers
+          ? sellOffersResponse.offers
+          : // .filter(
+            //     (offer: any) => offer.owner == owner
+            //   )
+            [],
+      buyoffers,
+    };
   } else {
     throw new Error("Not an XLS-20");
   }
