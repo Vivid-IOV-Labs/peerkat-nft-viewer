@@ -10,7 +10,6 @@
 </template>
 <script lang="ts">
 import { defineComponent, computed } from "vue";
-import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import LoadMedia from "@/components/LoadMedia.vue";
 import BackLink from "@/components/BackLink.vue";
@@ -21,11 +20,9 @@ export default defineComponent({
     BackLink,
   },
   setup() {
-    const route = useRoute();
     const store = useStore();
-    const { currency, nftAddress } = route.params;
     const nft = computed(() => {
-      return store.getters["nft/getByAddress"](nftAddress, currency);
+      return store.getters["nft/getCurrent"];
     });
     return {
       nft,

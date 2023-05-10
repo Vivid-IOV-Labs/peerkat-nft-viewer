@@ -307,8 +307,8 @@ export default defineComponent({
         const url = shareUrl(nodetypecode);
         copyText(url, params);
       },
-      view() {
-        //store.commit("nft/setCurrent", props.nft);
+      async view() {
+        await store.commit("nft/setCurrent", props.nft);
 
         if (!props.nft.error_code) {
           router.push({
