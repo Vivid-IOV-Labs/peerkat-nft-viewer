@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-link :to="{ path: `/shared` }" class="mb-4 btn btn-link w-100"
+    <router-link :to="{ path: `/wallet` }" class="mb-4 btn btn-link w-100"
       >Back
     </router-link>
 
@@ -140,7 +140,7 @@
           <div
             v-if="
               nft.attributes &&
-              nft.attributes.filter((a) => a.trait_type || a.value).length
+              nft.attributes.filter((a:any) => a.trait_type || a.value).length
                 .length
             "
             class="mt-2"
@@ -174,6 +174,77 @@
             <strong class="font-weight-bold">Standard </strong><br />
             <span>{{ nft.standard }}</span>
           </div>
+
+          <ul class="nav nav-pills nav-fill my-4">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                :class="{ 'active  bg-danger': showTab === 'sell' }"
+                href="#"
+                @click.prevent="showTab = 'sell'"
+                >Sell Offers
+                <span v-if="nft.selloffers && nft.selloffers.length"
+                  >({{ nft.selloffers.length }})</span
+                >
+                <span v-else>(0)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                :class="{ 'active text-white bg-success': showTab === 'buy' }"
+                href="#"
+                @click.prevent="showTab = 'buy'"
+                >Buy Offers
+                <span v-if="nft.buyoffers && nft.buyoffers.length"
+                  >({{ nft.buyoffers.length }})</span
+                >
+                <span v-else>(0)</span>
+              </a>
+            </li>
+          </ul>
+          <div>
+            <div v-if="showTab === 'sell'">
+              <div v-if="nft.selloffers.length == 0">
+                <p>No current offers found</p>
+              </div>
+              <div v-else>
+                <div
+                  v-for="offer in nft.selloffers.sort(
+              (a:any, b:any) => b.amount + b.amount
+            )"
+                  :key="offer.nft_offer_index"
+                  class="mt-4"
+                >
+                  <sell-card
+                    v-if="offer"
+                    :token="nft.currency"
+                    :offer="offer"
+                  ></sell-card>
+                </div>
+              </div>
+            </div>
+            <div v-if="showTab === 'buy'">
+              <div v-if="!nft.buyoffers || nft.buyoffers.length == 0">
+                <p>No current offers found</p>
+              </div>
+              <div v-else>
+                <div
+                  v-for="offer in nft.buyoffers.sort(
+              (a:any, b:any) => b.amount - b.amount
+            )"
+                  :key="offer.nft_offer_index"
+                  class="mt-4"
+                >
+                  <accept-buy-offer-card
+                    v-if="offer"
+                    :offer="offer"
+                    :nft-id="nft.currency"
+                  ></accept-buy-offer-card>
+                </div>
+              </div>
+            </div>
+          </div>
         </template>
         <template #footer>
           <external-link
@@ -185,77 +256,7 @@
         </template>
       </base-card>
 
-      <div v-if="!nft" class="p-2">
-        <div v-if="nodetypefromlink && nodetypefromlink !== nodetype">
-          <div v-if="isCustomNode(nodetypefromlink)">
-            <h5 class="text-center mt-2">
-              It appears that this link to an NFT is for the
-              {{ nodetypefromlink }}. Please switch to the
-              {{ nodetypefromlink }} in your Xumm app.
-            </h5>
-            <ul class="mt-2 p-2">
-              <li class="pb-2">
-                You can switch to the
-                {{ nodetypefromlink }} in the Xumm app by clicking “Quit xApp”
-              </li>
-              <li class="pb-2">
-                In the Xumm app: click “Settings”, then “Advanced”, then “Node”
-                and select the “
-                {{ getNetworkFromNodeType(nodetypefromlink) }}“ node, under the
-                CUSTOM section.
-              </li>
-              <li class="pb-2">
-                If you do not see this node under the CUSTOM section; please
-                contact the administrator of the network you are trying to
-                connect to, for more information.
-              </li>
-              <li class="pb-2">
-                Return to Xumm home, open the Peerkat xApp to view the NFT in
-                {{ nodetypefromlink }}
-              </li>
-            </ul>
-          </div>
-          <div v-if="!isCustomNode(nodetypefromlink)">
-            <h5 class="text-center mt-2">
-              It appears that this link to an NFT is for the
-              {{ nodetypefromlink }}. Please switch to the
-              {{ nodetypefromlink }} in your Xumm app.
-            </h5>
-            <ul class="mt-2 p-2">
-              <li class="pb-2">
-                You can switch to the
-                {{ nodetypefromlink }} in the Xumm app by clicking “Quit xApp”
-              </li>
-              <li class="pb-2">
-                In the Xumm app: click “Settings”, then “Advanced”, then “Node”
-                and select a Node listed in the “{{ nodetypefromlink }}” section
-              </li>
-              <li class="pb-2">
-                Return to Xumm home, open the Peerkat xApp to view the NFT in
-                {{ nodetypefromlink }}
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div v-if="!nodetypefromlink">
-          <h5 class="text-center mt-2">
-            Peerkat is not able to find an NFT from the link that you have
-            followed.
-          </h5>
-          <ul class="mt-2 p-2">
-            <li class="pb-2">There could be an error in the link</li>
-            <li class="pb-2">
-              The owner of the NFT may have changed or the link may be out to
-              date.
-            </li>
-            <li class="pb-2">
-              Please check with the NFT owner to ensure that you have followed
-              the correct link. If the owner of the NFT has changed recently,
-              you will not be able to use the same share link to access the NFT.
-            </li>
-          </ul>
-        </div>
-      </div>
+      <div v-if="!nft" class="p-2">not found</div>
     </div>
   </div>
 </template>
@@ -267,8 +268,6 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import BaseCard from "../components/BaseCard.vue";
 import {
-  getNetworkCodeFromType,
-  getNetworkTypeFromCode,
   getNetworkFromNodeType,
   isCustomNode,
   getNodeTypeFromNetwork,
@@ -278,25 +277,31 @@ import { getInspectorUrl } from "../utils/getInspectorUrl";
 import { fetchOneXls20, getIpfsMedia } from "../services/XrpService";
 import LoadMedia from "@/components/LoadMedia.vue";
 import LoadMediaPreview from "@/components/LoadMediaPreview.vue";
+import AcceptBuyOfferCard from "@/components/AcceptBuyOfferCard.vue";
+import SellCard from "@/components/SellCard.vue";
 export default defineComponent({
-  components: { BaseCard, ExternalLink, LoadMedia, LoadMediaPreview },
+  components: {
+    BaseCard,
+    ExternalLink,
+    LoadMedia,
+    LoadMediaPreview,
+    AcceptBuyOfferCard,
+    SellCard,
+  },
   async setup() {
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
 
-    const nodetypefromlink = getNetworkTypeFromCode(
-      parseInt(route.params.nodetype as string)
-    );
+    const currenTab = "sell";
+    const showTab = ref(currenTab);
     const client = computed(() => store.getters["nft/getXrpClient"]);
-    const user = computed(() => store.getters["user/getUser"]);
 
-    const malformedLink = ref(false);
     const network = computed(() => store.getters["user/getNetwork"]);
+    const user = computed(() => store.getters["user/getUser"]);
+    const walletAddress = computed(() => store.getters["user/getAddress"]);
     const nodetype = computed(() => getNodeTypeFromNetwork(network.value));
-    const networkCodeFromType = computed(() =>
-      getNetworkCodeFromType(nodetype.value)
-    );
+
     const nft = ref<any | null>(null);
     const bithomID = computed(() =>
       nft.value.standard && nft.value.standard === "XLS-20"
@@ -309,15 +314,9 @@ export default defineComponent({
     async function fetchOneXls14() {
       try {
         nft.value = await client.value.fetchOne(
-          route.params.nftAddress.toString(),
-          route.params.currency.toString()
+          walletAddress.value,
+          route.params.nftToken.toString()
         );
-        store.commit("nft/addShared", {
-          shared: nft.value,
-          nodetype: nodetype.value,
-          walletaddress: route.params.nftAddress.toString(),
-          user: user.value,
-        });
       } catch (error) {
         // malformedLink.value = true;
         devlog(error);
@@ -326,18 +325,13 @@ export default defineComponent({
     async function fetchShared() {
       try {
         const nftXLS20 = await fetchOneXls20(
-          route.params.nftAddress.toString(),
-          route.params.currency.toString()
+          walletAddress.value,
+          route.params.nftToken.toString(),
+          user.value
         );
         if (nftXLS20) {
           nft.value = nftXLS20;
           await fetchMedia();
-          store.commit("nft/addShared", {
-            shared: nft.value,
-            nodetype: nodetype.value,
-            walletaddress: route.params.nftAddress.toString(),
-            user: user.value,
-          });
         } else {
           throw new Error("Not an XLS-20");
         }
@@ -376,19 +370,13 @@ export default defineComponent({
         }
       }
     }
-    if (nodetypefromlink == nodetype.value) {
-      await fetchShared();
-    } else {
-      malformedLink.value = true;
-    }
-
+    await fetchShared();
     return {
       nft,
       nodetype,
       network,
-      nodetypefromlink,
       bihompUrl,
-      malformedLink,
+      showTab,
       isCustomNode,
       getNetworkFromNodeType,
       fallbackImg(event: Event): void {
@@ -397,7 +385,7 @@ export default defineComponent({
       view() {
         if (nft.value && !nft.value.error_code) {
           router.push({
-            path: `/shared/${nft.value.issuer}/${networkCodeFromType.value}/view/${nft.value.currency}`,
+            path: `/wallet/${nft.value.issuer}/view/${nft.value.currency}`,
           });
         }
       },
