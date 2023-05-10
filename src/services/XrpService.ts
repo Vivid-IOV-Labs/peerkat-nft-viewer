@@ -500,7 +500,8 @@ export async function getTokens(walletAddress: string): Promise<any> {
 
 export async function fetchOneXls20(
   walletAddress: string,
-  NFTokenID: string
+  NFTokenID: string,
+  owner?: string
 ): Promise<any> {
   const {
     result: { account_nfts },
@@ -510,7 +511,29 @@ export async function fetchOneXls20(
   });
 
   if (nftXLS20) {
-    return getOneXls20(nftXLS20);
+    const schema = await getOneXls20(nftXLS20);
+    const sellOffersResponse = await fetchSellOffers(NFTokenID);
+    const buyOffersResponse = await fetchBuyOffers(NFTokenID);
+    const now = Date.now();
+    const buyoffers =
+      buyOffersResponse && buyOffersResponse.offers
+        ? buyOffersResponse.offers.filter((offer: any) => {
+            if (offer.expiration) {
+              return offer.expiration * 1000 > now;
+            } else return true;
+          })
+        : [];
+    return {
+      ...schema,
+      selloffers:
+        sellOffersResponse && sellOffersResponse.offers
+          ? sellOffersResponse.offers
+          : // .filter(
+            //     (offer: any) => offer.owner == owner
+            //   )
+            [],
+      buyoffers,
+    };
   } else {
     throw new Error("Not an XLS-20");
   }
@@ -537,6 +560,24 @@ export function createUrlFromDomain(domain: string, nftokenid: string) {
   }
 }
 
+export function createUrlFromURI(uri: string) {
+  // const uri = hexToString(URI); //.replace(/\\/g, "");
+  // const end = uri.includes(".json")
+  //   ? ""
+  //   : Number.isInteger(NFTokenTaxon)
+  //   ? `/${NFTokenTaxon}.json`
+  //   : "/base.json";
+
+  const url = uri.includes("ipfs:")
+    ? uri.split("//")[1]
+    : uri.includes("/ipfs/")
+    ? uri.split("/ipfs/")[1]
+    : uri.includes("cid:")
+    ? uri.split("cid:")[1]
+    : uri;
+  return url;
+}
+
 export async function logFailedToLoad(obj: any): Promise<any> {
   const lambdaUrl = `/logger`;
   try {
@@ -556,7 +597,8 @@ export async function logFailedToLoad(obj: any): Promise<any> {
 async function getXLS20ContentType(
   mediaUrl: string,
   NFTokenID: string,
-  type: string
+  type: string,
+  isThumbnail: boolean
 ): Promise<any> {
   const ext = mediaUrl && mediaUrl.split(".")?.pop()?.toLowerCase();
 
@@ -566,10 +608,19 @@ async function getXLS20ContentType(
     return "video/" + ext;
   } else {
     try {
-      const end = type === "image" ? `full/${type}` : type;
+      const end =
+        type === "image"
+          ? `full/${type}`
+          : type === "image" && isThumbnail
+          ? `200px/${type}`
+          : type;
       const url = `/apidev/assets/${type}s/${NFTokenID}/${end}`;
-      const response = await fetch(url, { method: "HEAD" });
-      return response.headers.get("Content-Type");
+      const isReturned = await fetch(url, { method: "HEAD" });
+      if (isReturned.ok && isReturned.status === 200) {
+        return isReturned.headers.get("Content-Type");
+      } else {
+        throw new Error("Error Status:" + isReturned.status);
+      }
     } catch (err) {
       const response = await getIpfsMedia(mediaUrl);
       return response && response.headers
@@ -578,15 +629,17 @@ async function getXLS20ContentType(
     }
   }
 }
+
 function getXLS20MediaUrl(mediaUrl: string): string {
   if (mediaUrl.split("//")[0].includes("ipfs:") || !mediaUrl.split("//")[0]) {
-    return mediaUrl.split("//")[1].replace("ipfs/", "");
+    return encodeURI(mediaUrl.split("//")[1].replace("ipfs/", ""));
   } else if (mediaUrl.includes("/ipfs/")) {
-    return mediaUrl.split("/ipfs/")[1];
+    return encodeURI(mediaUrl.split("/ipfs/")[1]);
   } else {
-    return mediaUrl;
+    return encodeURI(mediaUrl);
   }
 }
+
 export async function getOneXls20(nft: any) {
   interface Assets {
     image?: any | null;
@@ -628,6 +681,7 @@ export async function getOneXls20(nft: any) {
   } catch (err) {
     if (!URI) {
       domain = await getDomain(Issuer);
+
       if (nodetype === "MAINNET") {
         const t = await logFailedToLoad({
           Issuer,
@@ -665,29 +719,8 @@ export async function getOneXls20(nft: any) {
         Source: "xummapp-frontend",
       });
       const uri = hexToString(URI); //.replace(/\\/g, "");
-      const end = uri.includes(".json")
-        ? ""
-        : Number.isInteger(NFTokenTaxon)
-        ? `/${NFTokenTaxon}.json`
-        : "/base.json";
+      const url = createUrlFromURI(uri);
 
-      const url = uri.includes("ipfs:")
-        ? uri.split("//")[1]
-        : uri.includes("/ipfs/")
-        ? uri.split("/ipfs/")[1]
-        : uri.includes("cid:")
-        ? uri.split("cid:")[1]
-        : uri;
-      /*
-      different kind of uri
-      
-      cid:bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4
-      https://bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4.ipfs.w3s.link/metadata.json #https://([a-zA-Z]+([0-9]+[a-zA-Z]+)+)\.ipfs\.[A-Za-z0-9]+\.[A-Za-z0-9]+/([A-Za-z0-9]+(_[A-Za-z0-9]+)+)\.[A-Za-z0-9]+
-      bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
-      ipfs://bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
-      https://ipfs.io/ipfs/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json
-      https://somedomain/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi
-      */
       try {
         const response =
           uri.includes("ipfs:") ||
@@ -727,38 +760,44 @@ export async function getOneXls20(nft: any) {
       }
     }
   }
-
   if (details) {
+    details = details.metadata ? details.metadata : details;
+
     tokenName = details.name && details.name.replace(/[^\w\s]/gi, "");
     description = details.description;
     attributes = details.attributes;
 
     collection = details.collection;
-
     if (details.content) {
       const cid = details.content.split("cid:")[1];
       const response = await getIpfsMedia(cid);
       const contentType = response.headers.get("Content-Type");
       media_type = contentType;
       mediaUrl = response.url;
+      thumbnail = response.url;
+      thumbnailType = contentType;
     }
     if (details.thumbnail) {
       thumbnail = getXLS20MediaUrl(details.thumbnail);
       thumbnailType = await getXLS20ContentType(
         details.thumbnail,
         NFTokenID,
-        "image"
+        "image",
+        true
       );
     }
-
     if (details.image || details.image_url) {
       const media = details.image || details.image_url;
       mediaUrl = getXLS20MediaUrl(media);
-
       const type = "image";
-      media_type = await getXLS20ContentType(mediaUrl, NFTokenID, type);
+      media_type = await getXLS20ContentType(mediaUrl, NFTokenID, type, false);
       thumbnail = details.thumbnail || mediaUrl;
-      thumbnailType = await getXLS20ContentType(thumbnail, NFTokenID, type);
+      thumbnailType = await getXLS20ContentType(
+        thumbnail,
+        NFTokenID,
+        type,
+        false
+      );
       assets.image = {
         media_type,
         mediaUrl,
@@ -767,10 +806,9 @@ export async function getOneXls20(nft: any) {
 
     if (details.animation || details.animation_url) {
       const media = details.animation || details.animation_url;
-
       mediaUrl = getXLS20MediaUrl(media);
       const type = "animation";
-      media_type = await getXLS20ContentType(mediaUrl, NFTokenID, type);
+      media_type = await getXLS20ContentType(mediaUrl, NFTokenID, type, true);
       if (
         (details.content_type && details.content_type.includes("video")) ||
         media_type.includes("video")
@@ -781,7 +819,8 @@ export async function getOneXls20(nft: any) {
           thumbnailType = await getXLS20ContentType(
             thumbnail,
             NFTokenID,
-            "image"
+            "image",
+            true
           );
         } else {
           thumbnail = details.thumbnail || mediaUrl;
@@ -794,7 +833,8 @@ export async function getOneXls20(nft: any) {
           thumbnailType = await getXLS20ContentType(
             thumbnail,
             NFTokenID,
-            "image"
+            "image",
+            false
           );
         } else {
           thumbnail = details.thumbnail || mediaUrl;
@@ -814,23 +854,21 @@ export async function getOneXls20(nft: any) {
       } else {
         mediaUrl = media;
       }
-
-      media_type = await getXLS20ContentType(mediaUrl, NFTokenID, "video");
+      media_type = await getXLS20ContentType(
+        mediaUrl,
+        NFTokenID,
+        "video",
+        false
+      );
       if (details.image || details.image_url) {
         const poster = details.image || details.image_url;
-        let posterUrl;
-        if (poster.split("//")[0].includes("ipfs:") || !poster.split("//")[0]) {
-          posterUrl = poster.split("//")[1].replace("ipfs/", "");
-        } else if (poster.includes("/ipfs/")) {
-          posterUrl = poster.split("/ipfs/")[1];
-        } else {
-          posterUrl = poster;
-        }
+        const posterUrl = getXLS20MediaUrl(poster);
         thumbnail = posterUrl;
         thumbnailType = await getXLS20ContentType(
           thumbnail,
           NFTokenID,
-          "image"
+          "image",
+          true
         );
       } else {
         thumbnail = details.thumbnail || mediaUrl;
@@ -849,14 +887,9 @@ export async function getOneXls20(nft: any) {
         : "image";
   }
 
-  const badgetypes = {
-    animation: details.animation || details.animation_url,
-    image: details.image || details.image_url,
-    video: details.video,
-    file: details.file,
-    audio: details.audio,
-  };
-
+  if (!domain && !URI) {
+    domain = await getDomain(Issuer);
+  }
   return {
     tokenTaxon: NFTokenTaxon,
     issuer: Issuer,
@@ -874,11 +907,10 @@ export async function getOneXls20(nft: any) {
     error_title,
     attributes,
     collection,
-    thumbnail,
+    thumbnail: thumbnail,
     nft_serial: nft.nft_serial,
     URI,
     Domain: domain,
-    badgetypes,
     assets,
   };
 }
@@ -1291,8 +1323,9 @@ export async function getIpfsMedia(url: string): Promise<any> {
     const ipfsGatewayList = [
       "https://cloudflare-ipfs.com/ipfs/",
       "https://cf-ipfs.com/ipfs/",
-      "https://nftstorage.link/ipfs/",
-      "https://jorropo.net/ipfs/",
+      "https://ipfs.io/ipfs/",
+      // "https://nftstorage.link/ipfs/",
+      // "https://jorropo.net/ipfs/",
     ].map((u) => u + url);
     const controller = new AbortController();
     const signal = controller.signal;

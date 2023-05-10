@@ -8,7 +8,13 @@
           href="#"
           @click.prevent="view"
         >
-          <load-media :nft="nft"></load-media>
+          <load-media-preview
+            v-if="nft.standard == 'XLS-20'"
+            :shared="true"
+            :nft="nft"
+          ></load-media-preview>
+          <load-media v-else :nft="nft"></load-media>
+          <!-- <load-media :nft="nft"></load-media> -->
         </a>
       </figure>
     </template>
@@ -218,6 +224,7 @@ import {
 } from "../utils/getNetworkTypeFromCode";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
 import LoadMedia from "@/components/LoadMedia.vue";
+import LoadMediaPreview from "@/components/LoadMediaPreview.vue";
 
 export default defineComponent({
   components: {
@@ -226,6 +233,7 @@ export default defineComponent({
     BaseButton,
     ExternalLink,
     LoadMedia,
+    LoadMediaPreview,
   },
   props: {
     nft: { type: Object, required: true },

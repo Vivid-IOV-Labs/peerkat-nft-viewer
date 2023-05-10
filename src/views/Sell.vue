@@ -134,15 +134,16 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref } from "vue";
-import SellCard from "@/components/SellCard.vue";
 import SellNftCard from "@/components/SellNftCard.vue";
 import AcceptBuyOfferCard from "@/components/AcceptBuyOfferCard.vue";
+import SellCard from "@/components/SellCard.vue";
+import AsyncButton from "@/components/AsyncButton.vue";
+
 import BaseDialog from "@/components/BaseDialog.vue";
 import BaseInput from "@/components/BaseInput.vue";
 // import BaseButton from "@/components/BaseButton.vue";
 import BackLink from "@/components/BackLink.vue";
 
-import AsyncButton from "@/components/AsyncButton.vue";
 import { useStore } from "vuex";
 import { devlog } from "../utils/devlog";
 

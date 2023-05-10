@@ -5,11 +5,11 @@ export interface SharedNFTs {
   [id: string]: Array<NFT>;
 }
 export interface SharedNFTsByWallet {
-  [walletaddress: string]: SharedNFTs;
+  [walletaddress: string]: any;
 }
 export interface NFTState {
   all: Array<NFT>;
-  sharedwithme: SharedNFTsByWallet;
+  sharedwithme: any;
   lines: Array<NFT>;
   xls20nfts: Array<any>;
   allXls20: Array<any>;
