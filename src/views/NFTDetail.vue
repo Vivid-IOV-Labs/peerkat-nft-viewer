@@ -8,14 +8,16 @@
       <base-card v-if="nft">
         <template #picture>
           <figure style="overflow: hidden">
-            <a
+            <load-media :nft="nft"></load-media>
+
+            <!-- <a
               class="h-100 d-block"
               style="overflow: hidden"
               href="#"
               @click.prevent="view"
             >
               <load-media :nft="nft"></load-media>
-            </a>
+            </a> -->
           </figure>
         </template>
 
