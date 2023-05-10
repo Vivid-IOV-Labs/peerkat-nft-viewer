@@ -329,6 +329,9 @@ export default defineComponent({
         if (nftXLS20) {
           nft.value = nftXLS20;
           await fetchMedia();
+          store.commit("nft/setAllXls20", nft.value);
+
+          store.commit("nft/setAll", nft.value);
         } else {
           throw new Error("Not an XLS-20");
         }
