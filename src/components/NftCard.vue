@@ -8,12 +8,12 @@
           href="#"
           @click.prevent="view"
         >
-          <load-media-preview
+          <!-- <load-media-preview
             v-if="nft.standard == 'XLS-20'"
             :nft="nft"
           ></load-media-preview>
-          <load-media v-else :nft="nft"></load-media>
-          <!-- <load-media :nft="nft"></load-media> -->
+          <load-media v-else :nft="nft"></load-media> -->
+          <load-media :nft="nft"></load-media>
         </a>
       </figure>
       <img
@@ -195,12 +195,6 @@
         <base-button
           v-if="nft.standard == 'XLS-20'"
           class="mr-2"
-          @click="goToDetails"
-          >Details
-        </base-button>
-        <base-button
-          v-if="nft.standard == 'XLS-20'"
-          class="mr-2"
           @click="goToOffer"
           >Offers
           <span v-if="countOffers">({{ countOffers }})</span>
@@ -286,12 +280,6 @@ export default defineComponent({
         await store.commit("nft/setCurrent", props.nft);
         router.push({
           path: `/offers/sell`,
-        });
-      },
-      async goToDetails() {
-        await store.commit("nft/setCurrent", props.nft);
-        router.push({
-          path: `/wallet/${props.nft.currency}`,
         });
       },
       bihompUrl,
