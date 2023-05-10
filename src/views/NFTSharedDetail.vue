@@ -14,12 +14,7 @@
               href="#"
               @click.prevent="view"
             >
-              <load-media-preview
-                v-if="nft.standard == 'XLS-20'"
-                :nft="nft"
-              ></load-media-preview>
-              <load-media v-else :nft="nft"></load-media>
-              <!-- <load-media :nft="nft" :shared="true"></load-media> -->
+              <load-media :nft="nft" :shared="true"></load-media>
             </a>
           </figure>
         </template>
@@ -277,9 +272,8 @@ import { devlog } from "../utils/devlog";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
 import { fetchOneXls20, getIpfsMedia } from "../services/XrpService";
 import LoadMedia from "@/components/LoadMedia.vue";
-import LoadMediaPreview from "@/components/LoadMediaPreview.vue";
 export default defineComponent({
-  components: { BaseCard, ExternalLink, LoadMedia, LoadMediaPreview },
+  components: { BaseCard, ExternalLink, LoadMedia },
   async setup() {
     const route = useRoute();
     const router = useRouter();
