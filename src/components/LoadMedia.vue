@@ -232,4 +232,11 @@ export default defineComponent({
   min-width: auto;
   max-width: auto;
 }
+video::-webkit-media-controls {
+  visibility: hidden;
+}
+
+video::-webkit-media-controls-enclosure {
+  visibility: visible;
+}
 </style>
