@@ -5,6 +5,7 @@
     :poster="thumbnailUrl"
     :autoplay="autoplay"
     :controls="controls"
+    preload="auto"
     loop
     muted
     playsinline
