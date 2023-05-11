@@ -4,7 +4,7 @@
     :src="videoUrl"
     :poster="thumbnailUrl"
     :autoplay="autoplay"
-    :controls="controls"
+    :controls="false"
     preload="auto"
     loop
     muted
