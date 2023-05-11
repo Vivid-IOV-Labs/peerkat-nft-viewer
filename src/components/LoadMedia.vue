@@ -69,7 +69,7 @@ export default defineComponent({
   async setup(props) {
     const mediaUrl = ref("");
     const store = useStore();
-    const thumbnailUrl = ref("/loading.gif");
+    const thumbnailUrl = ref("");
     const loadingMedia = ref(false);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
     async function fetchMedia() {
