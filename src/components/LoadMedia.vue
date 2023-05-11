@@ -1,9 +1,10 @@
 <template>
   <video
     v-if="nft.media_type?.includes('video') && !loadingMedia"
+    ref="video"
     :src="videoUrl"
     :poster="thumbnailUrl"
-    :autoplay="autoplay"
+    :autoplay="false"
     :controls="false"
     preload="auto"
     loop
@@ -37,14 +38,14 @@
       src="/thumbnail.jpg"
     />
   </svg>
-  <!-- <img
+  <img
     v-else-if="loadingMedia"
     :src="'/loading.gif'"
     style="object-fit: cover; height: 100%; object-position: center center"
     class="img-fluid card-img-top"
     alt="Card
           image cap"
-  /> -->
+  />
   <img
     v-else
     :src="'/thumbnail.jpg'"
@@ -55,7 +56,7 @@
   />
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { getIpfsMedia, logFailedToLoad } from "../services/XrpService";
 
@@ -69,9 +70,11 @@ export default defineComponent({
   async setup(props) {
     const mediaUrl = ref("");
     const store = useStore();
-    const thumbnailUrl = ref("");
+    const thumbnailUrl = ref("/loading.gif");
     const loadingMedia = ref(false);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
+    const video = ref<any>();
+
     async function fetchMedia() {
       if (props.nft.standard == "XLS-14" || props.nft.standard == "XLS-16") {
         mediaUrl.value = props.nft.url;
@@ -163,6 +166,13 @@ export default defineComponent({
         }
       }
     }
+    onMounted(() => {
+      video.value.oncanplaythrough = (event: Event) => {
+        console.log(event);
+        video.value.controls = props.controls;
+        if (props.autoplay) video.value.play();
+      };
+    });
 
     if (props.nft.mediaUrl) {
       mediaUrl.value = props.nft.mediaUrl || "";
@@ -212,8 +222,10 @@ export default defineComponent({
     //     // },
     //   },
     // });
+
     return {
       //lazyOptions,
+      video,
       mediaUrl,
       videoUrl,
       loadingMedia,
