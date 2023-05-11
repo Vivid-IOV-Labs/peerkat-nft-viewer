@@ -36,14 +36,14 @@
       src="/thumbnail.jpg"
     />
   </svg>
-  <img
+  <!-- <img
     v-else-if="loadingMedia"
     :src="'/loading.gif'"
     style="object-fit: cover; height: 100%; object-position: center center"
     class="img-fluid card-img-top"
     alt="Card
           image cap"
-  />
+  /> -->
   <img
     v-else
     :src="'/thumbnail.jpg'"
