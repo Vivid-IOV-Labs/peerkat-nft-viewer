@@ -171,13 +171,15 @@ export default defineComponent({
       video.value.oncanplaythrough = (event: Event) => {
         console.log(event);
         video.value.controls = props.controls;
-        video.value.autoplay = props.autoplay;
-        let playAttempt = setInterval(() => {
-          video.value.play().then(() => {
-            clearInterval(playAttempt);
-          });
-        }, 3000);
-        //if (props.autoplay) video.value.play();
+
+        if (props.autoplay) {
+          video.value.autoplay = props.autoplay;
+          let playAttempt = setInterval(() => {
+            video.value.play().then(() => {
+              clearInterval(playAttempt);
+            });
+          }, 3000);
+        }
       };
     });
 
