@@ -67,6 +67,7 @@ export default defineComponent({
     controls: { type: Boolean, default: () => false },
     preview: { type: Boolean, default: () => true },
   },
+
   async setup(props) {
     const mediaUrl = ref("");
     const store = useStore();
@@ -171,6 +172,11 @@ export default defineComponent({
         console.log(event);
         video.value.controls = props.controls;
         video.value.autoplay = props.autoplay;
+        let playAttempt = setInterval(() => {
+          video.value.play().then(() => {
+            clearInterval(playAttempt);
+          });
+        }, 3000);
         //if (props.autoplay) video.value.play();
       };
     });
