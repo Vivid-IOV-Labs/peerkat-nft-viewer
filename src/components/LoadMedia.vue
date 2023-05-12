@@ -170,7 +170,8 @@ export default defineComponent({
       video.value.oncanplaythrough = (event: Event) => {
         console.log(event);
         video.value.controls = props.controls;
-        if (props.autoplay) video.value.play();
+        video.value.controls = props.autoplay;
+        //if (props.autoplay) video.value.play();
       };
     });
 
