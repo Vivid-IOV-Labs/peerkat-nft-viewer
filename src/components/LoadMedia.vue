@@ -4,6 +4,7 @@
     ref="video"
     :src="videoUrl"
     :poster="thumbnailUrl"
+    :autoplay="startplay"
     preload="auto"
     loop
     muted
@@ -72,8 +73,9 @@ export default defineComponent({
     const thumbnailUrl = ref("/loading.gif");
     const loadingMedia = ref(false);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
-    const video = ref<any>();
 
+    const video = ref<any>();
+    const startplay = ref(false);
     async function fetchMedia() {
       if (props.nft.standard == "XLS-14" || props.nft.standard == "XLS-16") {
         mediaUrl.value = props.nft.url;
@@ -168,7 +170,7 @@ export default defineComponent({
     onMounted(() => {
       video.value.oncanplaythrough = (event: Event) => {
         if (props.autoplay) {
-          video.value.autoplay = true;
+          startplay.value = true;
           video.value.controls = true;
 
           // let playAttempt = setInterval(() => {
@@ -234,6 +236,7 @@ export default defineComponent({
       //lazyOptions,
       video,
       mediaUrl,
+      startplay,
       videoUrl,
       loadingMedia,
       thumbnailUrl,
