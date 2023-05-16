@@ -4,8 +4,8 @@
     ref="video"
     :src="videoUrl"
     :poster="thumbnailUrl"
-    :autoplay="startplay"
-    preload="auto"
+    :autoplay="autoplay"
+    preload
     loop
     muted
     playsinline
