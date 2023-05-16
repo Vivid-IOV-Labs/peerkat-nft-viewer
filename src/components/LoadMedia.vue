@@ -4,7 +4,6 @@
     ref="video"
     :src="videoUrl"
     :poster="thumbnailUrl"
-    :autoplay="autoplay"
     preload="auto"
     loop
     muted
@@ -168,17 +167,17 @@ export default defineComponent({
     }
     onMounted(() => {
       video.value.oncanplaythrough = (event: Event) => {
-        video.value.controls = props.controls;
+        if (props.autoplay) {
+          video.value.autoplay = `autoplay`;
+          video.value.controls = true;
 
-        // if (props.autoplay) {
-        //   // video.value.autoplay = props.autoplay;
-        //   let playAttempt = setInterval(() => {
-        //     video.value.play().then(() => {
-        //       clearInterval(playAttempt);
-        //       video.value.controls = props.controls;
-        //     });
-        //   }, 3000);
-        // }
+          // let playAttempt = setInterval(() => {
+          //   video.value.play().then(() => {
+          //     clearInterval(playAttempt);
+          //     video.value.controls = props.controls;
+          //   });
+          // }, 3000);
+        }
       };
     });
 
