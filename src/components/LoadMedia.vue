@@ -168,7 +168,7 @@ export default defineComponent({
     onMounted(() => {
       video.value.oncanplaythrough = (event: Event) => {
         if (props.autoplay) {
-          video.value.autoplay = `autoplay`;
+          video.value.autoplay = true;
           video.value.controls = true;
 
           // let playAttempt = setInterval(() => {
