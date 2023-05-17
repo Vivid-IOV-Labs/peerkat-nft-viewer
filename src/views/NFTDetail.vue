@@ -8,18 +8,14 @@
       <base-card v-if="nft">
         <template #picture>
           <figure style="overflow: hidden">
-            <span class="h-100 d-block" style="overflow: hidden">
-              <load-media :nft="nft"></load-media>
-            </span>
-
-            <!-- <a
+            <a
               class="h-100 d-block"
               style="overflow: hidden"
               href="#"
               @click.prevent="view"
             >
               <load-media :nft="nft"></load-media>
-            </a> -->
+            </a>
           </figure>
         </template>
 
@@ -329,6 +325,7 @@ export default defineComponent({
         if (nftXLS20) {
           nft.value = nftXLS20;
           await fetchMedia();
+          store.commit("nft/setCurrent", nft.value);
         } else {
           throw new Error("Not an XLS-20");
         }

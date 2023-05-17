@@ -13,6 +13,7 @@
             :nft="nft"
           ></load-media-preview>
           <load-media v-else :nft="nft"></load-media>
+          <!-- <load-media :nft="nft"></load-media> -->
         </a>
       </figure>
       <img
@@ -154,7 +155,7 @@
         <div
           v-if="
             nft.attributes &&
-            nft.attributes.filter((a) => a.trait_type || a.value).length.length
+            nft.attributes.filter((a:any) => a.trait_type || a.value).length.length
           "
           class="mt-2"
         >
@@ -191,6 +192,12 @@
     </template>
     <template #footer>
       <div>
+        <!-- <base-button
+          v-if="nft.standard == 'XLS-20'"
+          class="mr-2"
+          @click="goToDetails"
+          >Details
+        </base-button> -->
         <base-button
           v-if="nft.standard == 'XLS-20'"
           class="mr-2"
@@ -281,6 +288,12 @@ export default defineComponent({
           path: `/offers/sell`,
         });
       },
+      async goToDetails() {
+        await store.commit("nft/setCurrent", props.nft);
+        router.push({
+          path: `/wallet/${props.nft.currency}`,
+        });
+      },
       bihompUrl,
       countOffers,
       share() {
@@ -294,8 +307,8 @@ export default defineComponent({
         const url = shareUrl(nodetypecode);
         copyText(url, params);
       },
-      view() {
-        //store.commit("nft/setCurrent", props.nft);
+      async view() {
+        await store.commit("nft/setCurrent", props.nft);
 
         if (!props.nft.error_code) {
           router.push({

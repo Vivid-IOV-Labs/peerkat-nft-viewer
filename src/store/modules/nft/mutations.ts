@@ -33,10 +33,10 @@ const mutations: MutationTree<NFTState> = {
     state.isConnected = isConnected;
   },
   setAll(state: NFTState, all: Array<any>): void {
-    state.all = [...state.all, ...all];
+    state.all = [...new Set([...state.all, ...all])];
   },
   setAllXls20(state: NFTState, allXls20: Array<any>): void {
-    state.allXls20 = [...state.allXls20, ...allXls20];
+    state.allXls20 = [...new Set([...state.allXls20, ...allXls20])];
   },
   setAllXls14(state: NFTState, allXls14: Array<any>): void {
     state.allXls14 = [...state.allXls14, ...allXls14];

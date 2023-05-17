@@ -1,10 +1,11 @@
 <template>
   <video
     v-if="nft.media_type?.includes('video') && !loadingMedia"
+    ref="video"
     :src="videoUrl"
     :poster="thumbnailUrl"
     :autoplay="autoplay"
-    :controls="controls"
+    preload
     loop
     muted
     playsinline
@@ -54,7 +55,7 @@
   />
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { getIpfsMedia, logFailedToLoad } from "../services/XrpService";
 
@@ -65,12 +66,16 @@ export default defineComponent({
     controls: { type: Boolean, default: () => false },
     preview: { type: Boolean, default: () => true },
   },
+
   async setup(props) {
     const mediaUrl = ref("");
     const store = useStore();
     const thumbnailUrl = ref("/loading.gif");
     const loadingMedia = ref(false);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
+
+    const video = ref<any>();
+    const startplay = ref(false);
     async function fetchMedia() {
       if (props.nft.standard == "XLS-14" || props.nft.standard == "XLS-16") {
         mediaUrl.value = props.nft.url;
@@ -162,6 +167,21 @@ export default defineComponent({
         }
       }
     }
+    onMounted(() => {
+      video.value.oncanplaythrough = (event: Event) => {
+        if (props.autoplay) {
+          startplay.value = true;
+          video.value.controls = true;
+
+          // let playAttempt = setInterval(() => {
+          //   video.value.play().then(() => {
+          //     clearInterval(playAttempt);
+          //     video.value.controls = props.controls;
+          //   });
+          // }, 3000);
+        }
+      };
+    });
 
     if (props.nft.mediaUrl) {
       mediaUrl.value = props.nft.mediaUrl || "";
@@ -211,9 +231,12 @@ export default defineComponent({
     //     // },
     //   },
     // });
+
     return {
       //lazyOptions,
+      video,
       mediaUrl,
+      startplay,
       videoUrl,
       loadingMedia,
       thumbnailUrl,
@@ -230,5 +253,12 @@ export default defineComponent({
 .untruncate {
   min-width: auto;
   max-width: auto;
+}
+video::-webkit-media-controls {
+  visibility: hidden;
+}
+
+video::-webkit-media-controls-enclosure {
+  visibility: visible;
 }
 </style>
