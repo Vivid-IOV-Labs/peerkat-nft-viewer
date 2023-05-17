@@ -192,12 +192,12 @@
     </template>
     <template #footer>
       <div>
-        <base-button
+        <!-- <base-button
           v-if="nft.standard == 'XLS-20'"
           class="mr-2"
           @click="goToDetails"
           >Details
-        </base-button>
+        </base-button> -->
         <base-button
           v-if="nft.standard == 'XLS-20'"
           class="mr-2"
