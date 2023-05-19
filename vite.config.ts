@@ -10,8 +10,10 @@ const remoteScript =
   xummSandbox !== "main"
     ? '<script data-consolejs-channel="0dc99d93-4c6b-6c36-8f48-e404d46bb556" src="https://remotejs.com/agent/agent.js"></script>'
     : null;
-// https://vitejs.dev/config/
 export default defineConfig({
+  test: {
+    environment: "happy-dom",
+  },
   plugins: [
     vue(),
     // VitePWA({}),

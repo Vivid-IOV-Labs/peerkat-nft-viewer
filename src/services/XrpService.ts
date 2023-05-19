@@ -1,8 +1,4 @@
-import axios from "axios";
-import { format } from "date-fns";
-import enUS from "date-fns/locale/en-US";
 import { NFT } from "../models/NFT";
-import { delay } from "../utils/delay";
 import { devlog } from "../utils/devlog";
 import store from "../store/";
 // import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
@@ -66,6 +62,7 @@ function hexToString(hex: string) {
     str += String.fromCharCode(parseInt(strhex.substr(i, 2), 16));
   return str.trim();
 }
+
 function truncate(
   fullStr: string,
   strLen = 8,
@@ -364,6 +361,7 @@ async function getPdfContent(url: string) {
 async function connect() {
   await client.connect();
 }
+
 async function disconnect() {
   await client.disconnect();
 }
@@ -433,6 +431,7 @@ async function fetchNftLines(walletAddress: string): Promise<any> {
   });
   return nftLines;
 }
+
 async function fetchIssuerCurrencies(issuer: string): Promise<any> {
   const { result } = await client.request({
     command: "account_currencies",
@@ -442,6 +441,7 @@ async function fetchIssuerCurrencies(issuer: string): Promise<any> {
 
   return receive_currencies[0];
 }
+
 async function fetchOne(
   account: string,
   currency?: string,
@@ -474,6 +474,7 @@ async function fetchOne(
     );
   }
 }
+
 async function fetchNext(nextLines: line[]): Promise<NFT[]> {
   const nextNfts: NFT[] = await Promise.all(
     nextLines.map(async (line: line) => {
@@ -538,6 +539,7 @@ export async function fetchOneXls20(
     throw new Error("Not an XLS-20");
   }
 }
+
 async function getDomain(account: string) {
   const allReps = await client.request({
     command: "account_info",
@@ -935,6 +937,7 @@ export async function fetchNextXls20(nextXls20: any[]): Promise<any> {
     devlog("fetchNextXls20 Error", error);
   }
 }
+
 export async function fetchNextXls20WithSellOffer(
   nextXls20: any[],
   owner: string
@@ -984,6 +987,7 @@ export async function cancelOffer({ TokenID, OfferID }: any): Promise<any> {
     devlog("cancelOffer", error);
   }
 }
+
 export async function cancelBuyOffer({ TokenID, OfferID }: any): Promise<any> {
   const wallet = xrpl.Wallet.fromSeed(walletSecret);
   const tokenIDs = [OfferID];
@@ -1000,6 +1004,7 @@ export async function cancelBuyOffer({ TokenID, OfferID }: any): Promise<any> {
     devlog("cancelBuyOffer Error", error);
   }
 }
+
 export async function acceptOffer({ OfferID }: any): Promise<any> {
   const wallet = xrpl.Wallet.fromSeed(walletSecretAlice);
   const transactionBlob = {
@@ -1018,6 +1023,7 @@ export async function acceptOffer({ OfferID }: any): Promise<any> {
     devlog(error);
   }
 }
+
 export async function acceptBuyOffer({ OfferID }: any): Promise<any> {
   const wallet = xrpl.Wallet.fromSeed(walletSecret);
   const transactionBlob = {
@@ -1036,6 +1042,7 @@ export async function acceptBuyOffer({ OfferID }: any): Promise<any> {
     devlog(error);
   }
 }
+
 export async function createSellOffer({ TokenID, amount }: any): Promise<any> {
   const wallet = xrpl.Wallet.fromSeed(walletSecret);
   const transactionBlob = {

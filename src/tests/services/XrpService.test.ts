@@ -1,4 +1,4 @@
-import { test, expect } from "vitest";
+import { test, expect, describe } from "vitest";
 import {
   createUrlFromDomain,
   createUrlFromURI,
@@ -21,60 +21,64 @@ import {
 //   URI: "697066733A2F2F516D5371766A3151753836787232636139386757345661676D4C6A4B656F48444E71367833397536795459713641",
 //   nft_serial: 8803,
 // };
-test("createUrlFromDomain", () => {
-  const domain = "ipfs://QmT7WeBWD1JSYauacZgkA3RLi5o3dezvvkE167dMCUamjz/";
-  const NFTokenID =
-    "0008138889FDD429502FFD67568F65D6CBCFAD6B349C68F5000009B000000000";
-  const url = createUrlFromDomain(domain, NFTokenID);
-  expect(url).toEqual(
-    "QmT7WeBWD1JSYauacZgkA3RLi5o3dezvvkE167dMCUamjz/0008138889FDD429502FFD67568F65D6CBCFAD6B349C68F5000009B000000000.json"
-  );
-});
+describe("App", () => {
+  test("createUrlFromDomain", () => {
+    const domain = "ipfs://QmT7WeBWD1JSYauacZgkA3RLi5o3dezvvkE167dMCUamjz/";
+    const NFTokenID =
+      "0008138889FDD429502FFD67568F65D6CBCFAD6B349C68F5000009B000000000";
+    const url = createUrlFromDomain(domain, NFTokenID);
+    expect(url).toEqual(
+      "QmT7WeBWD1JSYauacZgkA3RLi5o3dezvvkE167dMCUamjz/0008138889FDD429502FFD67568F65D6CBCFAD6B349C68F5000009B000000000.json"
+    );
+  });
 
-test("createUrlFromURI cid:bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4", () => {
-  const URI = "cid:bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4";
-  const url = createUrlFromURI(URI);
-  expect(url).toEqual(
-    "bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4"
-  );
-});
+  test("createUrlFromURI cid:bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4", () => {
+    const URI =
+      "cid:bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4";
+    const url = createUrlFromURI(URI);
+    expect(url).toEqual(
+      "bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4"
+    );
+  });
 
-test("createUrlFromURI https://bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4.ipfs.w3s.link/metadata.json", () => {
-  const URI = "cid:bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4";
-  const url = createUrlFromURI(URI);
-  expect(url).toEqual(
-    "bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4"
-  );
-});
+  test("createUrlFromURI https://bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4.ipfs.w3s.link/metadata.json", () => {
+    const URI =
+      "cid:bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4";
+    const url = createUrlFromURI(URI);
+    expect(url).toEqual(
+      "bafybeignu67z7yimitdl74tis4v6b47bbcuzzsp7d64v4psny4uqdcsvy4"
+    );
+  });
 
-test("createUrlFromURI bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi", () => {
-  const URI = "bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi";
-  const url = createUrlFromURI(URI);
-  expect(url).toEqual(
-    "bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi"
-  );
-});
+  test("createUrlFromURI bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi", () => {
+    const URI = "bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi";
+    const url = createUrlFromURI(URI);
+    expect(url).toEqual(
+      "bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi"
+    );
+  });
 
-test("ipfs://bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json", () => {
-  const URI = "bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi";
-  const url = createUrlFromURI(URI);
-  expect(url).toEqual(
-    "bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi"
-  );
-});
+  test("ipfs://bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json", () => {
+    const URI = "bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi";
+    const url = createUrlFromURI(URI);
+    expect(url).toEqual(
+      "bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi"
+    );
+  });
 
-test("https://ipfs.io/ipfs/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json", () => {
-  const URI = "bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi";
-  const url = createUrlFromURI(URI);
-  expect(url).toEqual(
-    "bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi"
-  );
-});
+  test("https://ipfs.io/ipfs/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi/metadata.json", () => {
+    const URI = "bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi";
+    const url = createUrlFromURI(URI);
+    expect(url).toEqual(
+      "bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi"
+    );
+  });
 
-test("https://somedomain/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi", () => {
-  const URI = "bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi";
-  const url = createUrlFromURI(URI);
-  expect(url).toEqual(
-    "bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi"
-  );
+  test("https://somedomain/bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi", () => {
+    const URI = "bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi";
+    const url = createUrlFromURI(URI);
+    expect(url).toEqual(
+      "bafybeibxjchfxkfcki4dtmums24fgxyjot52sklnzpphm4fl2vd5dypdxi"
+    );
+  });
 });
