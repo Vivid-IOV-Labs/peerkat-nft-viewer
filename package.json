@@ -62,7 +62,7 @@
     "eslint-plugin-vuejs-accessibility": "^1.1.0",
     "express": "^4.17.1",
     "express-static-gzip": "^2.1.1",
-    "happy-dom": "^9.18.3",
+    "happy-dom": "^9.19.2",
     "jsdom": "^21.1.0",
     "postcss": "^8.3.5",
     "prettier": "^2.3.1",
