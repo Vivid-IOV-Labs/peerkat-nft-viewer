@@ -1,8 +1,11 @@
+// @vitest-environment jsdom
+
 import { mount } from "@vue/test-utils";
 import { createRouter, createWebHistory } from "vue-router";
 
 import App from "../App.vue";
 import Welcome from "../views/Welcome.vue";
+import router from "../router";
 import { describe, test, expect } from "vitest";
 
 describe("App", () => {
