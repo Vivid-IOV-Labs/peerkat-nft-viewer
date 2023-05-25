@@ -5,7 +5,6 @@
     :src="videoUrl"
     :poster="thumbnailUrl"
     :autoplay="autoplay"
-    preload
     loop
     muted
     playsinline
