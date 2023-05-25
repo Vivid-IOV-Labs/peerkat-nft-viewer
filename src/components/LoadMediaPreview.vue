@@ -4,6 +4,7 @@
     :src="thumbnailUrl + '#t=0.5'"
     :autoplay="autoplay"
     :controls="controls"
+    preload="auto"
     loop
     muted
     playsinline

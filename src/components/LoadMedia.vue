@@ -167,21 +167,21 @@ export default defineComponent({
         }
       }
     }
-    onMounted(() => {
-      video.value.oncanplaythrough = (event: Event) => {
-        if (props.autoplay) {
-          startplay.value = true;
-          video.value.controls = true;
+    // onMounted(() => {
+    //   video.value.oncanplaythrough = (event: Event) => {
+    //     if (props.autoplay) {
+    //       startplay.value = true;
+    //       video.value.controls = true;
 
-          // let playAttempt = setInterval(() => {
-          //   video.value.play().then(() => {
-          //     clearInterval(playAttempt);
-          //     video.value.controls = props.controls;
-          //   });
-          // }, 3000);
-        }
-      };
-    });
+    //       // let playAttempt = setInterval(() => {
+    //       //   video.value.play().then(() => {
+    //       //     clearInterval(playAttempt);
+    //       //     video.value.controls = props.controls;
+    //       //   });
+    //       // }, 3000);
+    //     }
+    //   };
+    // });
 
     if (props.nft.mediaUrl) {
       mediaUrl.value = props.nft.mediaUrl || "";
