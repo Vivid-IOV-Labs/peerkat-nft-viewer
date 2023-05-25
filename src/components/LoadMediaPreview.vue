@@ -128,16 +128,17 @@ export default defineComponent({
             const resp = await getIpfsMedia(linkkToMedia);
             thumbnailUrl.value = resp.url;
           }
-        } finally {
-          const params = {
-            tokenID: props.nft.currency,
-            thumbnailUrl: thumbnailUrl.value,
-            shared: props.shared
-              ? { user: user.value, nodetype: nodetype.value }
-              : false,
-          };
-          await store.commit("nft/setXls20MediaUrlById", params);
         }
+        // finally {
+        //   const params = {
+        //     tokenID: props.nft.currency,
+        //     thumbnailUrl: thumbnailUrl.value,
+        //     shared: props.shared
+        //       ? { user: user.value, nodetype: nodetype.value }
+        //       : false,
+        //   };
+        //   await store.commit("nft/setXls20MediaUrlById", params);
+        // }
       }
     }
     if (props.nft.thumbnailUrl) {
