@@ -26,32 +26,45 @@ const rawNFT = {
   URI: "697066733A2F2F6261666B726569686672723637676B66657868736A7A77326877703532766A64726371356676796F7A78646F647564727765337066326478333465",
   nft_serial: 935,
 };
-const NFTMetadata = [
-  {
-    trait_type: "Background",
-    value: "Background Xrp",
-  },
-  {
-    trait_type: "Base",
-    value: "Base Beard",
-  },
-  {
-    trait_type: "Eye",
-    value: "Eyes Suspicious Bloodshot",
-  },
-  {
-    trait_type: "Hat",
-    value: "Hat Unicorn",
-  },
-  {
-    trait_type: "Shirt",
-    value: "Shirt White Rags",
-  },
-  {
-    trait_type: "Mouth",
-    value: "Mouth Sad",
-  },
-];
+const NFTMetadata = {
+  attributes: [
+    {
+      trait_type: "Background",
+      value: "Background Xrp",
+    },
+    {
+      trait_type: "Base",
+      value: "Base Beard",
+    },
+    {
+      trait_type: "Eye",
+      value: "Eyes Suspicious Bloodshot",
+    },
+    {
+      trait_type: "Hat",
+      value: "Hat Unicorn",
+    },
+    {
+      trait_type: "Shirt",
+      value: "Shirt White Rags",
+    },
+    {
+      trait_type: "Mouth",
+      value: "Mouth Sad",
+    },
+  ],
+  category: "Art",
+  collection: { name: "xPEPE" },
+  description:
+    "xPEPE vol 1 - An XRPL community collection of 5,000 generative xPEPEs - Minted on xrpnft.com - Art by Link",
+  external_link: "xrpepe.com",
+  external_url: "",
+  fee_recipient: "r3gpBgxueWCDkH9985UzrB1Pt9DhLC8ATz",
+  hash: "7cd83be19b9a77c5e850062e4a5553ea",
+  image: "QmUoqwgAq5mFuj4hYn1mnnRyHdW8AqQJ9vSUkKb56q2fx9/1497.png",
+  name: "xPEPE #1497",
+  seller_fee_basis_points: 589,
+};
 // const nft = {
 //   Flags: 8,
 //   Issuer: "rfUkZ3BVmgx5aD3Zo5bZk68hrUrhNth8y3",
