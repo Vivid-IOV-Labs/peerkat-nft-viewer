@@ -7,6 +7,7 @@
     "lint": "eslint --ext .ts,vue --ignore-path .gitignore .",
     "start": "node server.js",
     "test": "vitest",
+    "coverage": "vitest run --coverage",
     "cypress:open": "cypress open"
   },
   "dependencies": {

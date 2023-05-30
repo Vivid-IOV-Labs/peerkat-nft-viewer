@@ -31,6 +31,7 @@ type line = {
   balanceFormatted: string;
   limitFormatted: string;
 };
+
 function isNFT({ balance, currency }: line): boolean {
   const isNFTRegex = /^(\d{16})(e-)(85|86|87|89|90|91|92|93|94|95|96)$/;
   const isCurrencyCorrect =
@@ -39,6 +40,7 @@ function isNFT({ balance, currency }: line): boolean {
   const allCheck = isNFTRegex.test(balance) && isCurrencyCorrect;
   return allCheck;
 }
+
 function formatXrpCurrency(xrpcurrency: string): string {
   const last2 = Number(xrpcurrency.slice(-2));
   const index = 96 - last2 + 1;
@@ -55,7 +57,7 @@ function is_hexadecimal(str: string): boolean {
   }
 }
 
-function hexToString(hex: string) {
+export function hexToString(hex: string) {
   const strhex = hex.toString(); //force conversion
   let str = "";
   for (let i = 0; i < strhex.length; i += 2)
@@ -91,6 +93,7 @@ function getXLSProtocol(source: string): string {
     return "";
   }
 }
+
 async function getMediaByXLSProtocol(
   source: string,
   xlsProtocol: string,
@@ -108,7 +111,8 @@ async function getMediaByXLSProtocol(
     return "";
   }
 }
-function getTokenName(currency: string): string {
+
+export function getTokenName(currency: string): string {
   const removeFirst02 = currency.replace("02", "");
   const first14char = removeFirst02.substring(0, 14);
   const proposedHex = hexToString(first14char);
@@ -119,6 +123,7 @@ function getTokenName(currency: string): string {
     return hexToString(removeFirst02).replace(/[^\w\s]/gi, "");
   }
 }
+
 function getCtiHex(currency: string): string {
   const removeFirst02 = currency.replace("02", "");
   return removeFirst02.substring(0, 14);
@@ -139,7 +144,7 @@ function cti_transaction_check(cti: bigint) {
   return (cti >> 48n) & 0xfn;
 }
 
-function hexToDec(s: string) {
+export function hexToDec(s: string) {
   let i,
     j,
     // eslint-disable-next-line prefer-const
@@ -334,7 +339,7 @@ async function getOne(
     error_title,
   };
 }
-let client: any;
+export let client: any;
 async function getPdfContent(url: string) {
   const doc = await PDFJS.getDocument(url).promise;
   const page = await doc.getPage(1);
@@ -632,7 +637,7 @@ async function getXLS20ContentType(
   }
 }
 
-function getXLS20MediaUrl(mediaUrl: string): string {
+export function getXLS20MediaUrl(mediaUrl: string): string {
   if (mediaUrl.split("//")[0].includes("ipfs:") || !mediaUrl.split("//")[0]) {
     return encodeURI(mediaUrl.split("//")[1].replace("ipfs/", ""));
   } else if (mediaUrl.includes("/ipfs/")) {
@@ -642,44 +647,28 @@ function getXLS20MediaUrl(mediaUrl: string): string {
   }
 }
 
-export async function getOneXls20(nft: any) {
-  interface Assets {
-    image?: any | null;
-    video?: any | null;
-    aufio?: any | null;
-    animation?: any | null;
-    file?: any | null;
-  }
-  let mediaUrl;
-  let media_type;
+export async function getMetadataFromStore(NFTokenID: string): Promise<any> {
+  const url = `/apidev/assets/metadata/${NFTokenID}/metadata.json`;
+  return await fetch(url).then((r) => r.json());
+}
+
+export async function getOneXls20(nft: any, nodetype: string): Promise<any> {
   let error_code;
   let error_message;
   let error_title;
-  let tokenName;
-  let description;
-  let attributes;
-  let collection;
-  let thumbnail;
-  let thumbnailType;
+
   let details;
   let domain;
-  let type;
-  const assets: Assets = {
-    image: undefined,
-    video: undefined,
-    aufio: undefined,
-    animation: undefined,
-    file: undefined,
-  };
+
   const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
-  const nodetype = store.getters["user/getNodeType"];
 
   try {
     if (nodetype !== "MAINNET") {
       throw new Error("not mainnet");
     }
-    const url = `/apidev/assets/metadata/${NFTokenID}/metadata.json`;
-    details = await fetch(url).then((r) => r.json());
+    debugger;
+    details = await getMetadataFromStore(NFTokenID);
+    debugger;
   } catch (err) {
     if (!URI) {
       domain = await getDomain(Issuer);
@@ -743,9 +732,15 @@ export async function getOneXls20(nft: any) {
             if (ipfLinkUrlPattern) {
               const ipfsHash = url.split(".ipfs")[0].split("//")[1];
               const name = url.split(".ipfs")[1].split("/")[1];
-              thumbnail = ipfsHash + "/" + name;
-              media_type = contentType;
-              mediaUrl = ipfsHash + "/" + name;
+              // thumbnail = ipfsHash + "/" + name;
+              // media_type = contentType;
+              // mediaUrl = ipfsHash + "/" + name;
+              details = {
+                image: ipfsHash + "/" + name,
+                thumbnail: ipfsHash + "/" + name,
+                name,
+                media_type: contentType,
+              };
             }
           } else {
             details = await response.json();
@@ -762,6 +757,38 @@ export async function getOneXls20(nft: any) {
       }
     }
   }
+  const standardNFT = await constructXls20NFT(details, nft);
+  debugger;
+  return { ...standardNFT, error_code, error_message, error_title };
+}
+
+export async function constructXls20NFT(details: any, nft: any) {
+  interface Assets {
+    image?: any | null;
+    video?: any | null;
+    aufio?: any | null;
+    animation?: any | null;
+    file?: any | null;
+  }
+  const assets: Assets = {
+    image: undefined,
+    video: undefined,
+    aufio: undefined,
+    animation: undefined,
+    file: undefined,
+  };
+  let mediaUrl;
+  let media_type;
+  let tokenName;
+  let description;
+  let attributes;
+  let collection;
+  let thumbnail;
+  let thumbnailType;
+  let domain;
+  let type;
+
+  const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
   if (details) {
     details = details.metadata ? details.metadata : details;
 
@@ -792,7 +819,9 @@ export async function getOneXls20(nft: any) {
       const media = details.image || details.image_url;
       mediaUrl = getXLS20MediaUrl(media);
       const type = "image";
-      media_type = await getXLS20ContentType(mediaUrl, NFTokenID, type, false);
+      media_type =
+        details.media_type ||
+        (await getXLS20ContentType(mediaUrl, NFTokenID, type, false));
       thumbnail = details.thumbnail || mediaUrl;
       thumbnailType = await getXLS20ContentType(
         thumbnail,
@@ -904,9 +933,6 @@ export async function getOneXls20(nft: any) {
     desc: description,
     issuerTruncated: truncate(Issuer),
     standard: "XLS-20",
-    error_code,
-    error_message,
-    error_title,
     attributes,
     collection,
     thumbnail: thumbnail,
@@ -916,7 +942,6 @@ export async function getOneXls20(nft: any) {
     assets,
   };
 }
-
 export async function fetchXls20(walletAddress: string): Promise<any> {
   const {
     result: { account_nfts },
@@ -924,28 +949,29 @@ export async function fetchXls20(walletAddress: string): Promise<any> {
   return account_nfts;
 }
 
-export async function fetchNextXls20(nextXls20: any[]): Promise<any> {
-  try {
-    const nextNfts = await Promise.all(
-      nextXls20.map(async (nft: any) => {
-        const one = await getOneXls20(nft);
-        return one;
-      })
-    );
-    return nextNfts;
-  } catch (error) {
-    devlog("fetchNextXls20 Error", error);
-  }
-}
+// export async function fetchNextXls20(nextXls20: any[]): Promise<any> {
+//   try {
+//     const nextNfts = await Promise.all(
+//       nextXls20.map(async (nft: any) => {
+//         const one = await getOneXls20(nft);
+//         return one;
+//       })
+//     );
+//     return nextNfts;
+//   } catch (error) {
+//     devlog("fetchNextXls20 Error", error);
+//   }
+// }
 
 export async function fetchNextXls20WithSellOffer(
   nextXls20: any[],
-  owner: string
+  owner: string,
+  nodetype: string
 ): Promise<any> {
   const nextNfts = await Promise.all(
     nextXls20.map(async (nft: any) => {
       const { NFTokenID } = nft;
-      const schema = await getOneXls20(nft);
+      const schema = await getOneXls20(nft, nodetype);
       const sellOffersResponse = await fetchSellOffers(NFTokenID);
       const buyOffersResponse = await fetchBuyOffers(NFTokenID);
       const now = Date.now();
