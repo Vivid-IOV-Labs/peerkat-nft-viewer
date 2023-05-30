@@ -123,7 +123,6 @@ export default defineComponent({
             };
             await store.commit("nft/setXls20MediaUrlById", params);
 
-            debugger;
           } else {
             const t = await logFailedToLoad({
               Issuer: props.nft.issuer,

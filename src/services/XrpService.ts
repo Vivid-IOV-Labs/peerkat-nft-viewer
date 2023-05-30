@@ -666,9 +666,7 @@ export async function getOneXls20(nft: any, nodetype: string): Promise<any> {
     if (nodetype !== "MAINNET") {
       throw new Error("not mainnet");
     }
-    debugger;
     details = await getMetadataFromStore(NFTokenID);
-    debugger;
   } catch (err) {
     if (!URI) {
       domain = await getDomain(Issuer);
@@ -758,7 +756,6 @@ export async function getOneXls20(nft: any, nodetype: string): Promise<any> {
     }
   }
   const standardNFT = await constructXls20NFT(details, nft);
-  debugger;
   return { ...standardNFT, error_code, error_message, error_title };
 }
 
