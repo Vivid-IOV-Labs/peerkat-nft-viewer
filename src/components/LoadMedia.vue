@@ -2,8 +2,8 @@
   <video
     v-if="nft.media_type?.includes('video') && !loadingMedia"
     ref="video"
-    :src="mediaUrl"
-    :poster="thumbnailUrl"
+    :src="videoUrl"
+    :poster="poster"
     :autoplay="autoplay"
     loop
     muted
@@ -68,7 +68,6 @@ export default defineComponent({
   async setup(props) {
     const mediaUrl = ref("");
     const store = useStore();
-    const thumbnailUrl = ref("/loading.gif");
     const loadingMedia = ref(false);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
 
@@ -122,7 +121,6 @@ export default defineComponent({
               mediaUrl: mediaUrl.value,
             };
             await store.commit("nft/setXls20MediaUrlById", params);
-
           } else {
             const t = await logFailedToLoad({
               Issuer: props.nft.issuer,
@@ -167,6 +165,15 @@ export default defineComponent({
     const videoUrl = computed(() =>
       props.nft.thumbnailUrl ? mediaUrl.value : `${mediaUrl.value}#t=0.5`
     );
+    const poster = computed(() =>
+      loadingMedia.value
+        ? "/loading.gif"
+        : !loadingMedia.value && props.nft.thumbnailUrl
+        ? props.nft.thumbnailUrl
+        : `${mediaUrl.value}#t=0.5`
+    );
+
+    //cloudflare-ipfs.com/ipfs/QmfQGVwoxpqnAvDxFxW7bPsesivFas7FFjBcW9tVU5ymZQ
 
     return {
       video,
@@ -174,7 +181,7 @@ export default defineComponent({
       startplay,
       videoUrl,
       loadingMedia,
-      thumbnailUrl,
+      poster,
     };
   },
 });

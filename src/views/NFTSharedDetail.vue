@@ -5,6 +5,7 @@
     </router-link>
 
     <div class="w-100 p-1">
+      <pre>{{ nft }}</pre>
       <base-card v-if="nft">
         <template #picture>
           <figure style="overflow: hidden">
