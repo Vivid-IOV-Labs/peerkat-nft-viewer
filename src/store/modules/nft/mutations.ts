@@ -61,6 +61,23 @@ const mutations: MutationTree<NFTState> = {
       }
     }
   },
+  setXls20AssetById(state: NFTState, params: any): void {
+    const { tokenID, mediaUrl, thumbnailUrl, shared, asset } = params;
+    const where =
+      params.shared && params.shared.user
+        ? state.sharedwithme[shared.user][shared.nodetype]
+        : state.allXls20;
+    const nft = where.find((n: any) => n.currency == tokenID);
+    const nftAsset = nft.assets[asset];
+    if (nftAsset) {
+      if (params.mediaUrl) {
+        nftAsset.mediaUrl = params.mediaUrl;
+      }
+      if (params.thumbnailUrl) {
+        nftAsset.thumbnailUrl = params.thumbnailUrl;
+      }
+    }
+  },
   setXls20MediaUrlById(state: NFTState, params: any): void {
     const { tokenID, mediaUrl, thumbnailUrl, shared } = params;
     const where =

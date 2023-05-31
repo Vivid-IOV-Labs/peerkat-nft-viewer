@@ -828,7 +828,7 @@ export async function constructXls20NFT(details: any, nft: any) {
       );
       assets.image = {
         media_type,
-        mediaUrl,
+        url: mediaUrl,
       };
     }
 
@@ -871,7 +871,7 @@ export async function constructXls20NFT(details: any, nft: any) {
       }
       assets.animation = {
         media_type,
-        mediaUrl,
+        url: mediaUrl,
       };
     }
 
@@ -904,7 +904,7 @@ export async function constructXls20NFT(details: any, nft: any) {
       }
       assets.video = {
         media_type,
-        mediaUrl,
+        url: mediaUrl,
       };
     }
     type =
@@ -939,6 +939,7 @@ export async function constructXls20NFT(details: any, nft: any) {
     assets,
   };
 }
+
 export async function fetchXls20(walletAddress: string): Promise<any> {
   const {
     result: { account_nfts },
