@@ -135,7 +135,7 @@
           <div
             v-if="
               nft.attributes &&
-              nft.attributes.filter((a) => a.trait_type || a.value).length
+              nft.attributes.filter((a:any) => a.trait_type || a.value).length
                 .length
             "
             class="mt-2"
@@ -321,7 +321,8 @@ export default defineComponent({
       try {
         const nftXLS20 = await fetchOneXls20(
           route.params.nftAddress.toString(),
-          route.params.currency.toString()
+          route.params.currency.toString(),
+          nodetype.value
         );
         if (nftXLS20) {
           nft.value = nftXLS20;

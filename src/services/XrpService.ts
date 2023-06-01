@@ -507,6 +507,7 @@ export async function getTokens(walletAddress: string): Promise<any> {
 export async function fetchOneXls20(
   walletAddress: string,
   NFTokenID: string,
+  nodetype?: string,
   owner?: string
 ): Promise<any> {
   const {
@@ -516,8 +517,8 @@ export async function fetchOneXls20(
     return n.NFTokenID == NFTokenID;
   });
 
-  if (nftXLS20) {
-    const schema = await getOneXls20(nftXLS20);
+  if (nftXLS20 && nodetype) {
+    const schema = await getOneXls20(nftXLS20, nodetype);
     const sellOffersResponse = await fetchSellOffers(NFTokenID);
     const buyOffersResponse = await fetchBuyOffers(NFTokenID);
     const now = Date.now();
