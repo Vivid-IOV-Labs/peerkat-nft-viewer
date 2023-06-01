@@ -1,7 +1,7 @@
 <template>
   <div style="height: 70vh">
     <BackLink />
-    <div v-if="nft" class="h-100">
+    <div v-if="nft && nft.standard == 'XLS-20'" class="h-100">
       <div class="d-flex p-2 justify-content-center">
         <button
           v-for="asset in assets"
@@ -22,12 +22,17 @@
         ></load-asset>
       </figure>
     </div>
+    <div v-if="nft && nft.standard !== 'XLS-20'" class="h-100">
+      <figure class="w-100">
+        <load-media :autoplay="true" :controls="true" :nft="nft"></load-media>
+      </figure>
+    </div>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent, computed, ref } from "vue";
 import { useStore } from "vuex";
-// import LoadMedia from "@/components/LoadMedia.vue";
+import LoadMedia from "@/components/LoadMedia.vue";
 import LoadAsset from "@/components/LoadAsset.vue";
 import BackLink from "@/components/BackLink.vue";
 
@@ -35,7 +40,7 @@ const filterObject = (obj: any, predicate: any) =>
   Object.fromEntries(Object.entries(obj).filter(predicate));
 export default defineComponent({
   components: {
-    // LoadMedia,
+    LoadMedia,
     LoadAsset,
     BackLink,
   },
