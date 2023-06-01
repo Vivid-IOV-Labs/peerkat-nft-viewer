@@ -2,11 +2,16 @@
   <div style="height: 70vh">
     <BackLink />
     <div v-if="nft" class="h-100">
-      <ul>
-        <li v-for="asset in assets" :key="asset">
-          <button @click="selectAsset(asset)">{{ asset }}</button>
-        </li>
-      </ul>
+      <div class="d-flex p-2 justify-content-center">
+        <button
+          v-for="asset in assets"
+          :key="asset"
+          class="btn btn-primary btn-sm mr-2"
+          @click="selectAsset(asset)"
+        >
+          {{ asset }}
+        </button>
+      </div>
       <figure v-for="asset in assets" :key="asset" class="w-100">
         <load-asset
           v-if="asset == selectedAsset"

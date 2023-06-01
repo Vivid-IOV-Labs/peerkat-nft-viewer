@@ -1,6 +1,6 @@
 <template>
   <video
-    v-if="nft.media_type?.includes('video') && !loadingMedia"
+    v-if="nftAsset.media_type?.includes('video') && !loadingMedia"
     ref="video"
     :src="videoUrl"
     :poster="poster"
@@ -12,7 +12,7 @@
     style="object-fit: cover; height: 100%; object-position: center center"
   ></video>
   <img
-    v-else-if="nft.media_type?.includes('image') && !loadingMedia"
+    v-else-if="nftAsset.media_type?.includes('image') && !loadingMedia"
     v-lazy="mediaUrl"
     style="object-fit: cover; height: 100%; object-position: center center"
     class="img-fluid card-img-top"
@@ -20,7 +20,7 @@
           image cap"
   />
   <svg
-    v-else-if="nft.media_type?.includes('xml') && !loadingMedia"
+    v-else-if="nftAsset.media_type?.includes('xml') && !loadingMedia"
     style="object-fit: cover; height: 100%; object-position: center center"
     class="img-fluid card-img-top"
   >
@@ -171,6 +171,7 @@ export default defineComponent({
       videoUrl,
       loadingMedia,
       poster,
+      nftAsset,
     };
   },
 });
