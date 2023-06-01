@@ -56,6 +56,7 @@
 import { computed, defineComponent, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { getIpfsMedia, logFailedToLoad } from "../services/XrpService";
+const useCache = import.meta.env.VITE_USE_CACHE;
 
 export default defineComponent({
   props: {
@@ -95,8 +96,8 @@ export default defineComponent({
         await store.commit("nft/setXlsMediaUrlById", params);
       } else {
         try {
-          if (nodetype.value !== "MAINNET") {
-            throw new Error("not mainnet");
+          if (!useCache) {
+            throw new Error("not cahce in use");
           }
           const ext =
             props.nft.media_type && props.nft.media_type.split("/").pop()

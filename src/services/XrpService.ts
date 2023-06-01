@@ -21,6 +21,7 @@ if (PDFJS && PDFJS.disableWorker) PDFJS.disableWorker = true;
 // const ipfsGateway = import.meta.env.VITE_IPFS_GATEWAY;
 const walletSecret = import.meta.env.VITE_WALLET_SECRET;
 const walletSecretAlice = import.meta.env.VITE_WALLET_SECRET_ALICE;
+const useCache = import.meta.env.VITE_USE_CACHE;
 
 const xrpl = (window as any).xrpl;
 type line = {
@@ -507,6 +508,7 @@ export async function getTokens(walletAddress: string): Promise<any> {
 export async function fetchOneXls20(
   walletAddress: string,
   NFTokenID: string,
+  nodetype?: string,
   owner?: string
 ): Promise<any> {
   const {
@@ -516,8 +518,8 @@ export async function fetchOneXls20(
     return n.NFTokenID == NFTokenID;
   });
 
-  if (nftXLS20) {
-    const schema = await getOneXls20(nftXLS20);
+  if (nftXLS20 && nodetype) {
+    const schema = await getOneXls20(nftXLS20, nodetype);
     const sellOffersResponse = await fetchSellOffers(NFTokenID);
     const buyOffersResponse = await fetchBuyOffers(NFTokenID);
     const now = Date.now();
@@ -663,24 +665,22 @@ export async function getOneXls20(nft: any, nodetype: string): Promise<any> {
   const { Issuer, NFTokenID, URI, NFTokenTaxon, nft_serial } = nft;
 
   try {
-    if (nodetype !== "MAINNET") {
-      throw new Error("not mainnet");
+    if (!useCache) {
+      throw new Error("not cahce in use");
     }
     details = await getMetadataFromStore(NFTokenID);
   } catch (err) {
     if (!URI) {
       domain = await getDomain(Issuer);
 
-      if (nodetype === "MAINNET") {
-        const t = await logFailedToLoad({
-          Issuer,
-          NFTokenID,
-          Domain: domain,
-          NFTokenTaxon,
-          nft_serial,
-          Source: "xummapp-frontend",
-        });
-      }
+      const t = await logFailedToLoad({
+        Issuer,
+        NFTokenID,
+        Domain: domain,
+        NFTokenTaxon,
+        nft_serial,
+        Source: "xummapp-frontend",
+      });
 
       const url = createUrlFromDomain(domain, NFTokenID);
       try {

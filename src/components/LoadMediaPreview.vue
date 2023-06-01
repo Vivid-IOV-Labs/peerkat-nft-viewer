@@ -41,6 +41,7 @@
 import { computed, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import { getIpfsMedia, logFailedToLoad } from "../services/XrpService";
+const useCache = import.meta.env.VITE_USE_CACHE;
 
 export default defineComponent({
   props: {
@@ -82,19 +83,12 @@ export default defineComponent({
         await store.commit("nft/setXlsMediaUrlById", params);
       } else {
         try {
-          if (nodetype.value !== "MAINNET") {
-            throw new Error("not mainnet");
+          if (!useCache) {
+            throw new Error("not cahce in use");
           }
-          // const ext =
-          //   props.nft.thumbnailType && props.nft.thumbnailType.split("/").pop()
-          //     ? props.nft.thumbnailType.split("/").pop()
-          //     : props.nft.thumbnail;
-
-          // const extnojpg = ext.replace("jpg", "jpeg");
 
           const url = `/apidev/assets/images/${props.nft.currency}/200px/image`;
 
-          // thumbnailUrl.value = `/apidev/assets/images/${props.nft.currency}/200px/image.${ext}`;
           const isReturned = await fetch(url, {
             method: "HEAD",
           });
@@ -129,16 +123,6 @@ export default defineComponent({
             thumbnailUrl.value = resp.url;
           }
         }
-        // finally {
-        //   const params = {
-        //     tokenID: props.nft.currency,
-        //     thumbnailUrl: thumbnailUrl.value,
-        //     shared: props.shared
-        //       ? { user: user.value, nodetype: nodetype.value }
-        //       : false,
-        //   };
-        //   await store.commit("nft/setXls20MediaUrlById", params);
-        // }
       }
     }
     if (props.nft.thumbnailUrl) {
