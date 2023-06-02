@@ -72,7 +72,13 @@ const actions: ActionTree<NFT, NFTState> = {
     const count = getters.getAllXls20.length;
     const nextXls20 = getters.getXls20.slice(count, count + 2);
     const owner = rootGetters["user/getAddress"];
-    const nextNfts = await fetchNextXls20WithSellOffer(nextXls20, owner);
+    const nodetype = rootGetters["user/getNodeType"];
+
+    const nextNfts = await fetchNextXls20WithSellOffer(
+      nextXls20,
+      owner,
+      nodetype
+    );
     commit("setAllXls20", nextNfts);
     commit("setAll", nextNfts);
   },
@@ -86,8 +92,13 @@ const actions: ActionTree<NFT, NFTState> = {
     const count = getters.getSellOffers.length;
     const nextXls20 = getters.getXls20.slice(count, count + 4);
     const owner = rootGetters["user/getAddress"];
+    const nodetype = rootGetters["user/getNodeType"];
 
-    const nfts_sells = await fetchNextXls20WithSellOffer(nextXls20, owner);
+    const nfts_sells = await fetchNextXls20WithSellOffer(
+      nextXls20,
+      owner,
+      nodetype
+    );
     commit("setSellOffers", nfts_sells);
     if (nfts_sells.every((a: any) => !a) && count < getters.getXls20.length) {
       await dispatch("fetchNextSellOffers");

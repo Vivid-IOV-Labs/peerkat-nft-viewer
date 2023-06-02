@@ -5,7 +5,7 @@ import { devlog } from "../utils/devlog";
 import { getNodeTypeFromNetwork } from "../utils/getNetworkTypeFromCode";
 import { isInXumm } from "../utils/isInXumm";
 const isHoldingPage = JSON.parse(import.meta.env.VITE_HOLDING_PAGE);
-const routes = [
+export const routes = [
   { path: "/", redirect: "/wallet" },
   {
     path: "/welcome/:redirect?",

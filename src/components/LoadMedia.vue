@@ -3,13 +3,11 @@
     v-if="nft.media_type?.includes('video') && !loadingMedia"
     ref="video"
     :src="videoUrl"
-    :poster="thumbnailUrl"
+    :poster="poster"
     :autoplay="autoplay"
-    preload
     loop
     muted
     playsinline
-    webkit-playsinline
     class="img-fluid card-img-top"
     style="object-fit: cover; height: 100%; object-position: center center"
   ></video>
@@ -58,6 +56,7 @@
 import { computed, defineComponent, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { getIpfsMedia, logFailedToLoad } from "../services/XrpService";
+const useCache = import.meta.env.VITE_USE_CACHE;
 
 export default defineComponent({
   props: {
@@ -70,7 +69,6 @@ export default defineComponent({
   async setup(props) {
     const mediaUrl = ref("");
     const store = useStore();
-    const thumbnailUrl = ref("/loading.gif");
     const loadingMedia = ref(false);
     const nodetype = computed(() => store.getters["user/getNodeType"]);
 
@@ -79,30 +77,26 @@ export default defineComponent({
     async function fetchMedia() {
       if (props.nft.standard == "XLS-14" || props.nft.standard == "XLS-16") {
         mediaUrl.value = props.nft.url;
-        // thumbnailUrl.value = props.nft.thumbnail;
 
         const params = {
           tokenID: props.nft.currency,
           mediaUrl: mediaUrl.value,
-          // thumbnailUrl: thumbnailUrl.value,
         };
         await store.commit("nft/setXlsMediaUrlById", params);
       } else if (props.nft.standard == "XLS-14d/SOLO") {
         const resp = await getIpfsMedia(props.nft.url);
         mediaUrl.value = resp.url;
-        // thumbnailUrl.value = props.nft.thumbnail;
 
         const params = {
           tokenID: props.nft.currency,
           mediaUrl: mediaUrl.value,
-          // thumbnailUrl: thumbnailUrl.value,
         };
 
         await store.commit("nft/setXlsMediaUrlById", params);
       } else {
         try {
-          if (nodetype.value !== "MAINNET") {
-            throw new Error("not mainnet");
+          if (!useCache) {
+            throw new Error("not cahce in use");
           }
           const ext =
             props.nft.media_type && props.nft.media_type.split("/").pop()
@@ -118,17 +112,14 @@ export default defineComponent({
             : props.nft.type?.includes("animation")
             ? `/apidev/assets/animations/${props.nft.currency}/animation.${extnojpg}`
             : `/apidev/assets/images/${props.nft.currency}/full/image.${extnojpg}`;
-          //thumbnailUrl.value = `/apidev/assets/images/${props.nft.currency}/200px/image.${ext}`;
           const isReturned = await fetch(url, {
             method: "HEAD",
           });
           if (isReturned.ok && isReturned.status === 200) {
             mediaUrl.value = url;
-            // thumbnailUrl.value = props.nft.thumbnail;
             const params = {
               tokenID: props.nft.currency,
               mediaUrl: mediaUrl.value,
-              // thumbnailUrl: thumbnailUrl.value,
             };
             await store.commit("nft/setXls20MediaUrlById", params);
           } else {
@@ -150,96 +141,48 @@ export default defineComponent({
             const resp = await getIpfsMedia(props.nft.url);
             mediaUrl.value = resp.url;
           }
-        } finally {
-          if (props.nft.media_type?.includes("video") && props.nft.thumbnail) {
-            //const resp = await getIpfsMedia(props.nft.thumbnail);
-            //thumbnailUrl.value = resp.url;
-          }
-          const params = {
-            tokenID: props.nft.currency,
-            mediaUrl: mediaUrl.value,
-            // thumbnailUrl:
-            //   thumbnailUrl.value === "/loading.gif"
-            //     ? undefined
-            //     : thumbnailUrl.value,
-          };
-          await store.commit("nft/setXls20MediaUrlById", params);
         }
       }
     }
     onMounted(() => {
-      video.value.oncanplaythrough = (event: Event) => {
-        if (props.autoplay) {
-          startplay.value = true;
-          video.value.controls = true;
-
-          // let playAttempt = setInterval(() => {
-          //   video.value.play().then(() => {
-          //     clearInterval(playAttempt);
-          //     video.value.controls = props.controls;
-          //   });
-          // }, 3000);
-        }
-      };
+      if (video.value) {
+        video.value.oncanplaythrough = (event: Event) => {
+          if (props.autoplay) {
+            startplay.value = true;
+            video.value.controls = true;
+          }
+        };
+      }
     });
 
     if (props.nft.mediaUrl) {
       mediaUrl.value = props.nft.mediaUrl || "";
-      // thumbnailUrl.value = props.nft.thumbnailUrl || props.nft.thumbnail;
     } else if (props.nft && props.nft.url && props.nft.standard) {
       loadingMedia.value = true;
       await fetchMedia();
       loadingMedia.value = false;
     }
 
-    // props.nft.url &&
-
-    //   ? props.nft.url
-    //   : props.nft.url
-    //   ? "https://dweb.link/ipfs/" + props.nft.url
-    //   : "";
-
-    // .then((resp: any) => {
-    //   mediaUrl.value = resp.url;
-    //   debugger;
-    // });
-
     const videoUrl = computed(() =>
       props.nft.thumbnailUrl ? mediaUrl.value : `${mediaUrl.value}#t=0.5`
     );
+    const poster = computed(() =>
+      loadingMedia.value
+        ? "/loading.gif"
+        : !loadingMedia.value && props.nft.thumbnailUrl
+        ? props.nft.thumbnailUrl
+        : `${mediaUrl.value}#t=0.5`
+    );
 
-    // if (props.nft.media_type.includes("video")) {
-    //   console.log("videoUrl", videoUrl.value);
-    // }
-
-    // const lazyOptions = reactive({
-    //   src: mediaUrl.value,
-    //   lifecycle: {
-    //     // loading: (el: any) => {
-    //     //   console.log("image loading", el);
-    //     // },
-    //     error: async (el: any) => {
-    //       if (el && el.src) {
-    //         if (!loadingMedia.value) {
-    //           await fetchMedia();
-    //           lazyOptions.src = mediaUrl.value;
-    //         }
-    //       }
-    //     },
-    //     // loaded: (el: any) => {
-    //     //   console.log("image loaded", el);
-    //     // },
-    //   },
-    // });
+    //cloudflare-ipfs.com/ipfs/QmfQGVwoxpqnAvDxFxW7bPsesivFas7FFjBcW9tVU5ymZQ
 
     return {
-      //lazyOptions,
       video,
       mediaUrl,
       startplay,
       videoUrl,
       loadingMedia,
-      thumbnailUrl,
+      poster,
     };
   },
 });
