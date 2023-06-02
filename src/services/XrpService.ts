@@ -502,6 +502,7 @@ export async function getTokens(walletAddress: string): Promise<any> {
     method: "account_nfts",
     account: walletAddress,
   });
+  debugger;
   return nfts;
 }
 

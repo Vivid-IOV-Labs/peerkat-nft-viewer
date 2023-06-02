@@ -86,7 +86,6 @@ export default defineComponent({
             : nftAsset.value.thumbnail
             ? nftAsset.value.thumbnail.split(".").pop()
             : "jpg";
-        debugger;
         const extnojpg = ext.replace("jpg", "jpeg");
 
         const url = nftAsset.value.media_type?.includes("video")
