@@ -500,6 +500,7 @@ async function fetchNext(nextLines: line[]): Promise<NFT[]> {
 export async function getTokens(walletAddress: string): Promise<any> {
   const nfts = await client.request({
     method: "account_nfts",
+    limit:400,
     account: walletAddress,
   });
   return nfts;
