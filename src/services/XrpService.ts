@@ -500,7 +500,6 @@ async function fetchNext(nextLines: line[]): Promise<NFT[]> {
 export async function getTokens(walletAddress: string): Promise<any> {
   const nfts = await client.request({
     method: "account_nfts",
-    limit: 400,
     account: walletAddress,
   });
   debugger;
@@ -531,7 +530,6 @@ async function recursiveFetchTokens(
 
 async function fetchTokens(walletAddress: string): Promise<any> {
   const accNfts = await recursiveFetchTokens(walletAddress, []);
-  debugger;
   return accNfts;
 }
 
@@ -542,7 +540,6 @@ export async function fetchOneXls20(
   owner?: string
 ): Promise<any> {
   const account_nfts = await fetchTokens(walletAddress);
-  debugger;
   const nftXLS20 = account_nfts.find((n: any) => {
     return n.NFTokenID == NFTokenID;
   });
