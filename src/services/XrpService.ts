@@ -500,10 +500,36 @@ async function fetchNext(nextLines: line[]): Promise<NFT[]> {
 export async function getTokens(walletAddress: string): Promise<any> {
   const nfts = await client.request({
     method: "account_nfts",
-    limit:400,
     account: walletAddress,
   });
   return nfts;
+}
+async function recursiveFetchTokens(
+  walletAddress: string,
+  accNfts: any[],
+  prev_marker?: string
+): Promise<any[]> {
+  const { result } = await client.request({
+    method: "account_nfts",
+    account: walletAddress,
+    marker: prev_marker,
+  });
+  const { account_nfts, error, marker } = result;
+  if (error) {
+    throw new Error(error);
+  }
+
+  accNfts = [...accNfts, ...account_nfts];
+  if (marker) {
+    return await recursiveFetchTokens(walletAddress, accNfts, marker);
+  } else {
+    return accNfts;
+  }
+}
+
+async function fetchTokens(walletAddress: string): Promise<any> {
+  const accNfts = await recursiveFetchTokens(walletAddress, []);
+  return accNfts;
 }
 
 export async function fetchOneXls20(
@@ -512,9 +538,7 @@ export async function fetchOneXls20(
   nodetype?: string,
   owner?: string
 ): Promise<any> {
-  const {
-    result: { account_nfts },
-  } = await getTokens(walletAddress);
+  const account_nfts = await fetchTokens(walletAddress);
   const nftXLS20 = account_nfts.find((n: any) => {
     return n.NFTokenID == NFTokenID;
   });
@@ -941,9 +965,7 @@ export async function constructXls20NFT(details: any, nft: any) {
   };
 }
 export async function fetchXls20(walletAddress: string): Promise<any> {
-  const {
-    result: { account_nfts },
-  } = await getTokens(walletAddress);
+  const account_nfts = await fetchTokens(walletAddress);
   return account_nfts;
 }
 
