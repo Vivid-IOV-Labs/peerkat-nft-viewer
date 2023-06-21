@@ -77,7 +77,7 @@
         </external-link>
         <external-link
           class="mr-2 btn btn-primary btn-sm"
-          :url="`https://peerkat.io/privacy`"
+          :url="`https://peerkat.com/privacy`"
           >Privacy notice</external-link
         >
       </nav>
