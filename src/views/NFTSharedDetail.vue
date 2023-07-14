@@ -271,7 +271,7 @@ import {
 import { devlog } from "../utils/devlog";
 import { getInspectorUrl } from "../utils/getInspectorUrl";
 import { fetchOneXls20, getIpfsMedia } from "../services/XrpService";
-import LoadMedia from "@/components/LoadMedia.vue";
+import LoadMedia from "@/components/LoadMediaPreview.vue";
 export default defineComponent({
   components: { BaseCard, ExternalLink, LoadMedia },
   async setup() {
