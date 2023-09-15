@@ -50,18 +50,27 @@
         </li>
       </ul>
     </div>
-    <!-- <external-link
+
+    <div
+      style="heigth: 15%; background: #16dbdb"
       v-if="NFTMedia.length"
-      class="rounded flex-center text-center d-flex w-100"
-      url="https://docs.google.com/forms/d/e/1FAIpQLSdx3iena1rUPaHrj99kDuI0wEaoR5FV3nkWVVsaeouppUZ4_w/viewform"
-      style="heigth: 10%"
+      class="d-flex w-100 pt-4 px-2 mt-4 align-items-end justify-content-between flex-wrap flex-center"
     >
-      <img
-        style="object-fit: cover; height: 100%; object-position: center center"
-        class="img-fluid w-100 h-100"
-        src="/banner-dark.png"
-      />
-    </external-link> -->
+      <div style="width: 160px"><img class="img-fluid" src="/whale.png" /></div>
+
+      <div class="text-white py-4">
+        <h4 class="font-weight-bold">How does your wallet compare?</h4>
+        <span
+          >Use our XRP Ledger analysis to check the strength of your
+          wallet!</span
+        >
+      </div>
+      <external-link url="https://www.peerkat.com/whales " class="pb-4">
+        <span style="background: white" class="btn btn-white btn-sm btn">
+          View XRP Rich List</span
+        >
+      </external-link>
+    </div>
   </div>
 </template>
 
