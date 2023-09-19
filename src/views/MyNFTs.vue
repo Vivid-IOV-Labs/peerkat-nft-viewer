@@ -73,7 +73,7 @@
     </div> -->
     <external-link
       style="heigth: 15%"
-      url="https://www.peerkat.com/whales "
+      url="https://www.peerkat.com/whales"
       class="d-block w-100 rounded mt-2"
     >
       <img class="img-fluid w-100 h-100 rounded-2" src="/banner-whales.png" />
