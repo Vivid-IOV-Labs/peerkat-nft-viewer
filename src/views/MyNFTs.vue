@@ -51,7 +51,7 @@
       </ul>
     </div>
 
-    <div
+    <!-- <div
       style="heigth: 15%; background: #16dbdb"
       v-if="NFTMedia.length"
       class="d-flex w-100 pt-4 px-2 mt-4 align-items-end justify-content-between flex-wrap flex-center"
@@ -70,7 +70,14 @@
           View XRP Rich List</span
         >
       </external-link>
-    </div>
+    </div> -->
+    <external-link
+      style="heigth: 15%"
+      url="https://www.peerkat.com/whales "
+      class="d-block w-100 rounded mt-2"
+    >
+      <img class="img-fluid w-100 h-100 rounded-2" src="/banner-whales.png" />
+    </external-link>
   </div>
 </template>
 

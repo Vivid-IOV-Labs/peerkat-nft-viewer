@@ -6,7 +6,7 @@
       </h5>
       <h4 class="mt-1 mb-4 text-center">
         <base-button class="mb-4" @click="copyEmail"
-          >support@peerkat.io
+          >support@peerkat.com
           <svg
             xmlns="http://www.w3.org/2000/svg"
             style="width: 18px; height: 18px; vertical-align: middle"
@@ -54,8 +54,9 @@
         </li>
         <li class="pb-2">
           <strong> What features are being added next?</strong>
-          <br />NFT Analytics are next on our roadmap. Please suggest any other
-          features you would like to see by getting in contact with us.
+          <br />Web3 Analytics website, including our Web3 API for developers
+          and business use cases, are next on our roadmap. Please suggest any
+          other features you would like to see by getting in contact with us.
         </li>
       </ul>
     </div>
@@ -82,7 +83,7 @@
         >
       </nav>
       <div class="mt-4 pb-2 text-center">
-        <p>© Peerkat 2023</p>
+        <p>© Peerkat 2020-2023</p>
         <p>Peerkat is a Vivid IoV Labs product</p>
         <p>
           Vivid IoV Labs, Innovation Labs, England, IP14 1RD.<br />
@@ -108,7 +109,7 @@ export default defineComponent({
   async setup() {
     return {
       copyEmail() {
-        copyText("support@peerkat.io", {
+        copyText("support@peerkat.com", {
           title: "Email Peerkat",
           text: "Copied to clipboard",
         });
