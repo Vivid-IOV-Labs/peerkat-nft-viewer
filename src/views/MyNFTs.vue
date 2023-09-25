@@ -1,76 +1,67 @@
 <template>
   <div class="h-100 overflow-hidden d-flex flex-column">
-    <div
-      v-if="NFTMedia.length"
-      id="scroller"
-      ref="scroller"
-      class="d-flex flex-row flex-nowrap overflow-auto pb-2"
-      style="flex: 1; align-items: center"
-      :class="{ loading }"
-    >
-      <div v-for="nft in NFTMedia" :key="nft.currency" class="col-11">
-        <nft-card
+    <div v-if="!actNotFound">
+      <div
+        v-if="NFTMedia.length"
+        id="scroller"
+        ref="scroller"
+        class="d-flex flex-row flex-nowrap overflow-auto pb-2"
+        style="flex: 1; align-items: center"
+        :class="{ loading }"
+      >
+        <div v-for="nft in NFTMedia" :key="nft.currency" class="col-11">
+          <nft-card
+            style="height: 70vh"
+            v-if="nft"
+            :id="`tokenID-${nft.currency}`"
+            :nft="nft"
+          ></nft-card>
+        </div>
+        <div
+          v-if="!endload"
+          id="sentinel"
+          ref="sentinel"
           style="height: 70vh"
-          v-if="nft"
-          :id="`tokenID-${nft.currency}`"
-          :nft="nft"
-        ></nft-card>
+          class="col-11 card"
+        >
+          <div
+            class="d-flex align-items-center justify-content-center card-body"
+          >
+            <div
+              class="spinner-border"
+              style="width: 4rem; height: 4rem; color: #666"
+              role="status"
+            ></div>
+          </div>
+          <h5>Loading Next NFTs...</h5>
+        </div>
       </div>
       <div
-        v-if="!endload"
-        id="sentinel"
-        ref="sentinel"
-        style="height: 70vh"
-        class="col-11 card"
+        v-if="!NFTMedia.length"
+        class="d-flex flex-column overflow-auto pb-2"
+        style="flex: 1; align-items: center; margin-top: 13%"
       >
-        <div class="d-flex align-items-center justify-content-center card-body">
-          <div
-            class="spinner-border"
-            style="width: 4rem; height: 4rem; color: #666"
-            role="status"
-          ></div>
-        </div>
-        <h5>Loading Next NFTs...</h5>
+        <h5 class="text-center mt-2">
+          Peerkat is not able to find any NFTs in this wallet
+        </h5>
+        <ul class="mt-2">
+          <li class="pb-2">
+            You can view an NFT in fullscreen mode, view current offers for your
+            NFTs, inspect the transaction history of an NFT via the Bithomp
+            explorer and share your NFTs with another user to enable them to
+            view the NFTs too
+          </li>
+        </ul>
       </div>
     </div>
+
     <div
-      v-if="!NFTMedia.length"
+      v-if="actNotFound"
       class="d-flex flex-column overflow-auto pb-2"
       style="flex: 1; align-items: center; margin-top: 13%"
     >
-      <h5 class="text-center mt-2">
-        Peerkat is not able to find any NFTs in this wallet
-      </h5>
-      <ul class="mt-2">
-        <li class="pb-2">
-          You can view an NFT in fullscreen mode, view current offers for your
-          NFTs, inspect the transaction history of an NFT via the Bithomp
-          explorer and share your NFTs with another user to enable them to view
-          the NFTs too
-        </li>
-      </ul>
+      <h3 class="text-center mt-2">Account not found</h3>
     </div>
-
-    <!-- <div
-      style="heigth: 15%; background: #16dbdb"
-      v-if="NFTMedia.length"
-      class="d-flex w-100 pt-4 px-2 mt-4 align-items-end justify-content-between flex-wrap flex-center"
-    >
-      <div style="width: 160px"><img class="img-fluid" src="/whale.png" /></div>
-
-      <div class="text-white py-4">
-        <h4 class="font-weight-bold">How does your wallet compare?</h4>
-        <span
-          >Use our XRP Ledger analysis to check the strength of your
-          wallet!</span
-        >
-      </div>
-      <external-link url="https://www.peerkat.com/whales " class="pb-4">
-        <span style="background: white" class="btn btn-white btn-sm btn">
-          View XRP Rich List</span
-        >
-      </external-link>
-    </div> -->
     <external-link
       style="heigth: 15%"
       url="https://www.peerkat.com/whales"
@@ -111,11 +102,10 @@ export default defineComponent({
   },
   async setup() {
     const store = useStore();
-    const route = useRoute();
     const sentinel = ref<HTMLElement | null>(null);
     const scroller = ref<HTMLElement | null>(null);
     const isInXumm = inject("isInXumm");
-
+    const actNotFound = ref(false);
     const isConnected = computed(() => store.getters["nft/getIsConnected"]);
     const endload = ref(true);
     const loading = computed(() => store.getters["ui/getIsloading"]);
@@ -181,15 +171,17 @@ export default defineComponent({
 
     const populateNFTs = async () => {
       try {
+        debugger;
         await poupulateXls20NFTs();
         if (allXls20.value.length == 0) {
           await populateXls14NFTs();
         }
       } catch (error) {
-        devlog(error);
+        actNotFound.value = JSON.stringify(error).includes("Account not found");
+        if (!actNotFound.value) {
+          await populateXls14NFTs();
+        }
         store.commit("ui/setIsloading", false);
-
-        await populateXls14NFTs();
       }
     };
 
@@ -281,6 +273,7 @@ export default defineComponent({
       loading,
       isInXumm,
       xls20count,
+      actNotFound,
       async connect() {
         await store.dispatch("nft/connect", nodetype.value);
       },
