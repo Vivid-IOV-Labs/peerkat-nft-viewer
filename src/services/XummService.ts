@@ -15,9 +15,14 @@ class XummService {
     if (isInXumm()) {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { XummSdkJwt } = require("xumm-sdk");
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      xapp = new xAppSdk();
-      Sdk = new XummSdkJwt(xummApiKey);
+
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        xapp = new xAppSdk();
+        Sdk = new XummSdkJwt(xummApiKey);
+      } catch (error) {
+        console.log("Errir SUmSdk", error);
+      }
     }
   }
   async getOttData(): Promise<xAppOttData> {
