@@ -5,8 +5,12 @@ import XummService from "../../../services/XummService";
 
 const actions: ActionTree<XummState, xAppOttData> = {
   async getOttData({ commit }): Promise<void> {
-    const OttData = await XummService.getOttData();
-    commit("setOttData", OttData);
+    try {
+      const OttData = await XummService.getOttData();
+      commit("setOttData", OttData);
+    } catch (error) {
+      console.log("OTTDATA vuex", error);
+    }
   },
 };
 export default actions;
