@@ -30,7 +30,7 @@ class XummService {
       const ottdata = await Sdk.getOttData();
       return ottdata;
     } catch (error) {
-      console.log("Errir SUmSdk", error);
+      console.log("getOttData SUmSdk", error);
     }
   }
   async createPayload(
