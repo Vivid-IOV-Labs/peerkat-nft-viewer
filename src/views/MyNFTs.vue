@@ -171,13 +171,13 @@ export default defineComponent({
 
     const populateNFTs = async () => {
       try {
-        debugger;
         await poupulateXls20NFTs();
         if (allXls20.value.length == 0) {
           await populateXls14NFTs();
         }
       } catch (error) {
         actNotFound.value = JSON.stringify(error).includes("Account not found");
+        console.log(error);
         if (!actNotFound.value) {
           await populateXls14NFTs();
         }
