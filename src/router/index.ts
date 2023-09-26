@@ -293,11 +293,11 @@ router.beforeEach(async (to, from, next) => {
 
       await store.dispatch("xumm/getOttData");
       const ottdata = computed(() => store.getters["xumm/getOttData"]);
-      // await store.commit("user/setAddress", ottdata.value.account);
-      // await store.commit("user/setNetwork", ottdata.value.nodewss);
-      // const nodetype = getNodeTypeFromNetwork(ottdata.value.nodewss);
-      // await store.commit("user/setNodeType", nodetype);
-      // await store.commit("user/setUser", ottdata.value.user);
+      await store.commit("user/setAddress", ottdata.value.account);
+      await store.commit("user/setNetwork", ottdata.value.nodewss);
+      const nodetype = getNodeTypeFromNetwork(ottdata.value.nodewss);
+      await store.commit("user/setNodeType", nodetype);
+      await store.commit("user/setUser", ottdata.value.user);
 
       try {
         await store.dispatch("nft/initXrpClient", {
