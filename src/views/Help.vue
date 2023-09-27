@@ -82,6 +82,30 @@
           >Privacy notice</external-link
         >
       </nav>
+      <div class="mt-4 pb-2 px-4">
+        <strong class="">Disclaimer</strong><br />
+        <p>
+          The contents of our websites (including subdomains of our websites)
+          and applications through which we make our products/services available
+          including, for example our Peerkat NFT viewer application via Xumm and
+          Peerkat Web3 API, (together, the “Platform”) is provided for general
+          information only. It is not intended to amount to advice on which you
+          should rely. You must obtain professional or specialist advice before
+          taking, or refraining from, any action on the basis of the content on
+          the Platform. Although we make reasonable efforts to update the
+          information on our Platform, we make no representations, warranties or
+          guarantees, whether expressed or implied, that the content on our
+          Platform is accurate, complete or up to date. If you enter into any
+          financial transactions pursuant to or in connection with material you
+          have seen on our Platform, note that such transactions will be
+          conducted solely through the XRPL network and would be entirely
+          separate to our Platform. We have no insight into and have no control
+          over any such transactions, nor do we have any ability to reverse or
+          amend such transactions. With that in mind, we will have no liability
+          to you or any third party for any claims or damages that may arise as
+          a result of any such transactions that you may enter into.
+        </p>
+      </div>
       <div class="mt-4 pb-2 text-center">
         <p>© Peerkat 2020-2023</p>
         <p>Peerkat is a Vivid IoV Labs product</p>

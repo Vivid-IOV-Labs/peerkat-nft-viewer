@@ -177,7 +177,7 @@ export default defineComponent({
         }
       } catch (error) {
         actNotFound.value = JSON.stringify(error).includes("Account not found");
-        console.log(error);
+
         if (!actNotFound.value) {
           await populateXls14NFTs();
         }
