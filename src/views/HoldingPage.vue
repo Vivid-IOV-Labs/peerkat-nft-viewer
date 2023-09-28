@@ -2,7 +2,7 @@
   <div class="justify-content-center d-flex align-items-center h-100">
     <div class="text-center p-4">
       <img
-        src="@/assets/img/logopeerkat.jpg"
+        src="@/assets/img/logopeerkat.png"
         alt="Peerkat logo"
         width="80"
         class="d-inline-block align-top rounded-circle mb-4"

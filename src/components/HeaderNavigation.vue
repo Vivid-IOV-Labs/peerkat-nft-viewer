@@ -6,7 +6,7 @@
     >
       <span class="navbar-brand">
         <img
-          src="@/assets/img/logopeerkat.jpg"
+          src="@/assets/img/logopeerkat.png"
           alt="Peerkat logo"
           width="40"
           height="40"

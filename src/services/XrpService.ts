@@ -509,11 +509,12 @@ async function recursiveFetchTokens(
   accNfts: any[],
   prev_marker?: string
 ): Promise<any[]> {
-  const { result } = await client.request({
+  const account = await client.request({
     method: "account_nfts",
     account: walletAddress,
     marker: prev_marker,
   });
+  const { result } = account;
   const { account_nfts, error, marker } = result;
   if (error) {
     throw new Error(error);
