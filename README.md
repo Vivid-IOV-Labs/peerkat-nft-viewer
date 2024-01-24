@@ -2,7 +2,7 @@
 
 ### Description
 
-A frontend application to be deployed as an [xApp](https://xumm.readme.io/docs/what-are-xapps) on the [Xaman App (prev. Xumm)](https://xumm.app/) platform. The purpose of this application is to enable *Xumm* Users to view and share image/video assets related to NFTs issued on the [XRPL](https://xrpl.org/index.html) network. This application currently supports XRPL-issued NFTs based on the [XLS-20d](https://github.com/XRPLF/XRPL-Standards/discussions/46) standard NFTs.
+A frontend application to be deployed as an [xApp](https://xumm.readme.io/docs/what-are-xapps) on the [Xaman App (prev. Xumm)](https://xumm.app/) platform. The purpose of this application is to enable *Xaman App (prev. Xumm)* Users to view and share image/video assets related to NFTs issued on the [XRPL](https://xrpl.org/index.html) network. This application currently supports XRPL-issued NFTs based on the [XLS-20d](https://github.com/XRPLF/XRPL-Standards/discussions/46) standard NFTs.
 
 
 ### Setup
