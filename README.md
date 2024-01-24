@@ -2,7 +2,7 @@
 
 ### Description
 
-A frontend application to be deployed as an [xApp](https://xumm.readme.io/docs/what-are-xapps) on the [Xumm App](https://xumm.app/) platform. The purpose of this application is to enable *Xumm* Users to view and share image/video assets related to NFTs issued on the [XRPL](https://xrpl.org/index.html) network. This application currently supports XRPL-issued NFTs based on the [XLS14d](https://github.com/XRPLF/XRPL-Standards/discussions/30) standard and will also be upddated to support [XLS-20d](https://github.com/XRPLF/XRPL-Standards/discussions/46) standard NFTs.
+A frontend application to be deployed as an [xApp](https://xumm.readme.io/docs/what-are-xapps) on the [Xaman App (prev. Xumm)](https://xumm.app/) platform. The purpose of this application is to enable *Xumm* Users to view and share image/video assets related to NFTs issued on the [XRPL](https://xrpl.org/index.html) network. This application currently supports XRPL-issued NFTs based on the [XLS-20d](https://github.com/XRPLF/XRPL-Standards/discussions/46) standard NFTs.
 
 
 ### Setup
@@ -30,4 +30,4 @@ A [Vue 3](https://v3.vuejs.org/) + [Typescript](https://www.typescriptlang.org/)
 
 ### Feedback
 
-For any feedback/queries please email [support@peerkat.io](mailto:support@peerkat.io)
+For any feedback/queries please email [support@peerkat.com](mailto:support@peerkat.com)
